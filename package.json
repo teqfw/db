@@ -1,0 +1,35 @@
+{
+  "name": "@teqfw/db",
+  "version": "0.1.0",
+  "description": "TeqFW: DB connectivity.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/teqfw/db.git"
+  },
+  "keywords": [
+    "db",
+    "ecmascript 2015",
+    "es6+",
+    "idb",
+    "pwa",
+    "rdbms",
+    "spa",
+    "teqfw",
+    "tequila framework",
+    "web applications",
+    "web-apps"
+  ],
+  "author": "Alex Gusev <alex@flancer64.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/teqfw/db/issues"
+  },
+  "homepage": "https://github.com/teqfw/db#readme",
+  "dependencies": {
+    "@teqfw/core": "*",
+    "knex": "*"
+  }
+}
