@@ -1,31 +1,34 @@
+/**
+ * RDBMS connector (based on 'knex' connector).
+ *
+ * @namespace TeqFw_Db_Back_RDb_Connect
+ */
+// MODULE'S IMPORT
 import $knex from 'knex';
 
 /**
- * 'knex' based connector to relational database.
+ * Default implementation for 'knex' based database connector.
+ * @implements TeqFw_Db_Back_Api_IConnect
  */
 export default class TeqFw_Db_Back_RDb_Connect {
 
     constructor(spec) {
-        /** @type {TeqFw_Core_Back_Config} */
-        const config = spec['TeqFw_Core_Back_Config$'];
         /** @type {TeqFw_Core_Shared_Logger} */
         const logger = spec['TeqFw_Core_Shared_Logger$'];
 
         let knex;
 
         /**
-         * Initialize connection to 'main' database.
+         * Initialize connection to database.
          *
+         * @param {TeqFw_Db_Back_Api_Dto_Config_Local|Knex.Config} cfg
          * @returns {Promise<void>}
          */
-        this.init = async function () {
-            // const dbSpec = config.get('/local/db/main');
-            const cfg = config.getLocal('db');
-            const dbSpec = cfg.main;
-            const db = dbSpec.connection.database + '@' + dbSpec.connection.host;
-            const user = dbSpec.connection.user;
+        this.init = async function (cfg) {
+            const db = cfg.connection.database + '@' + cfg.connection.host;
+            const user = cfg.connection.user;
             try {
-                knex = await $knex(dbSpec);
+                knex = await $knex(cfg);
                 logger.info('Connected to DB \'' + db + '\' as \'' + user + '\'.');
             } catch (e) {
                 logger.error('Cannot connect to DB \'' + db + '\' as \'' + user + '\'. Error: ' + e);
@@ -39,7 +42,6 @@ export default class TeqFw_Db_Back_RDb_Connect {
          * @returns {Promise<*>}
          */
         this.startTransaction = async function () {
-            if (!knex) await this.init();
             return await knex.transaction();
         };
 
@@ -49,18 +51,7 @@ export default class TeqFw_Db_Back_RDb_Connect {
          * @returns {*}
          */
         this.getKnex = async function () {
-            if (!knex) await this.init();
             return knex;
-        };
-
-        /**
-         * Accessor for 'knex.schema' object.
-         * (empty array is returned for async function)
-         * @returns {SchemaBuilder}
-         * @deprecated use 'getSchemaBuilder' instead; should be removed after 2021/10/15
-         */
-        this.getSchema = function () {
-            return knex.schema;
         };
 
         /**
@@ -73,7 +64,6 @@ export default class TeqFw_Db_Back_RDb_Connect {
         };
 
         this.disconnect = async function () {
-            if (!knex) await this.init();
             const pool = knex.client.pool;
             return new Promise(function (resolve) {
                 const WAIT = 100;
