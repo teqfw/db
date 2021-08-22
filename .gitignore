@@ -1,5 +1,6 @@
 /.idea/
 /.nyc_output/
+/dev/cfg/local.json
 /jsdoc/
 /node_modules/
 /package-lock.json
