@@ -12,6 +12,8 @@ const fileDem = join(pathPrj, 'teqfw.schema.json');
 const {readJson} = await container.get('TeqFw_Core_Back_Util');
 /** @type {TeqFw_Db_Back_Dto_Dem.Factory} */
 const fDem = await container.get('TeqFw_Db_Back_Dto_Dem#Factory$');
+/** @type {TeqFw_Db_Back_Process_Norm} */
+const procNorm = await container.get('TeqFw_Db_Back_Process_Norm$');
 
 
 //
@@ -20,4 +22,5 @@ const fDem = await container.get('TeqFw_Db_Back_Dto_Dem#Factory$');
 // read DEM as an object
 const jsonApp = readJson(fileDem);
 const dem = fDem.create(jsonApp);
+await procNorm.exec({dem});
 debugger

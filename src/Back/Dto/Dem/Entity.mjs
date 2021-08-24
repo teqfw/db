@@ -20,6 +20,9 @@ export default class TeqFw_Db_Back_Dto_Dem_Entity {
     relation;
 }
 
+// attributes names to use as aliases in queries to object props
+TeqFw_Db_Back_Dto_Dem_Entity.NAME = 'name';
+
 /**
  * Factory to create new DTO instances.
  * @memberOf TeqFw_Db_Back_Dto_Dem_Entity

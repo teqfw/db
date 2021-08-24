@@ -8,7 +8,7 @@ const NS = 'TeqFw_Db_Back_Dto_Dem';
 export default class TeqFw_Db_Back_Dto_Dem {
     /** @type {Object<string, TeqFw_Db_Back_Dto_Dem_Entity>} */
     entity;
-    /** @type {Object} */
+    /** @type {Object<string, TeqFw_Db_Back_Dto_Dem_Map>} */
     map;
     /** @type {Object<string, TeqFw_Db_Back_Dto_Dem_Package>} */
     package;
@@ -21,10 +21,16 @@ export default class TeqFw_Db_Back_Dto_Dem {
 export class Factory {
     constructor(spec) {
         // EXTRACT DEPS
+        /** @type {typeof TeqFw_Db_Back_Dto_Dem_Entity} */
+        const TEntity = spec['TeqFw_Db_Back_Dto_Dem_Entity#'];
+        /** @type {typeof TeqFw_Db_Back_Dto_Dem_Map} */
+        const TMap = spec['TeqFw_Db_Back_Dto_Dem_Map#'];
         /** @type {TeqFw_Db_Back_Dto_Dem_Entity.Factory} */
         const fEntity = spec['TeqFw_Db_Back_Dto_Dem_Entity#Factory$'];
         /** @type {TeqFw_Db_Back_Dto_Dem_Package.Factory} */
         const fPkg = spec['TeqFw_Db_Back_Dto_Dem_Package#Factory$'];
+        /** @type {TeqFw_Db_Back_Dto_Dem_Map.Factory} */
+        const fMap = spec['TeqFw_Db_Back_Dto_Dem_Map#Factory$'];
 
         /**
          * @param {TeqFw_Db_Back_Dto_Dem|null} data
@@ -32,26 +38,13 @@ export class Factory {
          */
         this.create = function (data = null) {
             // DEFINE INNER FUNCTIONS
-
-            function parseEntity(data) {
+            function parse(fnCreate, data, key = null) {
                 const res = {};
                 if (typeof data === 'object') {
-                    for (const key of Object.keys(data)) {
-                        const item = fEntity.create(data[key]);
-                        item.name = key;
-                        res[key] = item;
-                    }
-                }
-                return res;
-            }
-
-            function parsePackages(data) {
-                const res = {};
-                if (typeof data === 'object') {
-                    for (const key of Object.keys(data)) {
-                        const item = fPkg.create(data[key]);
-                        item.name = key;
-                        res[key] = item;
+                    for (const name of Object.keys(data)) {
+                        const item = fnCreate(data[name]);
+                        if (typeof key === 'string') item[key] = name;
+                        res[name] = item;
                     }
                 }
                 return res;
@@ -59,9 +52,9 @@ export class Factory {
 
             // MAIN FUNCTIONALITY
             const res = new TeqFw_Db_Back_Dto_Dem();
-            res.entity = parseEntity(data?.entity);
-            res.map = data?.map;
-            res.package = parsePackages(data?.package);
+            res.entity = parse(fEntity.create, data?.entity, TEntity.NAME);
+            res.map = parse(fMap.create, data?.map, TMap.VIRTUAL);
+            res.package = parse(fPkg.create, data?.package);
             return res;
         }
     }
