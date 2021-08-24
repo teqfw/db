@@ -1,7 +1,7 @@
 /**
  * Enumeration for attribute types (DEM related).
  */
-const TeqFw_Db_Back_Enum_Dem_Attr = {
+const TeqFw_Db_Back_Enum_Dem_Attr_Type = {
     BINARY: 'binary',
     BOOLEAN: 'boolean',
     DATETIME: 'datetime',
@@ -13,5 +13,5 @@ const TeqFw_Db_Back_Enum_Dem_Attr = {
     STRING: 'string',
     TEXT: 'text',
 }
-Object.freeze(TeqFw_Db_Back_Enum_Dem_Attr);
-export default TeqFw_Db_Back_Enum_Dem_Attr;
+Object.freeze(TeqFw_Db_Back_Enum_Dem_Attr_Type);
+export default TeqFw_Db_Back_Enum_Dem_Attr_Type;
