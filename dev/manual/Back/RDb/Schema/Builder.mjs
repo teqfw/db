@@ -1,4 +1,4 @@
-import container from '../DevEnv.mjs'; // init development environment
+import container from '../../../DevEnv.mjs'; // init development environment
 
 // get database connector then execute the process
 /** @type {TeqFw_Db_Back_Api_IConnect} */

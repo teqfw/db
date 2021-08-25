@@ -17,9 +17,9 @@ function normName(data) {
 
 // MODULE'S CLASSES
 /**
- * @implements TeqFw_Core_Shared_Api_IProcess
+ * @implements TeqFw_Core_Shared_Api_IAction
  */
-export default class TeqFw_Db_Back_Process_Norm {
+export default class TeqFw_Db_Back_RDb_Schema_A_Norm {
     /** @type {TeqFw_Db_Back_Defaults} */
     #DEF;
 

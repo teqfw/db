@@ -23,6 +23,8 @@ const container = new Container();
 container.addSourceMapping('TeqFw_Di', srcTeqFwDi, true, 'mjs');
 container.addSourceMapping('TeqFw_Core', srcTeqFwCore, true, 'mjs');
 container.addSourceMapping('TeqFw_Db', srcTeqFwDb, true, 'mjs');
+// setup replacements
+container.addModuleReplacement('TeqFw_Db_Back_Api_RDb_ISchema', 'TeqFw_Db_Back_RDb_Schema');
 
 // init logger
 /** @type {TeqFw_Core_Shared_Logger} */

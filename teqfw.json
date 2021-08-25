@@ -3,6 +3,13 @@
     "autoload": {
       "ns": "TeqFw_Db",
       "path": "./src"
-    }
+    },
+    "replace": [
+      {
+        "orig": "TeqFw_Db_Back_Api_RDb_ISchema",
+        "alter": "Fl32_Bwl_Front_Model_Gate_AjaxLed",
+        "area": "back"
+      }
+    ]
   }
 }
