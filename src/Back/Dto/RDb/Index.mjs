@@ -2,10 +2,10 @@
  * DTO with table index data.
  */
 // MODULE'S VARS
-const NS = 'TeqFw_Db_Back_RDb_Schema_Builder_Dto_Index';
+const NS = 'TeqFw_Db_Back_Dto_RDb_Index';
 
 // MODULE'S CLASSES
-export default class TeqFw_Db_Back_RDb_Schema_Builder_Dto_Index {
+export default class TeqFw_Db_Back_Dto_RDb_Index {
     /** @type {string[]} */
     columns;
     /** @type {string} */
@@ -14,22 +14,22 @@ export default class TeqFw_Db_Back_RDb_Schema_Builder_Dto_Index {
     type;
 }
 // attributes names to use as aliases in queries to object props
-TeqFw_Db_Back_RDb_Schema_Builder_Dto_Index.COLUMNS = 'columns';
-TeqFw_Db_Back_RDb_Schema_Builder_Dto_Index.NAME = 'name';
-TeqFw_Db_Back_RDb_Schema_Builder_Dto_Index.TYPE = 'type';
+TeqFw_Db_Back_Dto_RDb_Index.COLUMNS = 'columns';
+TeqFw_Db_Back_Dto_RDb_Index.NAME = 'name';
+TeqFw_Db_Back_Dto_RDb_Index.TYPE = 'type';
 
 /**
  * Factory to create new DTO instances.
- * @memberOf TeqFw_Db_Back_RDb_Schema_Builder_Dto_Index
+ * @memberOf TeqFw_Db_Back_Dto_RDb_Index
  */
 export class Factory {
     constructor() {
         /**
-         * @param {TeqFw_Db_Back_RDb_Schema_Builder_Dto_Index|null} data
-         * @return {TeqFw_Db_Back_RDb_Schema_Builder_Dto_Index}
+         * @param {TeqFw_Db_Back_Dto_RDb_Index|null} data
+         * @return {TeqFw_Db_Back_Dto_RDb_Index}
          */
         this.create = function (data = null) {
-            const res = new TeqFw_Db_Back_RDb_Schema_Builder_Dto_Index();
+            const res = new TeqFw_Db_Back_Dto_RDb_Index();
             res.columns = Array.isArray(data?.columns) ? data.columns : [];
             res.name = data?.name;
             res.type = data?.type;
@@ -39,5 +39,5 @@ export class Factory {
 }
 
 // finalize code components for this es6-module
-Object.freeze(TeqFw_Db_Back_RDb_Schema_Builder_Dto_Index);
+Object.freeze(TeqFw_Db_Back_Dto_RDb_Index);
 Object.defineProperty(Factory, 'name', {value: `${NS}.${Factory.constructor.name}`});

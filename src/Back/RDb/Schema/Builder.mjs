@@ -8,14 +8,14 @@ export default class TeqFw_Db_Back_RDb_Schema_Builder {
 
     /**
      * @param {Knex.SchemaBuilder} schema
-     * @param {TeqFw_Db_Back_RDb_Schema_Builder_Dto_Table} dto
+     * @param {TeqFw_Db_Back_Dto_RDb_Table} dto
      */
     addTable(schema, dto) {
         schema.createTable(dto.name, (table) => {
             // DEFINE INNER FUNCTIONS
             /**
              * @param {Knex.CreateTableBuilder} table
-             * @param {TeqFw_Db_Back_RDb_Schema_Builder_Dto_Column} dto
+             * @param {TeqFw_Db_Back_Dto_RDb_Column} dto
              */
             function addColumn(table, dto) {
                 /** @type {Knex.ColumnBuilder} */
@@ -28,7 +28,7 @@ export default class TeqFw_Db_Back_RDb_Schema_Builder {
 
             /**
              * @param {Knex.CreateTableBuilder} table
-             * @param {TeqFw_Db_Back_RDb_Schema_Builder_Dto_Index} dto
+             * @param {TeqFw_Db_Back_Dto_RDb_Index} dto
              */
             function addIndex(table, dto) {
                 table[dto.type](dto.columns, dto.name);
@@ -36,7 +36,7 @@ export default class TeqFw_Db_Back_RDb_Schema_Builder {
 
             /**
              * @param {Knex.CreateTableBuilder} table
-             * @param {TeqFw_Db_Back_RDb_Schema_Builder_Dto_Relation} dto
+             * @param {TeqFw_Db_Back_Dto_RDb_Relation} dto
              */
             function addRelation(table, dto) {
                 const chained = table.foreign(dto.ownColumns);
@@ -57,7 +57,7 @@ export default class TeqFw_Db_Back_RDb_Schema_Builder {
 
     /**
      * @param {Knex.SchemaBuilder} schema
-     * @param {TeqFw_Db_Back_RDb_Schema_Builder_Dto_Table} dto
+     * @param {TeqFw_Db_Back_Dto_RDb_Table} dto
      */
     dropTable(schema, dto) {
         schema.dropTableIfExists(dto.name);

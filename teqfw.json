@@ -7,7 +7,7 @@
     "replace": [
       {
         "orig": "TeqFw_Db_Back_Api_RDb_ISchema",
-        "alter": "Fl32_Bwl_Front_Model_Gate_AjaxLed",
+        "alter": "TeqFw_Db_Back_RDb_Schema",
         "area": "back"
       }
     ]

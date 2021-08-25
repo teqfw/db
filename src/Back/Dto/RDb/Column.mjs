@@ -2,10 +2,10 @@
  * DTO with table column data.
  */
 // MODULE'S VARS
-const NS = 'TeqFw_Db_Back_RDb_Schema_Builder_Dto_Column';
+const NS = 'TeqFw_Db_Back_Dto_RDb_Column';
 
 // MODULE'S CLASSES
-export default class TeqFw_Db_Back_RDb_Schema_Builder_Dto_Column {
+export default class TeqFw_Db_Back_Dto_RDb_Column {
     /** @type {string} */
     comment;
     /** @type {string} */
@@ -18,24 +18,24 @@ export default class TeqFw_Db_Back_RDb_Schema_Builder_Dto_Column {
     unsigned;
 }
 // attributes names to use as aliases in queries to object props
-TeqFw_Db_Back_RDb_Schema_Builder_Dto_Column.COMMENT = 'comment';
-TeqFw_Db_Back_RDb_Schema_Builder_Dto_Column.NAME = 'name';
-TeqFw_Db_Back_RDb_Schema_Builder_Dto_Column.NULLABLE = 'nullable';
-TeqFw_Db_Back_RDb_Schema_Builder_Dto_Column.TYPE = 'type';
-TeqFw_Db_Back_RDb_Schema_Builder_Dto_Column.UNSIGNED = 'unsigned';
+TeqFw_Db_Back_Dto_RDb_Column.COMMENT = 'comment';
+TeqFw_Db_Back_Dto_RDb_Column.NAME = 'name';
+TeqFw_Db_Back_Dto_RDb_Column.NULLABLE = 'nullable';
+TeqFw_Db_Back_Dto_RDb_Column.TYPE = 'type';
+TeqFw_Db_Back_Dto_RDb_Column.UNSIGNED = 'unsigned';
 
 /**
  * Factory to create new DTO instances.
- * @memberOf TeqFw_Db_Back_RDb_Schema_Builder_Dto_Column
+ * @memberOf TeqFw_Db_Back_Dto_RDb_Column
  */
 export class Factory {
     constructor() {
         /**
-         * @param {TeqFw_Db_Back_RDb_Schema_Builder_Dto_Column|null} data
-         * @return {TeqFw_Db_Back_RDb_Schema_Builder_Dto_Column}
+         * @param {TeqFw_Db_Back_Dto_RDb_Column|null} data
+         * @return {TeqFw_Db_Back_Dto_RDb_Column}
          */
         this.create = function (data = null) {
-            const res = new TeqFw_Db_Back_RDb_Schema_Builder_Dto_Column();
+            const res = new TeqFw_Db_Back_Dto_RDb_Column();
             res.comment = data?.comment;
             res.name = data?.name;
             res.nullable = data?.nullable ?? false;
@@ -47,5 +47,5 @@ export class Factory {
 }
 
 // finalize code components for this es6-module
-Object.freeze(TeqFw_Db_Back_RDb_Schema_Builder_Dto_Column);
+Object.freeze(TeqFw_Db_Back_Dto_RDb_Column);
 Object.defineProperty(Factory, 'name', {value: `${NS}.${Factory.constructor.name}`});

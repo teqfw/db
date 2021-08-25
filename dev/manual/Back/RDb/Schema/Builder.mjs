@@ -9,8 +9,8 @@ const TColumn = await container.get('TeqFw_Db_Back_Enum_Db_Column$');
 const TIndex = await container.get('TeqFw_Db_Back_Enum_Db_Index$');
 /** @type {typeof TeqFw_Db_Back_Enum_Db_Action} */
 const TAction = await container.get('TeqFw_Db_Back_Enum_Db_Action$');
-/** @type {TeqFw_Db_Back_RDb_Schema_Builder_Dto_Table.Factory} */
-const fTbl = await container.get('TeqFw_Db_Back_RDb_Schema_Builder_Dto_Table#Factory$');
+/** @type {TeqFw_Db_Back_Dto_RDb_Table.Factory} */
+const fTbl = await container.get('TeqFw_Db_Back_Dto_RDb_Table#Factory$');
 /** @type {TeqFw_Db_Back_RDb_Schema_Builder} */
 const builder = await container.get('TeqFw_Db_Back_RDb_Schema_Builder$');
 
