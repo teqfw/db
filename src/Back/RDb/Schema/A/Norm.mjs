@@ -20,11 +20,11 @@ function normName(data) {
  * @implements TeqFw_Core_Shared_Api_IAction
  */
 export default class TeqFw_Db_Back_RDb_Schema_A_Norm {
-    /** @type {TeqFw_Db_Back_Defaults} */
+    /** @type {TeqFw_Db_Back_Api_Defaults} */
     #DEF;
 
     constructor(spec) {
-        this.#DEF = spec['TeqFw_Db_Back_Defaults$'];
+        this.#DEF = spec['TeqFw_Db_Back_Api_Defaults$'];
     }
 
     /**

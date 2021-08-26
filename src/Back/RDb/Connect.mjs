@@ -8,7 +8,7 @@ import $knex from 'knex';
 
 /**
  * Default implementation for 'knex' based database connector.
- * @implements TeqFw_Db_Back_Api_IConnect
+ * @implements TeqFw_Db_Back_Api_RDb_IConnect
  */
 export default class TeqFw_Db_Back_RDb_Connect {
 
@@ -50,7 +50,7 @@ export default class TeqFw_Db_Back_RDb_Connect {
          *
          * @returns {*}
          */
-        this.getKnex = async function () {
+        this.getKnex = function () {
             return knex;
         };
 

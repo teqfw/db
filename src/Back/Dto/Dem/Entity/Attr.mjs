@@ -14,7 +14,7 @@ export default class TeqFw_Db_Back_Dto_Dem_Entity_Attr {
     name;
     /** @type {boolean} */
     nullable;
-    /** @type {Object} */
+    /** @type {TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options} */
     options;
     /** @type {string} */
     type;

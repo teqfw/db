@@ -1,18 +1,18 @@
 import container from '../../../DevEnv.mjs'; // init development environment
 
 // get database connector then execute the process
-/** @type {TeqFw_Db_Back_Api_IConnect} */
-const conn = await container.get('TeqFw_Db_Back_Api_IConnect$');
-/** @type {typeof TeqFw_Db_Back_Enum_Db_Column} */
-const TColumn = await container.get('TeqFw_Db_Back_Enum_Db_Column$');
-/** @type {typeof TeqFw_Db_Back_Enum_Db_Index} */
-const TIndex = await container.get('TeqFw_Db_Back_Enum_Db_Index$');
-/** @type {typeof TeqFw_Db_Back_Enum_Db_Action} */
-const TAction = await container.get('TeqFw_Db_Back_Enum_Db_Action$');
+/** @type {TeqFw_Db_Back_Api_RDb_IConnect} */
+const conn = await container.get('TeqFw_Db_Back_Api_RDb_IConnect$');
+/** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Column} */
+const TColumn = await container.get('TeqFw_Db_Back_Enum_Db_Type_Column$');
+/** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Index} */
+const TIndex = await container.get('TeqFw_Db_Back_Enum_Db_Type_Index$');
+/** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Action} */
+const TAction = await container.get('TeqFw_Db_Back_Enum_Db_Type_Action$');
 /** @type {TeqFw_Db_Back_Dto_RDb_Table.Factory} */
 const fTbl = await container.get('TeqFw_Db_Back_Dto_RDb_Table#Factory$');
-/** @type {TeqFw_Db_Back_RDb_Schema_Builder} */
-const builder = await container.get('TeqFw_Db_Back_RDb_Schema_Builder$');
+/** @type {TeqFw_Db_Back_RDb_Schema_A_Builder} */
+const builder = await container.get('TeqFw_Db_Back_RDb_Schema_A_Builder$');
 
 // tables definition
 const tables = {

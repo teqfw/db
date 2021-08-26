@@ -38,13 +38,13 @@ config.loadLocal(pathDev);
 const local = config.getLocal();
 
 // init DB connection
-/** @type {TeqFw_Db_Back_Defaults} */
-const DEF = await container.get('TeqFw_Db_Back_Defaults$');
+/** @type {TeqFw_Db_Back_Api_Defaults} */
+const DEF = await container.get('TeqFw_Db_Back_Api_Defaults$');
 /** @type {TeqFw_Db_Back_RDb_Connect} */
 const conn = await container.get('TeqFw_Db_Back_RDb_Connect$');
 const dbCfg = local[DEF.NAME];
 // await conn.init(dbCfg.mariadb);
 await conn.init(dbCfg.pg);
-container.set('TeqFw_Db_Back_Api_IConnect$', conn);
+container.set('TeqFw_Db_Back_Api_RDb_IConnect$', conn);
 
 export default container;

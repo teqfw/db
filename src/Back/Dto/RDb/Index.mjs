@@ -10,7 +10,7 @@ export default class TeqFw_Db_Back_Dto_RDb_Index {
     columns;
     /** @type {string} */
     name;
-    /** @type {typeof TeqFw_Db_Back_Enum_Db_Index} */
+    /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Index} */
     type;
 }
 // attributes names to use as aliases in queries to object props

@@ -1,10 +1,12 @@
 /**
  * Enumeration for attribute types (DEM related).
  */
-const TeqFw_Db_Back_Enum_Dem_Attr_Type = {
+const TeqFw_Db_Back_Enum_Dem_Type_Attr = {
     BINARY: 'binary',
     BOOLEAN: 'boolean',
+    DATE: 'date',
     DATETIME: 'datetime',
+    ENUM: 'enum',
     ID: 'id',
     INTEGER: 'integer',
     NUMERIC: 'numeric',
@@ -13,5 +15,5 @@ const TeqFw_Db_Back_Enum_Dem_Attr_Type = {
     STRING: 'string',
     TEXT: 'text',
 }
-Object.freeze(TeqFw_Db_Back_Enum_Dem_Attr_Type);
-export default TeqFw_Db_Back_Enum_Dem_Attr_Type;
+Object.freeze(TeqFw_Db_Back_Enum_Dem_Type_Attr);
+export default TeqFw_Db_Back_Enum_Dem_Type_Attr;

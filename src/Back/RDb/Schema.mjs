@@ -1,4 +1,6 @@
 /**
+ * Default implementation for schema builder using DEM.
+ *
  * @implements TeqFw_Db_Back_Api_RDb_ISchema
  */
 export default class TeqFw_Db_Back_RDb_Schema {
@@ -10,7 +12,7 @@ export default class TeqFw_Db_Back_RDb_Schema {
     #aOrder;
     /** @type {TeqFw_Db_Back_RDb_Schema_A_Scan} */
     #aScan;
-    /** @type {TeqFw_Db_Back_RDb_Schema_Builder} */
+    /** @type {TeqFw_Db_Back_RDb_Schema_A_Builder} */
     #builder;
     /** @type {TeqFw_Db_Back_Dto_Dem} */
     #dem;
@@ -21,12 +23,23 @@ export default class TeqFw_Db_Back_RDb_Schema {
         this.#aNorm = spec['TeqFw_Db_Back_RDb_Schema_A_Norm$'];
         this.#aOrder = spec['TeqFw_Db_Back_RDb_Schema_A_Order$'];
         this.#aScan = spec['TeqFw_Db_Back_RDb_Schema_A_Scan$'];
-        this.#builder = spec['TeqFw_Db_Back_RDb_Schema_Builder$'];
+        this.#builder = spec['TeqFw_Db_Back_RDb_Schema_A_Builder$'];
     }
 
 
     async createAllTables({conn}) {
-        return Promise.resolve(undefined);
+        // prepare schema (populate with CREATE TABLE statements)
+        const schema = conn.getSchemaBuilder();
+        const dem = this.#dem;
+        /** @type {TeqFw_Db_Back_Dto_Dem_Entity[]} */
+        const entities = await this.#aOrder.exec({dem});
+        for (const entity of entities) {
+            const tbl = await this.#aConvert.exec({entity});
+            this.#builder.addTable(schema, tbl);
+        }
+        // perform operations
+        // const sql = schema.toString();
+        await schema;
     }
 
     async dropAllTables({conn}) {
@@ -44,12 +57,7 @@ export default class TeqFw_Db_Back_RDb_Schema {
         await schema;
     }
 
-    /**
-     *
-     * @param {string} path to project root to scan for DEM definitions.
-     * @return {Promise<unknown>}
-     */
-    async init({path}) {
+    async loadDem({path}) {
         const dem = await this.#aScan.exec({path});
         this.#dem = await this.#aNorm.exec({dem});
     }

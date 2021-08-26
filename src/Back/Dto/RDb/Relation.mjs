@@ -12,9 +12,9 @@ export default class TeqFw_Db_Back_Dto_RDb_Relation {
     itsTable;
     /** @type {string} */
     name;
-    /** @type {typeof TeqFw_Db_Back_Enum_Db_Action} */
+    /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Action} */
     onDelete;
-    /** @type {typeof TeqFw_Db_Back_Enum_Db_Action} */
+    /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Action} */
     onUpdate;
     /** @type {string[]} */
     ownColumns;

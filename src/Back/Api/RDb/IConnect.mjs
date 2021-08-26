@@ -2,7 +2,7 @@
  * Interface for main DB connection based on 'knex' library.
  * @interface
  */
-export default class TeqFw_Db_Back_Api_IConnect {
+export default class TeqFw_Db_Back_Api_RDb_IConnect {
     async disconnect() {}
 
     /**

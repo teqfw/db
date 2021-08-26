@@ -4,42 +4,147 @@
  * @implements TeqFw_Core_Shared_Api_IAction
  */
 export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
-    /** @type {TeqFw_Db_Back_Defaults} */
-    #DEF;
-    /** @type {TeqFw_Db_Back_Dto_RDb_Table.Factory} */
-    #fTable;
 
     constructor(spec) {
-        this.#DEF = spec['TeqFw_Db_Back_Defaults$'];
-        this.#fTable = spec['TeqFw_Db_Back_Dto_RDb_Table#Factory$'];
-    }
+        // EXTRACT DEPS
+        /** @type {TeqFw_Db_Back_Api_Defaults} */
+        const DEF = spec['TeqFw_Db_Back_Api_Defaults$'];
+        /** @type {TeqFw_Db_Back_Dto_RDb_Column.Factory} */
+        const fColumn = spec['TeqFw_Db_Back_Dto_RDb_Column#Factory$'];
+        /** @type {TeqFw_Db_Back_Dto_RDb_Index.Factory} */
+        const fIndex = spec['TeqFw_Db_Back_Dto_RDb_Index#Factory$'];
+        /** @type {TeqFw_Db_Back_Dto_RDb_Relation.Factory} */
+        const fRelation = spec['TeqFw_Db_Back_Dto_RDb_Relation#Factory$'];
+        /** @type {TeqFw_Db_Back_Dto_RDb_Table.Factory} */
+        const fTable = spec['TeqFw_Db_Back_Dto_RDb_Table#Factory$'];
+        /** @type {typeof TeqFw_Db_Back_Enum_Dem_Type_Attr} */
+        const TDemAttr = spec['TeqFw_Db_Back_Enum_Dem_Type_Attr$'];
+        /** @type {typeof TeqFw_Db_Back_Enum_Dem_Type_Index} */
+        const TDemIndex = spec['TeqFw_Db_Back_Enum_Dem_Type_Index$'];
+        /** @type {typeof TeqFw_Db_Back_Enum_Dem_Type_Action} */
+        const TDemAction = spec['TeqFw_Db_Back_Enum_Dem_Type_Action$'];
+        /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Column} */
+        const TDbColType = spec['TeqFw_Db_Back_Enum_Db_Type_Column$'];
+        /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Index} */
+        const TDbIndexType = spec['TeqFw_Db_Back_Enum_Db_Type_Index$'];
+        /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Action} */
+        const TDbActionType = spec['TeqFw_Db_Back_Enum_Db_Type_Action$'];
 
-    /**
-     * Convert DEM DTO Entity to RDB DTO Table.
-     *
-     * @param {TeqFw_Db_Back_Dto_Dem_Entity} entity
-     * @return {Promise<TeqFw_Db_Back_Dto_RDb_Table>}
-     */
-    async exec({entity}) {
+        // DEFINE WORKING VARS / PROPS
+        const mapAction = {
+            [TDemAction.CASCADE]: TDbActionType.CASCADE,
+            [TDemAction.RESTRICT]: TDbActionType.RESTRICT,
+        };
+        const mapAttr2Cols = {
+            [TDemAttr.BOOLEAN]: TDbColType.BOOLEAN,
+            [TDemAttr.DATE]: TDbColType.DATE,
+            [TDemAttr.DATETIME]: TDbColType.DATETIME,
+            [TDemAttr.ENUM]: TDbColType.ENUM,
+            [TDemAttr.ID]: TDbColType.INCREMENTS,
+            [TDemAttr.INTEGER]: TDbColType.INTEGER,
+            [TDemAttr.NUMERIC]: TDbColType.DECIMAL,
+            [TDemAttr.REF]: TDbColType.INTEGER,
+            [TDemAttr.STRING]: TDbColType.STRING,
+            [TDemAttr.TEXT]: TDbColType.TEXT,
+        };
+        const mapIndex = {
+            [TDemIndex.INDEX]: TDbIndexType.INDEX,
+            [TDemIndex.PRIMARY]: TDbIndexType.PRIMARY,
+            [TDemIndex.UNIQUE]: TDbIndexType.UNIQUE,
+        };
+
         // DEFINE INNER FUNCTIONS
         /**
-         * @param {TeqFw_Db_Back_Dto_Dem_Entity} entity
-         * @param {string} PS path separator
-         * @param {string} NS name separator
+         * Normalize table name.
+         * @param {string} name
          * @return {string}
          */
-        function getTableName(entity, PS, NS) {
-            let res = `${entity.path}${entity.name}`;
-            res = res.replace(new RegExp(PS, 'g'), NS);
-            res = (res[0] === NS) ? res.substr(1) : res;
-            return res;
+        function normName(name) {
+            const res = name.replace(new RegExp(DEF.PS, 'g'), DEF.NS);
+            return (res[0] === DEF.NS) ? res.substr(1) : res;
         }
 
-        // MAIN FUNCTIONALITY
-        const res = this.#fTable.create();
-        res.name = getTableName(entity, this.#DEF.PS, this.#DEF.NS);
-        res.comment = entity.comment;
-        return res;
+        // DEFINE INSTANCE METHODS
+        /**
+         * Convert DEM DTO Entity to RDB DTO Table.
+         *
+         * @param {TeqFw_Db_Back_Dto_Dem_Entity} entity
+         * @return {Promise<TeqFw_Db_Back_Dto_RDb_Table>}
+         */
+        this.exec = async function ({entity}) {
+            // DEFINE INNER FUNCTIONS
+            /**
+             * @param {TeqFw_Db_Back_Dto_RDb_Table} tbl
+             * @param {TeqFw_Db_Back_Dto_Dem_Entity_Attr} dem
+             */
+            function convertAttr(tbl, dem) {
+                const col = fColumn.create();
+                col.name = dem.name;
+                col.comment = dem.comment;
+                col.type = mapAttr2Cols[dem.type];
+                if (dem.type === TDemAttr.ENUM) {
+                    col.enum = dem.options.values;
+                } else if (dem.type === TDemAttr.REF) {
+                    col.unsigned = true;
+                } else if (dem.type === TDemAttr.INTEGER) {
+                    col.unsigned = dem?.options?.unsigned;
+                } else if (dem.type === TDemAttr.NUMERIC) {
+                    col.precision = dem?.options?.precision;
+                    col.scale = dem?.options?.scale;
+                }
+                col.default = dem.default;
+                tbl.columns.push(col);
+            }
+
+            /**
+             * @param {TeqFw_Db_Back_Dto_RDb_Table} tbl
+             * @param {TeqFw_Db_Back_Dto_Dem_Entity_Index} dem
+             */
+            function convertIndex(tbl, dem) {
+                const db = fIndex.create();
+                db.name = `${tbl.name}${DEF.NS}${dem.name}`.toLowerCase();
+                db.columns = dem.attrs;
+                db.type = mapIndex[dem.type];
+                tbl.indexes.push(db);
+            }
+
+            /**
+             * @param {TeqFw_Db_Back_Dto_RDb_Table} tbl
+             * @param {TeqFw_Db_Back_Dto_Dem_Entity_Relation} dem
+             */
+            function convertRelation(tbl, dem) {
+                const db = fRelation.create();
+                db.name = `${tbl.name}${DEF.NS}fk${DEF.NS}${dem.name}`.toLowerCase();
+                db.ownColumns = dem.attrs;
+                db.itsTable = normName(dem.ref.path);
+                db.itsColumns = dem.ref.attrs;
+                if (dem.onDelete) db.onDelete = mapAction[dem.onDelete];
+                if (dem.onUpdate) db.onUpdate = mapAction[dem.onUpdate];
+                tbl.relations.push(db);
+            }
+
+            /**
+             * Convert entity path & name to table name.
+             * @param {TeqFw_Db_Back_Dto_Dem_Entity} entity
+             * @return {string}
+             */
+            function convertTableName(entity) {
+                const res = `${entity.path}${entity.name}`;
+                return normName(res);
+            }
+
+            // MAIN FUNCTIONALITY
+            const res = fTable.create();
+            res.name = convertTableName(entity);
+            res.comment = entity.comment;
+            for (const aName of Object.keys(entity.attr))
+                convertAttr(res, entity.attr[aName]);
+            for (const iName of Object.keys(entity.index))
+                convertIndex(res, entity.index[iName]);
+            for (const rName of Object.keys(entity.relation))
+                convertRelation(res, entity.relation[rName]);
+            return res;
+        }
 
     }
 }

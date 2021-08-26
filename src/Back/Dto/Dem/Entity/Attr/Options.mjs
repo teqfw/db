@@ -6,8 +6,17 @@ const NS = 'TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options';
 
 // MODULE'S CLASSES
 export default class TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options {
+    /** @type {number} */
+    precision;
+    /** @type {number} */
+    scale;
     /** @type {boolean} */
     unsigned;
+    /**
+     * Enum values.
+     * @type {Array}
+     */
+    values;
 }
 
 /**
@@ -22,7 +31,10 @@ export class Factory {
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options();
+            res.precision = data?.precision;
+            res.scale = data?.scale;
             res.unsigned = data?.unsigned;
+            res.values = Array.isArray(data?.values) ? [...data.values] : undefined;
             return res;
         }
     }

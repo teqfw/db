@@ -1,7 +1,7 @@
 /**
  * Enumeration for column types (knex related).
  */
-const TeqFw_Db_Back_Enum_Db_Column = {
+const TeqFw_Db_Back_Enum_Db_Type_Column = {
     BIG_INTEGER: 'bigInteger',
     BINARY: 'binary',
     BOOLEAN: 'boolean',
@@ -20,5 +20,5 @@ const TeqFw_Db_Back_Enum_Db_Column = {
     TIMESTAMP: 'timestamp',
     UUID: 'uuid',
 }
-Object.freeze(TeqFw_Db_Back_Enum_Db_Column);
-export default TeqFw_Db_Back_Enum_Db_Column;
+Object.freeze(TeqFw_Db_Back_Enum_Db_Type_Column);
+export default TeqFw_Db_Back_Enum_Db_Type_Column;

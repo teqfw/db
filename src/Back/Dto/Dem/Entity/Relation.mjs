@@ -10,6 +10,10 @@ export default class TeqFw_Db_Back_Dto_Dem_Entity_Relation {
     attrs;
     /** @type {string} */
     name;
+    /** @type {TeqFw_Db_Back_Enum_Dem_Type_Action} */
+    onDelete;
+    /** @type {TeqFw_Db_Back_Enum_Dem_Type_Action} */
+    onUpdate;
     /** @type {TeqFw_Db_Back_Dto_Dem_Entity_Relation_Ref} */
     ref;
 }
@@ -32,6 +36,8 @@ export class Factory {
             const res = new TeqFw_Db_Back_Dto_Dem_Entity_Relation();
             res.attrs = Array.isArray(data?.attrs) ? [...data.attrs] : [];
             res.name = data?.name;
+            res.onDelete = data?.onDelete;
+            res.onUpdate = data?.onUpdate;
             res.ref = fRef.create(data?.ref);
             return res;
         }
