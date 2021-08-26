@@ -60,7 +60,6 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Builder {
                     if (dto.name) chained.withKeyName(dto.name);
                     if (dto.onDelete) chained.onDelete(dto.onDelete);
                     if (dto.onUpdate) chained.onUpdate(dto.onUpdate);
-                    debugger
                 }
 
                 // MAIN FUNCTIONALITY
