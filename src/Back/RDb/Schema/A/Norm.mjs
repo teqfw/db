@@ -20,103 +20,82 @@ function normName(data) {
  * @implements TeqFw_Core_Shared_Api_IAction
  */
 export default class TeqFw_Db_Back_RDb_Schema_A_Norm {
-    /** @type {TeqFw_Db_Back_Api_Defaults} */
-    #DEF;
 
     constructor(spec) {
-        this.#DEF = spec['TeqFw_Db_Back_Api_Defaults$'];
-    }
+        // EXTRACT DEPS
+        /** @type {TeqFw_Db_Back_Api_Defaults} */
+        const $DEF = spec['TeqFw_Db_Back_Api_Defaults$'];
+        /** @type {Function|TeqFw_Core_Shared_Util.deepMerge} */
+        const $deepMerge = spec['TeqFw_Core_Shared_Util#deepMerge'];
+        /** @type {TeqFw_Db_Back_Dto_Dem.Factory} */
+        const $fDem = spec['TeqFw_Db_Back_Dto_Dem#Factory$'];
 
-    /**
-     * @param {TeqFw_Db_Back_Dto_Dem} dem
-     * @return {Promise<TeqFw_Db_Back_Dto_Dem>}
-     */
-    async exec({dem}) {
-        // DEFINE INNER FUNCTIONS
 
+        // DEFINE INSTANCE METHODS
         /**
-         * @param {TeqFw_Db_Back_Dto_Dem|TeqFw_Db_Back_Dto_Dem_Package} dem
-         * @param {string} current current path
-         * @param {string} ps path separator
+         * @param {Object<string, TeqFw_Db_Back_Dto_Dem>} dems
+         * @param {Object<string, Object<string, TeqFw_Db_Back_Dto_Map>>} map
+         * @return {Promise<TeqFw_Db_Back_Dto_Dem>}
          */
-        function setPaths(dem, current, ps) {
-            // set path to entities on the current level
-            if (typeof dem.entity === 'object') {
-                for (const eName of Object.keys(dem.entity)) {
-                    /** @type {TeqFw_Db_Back_Dto_Dem_Entity} */
-                    const entity = dem.entity[eName];
-                    entity.path = normName(current);
-                    // normalize relation references paths
-                    if (typeof entity.relation === 'object') {
-                        for (const relName of Object.keys(entity.relation)) {
-                            /** @type {TeqFw_Db_Back_Dto_Dem_Entity_Relation} */
-                            const relation = entity.relation[relName];
-                            const ref = relation.ref;
-                            ref.path = normName(ref.path);
-                        }
-                    }
-                }
-            }
-            // set path to packages on the current level
-            if (typeof dem.package === 'object') {
-                for (const name of Object.keys(dem.package)) {
-                    const pkg = dem.package[name];
-                    const path = normName(`${current}${name}${ps}`);
-                    setPaths(pkg, path, ps);
-                }
-            }
-        }
-
-        /**
-         * @param {TeqFw_Db_Back_Dto_Dem} dem
-         */
-        function applyMapping(dem) {
+        this.exec = async function ({dems, map}) {
             // DEFINE INNER FUNCTIONS
+
             /**
-             * @param {Object<string, TeqFw_Db_Back_Dto_Dem_Map>} map
-             * @param {TeqFw_Db_Back_Dto_Dem|TeqFw_Db_Back_Dto_Dem_Package} pkg
+             * @param {TeqFw_Db_Back_Dto_Dem|TeqFw_Db_Back_Dto_Dem_Package} dem
+             * @param {Object<string, TeqFw_Db_Back_Dto_Map>} map
+             * @param {string} current current path
+             * @param {string} ps path separator
              */
-            function processPackage(map, pkg) {
-                if (typeof pkg.entity === 'object') {
-                    for (const key of Object.keys(pkg.entity)) {
+            function setPaths(dem, map, current, ps) {
+                // set path to entities on the current level
+                if (typeof dem.entity === 'object') {
+                    for (const eName of Object.keys(dem.entity)) {
                         /** @type {TeqFw_Db_Back_Dto_Dem_Entity} */
-                        const entity = pkg.entity[key];
-                        for (const key of Object.keys(entity?.relation)) {
-                            const rel = entity.relation[key];
-                            const ref = rel.ref;
-                            if (typeof map[ref.path] === 'object') {
-                                /** @type {TeqFw_Db_Back_Dto_Dem_Map} */
-                                const mapItem = map[ref.path];
-                                ref.path = mapItem.path;
-                                const attrs = [];
-                                for (const one of ref.attrs) {
-                                    if (mapItem.attrs[one]) {
-                                        attrs.push(mapItem.attrs[one]);
-                                    } else {
-                                        attrs.push(one);
+                        const entity = dem.entity[eName];
+                        entity.path = normName(current);
+                        // normalize relation references paths
+                        if (typeof entity.relation === 'object') {
+                            for (const relName of Object.keys(entity.relation)) {
+                                /** @type {TeqFw_Db_Back_Dto_Dem_Entity_Relation} */
+                                const relation = entity.relation[relName];
+                                const ref = relation.ref;
+                                ref.path = normName(ref.path);
+                                // apply mapping for references
+                                if (typeof map[ref.path] === 'object') {
+                                    const mapItem = map[ref.path];
+                                    ref.path = normName(mapItem.path);
+                                    for (const i in ref.attrs) {
+                                        const attr = ref.attrs[i];
+                                        if (mapItem.attrs[attr]) ref.attrs[i] = mapItem.attrs[attr];
                                     }
                                 }
-                                ref.attrs = attrs;
                             }
                         }
                     }
                 }
-                if (typeof pkg.package === 'object') {
-                    for (const key of Object.keys(pkg.package))
-                        processPackage(map, pkg.package[key]);
+                // set path to packages on the current level
+                if (typeof dem.package === 'object') {
+                    for (const name of Object.keys(dem.package)) {
+                        const pkg = dem.package[name];
+                        const path = normName(`${current}${name}${ps}`);
+                        setPaths(pkg, map, path, ps);
+                    }
                 }
             }
 
             // MAIN FUNCTIONALITY
-            const map = dem?.map;
-            if (typeof map === 'object') {
-                processPackage(map, dem);
-            }
-        }
+            /** @type {TeqFw_Db_Back_Dto_Dem} */
+            const res = $fDem.create();
+            delete res.refs;
 
-        // MAIN FUNCTIONALITY
-        setPaths(dem, this.#DEF.PS, this.#DEF.PS);
-        applyMapping(dem);
-        return dem;
+            for (const plugin of Object.keys(dems)) {
+                // set full paths for entities taking into account references mapping
+                setPaths(dems[plugin], map[plugin], $DEF.PS, $DEF.PS);
+                delete dems[plugin].refs;
+                $deepMerge(res, dems[plugin]);
+            }
+
+            return res;
+        }
     }
 }

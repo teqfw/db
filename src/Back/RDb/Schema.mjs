@@ -4,61 +4,67 @@
  * @implements TeqFw_Db_Back_Api_RDb_ISchema
  */
 export default class TeqFw_Db_Back_RDb_Schema {
-    /** @type {TeqFw_Db_Back_RDb_Schema_A_Convert} */
-    #aConvert;
-    /** @type {TeqFw_Db_Back_RDb_Schema_A_Norm} */
-    #aNorm;
-    /** @type {TeqFw_Db_Back_RDb_Schema_A_Order} */
-    #aOrder;
-    /** @type {TeqFw_Db_Back_RDb_Schema_A_Scan} */
-    #aScan;
-    /** @type {TeqFw_Db_Back_RDb_Schema_A_Builder} */
-    #builder;
-    /** @type {TeqFw_Db_Back_Dto_Dem} */
-    #dem;
 
     constructor(spec) {
         // EXTRACT DEPS
-        this.#aConvert = spec['TeqFw_Db_Back_RDb_Schema_A_Convert$'];
-        this.#aNorm = spec['TeqFw_Db_Back_RDb_Schema_A_Norm$'];
-        this.#aOrder = spec['TeqFw_Db_Back_RDb_Schema_A_Order$'];
-        this.#aScan = spec['TeqFw_Db_Back_RDb_Schema_A_Scan$'];
-        this.#builder = spec['TeqFw_Db_Back_RDb_Schema_A_Builder$'];
-    }
+        /** @type {TeqFw_Db_Back_RDb_Schema_A_Convert} */
+        const $aConvert = spec['TeqFw_Db_Back_RDb_Schema_A_Convert$'];
+        /** @type {TeqFw_Db_Back_RDb_Schema_A_Norm} */
+        const $aNorm = spec['TeqFw_Db_Back_RDb_Schema_A_Norm$'];
+        /** @type {TeqFw_Db_Back_RDb_Schema_A_Order} */
+        const $aOrder = spec['TeqFw_Db_Back_RDb_Schema_A_Order$'];
+        /** @type {TeqFw_Db_Back_RDb_Schema_A_Builder} */
+        const $builder = spec['TeqFw_Db_Back_RDb_Schema_A_Builder$'];
+        /** @type {TeqFw_Db_Back_Act_Dem_Load_Map} */
+        const $mapLoad = spec['TeqFw_Db_Back_Act_Dem_Load_Map$'];
+        /** @type {TeqFw_Db_Back_Act_Dem_Load_Schema} */
+        const $schemaLoad = spec['TeqFw_Db_Back_Act_Dem_Load_Schema$'];
 
+        // DEFINE WORKING VARS / PROPS
+        /** @type {TeqFw_Db_Back_Dto_Dem} */
+        let $dem;
 
-    async createAllTables({conn}) {
-        // prepare schema (populate with CREATE TABLE statements)
-        const schema = conn.getSchemaBuilder();
-        const dem = this.#dem;
-        /** @type {TeqFw_Db_Back_Dto_Dem_Entity[]} */
-        const entities = await this.#aOrder.exec({dem});
-        for (const entity of entities) {
-            const tbl = await this.#aConvert.exec({entity});
-            this.#builder.addTable(schema, tbl);
+        // DEFINE INSTANCE METHODS
+        this.createAllTables = async function ({conn}) {
+            // prepare schema (populate with CREATE TABLE statements)
+            const schema = conn.getSchemaBuilder();
+            const dem = $dem;
+            /** @type {TeqFw_Db_Back_Dto_Dem_Entity[]} */
+            const entities = await $aOrder.exec({dem});
+            for (const entity of entities) {
+                const tbl = await $aConvert.exec({entity});
+                $builder.addTable(schema, tbl);
+            }
+            // perform operations
+            // const sql = schema.toString();
+            await schema;
         }
-        // perform operations
-        // const sql = schema.toString();
-        await schema;
-    }
 
-    async dropAllTables({conn}) {
-        // prepare schema (populate with DROP statements)
-        const schema = conn.getSchemaBuilder();
-        const dem = this.#dem;
-        /** @type {TeqFw_Db_Back_Dto_Dem_Entity[]} */
-        const entities = await this.#aOrder.exec({dem});
-        entities.reverse(); // reverse order for tables drop
-        for (const entity of entities) {
-            const tbl = await this.#aConvert.exec({entity});
-            this.#builder.dropTable(schema, tbl);
+        this.dropAllTables = async function ({conn}) {
+            // prepare schema (populate with DROP statements)
+            const schema = conn.getSchemaBuilder();
+            const dem = $dem;
+            /** @type {TeqFw_Db_Back_Dto_Dem_Entity[]} */
+            const entities = await $aOrder.exec({dem});
+            entities.reverse(); // reverse order for tables drop
+            for (const entity of entities) {
+                const tbl = await $aConvert.exec({entity});
+                $builder.dropTable(schema, tbl);
+            }
+            // perform operations
+            await schema;
         }
-        // perform operations
-        await schema;
+
+        this.loadDem = async function ({path}) {
+            // load DEM fragments and external references mapping rules
+            /** @type {Object<string, TeqFw_Db_Back_Dto_Dem>} */
+            const dems = await $schemaLoad.exec({path});
+            /** @type {Object<string, Object<string, TeqFw_Db_Back_Dto_Map>>} */
+            const map = await $mapLoad.exec({path});
+            // process all DEMs and map virtual aliases to real paths
+            $dem = await $aNorm.exec({dems, map});
+        }
+
     }
 
-    async loadDem({path}) {
-        const dem = await this.#aScan.exec({path});
-        this.#dem = await this.#aNorm.exec({dem});
-    }
 }

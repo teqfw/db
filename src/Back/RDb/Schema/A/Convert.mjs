@@ -37,12 +37,11 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
         };
         const mapAttr2Cols = {
             [TDemAttr.BOOLEAN]: TDbColType.BOOLEAN,
-            [TDemAttr.DATE]: TDbColType.DATE,
             [TDemAttr.DATETIME]: TDbColType.DATETIME,
             [TDemAttr.ENUM]: TDbColType.ENUM,
             [TDemAttr.ID]: TDbColType.INCREMENTS,
             [TDemAttr.INTEGER]: TDbColType.INTEGER,
-            [TDemAttr.NUMERIC]: TDbColType.DECIMAL,
+            [TDemAttr.NUMBER]: TDbColType.DECIMAL,
             [TDemAttr.REF]: TDbColType.INTEGER,
             [TDemAttr.STRING]: TDbColType.STRING,
             [TDemAttr.TEXT]: TDbColType.TEXT,
@@ -82,13 +81,15 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
                 col.name = dem.name;
                 col.comment = dem.comment;
                 col.type = mapAttr2Cols[dem.type];
+                if ((dem.type === TDemAttr.DATETIME) && (dem.options?.dateOnly === true)) col.type = TDbColType.DATE;
+                // parse argument options
                 if (dem.type === TDemAttr.ENUM) {
                     col.enum = dem.options.values;
                 } else if (dem.type === TDemAttr.REF) {
                     col.unsigned = true;
                 } else if (dem.type === TDemAttr.INTEGER) {
                     col.unsigned = dem?.options?.unsigned;
-                } else if (dem.type === TDemAttr.NUMERIC) {
+                } else if (dem.type === TDemAttr.NUMBER) {
                     col.precision = dem?.options?.precision;
                     col.scale = dem?.options?.scale;
                 }
