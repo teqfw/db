@@ -2,6 +2,7 @@
  * Normalize DEM:
  *   - set paths to entities;
  *   - apply mapping to relations;
+ *   - merge fragments into one object;
  */
 
 // MODULE'S FUNCTIONS
@@ -19,7 +20,7 @@ function normName(data) {
 /**
  * @implements TeqFw_Core_Shared_Api_IAction
  */
-export default class TeqFw_Db_Back_RDb_Schema_A_Norm {
+export default class TeqFw_Db_Back_Api_Act_Dem_Norm {
 
     constructor(spec) {
         // EXTRACT DEPS
@@ -61,7 +62,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Norm {
                                 const ref = relation.ref;
                                 ref.path = normName(ref.path);
                                 // apply mapping for references
-                                if (typeof map[ref.path] === 'object') {
+                                if (map && (typeof map[ref.path] === 'object')) {
                                     const mapItem = map[ref.path];
                                     ref.path = normName(mapItem.path);
                                     for (const i in ref.attrs) {
@@ -89,10 +90,12 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Norm {
             delete res.refs;
 
             for (const plugin of Object.keys(dems)) {
+                // make a copy of the DEM fragment
+                const part = JSON.parse(JSON.stringify(dems[plugin]));
                 // set full paths for entities taking into account references mapping
-                setPaths(dems[plugin], map[plugin], $DEF.PS, $DEF.PS);
-                delete dems[plugin].refs;
-                $deepMerge(res, dems[plugin]);
+                setPaths(part, map[plugin], $DEF.PS, $DEF.PS);
+                delete part.refs;
+                $deepMerge(res, part);
             }
 
             return res;

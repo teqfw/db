@@ -4,11 +4,23 @@
 
 ```json
 {
-  "package": {
-    "name": {}
-  },
-  "refs": {
-    "name": {}
+  "entity": {},
+  "package": {},
+  "refs": {}
+}
+```
+
+## `entity`
+
+```json
+{
+  "entity": {
+    "name": {
+      "comment": "",
+      "attr": {},
+      "index": {},
+      "relation": {}
+    }
   }
 }
 ```
@@ -27,29 +39,14 @@
 }
 ```
 
-## `package/entity`
-
-```json
-{
-  "entity": {
-    "name|.": {
-      "comment": "",
-      "attr": {},
-      "index": {},
-      "relation": {}
-    }
-  }
-}
-```
-
-## `package/entity/attr`
+## `entity/attr`
 
 ```json
 {
   "attr": {
     "name": {
       "comment": "",
-      "type": "id|ref|string|text|integer|numeric|datetime|boolean|binary|option",
+      "type": "id|ref|string|text|numeric|datetime|boolean|binary|option",
       "nullable": false,
       "default": "[value]|[function]"
     }
@@ -98,15 +95,14 @@
 }
 ```
 
-
 ### Attribute default functions
 
 Available functions:
-* `datetime`: 
+
+* `datetime`:
   * `current`: current timestamp
 
-
-## `package/entity/index`
+## `entity/index`
 
 ```json
 {
@@ -116,7 +112,7 @@ Available functions:
 }
 ```
 
-## `package/entity/relation`
+## `entity/relation`
 
 ```json
 {

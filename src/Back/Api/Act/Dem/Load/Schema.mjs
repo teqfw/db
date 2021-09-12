@@ -9,7 +9,7 @@ const DEM = 'etc/teqfw.schema.json';
 /**
  * @implements TeqFw_Core_Shared_Api_IAction
  */
-export default class TeqFw_Db_Back_Act_Dem_Load_Schema {
+export default class TeqFw_Db_Back_Api_Act_Dem_Load_Schema {
     constructor(spec) {
         // EXTRACT DEPS
         /** @type {Function|TeqFw_Core_Back_Util.readJson} */

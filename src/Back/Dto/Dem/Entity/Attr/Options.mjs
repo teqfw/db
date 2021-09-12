@@ -9,6 +9,8 @@ export default class TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options {
     /** @type {boolean} */
     dateOnly;
     /** @type {number} */
+    length;
+    /** @type {number} */
     precision;
     /** @type {number} */
     scale;
@@ -34,6 +36,7 @@ export class Factory {
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options();
             res.dateOnly = typeof data?.dateOnly === 'boolean' ? data.dateOnly : undefined;
+            res.length = data?.length;
             res.precision = data?.precision;
             res.scale = data?.scale;
             res.unsigned = data?.unsigned;

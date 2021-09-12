@@ -4,7 +4,7 @@
  * @namespace TeqFw_Db_Back_RDb_Connect
  */
 // MODULE'S IMPORT
-import $knex from 'knex';
+import knex from 'knex';
 
 /**
  * Default implementation for 'knex' based database connector.
@@ -13,11 +13,14 @@ import $knex from 'knex';
 export default class TeqFw_Db_Back_RDb_Connect {
 
     constructor(spec) {
+        // EXTRACT DEPS
         /** @type {TeqFw_Core_Shared_Logger} */
-        const logger = spec['TeqFw_Core_Shared_Logger$'];
+        const _logger = spec['TeqFw_Core_Shared_Logger$'];
 
-        let knex;
+        // DEFINE WORKING VARS / PROPS
+        let _knex, _db;
 
+        // DEFINE INSTANCE METHODS
         /**
          * Initialize connection to database.
          *
@@ -25,13 +28,14 @@ export default class TeqFw_Db_Back_RDb_Connect {
          * @returns {Promise<void>}
          */
         this.init = async function (cfg) {
-            const db = cfg.connection.database + '@' + cfg.connection.host;
+            _db = cfg.connection.database + '@' + cfg.connection.host;
             const user = cfg.connection.user;
             try {
-                knex = await $knex(cfg);
-                logger.info('Connected to DB \'' + db + '\' as \'' + user + '\'.');
+                _knex = await knex(cfg);
+                _logger.info(`Setup connection to DB '${_db}' as '${user}'.`);
             } catch (e) {
-                logger.error('Cannot connect to DB \'' + db + '\' as \'' + user + '\'. Error: ' + e);
+                _logger.error(`Cannot setup connection to DB '${_db}' as '${user}'. Error: ${e}`);
+                throw e;
             }
         };
 
@@ -42,7 +46,7 @@ export default class TeqFw_Db_Back_RDb_Connect {
          * @returns {Promise<*>}
          */
         this.startTransaction = async function () {
-            return await knex.transaction();
+            return await _knex.transaction();
         };
 
         /**
@@ -51,7 +55,7 @@ export default class TeqFw_Db_Back_RDb_Connect {
          * @returns {*}
          */
         this.getKnex = function () {
-            return knex;
+            return _knex;
         };
 
         /**
@@ -60,11 +64,11 @@ export default class TeqFw_Db_Back_RDb_Connect {
          * @returns {SchemaBuilder}
          */
         this.getSchemaBuilder = function () {
-            return knex.schema;
+            return _knex.schema;
         };
 
         this.disconnect = async function () {
-            const pool = knex.client.pool;
+            const pool = _knex.client.pool;
             return new Promise(function (resolve) {
                 const WAIT = 100;
 
@@ -80,8 +84,8 @@ export default class TeqFw_Db_Back_RDb_Connect {
                         setTimeout(checkPool, WAIT);
                     } else {
                         // close all connections
-                        knex.destroy();
-                        logger.info('All database connections are closed.');
+                        _knex.destroy();
+                        _logger.info(`Connections to '${_db}' are closed.`);
                         resolve();
                     }
                 }

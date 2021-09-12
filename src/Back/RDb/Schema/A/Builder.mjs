@@ -2,8 +2,6 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Builder {
 
     constructor(spec) {
         // EXTRACT DEPS
-        /** @type {TeqFw_Db_Back_Api_RDb_IConnect} */
-        const conn = spec['TeqFw_Db_Back_Api_RDb_IConnect$'];
         /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Column} */
         const TDbColType = spec['TeqFw_Db_Back_Enum_Db_Type_Column$'];
 
@@ -11,8 +9,9 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Builder {
         /**
          * @param {Knex.SchemaBuilder} schema
          * @param {TeqFw_Db_Back_Dto_RDb_Table} dto
+         * @param {*} knex
          */
-        this.addTable = function (schema, dto) {
+        this.addTable = function (schema, dto, knex) {
             schema.createTable(dto.name, (table) => {
                 // DEFINE INNER FUNCTIONS
                 /**
@@ -33,7 +32,6 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Builder {
                             (dto.type === TDbColType.DATE) || (dto.type === TDbColType.DATETIME)
                             && (dto.default === 'current')
                         ) {
-                            const knex = conn.getKnex();
                             column.defaultTo(knex.fn.now());
                         } else {
                             column.defaultTo(dto.default)

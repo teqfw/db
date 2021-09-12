@@ -24,4 +24,9 @@ export default class TeqFw_Db_Back_Api_RDb_ISchema {
      */
     async loadDem({path}) {}
 
+    /**
+     * Set internal DEM object.
+     * @param {TeqFw_Db_Back_Dto_Dem} dem
+     */
+    setDem({dem}) {}
 }
