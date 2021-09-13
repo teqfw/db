@@ -46,7 +46,7 @@
   "attr": {
     "name": {
       "comment": "",
-      "type": "id|ref|string|text|numeric|datetime|boolean|binary|option",
+      "type": "id|ref|string|text|number|datetime|boolean|binary|enum",
       "nullable": false,
       "default": "[value]|[function]"
     }
@@ -101,6 +101,7 @@ Available functions:
 
 * `datetime`:
   * `current`: current timestamp
+
 
 ## `entity/index`
 

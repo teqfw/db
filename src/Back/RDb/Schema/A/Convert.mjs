@@ -40,7 +40,6 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
             [TDemAttr.DATETIME]: TDbColType.DATETIME,
             [TDemAttr.ENUM]: TDbColType.ENUM,
             [TDemAttr.ID]: TDbColType.INCREMENTS,
-            [TDemAttr.INTEGER]: TDbColType.INTEGER,
             [TDemAttr.NUMBER]: TDbColType.DECIMAL,
             [TDemAttr.REF]: TDbColType.INTEGER,
             [TDemAttr.STRING]: TDbColType.STRING,
@@ -87,11 +86,13 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
                     col.enum = dem.options.values;
                 } else if (dem.type === TDemAttr.REF) {
                     col.unsigned = true;
-                } else if (dem.type === TDemAttr.INTEGER) {
-                    col.unsigned = dem?.options?.unsigned;
                 } else if (dem.type === TDemAttr.NUMBER) {
                     col.precision = dem?.options?.precision;
                     col.scale = dem?.options?.scale;
+                    if (!col.scale && !col.precision) {
+                        col.type = TDbColType.INTEGER;
+                        col.unsigned = dem?.options?.unsigned;
+                    }
                 }
                 col.default = dem.default;
                 tbl.columns.push(col);
