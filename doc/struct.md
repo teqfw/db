@@ -48,7 +48,14 @@
       "comment": "",
       "type": "id|ref|string|text|number|datetime|boolean|binary|enum",
       "nullable": false,
-      "default": "[value]|[function]"
+      "default": "[value]|[function]",
+      "options": {
+        "length": 32,
+        "precision": 10,
+        "scale": 2,
+        "unsigned": true,
+        "values": ["values", "for", "enum", "type"]
+      }
     }
   }
 }

@@ -89,9 +89,9 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
                 } else if (dem.type === TDemAttr.NUMBER) {
                     col.precision = dem?.options?.precision;
                     col.scale = dem?.options?.scale;
+                    col.unsigned = dem?.options?.unsigned;
                     if (!col.scale && !col.precision) {
                         col.type = TDbColType.INTEGER;
-                        col.unsigned = dem?.options?.unsigned;
                     }
                 }
                 col.default = dem.default;
