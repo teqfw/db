@@ -23,16 +23,20 @@ TeqFw_Db_Back_Dto_RDb_Index.TYPE = 'type';
  * @memberOf TeqFw_Db_Back_Dto_RDb_Index
  */
 export class Factory {
-    constructor() {
+    constructor(spec) {
+        const {castArray, castEnum, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
+        /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Index} */
+        const INDEX = spec['TeqFw_Db_Back_Enum_Db_Type_Index#'];
+
         /**
          * @param {TeqFw_Db_Back_Dto_RDb_Index|null} data
          * @return {TeqFw_Db_Back_Dto_RDb_Index}
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_RDb_Index();
-            res.columns = Array.isArray(data?.columns) ? data.columns : [];
-            res.name = data?.name;
-            res.type = data?.type;
+            res.columns = castArray(data?.columns);
+            res.name = castString(data?.name);
+            res.type = castEnum(data?.type, INDEX);
             return res;
         }
     }

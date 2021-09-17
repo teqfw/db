@@ -29,17 +29,11 @@ TeqFw_Db_Back_Dto_RDb_Table.RELATIONS = 'relations';
  */
 export class Factory {
     constructor(spec) {
-        // EXTRACT DEPS
-        /** @type {typeof TeqFw_Db_Back_Dto_RDb_Column} */
-        const TColumn = spec['TeqFw_Db_Back_Dto_RDb_Column#'];
+        const {castArrayOfObj, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
         /** @type {TeqFw_Db_Back_Dto_RDb_Column.Factory} */
         const fColumn = spec['TeqFw_Db_Back_Dto_RDb_Column#Factory$'];
-        /** @type {typeof TeqFw_Db_Back_Dto_RDb_Index} */
-        const TIndex = spec['TeqFw_Db_Back_Dto_RDb_Index#'];
         /** @type {TeqFw_Db_Back_Dto_RDb_Index.Factory} */
         const fIndex = spec['TeqFw_Db_Back_Dto_RDb_Index#Factory$'];
-        /** @type {typeof TeqFw_Db_Back_Dto_RDb_Relation} */
-        const TRelation = spec['TeqFw_Db_Back_Dto_RDb_Relation#'];
         /** @type {TeqFw_Db_Back_Dto_RDb_Relation.Factory} */
         const fRelation = spec['TeqFw_Db_Back_Dto_RDb_Relation#Factory$'];
 
@@ -49,17 +43,11 @@ export class Factory {
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_RDb_Table();
-            res.columns = Array.isArray(data?.columns)
-                ? data.columns.map((one) => (one instanceof TColumn) ? one : fColumn.create(one))
-                : [];
-            res.comment = data?.comment;
-            res.indexes = Array.isArray(data?.indexes)
-                ? data.indexes.map((one) => (one instanceof TIndex) ? one : fIndex.create(one))
-                : [];
-            res.name = data?.name;
-            res.relations = Array.isArray(data?.relations)
-                ? data.relations.map((one) => (one instanceof TRelation) ? one : fRelation.create(one))
-                : [];
+            res.columns = castArrayOfObj(data?.columns, fColumn);
+            res.comment = castString(data?.comment);
+            res.indexes = castArrayOfObj(data?.indexes, fIndex.create);
+            res.name = castString(data?.name);
+            res.relations = castArrayOfObj(data?.relations, fRelation.create);
             return res;
         }
     }

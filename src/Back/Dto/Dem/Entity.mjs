@@ -29,7 +29,7 @@ TeqFw_Db_Back_Dto_Dem_Entity.NAME = 'name';
  */
 export class Factory {
     constructor(spec) {
-        // EXTRACT DEPS
+        const {castString} = spec['TeqFw_Core_Shared_Util_Cast'];
         /** @type {TeqFw_Db_Back_Dto_Dem_Entity_Attr.Factory} */
         const fAttr = spec['TeqFw_Db_Back_Dto_Dem_Entity_Attr#Factory$'];
         /** @type {TeqFw_Db_Back_Dto_Dem_Entity_Index.Factory} */
@@ -59,10 +59,10 @@ export class Factory {
             // MAIN FUNCTIONALITY
             const res = new TeqFw_Db_Back_Dto_Dem_Entity();
             res.attr = parse(fAttr.create, data?.attr);
-            res.comment = data?.comment;
+            res.comment = castString(data?.comment);
             res.index = parse(fIndex.create, data?.index);
-            res.name = data?.name;
-            res.path = data?.path;
+            res.name = castString(data?.name);
+            res.path = castString(data?.path);
             res.relation = parse(fRelation.create, data?.relation);
             return res;
         }

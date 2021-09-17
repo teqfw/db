@@ -19,16 +19,17 @@ export default class TeqFw_Db_Back_Dto_Dem_Entity_Index {
  * @memberOf TeqFw_Db_Back_Dto_Dem_Entity_Index
  */
 export class Factory {
-    constructor() {
+    constructor(spec) {
+        const {castArray, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
         /**
          * @param {TeqFw_Db_Back_Dto_Dem_Entity_Index|null} data
          * @return {TeqFw_Db_Back_Dto_Dem_Entity_Index}
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_Dem_Entity_Index();
-            res.attrs = Array.isArray(data?.attrs) ? [...data.attrs] : [];
-            res.name = data?.name;
-            res.type = data?.type;
+            res.attrs = castArray(data?.attrs);
+            res.name = castString(data?.name);
+            res.type = castString(data?.type);
             return res;
         }
     }

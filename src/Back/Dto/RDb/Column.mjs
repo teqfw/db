@@ -33,26 +33,32 @@ TeqFw_Db_Back_Dto_RDb_Column.NULLABLE = 'nullable';
 TeqFw_Db_Back_Dto_RDb_Column.TYPE = 'type';
 TeqFw_Db_Back_Dto_RDb_Column.UNSIGNED = 'unsigned';
 
+// noinspection JSCheckFunctionSignatures
 /**
  * Factory to create new DTO instances.
  * @memberOf TeqFw_Db_Back_Dto_RDb_Column
  */
 export class Factory {
-    constructor() {
+    constructor(spec) {
+        const {castArray, castBooleanIfExists, castEnum, castInt, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
+        /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Column} */
+        const COLUMN = spec['TeqFw_Db_Back_Enum_Db_Type_Column#'];
+
         /**
          * @param {TeqFw_Db_Back_Dto_RDb_Column|null} data
          * @return {TeqFw_Db_Back_Dto_RDb_Column}
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_RDb_Column();
-            res.comment = data?.comment;
-            res.default = data?.default;
-            res.name = data?.name;
-            res.nullable = data?.nullable ?? false;
-            res.precision = data?.precision;
-            res.scale = data?.scale;
-            res.type = data?.type;
-            res.unsigned = (typeof data?.unsigned === 'boolean') ? data.unsigned : undefined;
+            res.comment = castString(data?.comment);
+            res.default = castString(data?.default);
+            res.enum = castArray(data?.enum);
+            res.name = castString(data?.name);
+            res.nullable = castBooleanIfExists(data?.nullable);
+            res.precision = castInt(data?.precision);
+            res.scale = castInt(data?.scale);
+            res.type = castEnum(data?.type, COLUMN);
+            res.unsigned = castBooleanIfExists(data?.unsigned);
             return res;
         }
     }

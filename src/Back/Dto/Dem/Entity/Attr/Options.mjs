@@ -23,24 +23,26 @@ export default class TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options {
     values;
 }
 
+// noinspection JSCheckFunctionSignatures
 /**
  * Factory to create new DTO instances.
  * @memberOf TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options
  */
 export class Factory {
-    constructor() {
+    constructor(spec) {
+        const {castArray, castBooleanIfExists, castInt} = spec['TeqFw_Core_Shared_Util_Cast'];
         /**
-         * @param {TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options|null|{}} data
+         * @param {TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options|null} data
          * @return {TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options}
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options();
-            res.dateOnly = typeof data?.dateOnly === 'boolean' ? data.dateOnly : undefined;
-            res.length = data?.length;
-            res.precision = data?.precision;
-            res.scale = data?.scale;
-            res.unsigned = data?.unsigned;
-            res.values = Array.isArray(data?.values) ? [...data.values] : undefined;
+            res.dateOnly = castBooleanIfExists(data?.dateOnly);
+            res.length = castInt(data?.length);
+            res.precision = castInt(data?.precision);
+            res.scale = castInt(data?.scale);
+            res.unsigned = castBooleanIfExists(data?.unsigned);
+            res.values = castArray(data?.values);
             return res;
         }
     }

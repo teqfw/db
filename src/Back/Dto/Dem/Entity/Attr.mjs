@@ -26,7 +26,7 @@ export default class TeqFw_Db_Back_Dto_Dem_Entity_Attr {
  */
 export class Factory {
     constructor(spec) {
-        // EXTRACT DEPS
+        const {castBoolean, castPrimitive, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
         /** @type {TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options.Factory} */
         const fOPts = spec['TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options#Factory$'];
 
@@ -36,12 +36,12 @@ export class Factory {
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_Dem_Entity_Attr();
-            res.comment = data?.comment;
-            res.default = data?.default;
-            res.name = data?.name;
-            res.nullable = data?.nullable;
+            res.comment = castString(data?.comment);
+            res.default = castPrimitive(data?.default);
+            res.name = castString(data?.name);
+            res.nullable = castBoolean(data?.nullable);
             res.options = fOPts.create(data?.options);
-            res.type = data?.type;
+            res.type = castString(data?.type);
             return res;
         }
     }

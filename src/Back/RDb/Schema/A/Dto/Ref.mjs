@@ -24,15 +24,17 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Dto_Ref {
  * @memberOf TeqFw_Db_Back_RDb_Schema_A_Dto_Ref
  */
 export class Factory {
-    constructor() {
+    constructor(spec) {
+        const {castArray, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
+
         /**
          * @param {TeqFw_Db_Back_RDb_Schema_A_Dto_Ref|null} data
          * @return {TeqFw_Db_Back_RDb_Schema_A_Dto_Ref}
          */
-        this.create = function create(data = null) {
+        this.create = function (data = null) {
             const res = new TeqFw_Db_Back_RDb_Schema_A_Dto_Ref();
-            res.path = data?.path;
-            res.attrs = (Array.isArray(data?.attrs)) ? [...data.attrs] : [];
+            res.path = castString(data?.path);
+            res.attrs = castArray(data?.attrs);
             return res;
         }
     }

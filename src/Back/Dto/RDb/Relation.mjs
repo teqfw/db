@@ -32,19 +32,22 @@ TeqFw_Db_Back_Dto_RDb_Relation.OWN_COLUMNS = 'ownColumns';
  * @memberOf TeqFw_Db_Back_Dto_RDb_Relation
  */
 export class Factory {
-    constructor() {
+    constructor(spec) {
+        const {castArray, castEnum, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
+        /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Action} */
+        const ACTION = spec['TeqFw_Db_Back_Enum_Db_Type_Action#'];
         /**
          * @param {TeqFw_Db_Back_Dto_RDb_Relation|null} data
          * @return {TeqFw_Db_Back_Dto_RDb_Relation}
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_RDb_Relation();
-            res.itsColumns = Array.isArray(data?.itsColumns) ? data.itsColumns : [];
-            res.itsTable = data?.itsTable;
-            res.name = data?.name;
-            res.onDelete = data?.onDelete;
-            res.onUpdate = data?.onUpdate;
-            res.ownColumns = Array.isArray(data?.ownColumns) ? data.ownColumns : [];
+            res.itsColumns = castArray(data?.itsColumns);
+            res.itsTable = castString(data?.itsTable);
+            res.name = castString(data?.name);
+            res.onDelete = castEnum(data?.onDelete, ACTION);
+            res.onUpdate = castEnum(data?.onUpdate, ACTION);
+            res.ownColumns = castArray(data?.ownColumns);
             return res;
         }
     }

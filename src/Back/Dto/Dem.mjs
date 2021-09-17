@@ -26,7 +26,6 @@ TeqFw_Db_Back_Dto_Dem.REFS = 'refs';
  */
 export class Factory {
     constructor(spec) {
-        // EXTRACT DEPS
         /** @type {typeof TeqFw_Db_Back_Dto_Dem_Entity} */
         const TEntity = spec['TeqFw_Db_Back_Dto_Dem_Entity#'];
         /** @type {TeqFw_Db_Back_Dto_Dem_Entity.Factory} */
@@ -63,11 +62,9 @@ export class Factory {
 
             function parseRefs(data) {
                 const res = {};
-                if (typeof data === 'object') {
-                    for (const path of Object.keys(data)) {
-                        if (Array.isArray(data[path])) res[path] = data[path];
-                    }
-                }
+                if (typeof data === 'object')
+                    for (const path of Object.keys(data))
+                        if (Array.isArray(data[path])) res[path] = [...data[path]]; // make a copy
                 return res;
             }
 

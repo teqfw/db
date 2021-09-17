@@ -19,8 +19,7 @@ export default class TeqFw_Db_Back_Api_Dto_Config_Local {
  */
 export class Factory {
     constructor(spec) {
-        /** @type {typeof TeqFw_Db_Back_Api_Dto_Config_Local_Connection} */
-        const DConn = spec['TeqFw_Db_Back_Api_Dto_Config_Local_Connection#'];
+        const {castString} = spec['TeqFw_Core_Shared_Util_Cast'];
         /** @type {TeqFw_Db_Back_Api_Dto_Config_Local_Connection.Factory} */
         const fConn = spec['TeqFw_Db_Back_Api_Dto_Config_Local_Connection#Factory$'];
 
@@ -30,9 +29,8 @@ export class Factory {
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Api_Dto_Config_Local();
-            res.client = data?.client;
-            res.connection = (data?.connection instanceof DConn)
-                ? data.connection : fConn.create(data?.connection);
+            res.client = castString(data?.client);
+            res.connection = fConn.create(data?.connection);
             return res;
         }
     }
