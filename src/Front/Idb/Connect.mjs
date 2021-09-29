@@ -5,6 +5,9 @@ const NS = 'TeqFw_Db_Front_Idb_Connect';
 
 export default class TeqFw_Db_Front_Idb_Connect {
     constructor() {
+        //
+        // !!! Don't use 'spec' here, this class is imported in 'TeqFw_Web_Sw_Config' !!!
+        //
         let /** @type {function} */
             fnUpgrade,
             /** @type {IDBDatabase} */
