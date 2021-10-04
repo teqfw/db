@@ -160,7 +160,7 @@ function nameUQ(tbl, fld) {
 }
 
 /**
- * Get 'nextval' for Postgres serial.
+ * Get 'nextval' for Postgres serials.
  * @param schema
  * @param {String[]} serials
  * @returns {Promise<Object>}
@@ -180,6 +180,24 @@ async function serialsGet(schema, serials) {
 }
 
 /**
+ * Get 'nextval' for one Postgres serial.
+ * @param schema
+ * @param {string} serial
+ * @returns {Promise<string|null>}
+ * @memberOf TeqFw_Db_Back_Api_Util
+ */
+async function serialsGetOne(schema, serial) {
+    try {
+        schema.raw(`SELECT nextval('${serial}')`);
+        const rs = await schema;
+        const [first] = rs.rows;
+        return first.nextval;
+    } catch (e) {
+        return null;
+    }
+}
+
+/**
  * Get nextval for Postgres serial.
  * @param schema
  * @param {Object} serials
@@ -188,7 +206,7 @@ async function serialsGet(schema, serials) {
  */
 async function serialsSet(schema, serials) {
     for (const one of Object.keys(serials)) {
-        if (one !== 'app_group_id_seq')
+        if (serials[one] !== null)
             schema.raw(`SELECT setval('${one}', ${serials[one]})`);
     }
     await schema;
@@ -216,5 +234,6 @@ export {
     nameNX,
     nameUQ,
     serialsGet,
+    serialsGetOne,
     serialsSet,
 };
