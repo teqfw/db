@@ -2,10 +2,10 @@
  * DB connection DTO ('knex' compatible structure).
  */
 // MODULE'S VARS
-const NS = 'TeqFw_Db_Back_Api_Dto_Config_Local_Connection';
+const NS = 'TeqFw_Db_Back_Dto_Config_Local_Connection';
 
 // MODULE'S CLASSES
-export default class TeqFw_Db_Back_Api_Dto_Config_Local_Connection {
+export default class TeqFw_Db_Back_Dto_Config_Local_Connection {
     /** @type {string} */
     database;
     /** @type {string} */
@@ -18,17 +18,17 @@ export default class TeqFw_Db_Back_Api_Dto_Config_Local_Connection {
 
 /**
  * Factory to create new DTO instances.
- * @memberOf TeqFw_Db_Back_Api_Dto_Config_Local_Connection
+ * @memberOf TeqFw_Db_Back_Dto_Config_Local_Connection
  */
 export class Factory {
     constructor(spec) {
         const {castString} = spec['TeqFw_Core_Shared_Util_Cast'];
         /**
-         * @param {TeqFw_Db_Back_Api_Dto_Config_Local_Connection|null} data
-         * @return {TeqFw_Db_Back_Api_Dto_Config_Local_Connection}
+         * @param {TeqFw_Db_Back_Dto_Config_Local_Connection|null} data
+         * @return {TeqFw_Db_Back_Dto_Config_Local_Connection}
          */
         this.create = function (data = null) {
-            const res = new TeqFw_Db_Back_Api_Dto_Config_Local_Connection();
+            const res = new TeqFw_Db_Back_Dto_Config_Local_Connection();
             res.database = castString(data?.database);
             res.host = castString(data?.host);
             res.password = castString(data?.password);

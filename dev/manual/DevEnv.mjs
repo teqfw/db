@@ -24,7 +24,7 @@ container.addSourceMapping('TeqFw_Di', srcTeqFwDi, true, 'mjs');
 container.addSourceMapping('TeqFw_Core', srcTeqFwCore, true, 'mjs');
 container.addSourceMapping('TeqFw_Db', srcTeqFwDb, true, 'mjs');
 // setup replacements
-container.addModuleReplacement('TeqFw_Db_Back_Api_RDb_ISchema', 'TeqFw_Db_Back_RDb_Schema');
+container.addModuleReplacement('TeqFw_Db_Back_RDb_ISchema', 'TeqFw_Db_Back_RDb_Schema');
 
 // init logger
 /** @type {TeqFw_Core_Shared_Logger} */
@@ -38,13 +38,13 @@ config.loadLocal(pathDev);
 const local = config.getLocal();
 
 // init DB connection
-/** @type {TeqFw_Db_Back_Api_Defaults} */
-const DEF = await container.get('TeqFw_Db_Back_Api_Defaults$');
+/** @type {TeqFw_Db_Back_Defaults} */
+const DEF = await container.get('TeqFw_Db_Back_Defaults$');
 /** @type {TeqFw_Db_Back_RDb_Connect} */
 const conn = await container.get('TeqFw_Db_Back_RDb_Connect$');
 const dbCfg = local[DEF.NAME];
 // await conn.init(dbCfg.mariadb);
 await conn.init(dbCfg.pg);
-container.set('TeqFw_Db_Back_Api_RDb_IConnect$', conn);
+container.set('TeqFw_Db_Back_RDb_IConnect$', conn);
 
 export default container;

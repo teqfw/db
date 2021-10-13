@@ -1,8 +1,8 @@
 import container from '../../../DevEnv.mjs'; // init development environment
 
 // get database connector then execute the process
-/** @type {TeqFw_Db_Back_Api_RDb_IConnect} */
-const conn = await container.get('TeqFw_Db_Back_Api_RDb_IConnect$');
+/** @type {TeqFw_Db_Back_RDb_IConnect} */
+const conn = await container.get('TeqFw_Db_Back_RDb_IConnect$');
 /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Column} */
 const TColumn = await container.get('TeqFw_Db_Back_Enum_Db_Type_Column$');
 /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Index} */

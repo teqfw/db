@@ -15,8 +15,8 @@ const {readJson} = await container.get('TeqFw_Core_Back_Util');
 const deepMerge = await container.get('TeqFw_Core_Shared_Util#deepMerge');
 /** @type {TeqFw_Db_Back_Dto_Dem.Factory} */
 const fDem = await container.get('TeqFw_Db_Back_Dto_Dem#Factory$');
-/** @type {TeqFw_Db_Back_Api_Act_Dem_Norm} */
-const procNorm = await container.get('TeqFw_Db_Back_Api_Act_Dem_Norm$');
+/** @type {TeqFw_Db_Back_Act_Dem_Norm} */
+const procNorm = await container.get('TeqFw_Db_Back_Act_Dem_Norm$');
 /** @type {TeqFw_Db_Back_RDb_Schema_A_Order} */
 const procOrder = await container.get('TeqFw_Db_Back_RDb_Schema_A_Order$');
 

@@ -8,7 +8,7 @@ import knex from 'knex';
 
 /**
  * Default implementation for 'knex' based database connector.
- * @implements TeqFw_Db_Back_Api_RDb_IConnect
+ * @implements TeqFw_Db_Back_RDb_IConnect
  */
 export default class TeqFw_Db_Back_RDb_Connect {
 
@@ -24,7 +24,7 @@ export default class TeqFw_Db_Back_RDb_Connect {
         /**
          * Initialize connection to database.
          *
-         * @param {TeqFw_Db_Back_Api_Dto_Config_Local|Knex.Config} cfg
+         * @param {TeqFw_Db_Back_Dto_Config_Local|Knex.Config} cfg
          * @returns {Promise<void>}
          */
         this.init = async function (cfg) {

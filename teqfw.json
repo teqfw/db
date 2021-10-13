@@ -5,7 +5,7 @@
       "path": "./src"
     },
     "replace": {
-      "TeqFw_Db_Back_Api_RDb_ISchema": {"ns": "TeqFw_Db_Back_RDb_Schema", "area": "back"}
+      "TeqFw_Db_Back_RDb_ISchema": {"ns": "TeqFw_Db_Back_RDb_Schema", "area": "back"}
     }
   }
 }

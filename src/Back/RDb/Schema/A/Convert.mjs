@@ -7,8 +7,8 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
 
     constructor(spec) {
         // EXTRACT DEPS
-        /** @type {TeqFw_Db_Back_Api_Defaults} */
-        const DEF = spec['TeqFw_Db_Back_Api_Defaults$'];
+        /** @type {TeqFw_Db_Back_Defaults} */
+        const DEF = spec['TeqFw_Db_Back_Defaults$'];
         /** @type {TeqFw_Db_Back_Dto_RDb_Column.Factory} */
         const fColumn = spec['TeqFw_Db_Back_Dto_RDb_Column#Factory$'];
         /** @type {TeqFw_Db_Back_Dto_RDb_Index.Factory} */

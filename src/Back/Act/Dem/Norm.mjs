@@ -20,12 +20,12 @@ function normName(data) {
 /**
  * @implements TeqFw_Core_Shared_Api_IAction
  */
-export default class TeqFw_Db_Back_Api_Act_Dem_Norm {
+export default class TeqFw_Db_Back_Act_Dem_Norm {
 
     constructor(spec) {
         // EXTRACT DEPS
-        /** @type {TeqFw_Db_Back_Api_Defaults} */
-        const $DEF = spec['TeqFw_Db_Back_Api_Defaults$'];
+        /** @type {TeqFw_Db_Back_Defaults} */
+        const $DEF = spec['TeqFw_Db_Back_Defaults$'];
         /** @type {Function|TeqFw_Core_Shared_Util.deepMerge} */
         const $deepMerge = spec['TeqFw_Core_Shared_Util#deepMerge'];
         /** @type {TeqFw_Db_Back_Dto_Dem.Factory} */

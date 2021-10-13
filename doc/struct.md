@@ -6,7 +6,8 @@
 {
   "entity": {},
   "package": {},
-  "refs": {}
+  "refs": {},
+  "namespace": "teq"
 }
 ```
 
