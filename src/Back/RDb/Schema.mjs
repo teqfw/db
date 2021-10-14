@@ -60,7 +60,7 @@ export default class TeqFw_Db_Back_RDb_Schema {
             // load DEM fragments and external references mapping rules
             /** @type {Object<string, TeqFw_Db_Back_Dto_Dem>} */
             const dems = await $schemaLoad.exec({path});
-            /** @type {Object<string, Object<string, TeqFw_Db_Back_Dto_Map>>} */
+            /** @type {Object<string, Object<string, TeqFw_Db_Back_Dto_Map_Ref>>} */
             const map = await $mapLoad.exec({path});
             // process all DEMs and map virtual aliases to real paths
             $dem = await $aNorm.exec({dems, map});

@@ -1,5 +1,6 @@
 /**
  * Load DEM mapping data for the application.
+ * There is one only map file per application (in root plugin).
  */
 // MODULE'S IMPORT
 import {join} from 'path';
@@ -21,27 +22,12 @@ export default class TeqFw_Db_Back_Act_Dem_Load_Map {
          * Load DEM mapping data for the application and parse it.
          * @param {string} path path to the project root folder
          * @param {string|null} filename filename relative to project root
-         * @return {Promise<Object<string, Object<string, TeqFw_Db_Back_Dto_Map>>>}
+         * @return {Promise<TeqFw_Db_Back_Dto_Map>}
          */
         this.exec = async function ({path, filename}) {
-            const res = {};
             const fullPath = (filename) ? join(path, filename) : join(path, MAP);
             const json = $readJson(fullPath) ?? {};
-            if (typeof json === 'object') {
-                for (const pluginName of Object.keys(json)) {
-                    const pluginData = json[pluginName];
-                    if (typeof pluginData === 'object') {
-                        res[pluginName] = {};
-                        for (const alias of Object.keys(pluginData)) {
-                            const data = pluginData[alias];
-                            const item = $fMap.create(data);
-                            item.alias = alias;
-                            res[pluginName][alias] = item;
-                        }
-                    }
-                }
-            }
-            return res;
+            return $fMap.create(json);
         }
     }
 }

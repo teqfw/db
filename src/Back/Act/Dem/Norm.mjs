@@ -35,7 +35,7 @@ export default class TeqFw_Db_Back_Act_Dem_Norm {
         // DEFINE INSTANCE METHODS
         /**
          * @param {Object<string, TeqFw_Db_Back_Dto_Dem>} dems
-         * @param {Object<string, Object<string, TeqFw_Db_Back_Dto_Map>>} map
+         * @param {TeqFw_Db_Back_Dto_Map} map
          * @return {Promise<TeqFw_Db_Back_Dto_Dem>}
          */
         this.exec = async function ({dems, map}) {
@@ -43,7 +43,7 @@ export default class TeqFw_Db_Back_Act_Dem_Norm {
 
             /**
              * @param {TeqFw_Db_Back_Dto_Dem|TeqFw_Db_Back_Dto_Dem_Package} dem
-             * @param {Object<string, TeqFw_Db_Back_Dto_Map>} map
+             * @param {Object<string, TeqFw_Db_Back_Dto_Map_Ref>} map
              * @param {string} current current path
              * @param {string} ps path separator
              */
@@ -93,7 +93,7 @@ export default class TeqFw_Db_Back_Act_Dem_Norm {
                 // make a copy of the DEM fragment
                 const part = JSON.parse(JSON.stringify(dems[plugin]));
                 // set full paths for entities taking into account references mapping
-                setPaths(part, map[plugin], $DEF.PS, $DEF.PS);
+                setPaths(part, map.ref[plugin], $DEF.PS, $DEF.PS);
                 delete part.refs;
                 $deepMerge(res, part);
             }

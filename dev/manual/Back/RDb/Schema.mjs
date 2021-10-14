@@ -1,14 +1,8 @@
 /**
  * Manually started script to develop schema related functionality (drop/create tables from DEM).
  */
-import {dirname, join} from 'path';
 import container from '../../DevEnv.mjs';
-
-/* Resolve paths to main folders */
-const url = new URL(import.meta.url);
-const script = url.pathname;
-const pathScript = dirname(script);
-const path = join(pathScript, '../../../../../../../');
+import dem from './Z/DemLoader.mjs';
 
 // get objects with DI
 /** @type {TeqFw_Db_Back_RDb_IConnect} */
@@ -20,7 +14,9 @@ const schema = await container.get('TeqFw_Db_Back_RDb_ISchema$');
 //
 // DEV MAIN CONTENT
 //
-await schema.loadDem({path});
-await schema.dropAllTables({conn});
 
+schema.setDem({dem});
+await schema.dropAllTables({conn});
+await schema.createAllTables({conn});
+conn.disconnect();
 debugger

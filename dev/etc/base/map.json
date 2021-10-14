@@ -1,0 +1,11 @@
+{
+  "namespace": "teq",
+  "ref": {
+    "app": {
+      "/person": {
+        "path": "/user",
+        "attrs": {"identity": "id"}
+      }
+    }
+  }
+}

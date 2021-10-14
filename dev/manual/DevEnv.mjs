@@ -43,8 +43,8 @@ const DEF = await container.get('TeqFw_Db_Back_Defaults$');
 /** @type {TeqFw_Db_Back_RDb_Connect} */
 const conn = await container.get('TeqFw_Db_Back_RDb_Connect$');
 const dbCfg = local[DEF.NAME];
-// await conn.init(dbCfg.mariadb);
-await conn.init(dbCfg.pg);
+await conn.init(dbCfg.mariadb);
+// await conn.init(dbCfg.pg);
 container.set('TeqFw_Db_Back_RDb_IConnect$', conn);
 
 export default container;

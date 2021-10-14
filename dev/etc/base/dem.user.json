@@ -1,0 +1,15 @@
+{
+  "entity": {
+    "user": {
+      "comment": "Registry to user related data.",
+      "attr": {
+        "id": {"type": "id"},
+        "date_created": {
+          "comment": "Date-time for user registration.",
+          "type": "datetime",
+          "default": "current"
+        }
+      }
+    }
+  }
+}
