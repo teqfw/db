@@ -9,16 +9,16 @@ export default class TeqFw_Db_Back_RDb_Schema {
         // EXTRACT DEPS
         /** @type {TeqFw_Db_Back_RDb_Schema_A_Convert} */
         const $aConvert = spec['TeqFw_Db_Back_RDb_Schema_A_Convert$'];
-        /** @type {TeqFw_Db_Back_Act_Dem_Norm} */
-        const $aNorm = spec['TeqFw_Db_Back_Act_Dem_Norm$'];
+        /** @type {TeqFw_Db_Back_Dem_Norm} */
+        const $aNorm = spec['TeqFw_Db_Back_Dem_Norm$'];
         /** @type {TeqFw_Db_Back_RDb_Schema_A_Order} */
         const $aOrder = spec['TeqFw_Db_Back_RDb_Schema_A_Order$'];
         /** @type {TeqFw_Db_Back_RDb_Schema_A_Builder} */
         const $builder = spec['TeqFw_Db_Back_RDb_Schema_A_Builder$'];
-        /** @type {TeqFw_Db_Back_Act_Dem_Load_Map} */
-        const $mapLoad = spec['TeqFw_Db_Back_Act_Dem_Load_Map$'];
-        /** @type {TeqFw_Db_Back_Act_Dem_Load_Schema} */
-        const $schemaLoad = spec['TeqFw_Db_Back_Act_Dem_Load_Schema$'];
+        /** @type {TeqFw_Db_Back_Dem_Load_Map} */
+        const $mapLoad = spec['TeqFw_Db_Back_Dem_Load_Map$'];
+        /** @type {TeqFw_Db_Back_Dem_Scanner} */
+        const $schemaLoad = spec['TeqFw_Db_Back_Dem_Scanner$'];
 
         // DEFINE WORKING VARS / PROPS
         /** @type {TeqFw_Db_Back_Dto_Dem} */

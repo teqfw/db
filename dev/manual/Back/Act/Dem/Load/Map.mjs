@@ -9,8 +9,8 @@ const pathDev = join(pathScript, '../../../../../../dev');
 const fileMap = 'etc/base/map.json';
 
 // get objects with DI
-/** @type {TeqFw_Db_Back_Act_Dem_Load_Map} */
-const aLoadMap = await container.get('TeqFw_Db_Back_Act_Dem_Load_Map$');
+/** @type {TeqFw_Db_Back_Dem_Load_Map} */
+const aLoadMap = await container.get('TeqFw_Db_Back_Dem_Load_Map$');
 
 
 //

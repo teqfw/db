@@ -1,5 +1,9 @@
 /**
  * DTO for DEM (Domain Entities Model).
+ *
+ * DEM is a declaration of plugin's part of common RDB schema. All plugins DEMs merge into one common DEM using
+ * normalization Map (see TeqFw_Db_Back_Dto_Map).
+ *
  */
 // MODULE'S VARS
 const NS = 'TeqFw_Db_Back_Dto_Dem';
@@ -18,6 +22,8 @@ export default class TeqFw_Db_Back_Dto_Dem {
 }
 
 // attributes names to use as aliases in queries to object props
+TeqFw_Db_Back_Dto_Dem.ENTITY = 'entity';
+TeqFw_Db_Back_Dto_Dem.PACKAGE = 'package';
 TeqFw_Db_Back_Dto_Dem.REFS = 'refs';
 
 /**

@@ -20,7 +20,7 @@ function normName(data) {
 /**
  * @implements TeqFw_Core_Shared_Api_IAction
  */
-export default class TeqFw_Db_Back_Act_Dem_Norm {
+export default class TeqFw_Db_Back_Dem_Norm {
 
     constructor(spec) {
         // EXTRACT DEPS

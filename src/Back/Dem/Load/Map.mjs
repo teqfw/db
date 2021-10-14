@@ -10,7 +10,7 @@ const MAP = 'etc/teqfw.schema.map.json';
 /**
  * @implements TeqFw_Core_Shared_Api_IAction
  */
-export default class TeqFw_Db_Back_Act_Dem_Load_Map {
+export default class TeqFw_Db_Back_Dem_Load_Map {
     constructor(spec) {
         // EXTRACT DEPS
         /** @type {Function|TeqFw_Core_Back_Util.readJson} */

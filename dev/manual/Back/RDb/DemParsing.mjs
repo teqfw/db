@@ -14,12 +14,12 @@ const fileMap = 'etc/base/map.json'
 const {readJson} = await container.get('TeqFw_Core_Back_Util');
 /** @type {TeqFw_Db_Back_Dto_Dem.Factory} */
 const fDem = await container.get('TeqFw_Db_Back_Dto_Dem#Factory$');
-/** @type {TeqFw_Db_Back_Act_Dem_Norm} */
-const aNorm = await container.get('TeqFw_Db_Back_Act_Dem_Norm$');
+/** @type {TeqFw_Db_Back_Dem_Norm} */
+const aNorm = await container.get('TeqFw_Db_Back_Dem_Norm$');
 /** @type {TeqFw_Db_Back_RDb_Schema_A_Order} */
 const aOrder = await container.get('TeqFw_Db_Back_RDb_Schema_A_Order$');
-/** @type {TeqFw_Db_Back_Act_Dem_Load_Map} */
-const aLoadMap = await container.get('TeqFw_Db_Back_Act_Dem_Load_Map$');
+/** @type {TeqFw_Db_Back_Dem_Load_Map} */
+const aLoadMap = await container.get('TeqFw_Db_Back_Dem_Load_Map$');
 
 //
 // DEV MAIN CONTENT
