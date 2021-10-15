@@ -6,7 +6,7 @@ import {join} from 'path';
 
 // MODULE'S VARS
 const DEM = 'etc/teqfw.schema.json';
-const MAP = 'etc/teqfw.map.json';
+const MAP = 'etc/teqfw.schema.map.json';
 /**
  * @implements TeqFw_Core_Shared_Api_IAction
  */
