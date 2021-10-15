@@ -8,33 +8,30 @@ export default class TeqFw_Db_Back_RDb_Schema {
     constructor(spec) {
         // EXTRACT DEPS
         /** @type {TeqFw_Db_Back_RDb_Schema_A_Convert} */
-        const $aConvert = spec['TeqFw_Db_Back_RDb_Schema_A_Convert$'];
-        /** @type {TeqFw_Db_Back_Dem_Norm} */
-        const $aNorm = spec['TeqFw_Db_Back_Dem_Norm$'];
+        const _aConvert = spec['TeqFw_Db_Back_RDb_Schema_A_Convert$'];
         /** @type {TeqFw_Db_Back_RDb_Schema_A_Order} */
-        const $aOrder = spec['TeqFw_Db_Back_RDb_Schema_A_Order$'];
+        const _aOrder = spec['TeqFw_Db_Back_RDb_Schema_A_Order$'];
         /** @type {TeqFw_Db_Back_RDb_Schema_A_Builder} */
-        const $builder = spec['TeqFw_Db_Back_RDb_Schema_A_Builder$'];
-        /** @type {TeqFw_Db_Back_Dem_Load_Map} */
-        const $mapLoad = spec['TeqFw_Db_Back_Dem_Load_Map$'];
-        /** @type {TeqFw_Db_Back_Dem_Scanner} */
-        const $schemaLoad = spec['TeqFw_Db_Back_Dem_Scanner$'];
+        const _builder = spec['TeqFw_Db_Back_RDb_Schema_A_Builder$'];
+
 
         // DEFINE WORKING VARS / PROPS
         /** @type {TeqFw_Db_Back_Dto_Dem} */
-        let $dem;
+        let _dem;
+        /** @type {TeqFw_Db_Back_Dto_Config_Schema} */
+        let _cfg;
 
         // DEFINE INSTANCE METHODS
         this.createAllTables = async function ({conn}) {
             // prepare schema (populate with CREATE TABLE statements)
             const schema = conn.getSchemaBuilder();
             const knex = conn.getKnex();
-            const dem = $dem;
+            const dem = _dem;
             /** @type {TeqFw_Db_Back_Dto_Dem_Entity[]} */
-            const entities = await $aOrder.exec({dem});
+            const entities = await _aOrder.exec({dem});
             for (const entity of entities) {
-                const tbl = await $aConvert.exec({entity});
-                $builder.addTable(schema, tbl, knex);
+                const tbl = await _aConvert.exec({entity, cfg: _cfg});
+                _builder.addTable(schema, tbl, knex);
             }
             // perform operations
             // const sql = schema.toString();
@@ -44,30 +41,23 @@ export default class TeqFw_Db_Back_RDb_Schema {
         this.dropAllTables = async function ({conn}) {
             // prepare schema (populate with DROP statements)
             const schema = conn.getSchemaBuilder();
-            const dem = $dem;
+            const dem = _dem;
             /** @type {TeqFw_Db_Back_Dto_Dem_Entity[]} */
-            const entities = await $aOrder.exec({dem});
+            const entities = await _aOrder.exec({dem});
             entities.reverse(); // reverse order for tables drop
             for (const entity of entities) {
-                const tbl = await $aConvert.exec({entity});
-                $builder.dropTable(schema, tbl);
+                const tbl = await _aConvert.exec({entity, cfg: _cfg});
+                _builder.dropTable(schema, tbl);
             }
             // perform operations
             await schema;
         }
 
-        this.loadDem = async function ({path}) {
-            // load DEM fragments and external references mapping rules
-            /** @type {Object<string, TeqFw_Db_Back_Dto_Dem>} */
-            const dems = await $schemaLoad.exec({path});
-            /** @type {Object<string, Object<string, TeqFw_Db_Back_Dto_Map_Ref>>} */
-            const map = await $mapLoad.exec({path});
-            // process all DEMs and map virtual aliases to real paths
-            $dem = await $aNorm.exec({dems, map});
+        this.setCfg = function ({cfg}) {
+            _cfg = cfg;
         }
-
         this.setDem = function ({dem}) {
-            $dem = dem;
+            _dem = dem;
         }
     }
 

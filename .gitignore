@@ -1,7 +1,9 @@
+/**/local.json
 /.idea/
 /.nyc_output/
 /dev/cfg/local.json
 /jsdoc/
 /node_modules/
+/own_modules/
 /package-lock.json
 /tmp/

@@ -18,11 +18,10 @@ export default class TeqFw_Db_Back_RDb_ISchema {
     async dropAllTables({conn}) {}
 
     /**
-     * Load DEM fragments, merge its and normalize result model.
-     * @param {string} path to project root
-     * @return {Promise<void>}
+     * Set database connection configuration object.
+     * @param {TeqFw_Db_Back_Dto_Config_Schema} cfg
      */
-    async loadDem({path}) {}
+    setCfg({cfg}) {}
 
     /**
      * Set internal DEM object.

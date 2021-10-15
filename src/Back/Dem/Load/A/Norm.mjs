@@ -20,23 +20,23 @@ function normName(data) {
 /**
  * @implements TeqFw_Core_Shared_Api_IAction
  */
-export default class TeqFw_Db_Back_Dem_Norm {
+export default class TeqFw_Db_Back_Dem_Load_A_Norm {
 
     constructor(spec) {
         // EXTRACT DEPS
         /** @type {TeqFw_Db_Back_Defaults} */
-        const $DEF = spec['TeqFw_Db_Back_Defaults$'];
+        const DEF = spec['TeqFw_Db_Back_Defaults$'];
         /** @type {Function|TeqFw_Core_Shared_Util.deepMerge} */
-        const $deepMerge = spec['TeqFw_Core_Shared_Util#deepMerge'];
+        const _deepMerge = spec['TeqFw_Core_Shared_Util#deepMerge'];
         /** @type {TeqFw_Db_Back_Dto_Dem.Factory} */
-        const $fDem = spec['TeqFw_Db_Back_Dto_Dem#Factory$'];
+        const _factory = spec['TeqFw_Db_Back_Dto_Dem#Factory$'];
 
 
         // DEFINE INSTANCE METHODS
         /**
          * @param {Object<string, TeqFw_Db_Back_Dto_Dem>} dems
          * @param {TeqFw_Db_Back_Dto_Map} map
-         * @return {Promise<TeqFw_Db_Back_Dto_Dem>}
+         * @return {Promise<{dem: TeqFw_Db_Back_Dto_Dem}>}
          */
         this.exec = async function ({dems, map}) {
             // DEFINE INNER FUNCTIONS
@@ -86,19 +86,19 @@ export default class TeqFw_Db_Back_Dem_Norm {
 
             // MAIN FUNCTIONALITY
             /** @type {TeqFw_Db_Back_Dto_Dem} */
-            const res = $fDem.create();
-            delete res.refs;
+            const dem = _factory.create();
+            delete dem.refs;
 
             for (const plugin of Object.keys(dems)) {
                 // make a copy of the DEM fragment
                 const part = JSON.parse(JSON.stringify(dems[plugin]));
                 // set full paths for entities taking into account references mapping
-                setPaths(part, map.ref[plugin], $DEF.PS, $DEF.PS);
+                setPaths(part, map.ref[plugin], DEF.PS, DEF.PS);
                 delete part.refs;
-                $deepMerge(res, part);
+                _deepMerge(dem, part);
             }
 
-            return res;
+            return {dem};
         }
     }
 }

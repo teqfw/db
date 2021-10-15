@@ -67,9 +67,10 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
          * Convert DEM DTO Entity to RDB DTO Table.
          *
          * @param {TeqFw_Db_Back_Dto_Dem_Entity} entity
+         * @param {TeqFw_Db_Back_Dto_Config_Schema} cfg
          * @return {Promise<TeqFw_Db_Back_Dto_RDb_Table>}
          */
-        this.exec = async function ({entity}) {
+        this.exec = async function ({entity, cfg}) {
             // DEFINE INNER FUNCTIONS
             /**
              * @param {TeqFw_Db_Back_Dto_RDb_Table} tbl
@@ -113,12 +114,14 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
             /**
              * @param {TeqFw_Db_Back_Dto_RDb_Table} tbl
              * @param {TeqFw_Db_Back_Dto_Dem_Entity_Relation} dem
+             * @param {TeqFw_Db_Back_Dto_Config_Schema} cfg
              */
-            function convertRelation(tbl, dem) {
+            function convertRelation(tbl, dem, cfg) {
                 const db = fRelation.create();
                 db.name = `${tbl.name}${DEF.NS}fk${DEF.NS}${dem.name}`.toLowerCase();
                 db.ownColumns = dem.attrs;
-                db.itsTable = normName(dem.ref.path);
+                const prefix = (cfg?.prefix) ?? '';
+                db.itsTable = normName(`${prefix}${dem.ref.path}`);
                 db.itsColumns = dem.ref.attrs;
                 if (dem.onDelete) db.onDelete = mapAction[dem.onDelete];
                 if (dem.onUpdate) db.onUpdate = mapAction[dem.onUpdate];
@@ -128,23 +131,25 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
             /**
              * Convert entity path & name to table name.
              * @param {TeqFw_Db_Back_Dto_Dem_Entity} entity
+             * @param {TeqFw_Db_Back_Dto_Config_Schema} cfg
              * @return {string}
              */
-            function convertTableName(entity) {
-                const res = `${entity.path}${entity.name}`;
+            function convertTableName(entity, cfg) {
+                const prefix = (cfg?.prefix) ?? '';
+                const res = `${prefix}${entity.path}${entity.name}`;
                 return normName(res);
             }
 
             // MAIN FUNCTIONALITY
             const res = fTable.create();
-            res.name = convertTableName(entity);
+            res.name = convertTableName(entity, cfg);
             res.comment = entity.comment;
             for (const aName of Object.keys(entity.attr))
                 convertAttr(res, entity.attr[aName]);
             for (const iName of Object.keys(entity.index))
                 convertIndex(res, entity.index[iName]);
             for (const rName of Object.keys(entity.relation))
-                convertRelation(res, entity.relation[rName]);
+                convertRelation(res, entity.relation[rName], cfg);
             return res;
         }
 

@@ -1,0 +1,16 @@
+{
+  "namespace": "teq",
+  "ref": {
+    "app": {
+      "/user": {"path": "/plugin"}
+    },
+    "@vnd/plugin": {
+      "/profile": {
+        "path": "/plugin",
+        "attrs": {
+          "profile_id": "id"
+        }
+      }
+    }
+  }
+}
