@@ -4,13 +4,13 @@
     "app": {
       "/user": {"path": "/plugin"}
     },
-    "@vnd/plugin": {
-      "/profile": {
-        "path": "/plugin",
-        "attrs": {
-          "profile_id": "id"
-        }
-      }
+"@vnd/plugin": {
+  "/profile": {
+    "path": "/plugin",
+    "attrs": {
+      "profile_id": "id"
     }
+  }
+}
   }
 }
