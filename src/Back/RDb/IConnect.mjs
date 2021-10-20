@@ -1,8 +1,9 @@
 /**
- * Interface for main DB connection based on 'knex' library.
+ * Interface for RDBMS connection based on 'knex' library.
  * @interface
  */
 export default class TeqFw_Db_Back_RDb_IConnect {
+
     async disconnect() {}
 
     /**
@@ -12,6 +13,11 @@ export default class TeqFw_Db_Back_RDb_IConnect {
 
     getSchemaBuilder() {}
 
-    async startTransaction() {}
+    /**
+     * Create new transaction to manipulate data in DB.
+     * @param {*} opts
+     * @return {Promise<TeqFw_Db_Back_RDb_ITrans>}
+     */
+    async startTransaction(opts) {}
 
 }

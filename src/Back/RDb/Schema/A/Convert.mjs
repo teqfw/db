@@ -36,10 +36,12 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
             [TDemAction.RESTRICT]: TDbActionType.RESTRICT,
         };
         const mapAttr2Cols = {
+            [TDemAttr.BINARY]: TDbColType.BINARY,
             [TDemAttr.BOOLEAN]: TDbColType.BOOLEAN,
             [TDemAttr.DATETIME]: TDbColType.DATETIME,
             [TDemAttr.ENUM]: TDbColType.ENUM,
             [TDemAttr.ID]: TDbColType.INCREMENTS,
+            [TDemAttr.INTEGER]: TDbColType.INTEGER,
             [TDemAttr.NUMBER]: TDbColType.DECIMAL,
             [TDemAttr.REF]: TDbColType.INTEGER,
             [TDemAttr.STRING]: TDbColType.STRING,
