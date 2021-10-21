@@ -21,6 +21,12 @@ export default class TeqFw_Db_Back_RDb_ITrans {
     getSchemaConfig() {}
 
     /**
+     * 'true' if type of connected RDBMS is MariaDB or MySQL.
+     * @return {boolean}
+     */
+    isMariaDB() {}
+
+    /**
      * 'true' if type of connected RDBMS is PostgreSQL
      * @return {boolean}
      */

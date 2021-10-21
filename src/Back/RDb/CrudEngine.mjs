@@ -1,5 +1,6 @@
 /**
- * Engine to perform simple CRUD operations.
+ * 'knex' based engine to perform simple CRUD operations.
+ * @implements TeqFw_Db_Api_Back_RDb_ICrudEngine
  */
 export default class TeqFw_Db_Back_RDb_CrudEngine {
     constructor(spec) {
@@ -14,7 +15,7 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
          */
         function getTableName(cfg, meta) {
             const entity = meta.getEntityName();
-            const prefix = cfg.prefix;
+            const prefix = cfg?.prefix;
             const partsAll = entity.split(DEF.PS)
             const partsPath = (entity.charAt(0) === DEF.SCOPE_CHAR)
                 ? partsAll.slice(2) // @vnd/plugin/...
@@ -25,14 +26,9 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
         }
 
         // DEFINE INSTANCE METHODS
-        /**
-         *
-         * @param {Object|Array}data
-         * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta
-         * @param {TeqFw_Db_Back_RDb_ITrans} trx
-         * @return {Promise<number>}
-         */
+
         this.create = async function (data, meta, trx) {
+            const res = {};
             const cfg = trx.getSchemaConfig();
             const table = getTableName(cfg, meta);
             const attrs = meta.getAttributes();
@@ -48,13 +44,22 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
             }
             // const sql = query.toString();
             const rs = await query;
-            return rs;
+            if (trx.isMariaDB()) {
+                const pk = meta.getPrimaryKey();
+                if (pk.length === 1) { // simple PK
+                    res[pk[0]] = rs[0];
+                } else { // complex PK
+                    for (const key of pk)
+                        res[key] = data[key];
+                }
+            }
+            return res;
         }
-        this.deleteOne = async function () {}
-        this.deleteSet = async function () {}
-        this.readOne = async function () {}
-        this.readSet = async function () {}
-        this.updateOne = async function () {}
-        this.updateSet = async function () {}
+        this.deleteOne = async function (data, meta, trx) {}
+        this.deleteSet = async function (data, meta, trx) {}
+        this.readOne = async function (data, meta, trx) {}
+        this.readSet = async function (data, meta, trx) {}
+        this.updateOne = async function (data, meta, trx) {}
+        this.updateSet = async function (data, meta, trx) {}
     }
 }

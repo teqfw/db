@@ -1,0 +1,30 @@
+{
+  "entity": {
+    "simple": {
+      "comment": "Entity with simple primary key.",
+      "attr": {
+        "id": {"type": "id"},
+        "date_created": {
+          "type": "datetime",
+          "default": "current"
+        }
+      }
+    }
+  },
+  "package": {
+    "complex": {
+      "entity": {
+        "pkey": {
+          "comment": "Entity with complex primary key.",
+          "attr": {
+            "key_num": {"type": "integer"},
+            "key_str": {"type": "string"}
+          },
+          "index": {
+            "pk": {"type": "primary", "attrs": ["key_num", "key_str"]}
+          }
+        }
+      }
+    }
+  }
+}
