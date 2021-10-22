@@ -7,7 +7,7 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
 
         // DEFINE INSTANCE METHODS
 
-        this.create = async function (data, meta, trx) {
+        this.create = async function (trx, meta, data) {
             const res = {};
             const table = trx.getTableName(meta);
             const attrs = meta.getAttributes();
@@ -34,9 +34,9 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
             }
             return res;
         }
-        this.deleteOne = async function (data, meta, trx) {}
-        this.deleteSet = async function (data, meta, trx) {}
-        this.readOne = async function (key, meta, trx) {
+        this.deleteOne = async function (trx, meta, data) {}
+        this.deleteSet = async function (trx, meta, data) {}
+        this.readOne = async function (trx, meta, key) {
             let res = null;
             const table = trx.getTableName(meta);
             const attrs = meta.getAttributes();
@@ -55,8 +55,26 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
             }
             return res;
         }
-        this.readSet = async function (data, meta, trx) {}
-        this.updateOne = async function (data, meta, trx) {}
-        this.updateSet = async function (data, meta, trx) {}
+
+        this.readSet = async function (trx, meta, where, bind, order, limit, offset) {
+            let res = [];
+            const table = trx.getTableName(meta);
+            const attrs = meta.getAttributes();
+            /** @type {Knex.QueryBuilder} */
+            const query = trx.createQuery();
+            query.table(table);
+            query.where(where);
+            // const sql = query.toString();
+            const rs = await query;
+            if (rs.length > 0)
+                for (const one of rs) {
+                    const item = meta.createDto(one);
+                    res.push(item);
+                }
+            return res;
+        }
+
+        this.updateOne = async function (trx, meta, data) {}
+        this.updateSet = async function (trx, meta, data) {}
     }
 }
