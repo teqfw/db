@@ -30,7 +30,7 @@ describe('CRUD Engine - simple PK', function () {
         const trx = await conn.startTransaction();
         try {
             const data = {'not_exist': 4};
-            const pk = await crud.create(data, meta, trx);
+            const pk = await crud.create(trx, meta, data);
             assert(typeof pk[MSimple.ATTR.ID] === 'number');
             await trx.commit();
         } catch (e) {

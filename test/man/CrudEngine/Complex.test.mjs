@@ -33,7 +33,7 @@ describe('CRUD Engine - complex PK', function () {
                 [Meta.ATTR.KEY_NUM]: 4,
                 [Meta.ATTR.KEY_STR]: 'a',
             };
-            const pk = await crud.create(data, meta, trx);
+            const pk = await crud.create(trx, meta, data);
             assert(typeof pk[Meta.ATTR.KEY_NUM] === 'number');
             assert(typeof pk[Meta.ATTR.KEY_STR] === 'string');
             await trx.commit();
