@@ -1,36 +1,15 @@
 /**
  * 'knex' based engine to perform simple CRUD operations.
- * @implements TeqFw_Db_Api_Back_RDb_ICrudEngine
+ * @implements TeqFw_Db_Back_Api_RDb_ICrudEngine
  */
 export default class TeqFw_Db_Back_RDb_CrudEngine {
-    constructor(spec) {
-        /** @type {TeqFw_Db_Back_Defaults} */
-        const DEF = spec['TeqFw_Db_Back_Defaults$'];
-
-        // DEFINE INNER FUNCTIONS
-        /**
-         * Compose table name for given entity and schema configuration.
-         * @param {TeqFw_Db_Back_Dto_Config_Schema} cfg
-         * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta
-         */
-        function getTableName(cfg, meta) {
-            const entity = meta.getEntityName();
-            const prefix = cfg?.prefix;
-            const partsAll = entity.split(DEF.PS)
-            const partsPath = (entity.charAt(0) === DEF.SCOPE_CHAR)
-                ? partsAll.slice(2) // @vnd/plugin/...
-                : partsAll.slice(1); // plugin/...
-            const path = partsPath.join(DEF.NS)
-            return ((typeof prefix === 'string') && (prefix.length > 0))
-                ? `${prefix}${DEF.NS}${path}` : path;
-        }
+    constructor() {
 
         // DEFINE INSTANCE METHODS
 
         this.create = async function (data, meta, trx) {
             const res = {};
-            const cfg = trx.getSchemaConfig();
-            const table = getTableName(cfg, meta);
+            const table = trx.getTableName(meta);
             const attrs = meta.getAttributes();
             /** @type {Knex.QueryBuilder} */
             const query = trx.createQuery();
@@ -57,7 +36,25 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
         }
         this.deleteOne = async function (data, meta, trx) {}
         this.deleteSet = async function (data, meta, trx) {}
-        this.readOne = async function (data, meta, trx) {}
+        this.readOne = async function (key, meta, trx) {
+            let res = null;
+            const table = trx.getTableName(meta);
+            const attrs = meta.getAttributes();
+            /** @type {Knex.QueryBuilder} */
+            const query = trx.createQuery();
+            query.table(table);
+            const where = {};
+            for (const attr of attrs)
+                if (key[attr] !== undefined) where[attr] = key[attr];
+            query.where(where);
+            // const sql = query.toString();
+            const rs = await query;
+            if (rs.length === 1) {
+                const [first] = rs;
+                res = meta.createDto(first);
+            }
+            return res;
+        }
         this.readSet = async function (data, meta, trx) {}
         this.updateOne = async function (data, meta, trx) {}
         this.updateSet = async function (data, meta, trx) {}

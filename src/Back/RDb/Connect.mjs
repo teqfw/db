@@ -16,6 +16,8 @@ export default class TeqFw_Db_Back_RDb_Connect {
         // EXTRACT DEPS
         /** @type {TeqFw_Core_Shared_Logger} */
         const _logger = spec['TeqFw_Core_Shared_Logger$'];
+        /** @type {TeqFw_Db_Back_RDb_Connect_Resolver} */
+        const _resolver = spec['TeqFw_Db_Back_RDb_Connect_Resolver$$']; // instance per connection
         /** @type {typeof TeqFw_Db_Back_RDb_Trans} */
         const Trans = spec['TeqFw_Db_Back_RDb_Trans#'];
 
@@ -23,8 +25,6 @@ export default class TeqFw_Db_Back_RDb_Connect {
         /** @type {Knex} */
         let _knex;
         let _db;
-        /** @type {TeqFw_Db_Back_Dto_Config_Schema} */
-        let _cfg;
 
         // DEFINE INSTANCE METHODS
         /**
@@ -47,14 +47,14 @@ export default class TeqFw_Db_Back_RDb_Connect {
 
         this.startTransaction = async function (opts) {
             const trx = await _knex.transaction(opts);
-            return new Trans({cfg: _cfg, trx});
+            return new Trans({resolver: _resolver, trx});
         };
         /**
          * Set schema configuration for current connection.
          * @param {TeqFw_Db_Back_Dto_Config_Schema} cfg
          */
         this.setSchemaConfig = function (cfg) {
-            _cfg = cfg;
+            _resolver.setConfig(cfg);
         }
         /**
          * Accessor for 'knex' object.

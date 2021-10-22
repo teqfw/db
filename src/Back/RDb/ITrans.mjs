@@ -15,10 +15,11 @@ export default class TeqFw_Db_Back_RDb_ITrans {
     async disconnect() {}
 
     /**
-     * Return schema configuration for current connection (table prefix, etc.)
-     * @return {TeqFw_Db_Back_Dto_Config_Schema}
+     * Convert entity name to table name ('@vnd/plugin/package/entity' => 'prefix_package_entity').
+     * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta
+     * @return {string}
      */
-    getSchemaConfig() {}
+    getTableName(meta) {}
 
     /**
      * 'true' if type of connected RDBMS is MariaDB or MySQL.

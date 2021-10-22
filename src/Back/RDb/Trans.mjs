@@ -3,13 +3,17 @@
  * @implements TeqFw_Db_Back_RDb_ITrans
  */
 export default class TeqFw_Db_Back_RDb_Trans {
-    /** @type {TeqFw_Db_Back_Dto_Config_Schema} */
-    #cfg;
+    /** @type {TeqFw_Db_Back_RDb_Connect_Resolver} */
+    #resolver;
     /** @type {Knex} */
     #trx;
 
-    constructor({cfg, trx}) {
-        this.#cfg = cfg;
+    /**
+     * @param {TeqFw_Db_Back_RDb_Connect_Resolver} resolver
+     * @param {Knex} trx
+     */
+    constructor({resolver, trx}) {
+        this.#resolver = resolver;
         this.#trx = trx;
     }
 
@@ -22,10 +26,6 @@ export default class TeqFw_Db_Back_RDb_Trans {
     }
 
     async disconnect() {}
-
-    getSchemaConfig() {
-        return this.#cfg;
-    }
 
     isPostgres() {
         return this.#trx?.client?.constructor?.name === 'Client_PG';
@@ -42,5 +42,9 @@ export default class TeqFw_Db_Back_RDb_Trans {
 
     async rollback() {
         return this.#trx.rollback();
+    }
+
+    getTableName(meta) {
+        return this.#resolver.getTableName(meta);
     }
 }
