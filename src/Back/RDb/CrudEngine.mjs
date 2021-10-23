@@ -10,7 +10,7 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
         this.create = async function (trx, meta, data) {
             const res = {};
             const table = trx.getTableName(meta);
-            const attrs = meta.getAttributes();
+            const attrs = meta.getAttrNames();
             /** @type {Knex.QueryBuilder} */
             const query = trx.createQuery();
             query.table(table);
@@ -39,13 +39,15 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
         this.readOne = async function (trx, meta, key) {
             let res = null;
             const table = trx.getTableName(meta);
-            const attrs = meta.getAttributes();
+            const attrs = meta.getAttrNames();
             /** @type {Knex.QueryBuilder} */
             const query = trx.createQuery();
             query.table(table);
+            // check key values according to allowed attributes
             const where = {};
-            for (const attr of attrs)
-                if (key[attr] !== undefined) where[attr] = key[attr];
+            for (const one of key)
+                if (attrs[one] !== undefined) where[one] = key[one];
+            // set records filter
             query.where(where);
             // const sql = query.toString();
             const rs = await query;
@@ -59,7 +61,6 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
         this.readSet = async function (trx, meta, where, bind, order, limit, offset) {
             let res = [];
             const table = trx.getTableName(meta);
-            const attrs = meta.getAttributes();
             /** @type {Knex.QueryBuilder} */
             const query = trx.createQuery();
             query.table(table);
