@@ -21,8 +21,9 @@ export default class TeqFw_Db_Back_RDb_Schema_EntityBase {
 
             inst.createDto = (data) => {
                 const res = new Dto();
-                for (const attr of Object.keys(data))
-                    if (attrNames.includes(attr)) res[attr] = data[attr];
+                if (typeof data === 'object')
+                    for (const attr of Object.keys(data))
+                        if (attrNames.includes(attr)) res[attr] = data[attr];
                 return res;
             }
 
