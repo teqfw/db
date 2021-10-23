@@ -34,4 +34,20 @@ export default class TeqFw_Db_Back_RDb_ITrans {
     isPostgres() {}
 
     async rollback() {}
+
+
+    /**
+     * TODO: remove it
+     * @param {string|Object} table
+     * @return {Knex.Builder}
+     * @deprecated temporary solution for refactoring period
+     */
+    getQuery(table) { }
+
+    /**
+     * TODO: remove it
+     * @return {Knex}
+     * @deprecated temporary solution for refactoring period
+     */
+    getTrx() { }
 }

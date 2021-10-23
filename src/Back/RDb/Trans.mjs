@@ -48,21 +48,10 @@ export default class TeqFw_Db_Back_RDb_Trans {
         return this.#resolver.getTableName(meta);
     }
 
-    /**
-     * TODO: remove it
-     * @param {string} table
-     * @return {Knex.Builder}
-     * @deprecated temporary solution for refactoring period
-     */
     getQuery(table) {
         return this.#trx(table);
     }
 
-    /**
-     * TODO: remove it
-     * @return {Knex}
-     * @deprecated temporary solution for refactoring period
-     */
     getTrx() {
         return this.#trx;
     }
