@@ -34,8 +34,17 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
             }
             return res;
         }
-        this.deleteOne = async function (trx, meta, data) {}
-        this.deleteSet = async function (trx, meta, data) {}
+        this.deleteOne = async function (trx, meta, key) {}
+
+        this.deleteSet = async function (trx, meta, where) {
+            const table = trx.getTableName(meta);
+            /** @type {Knex.QueryBuilder} */
+            const query = trx.createQuery();
+            query.table(table);
+            query.where(where);
+            return await query.del();
+        }
+
         this.readOne = async function (trx, meta, key) {
             let res = null;
             const table = trx.getTableName(meta);
@@ -43,12 +52,13 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
             /** @type {Knex.QueryBuilder} */
             const query = trx.createQuery();
             query.table(table);
-            // check key values according to allowed attributes
+            // check key values according to allowed attributes and set record filter
             const where = {};
-            for (const one of key)
-                if (attrs[one] !== undefined) where[one] = key[one];
-            // set records filter
+            const keyParts = Array.isArray(key) ? Object.fromEntries(key) : key;
+            for (const one of Object.keys(keyParts))
+                if (attrs.includes(one)) where[one] = key[one];
             query.where(where);
+            query.limit(2); // should be one only item, limit if search key is not unique
             // const sql = query.toString();
             const rs = await query;
             if (rs.length === 1) {

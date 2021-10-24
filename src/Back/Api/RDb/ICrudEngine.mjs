@@ -13,12 +13,13 @@ export default class TeqFw_Db_Back_Api_RDb_ICrudEngine {
      */
     async create(trx, meta, data) {};
 
-    async deleteOne(trx, meta, data) {};
+    async deleteOne(trx, meta, key) {};
 
-    async deleteSet(trx, meta, data) {};
+    async deleteSet(trx, meta, where) {};
 
     /**
-     * Get one entity by key (primary or unique).
+     * Get one entity by key (primary or unique). Return 'null' if result set contains more than one item.
+     *
      * @param {TeqFw_Db_Back_RDb_ITrans} trx DB transaction for data processing
      * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
      * @param {Object|Array} key key values (primary or unique)
@@ -27,7 +28,6 @@ export default class TeqFw_Db_Back_Api_RDb_ICrudEngine {
     async readOne(trx, meta, key) {};
 
     /**
-     *
      * @param {TeqFw_Db_Back_RDb_ITrans} trx DB transaction for data processing
      * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
      * @param {Object|string|function} [where]
