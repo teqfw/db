@@ -13,8 +13,24 @@ export default class TeqFw_Db_Back_Api_RDb_ICrudEngine {
      */
     async create(trx, meta, data) {};
 
+    /**
+     * Delete one entity by key (primary or unique).
+     *
+     * @param {TeqFw_Db_Back_RDb_ITrans} trx DB transaction for data processing
+     * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
+     * @param {Object|Array} key key values (primary or unique)
+     * @return {Promise<number>}
+     */
     async deleteOne(trx, meta, key) {};
 
+    /**
+     * Delete entities using some condition ('where' clause).
+     *
+     * @param {TeqFw_Db_Back_RDb_ITrans} trx DB transaction for data processing
+     * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
+     * @param {Object|function} where
+     * @return {Promise<number>}
+     */
     async deleteSet(trx, meta, where) {};
 
     /**
@@ -39,6 +55,14 @@ export default class TeqFw_Db_Back_Api_RDb_ICrudEngine {
      */
     async readSet(trx, meta, where, bind, order, limit, offset) {};
 
+    /**
+     * Update data for one entity by primary key.
+     *
+     * @param {TeqFw_Db_Back_RDb_ITrans} trx DB transaction for data processing
+     * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
+     * @param {Object|Array} data data to process (must contain primary key)
+     * @return {Promise<number>}
+     */
     async updateOne(trx, meta, data) {};
 
     async updateSet(trx, meta, data) {};
