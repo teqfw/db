@@ -31,12 +31,13 @@ function formatAsDateTime(dateIn) {
 
 /**
  * Get list of available tables.
- * @param trx
+ * @param {TeqFw_Db_Back_RDb_ITrans} iTrx
  * @return {Promise<*[]>}
  * @memberOf TeqFw_Db_Back_Util
  */
-async function getTables(trx) {
+async function getTables(iTrx) {
     const result = [];
+    const trx = iTrx.getTrx();
     const dialect = trx.client.config.client;
     if (['mysql', 'mysql2'].includes(dialect)) {
         const rs = await trx.raw('show tables');
@@ -67,13 +68,14 @@ function isPostgres(client) {
 
 /**
  * Insert table items selected by 'itemsSelect'.
- * @param trx
+ * @param {TeqFw_Db_Back_RDb_ITrans} iTrx
  * @param dump
  * @param entity
  * @return {Promise<void>}
  * @memberOf TeqFw_Db_Back_Util
  */
-async function itemsInsert(trx, dump, entity) {
+async function itemsInsert(iTrx, dump, entity) {
+    const trx = iTrx.getTrx();
     if (Array.isArray(dump[entity]) && dump[entity].length > 0) {
         await trx(entity).insert(dump[entity]);
     }
@@ -81,14 +83,15 @@ async function itemsInsert(trx, dump, entity) {
 
 /**
  * Select * from 'entity' if 'entity' exists in 'tables' or null otherwise.
- * @param trx
+ * @param {TeqFw_Db_Back_RDb_ITrans} iTrx
  * @param {string[]} tables
  * @param {string} entity
  * @param {string[]|null} cols
  * @returns {Promise<*|null>}
  * @memberOf TeqFw_Db_Back_Util
  */
-async function itemsSelect(trx, tables, entity, cols = null) {
+async function itemsSelect(iTrx, tables, entity, cols = null) {
+    const trx = iTrx.getTrx();
     if (tables.includes(entity)) {
         if (Array.isArray(cols)) {
             return await trx.select(cols).from(entity);
