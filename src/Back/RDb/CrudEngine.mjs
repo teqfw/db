@@ -23,7 +23,7 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
             }
             // const sql = query.toString();
             const rs = await query;
-            if (trx.isMariaDB()) {
+            if (trx.isMariaDB() || trx.isSqlite()) {
                 const pk = meta.getPrimaryKey();
                 if (pk.length === 1) { // simple PK
                     res[pk[0]] = rs[0];
@@ -31,6 +31,8 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
                     for (const key of pk)
                         res[key] = data[key];
                 }
+            } else if (trx.isPostgres()) {
+                if (Array.isArray(rs) && (typeof rs[0] === 'object')) Object.assign(res, rs[0]);
             }
             return res;
         }

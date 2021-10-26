@@ -27,13 +27,17 @@ export default class TeqFw_Db_Back_RDb_Trans {
 
     async disconnect() {}
 
+    isMariaDB() {
+        const name = this.#trx?.client?.constructor?.name;
+        return (name === 'Client_MySQL2') || (name === 'Client_MySQL');
+    }
+
     isPostgres() {
         return this.#trx?.client?.constructor?.name === 'Client_PG';
     }
 
-    isMariaDB() {
-        const name = this.#trx?.client?.constructor?.name;
-        return (name === 'Client_MySQL2') || (name === 'Client_MySQL');
+    isSqlite() {
+        return this.#trx?.client?.constructor?.name === 'Client_SQLite3';
     }
 
     async commit() {

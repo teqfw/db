@@ -33,6 +33,12 @@ export default class TeqFw_Db_Back_RDb_ITrans {
      */
     isPostgres() {}
 
+    /**
+     * 'true' if type of connected RDBMS is SQLite
+     * @return {boolean}
+     */
+    isSqlite() {}
+
     async rollback() {}
 
 

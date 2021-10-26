@@ -11,6 +11,16 @@ export default class TeqFw_Db_Back_Dto_Config_Local {
     client;
     /** @type {TeqFw_Db_Back_Dto_Config_Local_Connection} */
     connection;
+    /**
+     * PostgreSQL client allows you to set the initial search path for each connection automatically.
+     * @type {string[]}
+     */
+    searchPath;
+    /**
+     * When you use the PostgreSQL adapter to connect a non-standard database.
+     * @type {string}
+     */
+    version;
 }
 
 /**
@@ -19,7 +29,7 @@ export default class TeqFw_Db_Back_Dto_Config_Local {
  */
 export class Factory {
     constructor(spec) {
-        const {castString} = spec['TeqFw_Core_Shared_Util_Cast'];
+        const {castArrayOfStr, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
         /** @type {TeqFw_Db_Back_Dto_Config_Local_Connection.Factory} */
         const fConn = spec['TeqFw_Db_Back_Dto_Config_Local_Connection#Factory$'];
 
@@ -31,6 +41,8 @@ export class Factory {
             const res = new TeqFw_Db_Back_Dto_Config_Local();
             res.client = castString(data?.client);
             res.connection = fConn.create(data?.connection);
+            res.searchPath = castArrayOfStr(data?.searchPath);
+            res.version = castString(data?.version);
             return res;
         }
     }
