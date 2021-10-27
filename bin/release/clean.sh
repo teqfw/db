@@ -4,7 +4,7 @@
 ##
 DIR_ROOT=${DIR_ROOT:-$(cd "$(dirname "$0")/../../" && pwd)}
 
-rm -fr "${DIR_ROOT}/bin/deploy/dev.sh"
+rm -fr "${DIR_ROOT}/bin/deploy/"
 rm -fr "${DIR_ROOT}/doc/"
 rm -fr "${DIR_ROOT}/node_modules/"
 rm -fr "${DIR_ROOT}/own_modules/"
