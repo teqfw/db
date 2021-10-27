@@ -1,5 +1,11 @@
 # @teqfw/db: releases
 
+# 0.3.0
+* Cast function for DTOs.
+* DB utils refactoring.
+* DEM (Domain Entities Model) support.
+* CRUD engine basics.
+
 # 0.2.0
 
 * use `@teqfw/di.replace` in `./teqfw.json` as an object and not as an array;

@@ -1,6 +1,6 @@
 {
   "name": "@teqfw/db",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "TeqFW: DB connectivity.",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha --recursive './test/mod/**/*.test.mjs'"
@@ -35,6 +35,7 @@
   "devDependencies": {
     "mocha": "*",
     "mysql2": "*",
-    "pg": "*"
+    "pg": "*",
+    "sqlite3": "*"
   }
 }
