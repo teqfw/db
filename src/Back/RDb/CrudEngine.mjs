@@ -91,6 +91,9 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
             const query = trx.createQuery();
             query.table(table);
             query.where(where);
+            if (order) query.orderBy(order);
+            if (offset) query.offset(offset);
+            if (limit) query.limit(limit);
             // const sql = query.toString();
             const rs = await query;
             if (rs.length > 0)
