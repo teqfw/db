@@ -17,6 +17,12 @@ export default class TeqFw_Db_Back_Dto_Config_Local {
      */
     searchPath;
     /**
+     * SQLite: replace undefined keys with NULL instead of DEFAULT.
+     *
+     * @type {boolean}
+     */
+    useNullAsDefault;
+    /**
      * When you use the PostgreSQL adapter to connect a non-standard database.
      * @type {string}
      */
