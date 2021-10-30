@@ -24,7 +24,8 @@ export default class TeqFw_Db_Back_RDb_Connect {
         // DEFINE WORKING VARS / PROPS
         /** @type {Knex} */
         let _knex;
-        let _db;
+        /** @type {string} */
+        let _info;
 
         // DEFINE INSTANCE METHODS
         /**
@@ -34,13 +35,20 @@ export default class TeqFw_Db_Back_RDb_Connect {
          * @returns {Promise<void>}
          */
         this.init = async function (cfg) {
-            _db = cfg.connection.database + '@' + cfg.connection.host;
-            const user = cfg.connection.user;
+            const filename = cfg?.connection?.filename;
+            if (filename) {
+                _info = `'${filename}'`;
+            } else {
+                const db = cfg?.connection?.database;
+                const host = cfg?.connection?.host;
+                const user = cfg?.connection?.user;
+                _info = `'${db}@${host}' as '${user}'`;
+            }
             try {
                 _knex = await knex(cfg);
-                _logger.info(`Setup connection to DB '${_db}' as '${user}'.`);
+                _logger.info(`Setup connection to DB ${_info}.`);
             } catch (e) {
-                _logger.error(`Cannot setup connection to DB '${_db}' as '${user}'. Error: ${e}`);
+                _logger.error(`Cannot setup connection to DB ${_info}. Error: ${e}`);
                 throw e;
             }
         };
@@ -93,7 +101,7 @@ export default class TeqFw_Db_Back_RDb_Connect {
                     } else {
                         // close all connections
                         _knex.destroy();
-                        _logger.info(`Connections to '${_db}' are closed.`);
+                        _logger.info(`Connections to ${_info} are closed.`);
                         resolve();
                     }
                 }
