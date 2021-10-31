@@ -3,6 +3,9 @@
  */
 const NS = 'TeqFw_Db_Front_Idb_Connect';
 
+/**
+ * @deprecated use TeqFw_Web_Front_Store_Connect
+ */
 export default class TeqFw_Db_Front_Idb_Connect {
     constructor() {
         //
