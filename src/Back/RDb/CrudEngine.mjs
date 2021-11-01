@@ -15,8 +15,9 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
             const query = trx.createQuery();
             query.table(table);
             const record = {};
-            for (const attr of attrs)
-                if (data[attr] !== undefined) record[attr] = data[attr];
+            if (data)
+                for (const attr of attrs)
+                    if (data[attr] !== undefined) record[attr] = data[attr];
             query.insert(record);
             if (trx.isPostgres()) {
                 query.returning(meta.getPrimaryKey());
@@ -28,8 +29,8 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
                 if (pk.length === 1) { // simple PK
                     res[pk[0]] = rs[0];
                 } else { // complex PK
-                    for (const key of pk)
-                        res[key] = data[key];
+                    if (data)
+                        for (const key of pk) res[key] = data[key];
                 }
             } else if (trx.isPostgres()) {
                 if (Array.isArray(rs) && (typeof rs[0] === 'object')) Object.assign(res, rs[0]);
