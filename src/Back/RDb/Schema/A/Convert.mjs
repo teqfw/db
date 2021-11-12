@@ -125,8 +125,8 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
                 const prefix = (cfg?.prefix) ?? '';
                 db.itsTable = normName(`${prefix}${dem.ref.path}`);
                 db.itsColumns = dem.ref.attrs;
-                if (dem.onDelete) db.onDelete = mapAction[dem.onDelete];
-                if (dem.onUpdate) db.onUpdate = mapAction[dem.onUpdate];
+                if (dem?.action?.delete) db.onDelete = mapAction[dem.action.delete];
+                if (dem?.action?.update) db.onUpdate = mapAction[dem.action.update];
                 tbl.relations.push(db);
             }
 

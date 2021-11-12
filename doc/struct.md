@@ -130,9 +130,9 @@ Available functions:
       "attrs": ["attr1", "attr2"],
       "ref": {
         "path": "/pack1/sub/entity",
-        "attrs": ["ref1", "ref2"],
-        "action": {"delete": "restrict|cascade", "update": "..."}
-      }
+        "attrs": ["ref1", "ref2"]
+      },
+      "action": {"delete": "restrict|cascade", "update": "..."}
     }
   }
 }

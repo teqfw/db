@@ -113,7 +113,7 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
             /** @type {Knex.QueryBuilder} */
             const query = trx.createQuery();
             query.table(table);
-            query.where(where);
+            if (where) query.where(where);
             if (order) query.orderBy(order);
             if (offset) query.offset(offset);
             if (limit) query.limit(limit);
