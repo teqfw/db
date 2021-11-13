@@ -20,6 +20,7 @@ export default class TeqFw_Db_Back_RDb_Schema_EntityBase {
             const attrNames = Object.values(attrs);
 
             inst.createDto = (data) => {
+                // TODO: DTO create function with data casting should be here (data in SQLite is integer)
                 const res = new Dto();
                 if (typeof data === 'object')
                     for (const attr of Object.keys(data))
