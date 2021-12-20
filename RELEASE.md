@@ -1,8 +1,10 @@
 # @teqfw/db: releases
 
-## x.x.x
+## 0.4.0
 
 * Improve CRUD engine.
+* Add SQLite support to config.
+* Add `TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action` for foreign keys actions (restrict, delete, ...).
 
 ## 0.3.1
 
