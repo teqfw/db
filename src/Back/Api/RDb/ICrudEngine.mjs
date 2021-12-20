@@ -8,7 +8,7 @@ export default class TeqFw_Db_Back_Api_RDb_ICrudEngine {
      *
      * @param {TeqFw_Db_Back_RDb_ITrans} trx DB transaction for data processing
      * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
-     * @param {Object|Array} data data to process
+     * @param {Object|Array} [data] data to process
      * @return {Promise<Object>} object with primary key data ({key1: ..., key2: ..., ...})
      */
     async create(trx, meta, data) {};
@@ -38,7 +38,7 @@ export default class TeqFw_Db_Back_Api_RDb_ICrudEngine {
      *
      * @param {TeqFw_Db_Back_RDb_ITrans} trx DB transaction for data processing
      * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
-     * @param {Object|Array} key key values (primary or unique)
+     * @param {number|string|boolean|Array|Object} key JS primitive for simple PK or object/array for complex PK or unique key
      * @return {Promise<Object|null>}
      */
     async readOne(trx, meta, key) {};

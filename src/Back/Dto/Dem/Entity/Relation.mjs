@@ -6,14 +6,12 @@ const NS = 'TeqFw_Db_Back_Dto_Dem_Entity_Relation';
 
 // MODULE'S CLASSES
 export default class TeqFw_Db_Back_Dto_Dem_Entity_Relation {
+    /** @type {TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action} */
+    action;
     /** @type {string[]} */
     attrs;
     /** @type {string} */
     name;
-    /** @type {TeqFw_Db_Back_Enum_Dem_Type_Action} */
-    onDelete;
-    /** @type {TeqFw_Db_Back_Enum_Dem_Type_Action} */
-    onUpdate;
     /** @type {TeqFw_Db_Back_Dto_Dem_Entity_Relation_Ref} */
     ref;
 }
@@ -24,11 +22,11 @@ export default class TeqFw_Db_Back_Dto_Dem_Entity_Relation {
  */
 export class Factory {
     constructor(spec) {
-        const {castArray, castEnum, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
-        /** @type {typeof TeqFw_Db_Back_Enum_Dem_Type_Action} */
-        const ACTION = spec['TeqFw_Db_Back_Enum_Dem_Type_Action#'];
+        const {castArray, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
         /** @type {TeqFw_Db_Back_Dto_Dem_Entity_Relation_Ref.Factory} */
         const fRef = spec['TeqFw_Db_Back_Dto_Dem_Entity_Relation_Ref#Factory$'];
+        /** @type {TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action.Factory} */
+        const fAction = spec['TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action#Factory$'];
 
         /**
          * @param {TeqFw_Db_Back_Dto_Dem_Entity_Relation|null} data
@@ -36,10 +34,9 @@ export class Factory {
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_Dem_Entity_Relation();
+            res.action = fAction.create(data?.action);
             res.attrs = castArray(data?.attrs);
             res.name = castString(data?.name);
-            res.onDelete = castEnum(data?.onDelete, ACTION);
-            res.onUpdate = castEnum(data?.onUpdate, ACTION);
             res.ref = fRef.create(data?.ref);
             return res;
         }

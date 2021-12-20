@@ -7,7 +7,7 @@ export default class TeqFw_Db_Back_RDb_Meta_IEntity {
     /**
      * Create entity DTO from given data.
      * @param [data]
-     * @return {Object}
+     * @return {*}
      */
     createDto(data) {}
 

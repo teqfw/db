@@ -17,6 +17,12 @@ export default class TeqFw_Db_Back_Dto_Config_Local {
      */
     searchPath;
     /**
+     * SQLite: replace undefined keys with NULL instead of DEFAULT.
+     *
+     * @type {boolean}
+     */
+    useNullAsDefault;
+    /**
      * When you use the PostgreSQL adapter to connect a non-standard database.
      * @type {string}
      */
@@ -29,7 +35,7 @@ export default class TeqFw_Db_Back_Dto_Config_Local {
  */
 export class Factory {
     constructor(spec) {
-        const {castArrayOfStr, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
+        const {castArrayOfStr, castString, castBoolean} = spec['TeqFw_Core_Shared_Util_Cast'];
         /** @type {TeqFw_Db_Back_Dto_Config_Local_Connection.Factory} */
         const fConn = spec['TeqFw_Db_Back_Dto_Config_Local_Connection#Factory$'];
 
@@ -42,6 +48,7 @@ export class Factory {
             res.client = castString(data?.client);
             res.connection = fConn.create(data?.connection);
             res.searchPath = castArrayOfStr(data?.searchPath);
+            res.useNullAsDefault = castBoolean(data?.useNullAsDefault);
             res.version = castString(data?.version);
             return res;
         }

@@ -7,13 +7,14 @@ export default class TeqFw_Db_Back_RDb_Schema {
 
     constructor(spec) {
         // EXTRACT DEPS
+        /** @type {TeqFw_Core_Shared_Logger} */
+        const _logger = spec['TeqFw_Core_Shared_Logger$'];
         /** @type {TeqFw_Db_Back_RDb_Schema_A_Convert} */
         const _aConvert = spec['TeqFw_Db_Back_RDb_Schema_A_Convert$'];
         /** @type {TeqFw_Db_Back_RDb_Schema_A_Order} */
         const _aOrder = spec['TeqFw_Db_Back_RDb_Schema_A_Order$'];
         /** @type {TeqFw_Db_Back_RDb_Schema_A_Builder} */
         const _builder = spec['TeqFw_Db_Back_RDb_Schema_A_Builder$'];
-
 
         // DEFINE WORKING VARS / PROPS
         /** @type {TeqFw_Db_Back_Dto_Dem} */
@@ -29,9 +30,11 @@ export default class TeqFw_Db_Back_RDb_Schema {
             const dem = _dem;
             /** @type {TeqFw_Db_Back_Dto_Dem_Entity[]} */
             const entities = await _aOrder.exec({dem});
+            _logger.info(`Total ${entities.length} entities are in DEM.`);
             for (const entity of entities) {
                 const tbl = await _aConvert.exec({entity, cfg: _cfg});
                 _builder.addTable(schema, tbl, knex);
+                _logger.info(`Table '${tbl.name}' is created.`);
             }
             // perform operations
             // const sql = schema.toString();
