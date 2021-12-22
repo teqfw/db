@@ -1,7 +1,7 @@
 /**
  * Compose schema configuration from DEMs union and map file.
  *
- * @implements TeqFw_Core_Shared_Api_IAction
+ * @implements TeqFw_Core_Shared_Api_Async_IAction
  */
 export default class TeqFw_Db_Back_Dem_Load_A_SchemaCfg {
     constructor(spec) {

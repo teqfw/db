@@ -1,7 +1,7 @@
 /**
  * Load all DEMs (app & plugins), merge all fragments and normalize its using map data.
  *
- * @implements TeqFw_Core_Shared_Api_IAction
+ * @implements TeqFw_Core_Shared_Api_Async_IAction
  */
 export default class TeqFw_Db_Back_Dem_Load {
     constructor(spec) {
