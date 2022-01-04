@@ -15,8 +15,8 @@ export default class TeqFw_Db_Back_Dem_Load_A_Scan {
         // EXTRACT DEPS
         /** @type {Function|TeqFw_Core_Back_Util.scanNodeModules} */
         const _scanNodeModules = spec['TeqFw_Core_Back_Util#scanNodeModules'];
-        /** @type {TeqFw_Core_Back_Scan_Plugin_Registry} */
-        const _regPlugins = spec['TeqFw_Core_Back_Scan_Plugin_Registry$'];
+        /** @type {TeqFw_Core_Back_App_Scan_Plugin_Registry} */
+        const _regPlugins = spec['TeqFw_Core_Back_App_Scan_Plugin_Registry$'];
         /** @type {TeqFw_Db_Back_Dem_Load_A_Scan_A_Dem} */
         const _loadDem = spec['TeqFw_Db_Back_Dem_Load_A_Scan_A_Dem$'];
         /** @type {TeqFw_Db_Back_Dem_Load_A_Scan_A_Map} */
