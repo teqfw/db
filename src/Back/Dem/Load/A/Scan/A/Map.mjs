@@ -2,7 +2,7 @@
  * Load DEM mapping data for the application.
  * There is one only map file per application (in root plugin).
  *
- * @implements TeqFw_Core_Shared_Api_Async_IAction
+ * @implements TeqFw_Core_Shared_Api_Action_IAsync
  */
 export default class TeqFw_Db_Back_Dem_Load_A_Scan_A_Map {
     constructor(spec) {

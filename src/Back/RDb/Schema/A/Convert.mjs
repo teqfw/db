@@ -1,7 +1,7 @@
 /**
  * Convert DEM DTO Entity to RDB DTO Table.
  *
- * @implements TeqFw_Core_Shared_Api_Async_IAction
+ * @implements TeqFw_Core_Shared_Api_Action_IAsync
  */
 export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
 
