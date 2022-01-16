@@ -31,6 +31,8 @@ TeqFw_Db_Back_Dto_Dem.REFS = 'refs';
  * @memberOf TeqFw_Db_Back_Dto_Dem
  */
 export class Factory {
+    static namespace = NS;
+
     constructor(spec) {
         /** @type {typeof TeqFw_Db_Back_Dto_Dem_Entity} */
         const TEntity = spec['TeqFw_Db_Back_Dto_Dem_Entity#'];
@@ -86,5 +88,3 @@ export class Factory {
 
 // finalize code components for this es6-module
 Object.freeze(TeqFw_Db_Back_Dto_Dem);
-Object.defineProperty(Factory, 'name', {value: `${NS}.${Factory.constructor.name}`});
-

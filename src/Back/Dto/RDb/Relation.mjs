@@ -32,6 +32,8 @@ TeqFw_Db_Back_Dto_RDb_Relation.OWN_COLUMNS = 'ownColumns';
  * @memberOf TeqFw_Db_Back_Dto_RDb_Relation
  */
 export class Factory {
+    static namespace = NS;
+
     constructor(spec) {
         const {castArray, castEnum, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
         /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Action} */
@@ -55,4 +57,3 @@ export class Factory {
 
 // finalize code components for this es6-module
 Object.freeze(TeqFw_Db_Back_Dto_RDb_Relation);
-Object.defineProperty(Factory, 'name', {value: `${NS}.${Factory.constructor.name}`});

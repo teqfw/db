@@ -39,6 +39,8 @@ TeqFw_Db_Back_Dto_RDb_Column.UNSIGNED = 'unsigned';
  * @memberOf TeqFw_Db_Back_Dto_RDb_Column
  */
 export class Factory {
+    static namespace = NS;
+
     constructor(spec) {
         const {castArray, castBooleanIfExists, castEnum, castInt, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
         /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Column} */
@@ -66,4 +68,3 @@ export class Factory {
 
 // finalize code components for this es6-module
 Object.freeze(TeqFw_Db_Back_Dto_RDb_Column);
-Object.defineProperty(Factory, 'name', {value: `${NS}.${Factory.constructor.name}`});

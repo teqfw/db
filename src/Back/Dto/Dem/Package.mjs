@@ -17,6 +17,8 @@ export default class TeqFw_Db_Back_Dto_Dem_Package {
  * @memberOf TeqFw_Db_Back_Dto_Dem_Package
  */
 export class Factory {
+    static namespace = NS;
+
     constructor(spec) {
         // EXTRACT DEPS
         /** @type {TeqFw_Db_Back_Dto_Dem_Entity.Factory} */
@@ -51,5 +53,3 @@ export class Factory {
 
 // finalize code components for this es6-module
 Object.freeze(TeqFw_Db_Back_Dto_Dem_Package);
-Object.defineProperty(Factory, 'name', {value: `${NS}.${Factory.constructor.name}`});
-

@@ -17,6 +17,8 @@ export default class TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action {
  * @memberOf TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action
  */
 export class Factory {
+    static namespace = NS;
+
     constructor(spec) {
         /** @type {TeqFw_Core_Shared_Util_Cast.castEnum|function} */
         const castEnum = spec['TeqFw_Core_Shared_Util_Cast.castEnum'];
@@ -38,5 +40,3 @@ export class Factory {
 
 // finalize code components for this es6-module
 Object.freeze(TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action);
-Object.defineProperty(Factory, 'name', {value: `${NS}.${Factory.constructor.name}`});
-

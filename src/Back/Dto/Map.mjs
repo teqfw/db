@@ -27,6 +27,8 @@ TeqFw_Db_Back_Dto_Map.NAMESPACE = 'namespace';
  * @memberOf TeqFw_Db_Back_Dto_Map
  */
 export class Factory {
+    static namespace = NS;
+
     constructor(spec) {
         /** @type {TeqFw_Db_Back_Dto_Map_Ref.Factory} */
         const fRef = spec['TeqFw_Db_Back_Dto_Map_Ref#Factory$'];
@@ -62,5 +64,3 @@ export class Factory {
 
 // finalize code components for this es6-module
 Object.freeze(TeqFw_Db_Back_Dto_Map);
-Object.defineProperty(Factory, 'name', {value: `${NS}.${Factory.constructor.name}`});
-

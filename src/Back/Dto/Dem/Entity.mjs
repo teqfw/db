@@ -28,6 +28,8 @@ TeqFw_Db_Back_Dto_Dem_Entity.NAME = 'name';
  * @memberOf TeqFw_Db_Back_Dto_Dem_Entity
  */
 export class Factory {
+    static namespace = NS;
+
     constructor(spec) {
         const {castString} = spec['TeqFw_Core_Shared_Util_Cast'];
         /** @type {TeqFw_Db_Back_Dto_Dem_Entity_Attr.Factory} */
@@ -71,5 +73,3 @@ export class Factory {
 
 // finalize code components for this es6-module
 Object.freeze(TeqFw_Db_Back_Dto_Dem_Entity);
-Object.defineProperty(Factory, 'name', {value: `${NS}.${Factory.constructor.name}`});
-

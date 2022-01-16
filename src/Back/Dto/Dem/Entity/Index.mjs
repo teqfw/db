@@ -19,6 +19,8 @@ export default class TeqFw_Db_Back_Dto_Dem_Entity_Index {
  * @memberOf TeqFw_Db_Back_Dto_Dem_Entity_Index
  */
 export class Factory {
+    static namespace = NS;
+
     constructor(spec) {
         const {castArray, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
         /**
@@ -37,5 +39,3 @@ export class Factory {
 
 // finalize code components for this es6-module
 Object.freeze(TeqFw_Db_Back_Dto_Dem_Entity_Index);
-Object.defineProperty(Factory, 'name', {value: `${NS}.${Factory.constructor.name}`});
-
