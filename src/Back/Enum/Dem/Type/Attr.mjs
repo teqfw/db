@@ -8,6 +8,7 @@ const TeqFw_Db_Back_Enum_Dem_Type_Attr = {
     ENUM: 'enum',
     ID: 'id',
     INTEGER: 'integer',
+    JSON: 'json',
     NUMBER: 'number',
     REF: 'ref',
     STRING: 'string',

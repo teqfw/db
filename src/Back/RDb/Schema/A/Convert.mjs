@@ -42,6 +42,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
             [TDemAttr.ENUM]: TDbColType.ENUM,
             [TDemAttr.ID]: TDbColType.INCREMENTS,
             [TDemAttr.INTEGER]: TDbColType.INTEGER,
+            [TDemAttr.JSON]: TDbColType.JSONB,
             [TDemAttr.NUMBER]: TDbColType.DECIMAL,
             [TDemAttr.REF]: TDbColType.INTEGER,
             [TDemAttr.STRING]: TDbColType.STRING,
