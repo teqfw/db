@@ -7,8 +7,8 @@ export default class TeqFw_Db_Back_RDb_Schema {
 
     constructor(spec) {
         // EXTRACT DEPS
-        /** @type {TeqFw_Core_Shared_Logger} */
-        const _logger = spec['TeqFw_Core_Shared_Logger$'];
+        /** @type {TeqFw_Core_Shared_Api_ILogger} */
+        const _logger = spec['TeqFw_Core_Shared_Api_ILogger$'];
         /** @type {TeqFw_Db_Back_RDb_Schema_A_Convert} */
         const _aConvert = spec['TeqFw_Db_Back_RDb_Schema_A_Convert$'];
         /** @type {TeqFw_Db_Back_RDb_Schema_A_Order} */
