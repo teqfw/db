@@ -38,7 +38,7 @@ export class Factory {
          * @return {TeqFw_Db_Back_Dto_Map}
          */
         this.create = function create(data = null) {
-            // DEFINE INNER FUNCTIONS
+            // ENCLOSED FUNCS
             function parseRef(data) {
                 const res = {};
                 if (typeof data === 'object')
@@ -53,7 +53,7 @@ export class Factory {
                 return res;
             }
 
-            // MAIN FUNCTIONALITY
+            // MAIN
             const res = new TeqFw_Db_Back_Dto_Map();
             res.namespace = data?.namespace;
             res.ref = parseRef(data?.ref);

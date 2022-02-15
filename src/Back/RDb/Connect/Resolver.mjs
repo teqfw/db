@@ -3,7 +3,7 @@
  */
 export default class TeqFw_Db_Back_RDb_Connect_Resolver {
     constructor(spec) {
-        // EXTRACT DEPS
+        // DEPS
         /** @type {TeqFw_Db_Back_Defaults} */
         const DEF = spec['TeqFw_Db_Back_Defaults$'];
 

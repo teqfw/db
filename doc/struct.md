@@ -116,7 +116,7 @@ Available functions:
 ```json
 {
   "index": {
-    "name": {"type": "primary|unique", "attrs": ["attr1", "attr2"]}
+    "name": {"type": "primary|unique|index", "attrs": ["attr1", "attr2"]}
   }
 }
 ```

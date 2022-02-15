@@ -12,7 +12,7 @@ const MAP = 'etc/teqfw.schema.map.json';
  */
 export default class TeqFw_Db_Back_Dem_Load_A_Scan {
     constructor(spec) {
-        // EXTRACT DEPS
+        // DEPS
         /** @type {Function|TeqFw_Core_Back_Util.scanNodeModules} */
         const _scanNodeModules = spec['TeqFw_Core_Back_Util#scanNodeModules'];
         /** @type {TeqFw_Core_Back_App_Init_Plugin_Registry} */

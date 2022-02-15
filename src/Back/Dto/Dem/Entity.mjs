@@ -44,7 +44,7 @@ export class Factory {
          * @return {TeqFw_Db_Back_Dto_Dem_Entity}
          */
         this.create = function (data = null) {
-            // DEFINE INNER FUNCTIONS
+            // ENCLOSED FUNCS
 
             function parse(fnCreate, data) {
                 const res = {};
@@ -58,7 +58,7 @@ export class Factory {
                 return res;
             }
 
-            // MAIN FUNCTIONALITY
+            // MAIN
             const res = new TeqFw_Db_Back_Dto_Dem_Entity();
             res.attr = parse(fAttr.create, data?.attr);
             res.comment = castString(data?.comment);

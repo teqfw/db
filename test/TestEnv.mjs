@@ -61,7 +61,7 @@ const container = (function (cfg) {
  * @typedef {Object}
  */
 const localCfg = await (async function (cfg, container) {
-    // DEFINE INNER FUNCTIONS
+    // ENCLOSED FUNCS
     /**
      * Default connection parameters to PostgreSQL/MariaDB/MuSQL database.
      * Override these params in local configuration (test/data/cfg/local.json).
@@ -81,7 +81,7 @@ const localCfg = await (async function (cfg, container) {
         };
     }
 
-    // MAIN FUNCTIONALITY
+    // MAIN
     /** @type {TeqFw_Db_Back_Defaults} */
     const DEF = await container.get('TeqFw_Db_Back_Defaults$');
     /** @type {TeqFw_Core_Back_Config} */

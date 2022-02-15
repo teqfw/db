@@ -46,7 +46,7 @@ export class Factory {
          * @return {TeqFw_Db_Back_Dto_Dem}
          */
         this.create = function (data = null) {
-            // DEFINE INNER FUNCTIONS
+            // ENCLOSED FUNCS
             /**
              * Create object node from ${data} using factory ${fnCreate} to create node entries.
              * Use ${key} attribute to save node key as 'name' attribute in created entry.
@@ -76,7 +76,7 @@ export class Factory {
                 return res;
             }
 
-            // MAIN FUNCTIONALITY
+            // MAIN
             const res = new TeqFw_Db_Back_Dto_Dem();
             res.entity = parse(fEntity.create, data?.entity, TEntity.NAME);
             res.package = parse(fPkg.create, data?.package);

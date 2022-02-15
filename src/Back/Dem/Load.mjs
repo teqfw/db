@@ -5,7 +5,7 @@
  */
 export default class TeqFw_Db_Back_Dem_Load {
     constructor(spec) {
-        // EXTRACT DEPS
+        // DEPS
         /** @type {TeqFw_Db_Back_Dem_Load_A_Scan} */
         const scan = spec['TeqFw_Db_Back_Dem_Load_A_Scan$'];
         /** @type {TeqFw_Db_Back_Dem_Load_A_Norm} */

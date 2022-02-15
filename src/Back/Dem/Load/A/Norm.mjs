@@ -23,7 +23,7 @@ function normName(data) {
 export default class TeqFw_Db_Back_Dem_Load_A_Norm {
 
     constructor(spec) {
-        // EXTRACT DEPS
+        // DEPS
         /** @type {TeqFw_Db_Back_Defaults} */
         const DEF = spec['TeqFw_Db_Back_Defaults$'];
         /** @type {Function|TeqFw_Core_Shared_Util.deepMerge} */
@@ -39,7 +39,7 @@ export default class TeqFw_Db_Back_Dem_Load_A_Norm {
          * @return {Promise<{dem: TeqFw_Db_Back_Dto_Dem}>}
          */
         this.exec = async function ({dems, map}) {
-            // DEFINE INNER FUNCTIONS
+            // ENCLOSED FUNCS
 
             /**
              * @param {TeqFw_Db_Back_Dto_Dem|TeqFw_Db_Back_Dto_Dem_Package} dem
@@ -84,7 +84,7 @@ export default class TeqFw_Db_Back_Dem_Load_A_Norm {
                 }
             }
 
-            // MAIN FUNCTIONALITY
+            // MAIN
             /** @type {TeqFw_Db_Back_Dto_Dem} */
             const dem = _factory.create();
             delete dem.refs;

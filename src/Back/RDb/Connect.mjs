@@ -13,7 +13,7 @@ import knex from 'knex';
 export default class TeqFw_Db_Back_RDb_Connect {
 
     constructor(spec) {
-        // EXTRACT DEPS
+        // DEPS
         /** @type {TeqFw_Core_Shared_Api_ILogger} */
         const _logger = spec['TeqFw_Core_Shared_Api_ILogger$'];
         /** @type {TeqFw_Db_Back_RDb_Connect_Resolver} */
@@ -80,35 +80,36 @@ export default class TeqFw_Db_Back_RDb_Connect {
          * @returns {SchemaBuilder}
          */
         this.getSchemaBuilder = function () {
-            return _knex.schema;
+            return _knex?.schema;
         };
 
         this.disconnect = async function () {
-            const pool = _knex.client.pool;
-            return new Promise(function (resolve) {
-                const WAIT = 100;
+            const pool = _knex?.client?.pool;
+            if (pool) {
+                return new Promise(function (resolve) {
+                    const WAIT = 100;
 
-                /**
-                 * Check DB connections in loop and close all when all connections will be released.
-                 */
-                function checkPool() {
-                    const acquires = pool.numPendingAcquires();
-                    const creates = pool.numPendingCreates();
-                    const pending = acquires + creates;
-                    if (pending > 0) {
-                        // wait until all connections will be released
-                        setTimeout(checkPool, WAIT);
-                    } else {
-                        // close all connections
-                        _knex.destroy();
-                        _logger.info(`Connections to ${_info} are closed.`);
-                        resolve();
+                    /**
+                     * Check DB connections in loop and close all when all connections will be released.
+                     */
+                    function checkPool() {
+                        const acquires = pool.numPendingAcquires();
+                        const creates = pool.numPendingCreates();
+                        const pending = acquires + creates;
+                        if (pending > 0) {
+                            // wait until all connections will be released
+                            setTimeout(checkPool, WAIT);
+                        } else {
+                            // close all connections
+                            _knex.destroy();
+                            _logger.info(`Connections to ${_info} are closed.`);
+                            resolve();
+                        }
                     }
-                }
 
-                setTimeout(checkPool, WAIT);
-            });
-
+                    setTimeout(checkPool, WAIT);
+                });
+            }
         };
     }
 }

@@ -20,7 +20,7 @@ export class Factory {
     static namespace = NS;
 
     constructor(spec) {
-        // EXTRACT DEPS
+        // DEPS
         /** @type {TeqFw_Db_Back_Dto_Dem_Entity.Factory} */
         const fEntity = spec['TeqFw_Db_Back_Dto_Dem_Entity#Factory$'];
 
@@ -29,7 +29,7 @@ export class Factory {
          * @return {TeqFw_Db_Back_Dto_Dem_Package}
          */
         this.create = function create (data = null) {
-            // DEFINE INNER FUNCTIONS
+            // ENCLOSED FUNCS
             function parse(fnCreate, data) {
                 const res = {};
                 if (typeof data === 'object') {
@@ -42,7 +42,7 @@ export class Factory {
                 return res;
             }
 
-            // MAIN FUNCTIONALITY
+            // MAIN
             const res = new TeqFw_Db_Back_Dto_Dem_Package();
             res.entity = parse(fEntity.create, data?.entity);
             res.package = parse(create, data?.package);

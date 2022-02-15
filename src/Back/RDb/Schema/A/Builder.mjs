@@ -1,7 +1,7 @@
 export default class TeqFw_Db_Back_RDb_Schema_A_Builder {
 
     constructor(spec) {
-        // EXTRACT DEPS
+        // DEPS
         /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Column} */
         const TDbColType = spec['TeqFw_Db_Back_Enum_Db_Type_Column$'];
 
@@ -13,7 +13,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Builder {
          */
         this.addTable = function (schema, dto, knex) {
             schema.createTable(dto.name, (table) => {
-                // DEFINE INNER FUNCTIONS
+                // ENCLOSED FUNCS
                 /**
                  * @param {Knex.CreateTableBuilder} table
                  * @param {TeqFw_Db_Back_Dto_RDb_Column} dto
@@ -60,7 +60,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Builder {
                     if (dto.onUpdate) chained.onUpdate(dto.onUpdate);
                 }
 
-                // MAIN FUNCTIONALITY
+                // MAIN
                 if (dto.comment) table.comment(dto.comment);
                 for (const one of dto.columns) addColumn(table, one);
                 for (const one of dto.indexes) addIndex(table, one);
