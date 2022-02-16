@@ -8,6 +8,11 @@ const NS = 'TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options';
 export default class TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options {
     /** @type {boolean} */
     dateOnly;
+    /**
+     * Used with 'integer' attributes.
+     * @type {boolean}
+     */
+    isTiny;
     /** @type {number} */
     length;
     /** @type {number} */

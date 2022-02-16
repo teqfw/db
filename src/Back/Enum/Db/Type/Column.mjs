@@ -18,6 +18,7 @@ const TeqFw_Db_Back_Enum_Db_Type_Column = {
     TEXT: 'text',
     TIME: 'time',
     TIMESTAMP: 'timestamp',
+    TINYINT: 'tinyint',
     UUID: 'uuid',
 }
 Object.freeze(TeqFw_Db_Back_Enum_Db_Type_Column);

@@ -94,11 +94,13 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
                     col.precision = dem?.options?.precision;
                     col.scale = dem?.options?.scale;
                     col.unsigned = dem?.options?.unsigned;
-                    if (!col.scale && !col.precision) {
-                        col.type = TDbColType.INTEGER;
-                    }
+                    if (!col.scale && !col.precision) col.type = TDbColType.INTEGER;
+                } else if (dem.type === TDemAttr.INTEGER) {
+                    col.unsigned = dem?.options?.unsigned;
+                    if (dem?.options?.isTiny) col.type = TDbColType.TINYINT;
                 }
                 col.default = dem.default;
+                col.nullable = dem.nullable;
                 tbl.columns.push(col);
             }
 

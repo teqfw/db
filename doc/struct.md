@@ -47,10 +47,12 @@
   "attr": {
     "name": {
       "comment": "",
-      "type": "id|ref|string|text|number|datetime|boolean|binary|enum",
+      "type": "binary|boolean|datetime|enum|id|integer|json|number|ref|string|text",
       "nullable": false,
       "default": "[value]|[function]",
       "options": {
+        "dateOnly": true,
+        "isTiny": true,
         "length": 32,
         "precision": 10,
         "scale": 2,
