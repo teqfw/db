@@ -8,7 +8,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Order {
      * @return {Promise<TeqFw_Db_Back_Dto_Dem_Entity[]>}
      */
     async exec({dem}) {
-        // ENCLOSED FUNCS
+        // FUNCS
 
         /**
          * Collect entities from package and all subpackages.
@@ -40,7 +40,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Order {
             const successors = {}; // {/user => [/app/profile, ...]}
             const weights = {};
 
-            // ENCLOSED FUNCS
+            // FUNCS
             /**
              * Recursive function to update items weights in hierarchy.
              * 1 - item has no deps, 2 - item has one dep's level below, ...

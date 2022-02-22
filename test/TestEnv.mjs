@@ -61,7 +61,7 @@ const container = (function (cfg) {
  * @typedef {Object}
  */
 const localCfg = await (async function (cfg, container) {
-    // ENCLOSED FUNCS
+    // FUNCS
     /**
      * Default connection parameters to PostgreSQL/MariaDB/MuSQL database.
      * Override these params in local configuration (test/data/cfg/local.json).

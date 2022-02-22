@@ -54,7 +54,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
             [TDemIndex.UNIQUE]: TDbIndexType.UNIQUE,
         };
 
-        // ENCLOSED FUNCS
+        // FUNCS
         /**
          * Normalize table name.
          * @param {string} name
@@ -74,7 +74,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
          * @return {Promise<TeqFw_Db_Back_Dto_RDb_Table>}
          */
         this.exec = async function ({entity, cfg}) {
-            // ENCLOSED FUNCS
+            // FUNCS
             /**
              * @param {TeqFw_Db_Back_Dto_RDb_Table} tbl
              * @param {TeqFw_Db_Back_Dto_Dem_Entity_Attr} dem

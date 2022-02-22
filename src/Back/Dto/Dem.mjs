@@ -46,7 +46,7 @@ export class Factory {
          * @return {TeqFw_Db_Back_Dto_Dem}
          */
         this.create = function (data = null) {
-            // ENCLOSED FUNCS
+            // FUNCS
             /**
              * Create object node from ${data} using factory ${fnCreate} to create node entries.
              * Use ${key} attribute to save node key as 'name' attribute in created entry.

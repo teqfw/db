@@ -63,7 +63,7 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
         }
 
         this.readOne = async function (trx, meta, key) {
-            // ENCLOSED FUNCS
+            // FUNCS
             /**
              * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
              * @param {*} key

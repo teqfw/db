@@ -39,7 +39,7 @@ export default class TeqFw_Db_Back_Dem_Load_A_Norm {
          * @return {Promise<{dem: TeqFw_Db_Back_Dto_Dem}>}
          */
         this.exec = async function ({dems, map}) {
-            // ENCLOSED FUNCS
+            // FUNCS
 
             /**
              * @param {TeqFw_Db_Back_Dto_Dem|TeqFw_Db_Back_Dto_Dem_Package} dem

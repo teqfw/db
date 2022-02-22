@@ -13,7 +13,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Builder {
          */
         this.addTable = function (schema, dto, knex) {
             schema.createTable(dto.name, (table) => {
-                // ENCLOSED FUNCS
+                // FUNCS
                 /**
                  * @param {Knex.CreateTableBuilder} table
                  * @param {TeqFw_Db_Back_Dto_RDb_Column} dto

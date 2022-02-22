@@ -44,7 +44,7 @@ export class Factory {
          * @return {TeqFw_Db_Back_Dto_Dem_Entity}
          */
         this.create = function (data = null) {
-            // ENCLOSED FUNCS
+            // FUNCS
 
             function parse(fnCreate, data) {
                 const res = {};

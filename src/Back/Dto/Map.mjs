@@ -38,7 +38,7 @@ export class Factory {
          * @return {TeqFw_Db_Back_Dto_Map}
          */
         this.create = function create(data = null) {
-            // ENCLOSED FUNCS
+            // FUNCS
             function parseRef(data) {
                 const res = {};
                 if (typeof data === 'object')

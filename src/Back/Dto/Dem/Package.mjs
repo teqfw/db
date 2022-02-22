@@ -29,7 +29,7 @@ export class Factory {
          * @return {TeqFw_Db_Back_Dto_Dem_Package}
          */
         this.create = function create (data = null) {
-            // ENCLOSED FUNCS
+            // FUNCS
             function parse(fnCreate, data) {
                 const res = {};
                 if (typeof data === 'object') {
