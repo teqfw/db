@@ -24,7 +24,7 @@ This plugin uses `TeqFw_Db` namespace.
   "@teqfw/db": {
     "client": "mysql2|pg|...",
     "connection": {
-      "database": "duplo",
+      "database": "dup",
       "filename": "/.../db.sqlite",
       "flags": ["for", "SQLite"],
       "host": "127.0.0.1",
