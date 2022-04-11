@@ -16,13 +16,13 @@ export default class TeqFw_Db_Back_RDb_Schema {
         /** @type {TeqFw_Db_Back_RDb_Schema_A_Builder} */
         const _builder = spec['TeqFw_Db_Back_RDb_Schema_A_Builder$'];
 
-        // DEFINE WORKING VARS / PROPS
+        // VARS
         /** @type {TeqFw_Db_Back_Dto_Dem} */
         let _dem;
         /** @type {TeqFw_Db_Back_Dto_Config_Schema} */
         let _cfg;
 
-        // DEFINE INSTANCE METHODS
+        // INSTANCE METHODS
         this.createAllTables = async function ({conn}) {
             // prepare schema (populate with CREATE TABLE statements)
             const schema = conn.getSchemaBuilder();

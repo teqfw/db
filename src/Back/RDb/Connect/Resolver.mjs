@@ -7,10 +7,10 @@ export default class TeqFw_Db_Back_RDb_Connect_Resolver {
         /** @type {TeqFw_Db_Back_Defaults} */
         const DEF = spec['TeqFw_Db_Back_Defaults$'];
 
-        // DEFINE WORKING VARS / PROPS
+        // VARS
         /** @type {TeqFw_Db_Back_Dto_Config_Schema} */
         let _cfg;
-        // DEFINE INSTANCE METHODS
+        // INSTANCE METHODS
 
         /**
          *

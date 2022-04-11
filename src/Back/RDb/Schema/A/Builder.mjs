@@ -5,7 +5,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Builder {
         /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Column} */
         const TDbColType = spec['TeqFw_Db_Back_Enum_Db_Type_Column$'];
 
-        // DEFINE INSTANCE METHODS
+        // INSTANCE METHODS
         /**
          * @param {Knex.SchemaBuilder} schema
          * @param {TeqFw_Db_Back_Dto_RDb_Table} dto

@@ -32,7 +32,7 @@ export default class TeqFw_Db_Back_Dem_Load_A_Norm {
         const _factory = spec['TeqFw_Db_Back_Dto_Dem#Factory$'];
 
 
-        // DEFINE INSTANCE METHODS
+        // INSTANCE METHODS
         /**
          * @param {Object<string, TeqFw_Db_Back_Dto_Dem>} dems
          * @param {TeqFw_Db_Back_Dto_Map} map

@@ -30,7 +30,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
         /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Action} */
         const TDbActionType = spec['TeqFw_Db_Back_Enum_Db_Type_Action$'];
 
-        // DEFINE WORKING VARS / PROPS
+        // VARS
         const mapAction = {
             [TDemAction.CASCADE]: TDbActionType.CASCADE,
             [TDemAction.RESTRICT]: TDbActionType.RESTRICT,
@@ -65,7 +65,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
             return (res[0] === DEF.NS) ? res.substr(1) : res;
         }
 
-        // DEFINE INSTANCE METHODS
+        // INSTANCE METHODS
         /**
          * Convert DEM DTO Entity to RDB DTO Table.
          *

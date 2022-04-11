@@ -30,7 +30,7 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
             return res;
         }
 
-        // DEFINE INSTANCE METHODS
+        // INSTANCE METHODS
 
         this.create = async function (trx, meta, data) {
             const res = {};

@@ -21,13 +21,13 @@ export default class TeqFw_Db_Back_RDb_Connect {
         /** @type {typeof TeqFw_Db_Back_RDb_Trans} */
         const Trans = spec['TeqFw_Db_Back_RDb_Trans#'];
 
-        // DEFINE WORKING VARS / PROPS
+        // VARS
         /** @type {Knex} */
         let _knex;
         /** @type {string} */
         let _info;
 
-        // DEFINE INSTANCE METHODS
+        // INSTANCE METHODS
         /**
          * Initialize connection to database.
          *
