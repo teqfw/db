@@ -18,7 +18,7 @@ const regPlugins = {
         }
     }
 };
-container.set('TeqFw_Core_Back_App_Init_Plugin_Registry$', regPlugins);
+container.set('TeqFw_Core_Back_Mod_Init_Plugin_Registry$', regPlugins);
 
 // get object from container and run tests
 /** @type {TeqFw_Db_Back_Dem_Load_A_Scan} */
