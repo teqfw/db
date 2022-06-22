@@ -28,7 +28,7 @@ This plugin uses `TeqFw_Db` namespace.
       "filename": "/.../db.sqlite",
       "flags": ["for", "SQLite"],
       "host": "127.0.0.1",
-      "password": "...",
+      "passwordHash": "...",
       "port": 3210,
       "socketPath": "/path/to/socket",
       "user": "name"

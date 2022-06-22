@@ -7,7 +7,7 @@ These options are the same as connection options of [knex](https://knexjs.org/#I
   "connection": {
     "host": "127.0.0.1",
     "user": "...",
-    "password": "...",
+    "passwordHash": "...",
     "database": "..."
   }
 }
