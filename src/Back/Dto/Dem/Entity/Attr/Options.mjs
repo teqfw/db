@@ -45,6 +45,7 @@ export class Factory {
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options();
             res.dateOnly = castBooleanIfExists(data?.dateOnly);
+            res.isTiny = castBooleanIfExists(data?.isTiny);
             res.length = castInt(data?.length);
             res.precision = castInt(data?.precision);
             res.scale = castInt(data?.scale);
