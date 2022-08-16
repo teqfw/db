@@ -162,6 +162,27 @@ function nameUQ(tbl, fld) {
     return result;
 }
 
+
+/**
+ * Get 'nextval' for Postgres serials.
+ * @param {TeqFw_Db_Back_RDb_ITrans} trx
+ * @returns {Promise<Object<string, string>>}
+ * @memberOf TeqFw_Db_Back_Util
+ */
+async function pgSerialsGet(trx) {
+    const res = {};
+    const all = await trx.raw('SELECT sequence_name FROM information_schema.sequences  WHERE sequence_schema = \'public\'');
+    if (Array.isArray(all?.rows)) {
+        // prepare batch of SQLs
+        for (const one of all.rows) {
+            const name = one['sequence_name'];
+            const rs = await trx.raw(`SELECT nextval('${name}')`);
+            res[name] = rs.rows[0]['nextval'];
+        }
+    }
+    return res;
+}
+
 /**
  * Get 'nextval' for Postgres serials.
  * @param schema
@@ -217,15 +238,16 @@ async function serialsSet(schema, serials) {
 
 
 // finalize code components for this es6-module
-Object.defineProperty(getTables, 'name', {value: `${NS}.${getTables.name}`});
-Object.defineProperty(isPostgres, 'name', {value: `${NS}.${isPostgres.name}`});
-Object.defineProperty(itemsInsert, 'name', {value: `${NS}.${itemsInsert.name}`});
-Object.defineProperty(itemsSelect, 'name', {value: `${NS}.${itemsSelect.name}`});
-Object.defineProperty(nameFK, 'name', {value: `${NS}.${nameFK.name}`});
-Object.defineProperty(nameNX, 'name', {value: `${NS}.${nameNX.name}`});
-Object.defineProperty(nameUQ, 'name', {value: `${NS}.${nameUQ.name}`});
-Object.defineProperty(serialsGet, 'name', {value: `${NS}.${serialsGet.name}`});
-Object.defineProperty(serialsSet, 'name', {value: `${NS}.${serialsSet.name}`});
+Object.defineProperty(getTables, 'namespace', {value: NS});
+Object.defineProperty(isPostgres, 'namespace', {value: NS});
+Object.defineProperty(itemsInsert, 'namespace', {value: NS});
+Object.defineProperty(itemsSelect, 'namespace', {value: NS});
+Object.defineProperty(nameFK, 'namespace', {value: NS});
+Object.defineProperty(nameNX, 'namespace', {value: NS});
+Object.defineProperty(nameUQ, 'namespace', {value: NS});
+Object.defineProperty(pgSerialsGet, 'namespace', {value: NS});
+Object.defineProperty(serialsGet, 'namespace', {value: NS});
+Object.defineProperty(serialsSet, 'namespace', {value: NS});
 
 export {
     formatAsDateTime,
@@ -236,6 +258,7 @@ export {
     nameFK,
     nameNX,
     nameUQ,
+    pgSerialsGet,
     serialsGet,
     serialsGetOne,
     serialsSet,

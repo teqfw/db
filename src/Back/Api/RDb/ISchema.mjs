@@ -17,6 +17,8 @@ export default class TeqFw_Db_Back_Api_RDb_ISchema {
      */
     async dropAllTables({conn}) {}
 
+    async getTablesList() {}
+
     /**
      * Set database connection configuration object.
      * @param {TeqFw_Db_Back_Dto_Config_Schema} cfg
