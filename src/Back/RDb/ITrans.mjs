@@ -57,9 +57,8 @@ export default class TeqFw_Db_Back_RDb_ITrans {
     getQuery(table) { }
 
     /**
-     * TODO: remove it
+     * 'Knex' object
      * @return {Knex}
-     * @deprecated temporary solution for refactoring period
      */
-    getTrx() { }
+    getKnexTrx() { }
 }

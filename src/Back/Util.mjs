@@ -31,22 +31,22 @@ function formatAsDateTime(dateIn) {
 
 /**
  * Get list of available tables.
- * @param {TeqFw_Db_Back_RDb_ITrans} iTrx
+ * @param {TeqFw_Db_Back_RDb_ITrans} trx
  * @return {Promise<*[]>}
  * @memberOf TeqFw_Db_Back_Util
  */
-async function getTables(iTrx) {
+async function getTables(trx) {
     const result = [];
-    const trx = iTrx.getTrx();
-    const dialect = trx.client.config.client;
+    const knex = trx.getKnexTrx();
+    const dialect = knex.client.config.client;
     if (['mysql', 'mysql2'].includes(dialect)) {
-        const rs = await trx.raw('show tables');
+        const rs = await knex.raw('show tables');
         if (Array.isArray(rs)) {
             const column = rs[1][0]['name'];
             rs[0].map(one => result.push(one[column]));
         }
     } else if (['pg'].includes(dialect)) {
-        const rs = await trx.raw('SELECT * FROM information_schema.tables  WHERE table_schema = \'public\'');
+        const rs = await knex.raw('SELECT * FROM information_schema.tables  WHERE table_schema = \'public\'');
         if (Array.isArray(rs?.rows)) {
             rs.rows.map(one => result.push(one['table_name']));
         }
@@ -68,35 +68,35 @@ function isPostgres(client) {
 
 /**
  * Insert table items selected by 'itemsSelect'.
- * @param {TeqFw_Db_Back_RDb_ITrans} iTrx
- * @param dump
- * @param entity
+ * @param {TeqFw_Db_Back_RDb_ITrans} trx
+ * @param {string} table raw name (with prefix, if exists)
+ * @param {array} rows
  * @return {Promise<void>}
  * @memberOf TeqFw_Db_Back_Util
  */
-async function itemsInsert(iTrx, dump, entity) {
-    const trx = iTrx.getTrx();
-    if (Array.isArray(dump[entity]) && dump[entity].length > 0) {
-        await trx(entity).insert(dump[entity]);
+async function itemsInsert(trx, table, rows) {
+    const knex = trx.getKnexTrx();
+    if (Array.isArray(rows) && rows.length > 0) {
+        await knex(table).insert(rows);
     }
 }
 
 /**
  * Select * from 'entity' if 'entity' exists in 'tables' or null otherwise.
- * @param {TeqFw_Db_Back_RDb_ITrans} iTrx
- * @param {string[]} tables
+ * @param {TeqFw_Db_Back_RDb_ITrans} trx
+ * @param {string[]} tables list of raw names (with prefix, if exists)
  * @param {string} entity
  * @param {string[]|null} cols
  * @returns {Promise<*|null>}
  * @memberOf TeqFw_Db_Back_Util
  */
-async function itemsSelect(iTrx, tables, entity, cols = null) {
-    const trx = iTrx.getTrx();
+async function itemsSelect(trx, tables, entity, cols = null) {
+    const knex = trx.getKnexTrx();
     if (tables.includes(entity)) {
         if (Array.isArray(cols)) {
-            return await trx.select(cols).from(entity);
+            return await knex.select(cols).from(entity);
         } else {
-            return await trx.select().from(entity);
+            return await knex.select().from(entity);
         }
     } else {
         return null;

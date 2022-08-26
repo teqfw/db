@@ -60,7 +60,7 @@ export default class TeqFw_Db_Back_RDb_Trans {
         return this.#trx(table);
     }
 
-    getTrx() {
+    getKnexTrx() {
         return this.#trx;
     }
 }
