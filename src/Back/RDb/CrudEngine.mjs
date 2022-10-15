@@ -137,8 +137,25 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
                 else if (attrs.includes(one)) updates[one] = parts[one]; // add to updating values
             query.update(updates);
             query.where(where);
-            return query; // return await query?
+            return query;
         }
-        this.updateSet = async function (trx, meta, data) {}
+
+        this.updateSet = async function (trx, meta, data, where) {
+            const table = trx.getTableName(meta);
+            const pkey = meta.getPrimaryKey();
+            const attrs = meta.getAttrNames();
+            /** @type {Knex.QueryBuilder} */
+            const query = trx.createQuery();
+            query.table(table);
+            // collect data part and primary key part
+            const updates = {};
+            const parts = Array.isArray(data) ? Object.fromEntries(data) : data;
+            for (const one of Object.keys(parts))
+                if (pkey.includes(one)) where[one] = parts[one]; // add to primary key
+                else if (attrs.includes(one)) updates[one] = parts[one]; // add to updating values
+            query.update(updates);
+            query.where(where);
+            return query;
+        }
     }
 }

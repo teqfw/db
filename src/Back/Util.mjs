@@ -11,7 +11,7 @@ const NS = 'TeqFw_Db_Back_Util';
 /**
  * Format input data to be used as MySQL datetime compatible string (UTC).
  *
- * @param {Date|string|null} dateIn
+ * @param {Date|string|null} [dateIn]
  * @return {string}
  * @memberOf TeqFw_Db_Back_Util
  */
