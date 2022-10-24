@@ -92,7 +92,7 @@ export default class TeqFw_Db_Back_RDb_Connect {
                     /**
                      * Check DB connections in loop and close all when all connections will be released.
                      */
-                    function checkPool() {
+                    async function checkPool() {
                         const acquires = pool.numPendingAcquires();
                         const creates = pool.numPendingCreates();
                         const pending = acquires + creates;
@@ -101,7 +101,7 @@ export default class TeqFw_Db_Back_RDb_Connect {
                             setTimeout(checkPool, WAIT);
                         } else {
                             // close all connections
-                            _knex.destroy();
+                            await _knex.destroy();
                             _logger.info(`Connections to ${_info} are closed.`);
                             resolve();
                         }
