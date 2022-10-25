@@ -9,11 +9,32 @@ const NS = 'TeqFw_Db_Back_Util';
 // MODULE'S FUNCTIONS
 
 /**
+ * Format UTC date-time as ISO 8601 string.
+ * @param {Date|string|null} [dateIn]
+ * @returns {string}
+ * @memberOf TeqFw_Db_Back_Util
+ */
+function dateUtc(dateIn) {
+    /** @type {Date} */
+    const date = (dateIn) ?
+        (dateIn instanceof Date) ? dateIn : new Date(dateIn)
+        : new Date();
+    const y = date.getUTCFullYear();
+    const m = `${date.getUTCMonth() + 1}`.padStart(2, '0');
+    const d = `${date.getUTCDate()}`.padStart(2, '0');
+    const h = `${date.getUTCHours()}`.padStart(2, '0');
+    const i = `${date.getUTCMinutes()}`.padStart(2, '0');
+    const s = `${date.getUTCSeconds()}`.padStart(2, '0');
+    return `${y}-${m}-${d}T${h}:${i}:${s}Z`;
+}
+
+/**
  * Format input data to be used as MySQL datetime compatible string (UTC).
  *
  * @param {Date|string|null} [dateIn]
  * @return {string}
  * @memberOf TeqFw_Db_Back_Util
+ * @deprecated use TeqFw_Db_Back_Util.dateUtc
  */
 function formatAsDateTime(dateIn) {
     /** @type {Date} */
@@ -238,6 +259,8 @@ async function serialsSet(schema, serials) {
 
 
 // finalize code components for this es6-module
+Object.defineProperty(dateUtc, 'namespace', {value: NS});
+Object.defineProperty(formatAsDateTime, 'namespace', {value: NS});
 Object.defineProperty(getTables, 'namespace', {value: NS});
 Object.defineProperty(isPostgres, 'namespace', {value: NS});
 Object.defineProperty(itemsInsert, 'namespace', {value: NS});
@@ -250,6 +273,7 @@ Object.defineProperty(serialsGet, 'namespace', {value: NS});
 Object.defineProperty(serialsSet, 'namespace', {value: NS});
 
 export {
+    dateUtc,
     formatAsDateTime,
     getTables,
     isPostgres,
