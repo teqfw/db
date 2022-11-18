@@ -2,6 +2,10 @@
 
 ## 0.6.0 - new
 
+## 0.5.1
+
+* Remove dependency from `@teqfw/web`.
+
 ## 0.5.0
 
 * Documentation improvement.
