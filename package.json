@@ -1,6 +1,6 @@
 {
   "name": "@teqfw/db",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "TeqFW: DB connectivity.",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha --recursive './test/mod/**/*.test.mjs'"
@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/teqfw/db#readme",
   "dependencies": {
-    "@teqfw/web": "*",
+    "@teqfw/core": "*",
     "knex": "*"
   },
   "devDependencies": {
