@@ -1,5 +1,7 @@
 # @teqfw/db: releases
 
+## 0.6.0 - new
+
 ## 0.5.0
 
 * Documentation improvement.
