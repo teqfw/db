@@ -1,6 +1,6 @@
 /**
  * Order DEM entities (dependencies go first: [base, dep, ...]).
- * @implements TeqFw_Core_Shared_Api_IAction
+ * @implements TeqFw_Core_Shared_Api_Action_IAsync
  */
 export default class TeqFw_Db_Back_RDb_Schema_A_Order {
     /**
@@ -8,7 +8,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Order {
      * @return {Promise<TeqFw_Db_Back_Dto_Dem_Entity[]>}
      */
     async exec({dem}) {
-        // DEFINE INNER FUNCTIONS
+        // FUNCS
 
         /**
          * Collect entities from package and all subpackages.
@@ -40,7 +40,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Order {
             const successors = {}; // {/user => [/app/profile, ...]}
             const weights = {};
 
-            // DEFINE INNER FUNCTIONS
+            // FUNCS
             /**
              * Recursive function to update items weights in hierarchy.
              * 1 - item has no deps, 2 - item has one dep's level below, ...
@@ -65,7 +65,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Order {
                 weights[name] = weight;
             }
 
-            // MAIN FUNCTIONALITY
+            // MAIN
             // collect items successors
             for (const address of Object.keys(entities)) {
                 const entity = entities[address];
@@ -102,7 +102,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Order {
             return res;
         }
 
-        // MAIN FUNCTIONALITY
+        // MAIN
         const entities = collectEntities(dem);
         const levels = composeLevels(entities);
         return mapEntitiesByLevel(entities, levels);

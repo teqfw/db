@@ -28,6 +28,8 @@ TeqFw_Db_Back_Dto_RDb_Table.RELATIONS = 'relations';
  * @memberOf TeqFw_Db_Back_Dto_RDb_Table
  */
 export class Factory {
+    static namespace = NS;
+
     constructor(spec) {
         const {castArrayOfObj, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
         /** @type {TeqFw_Db_Back_Dto_RDb_Column.Factory} */
@@ -55,4 +57,3 @@ export class Factory {
 
 // finalize code components for this es6-module
 Object.freeze(TeqFw_Db_Back_Dto_RDb_Table);
-Object.defineProperty(Factory, 'name', {value: `${NS}.${Factory.constructor.name}`});

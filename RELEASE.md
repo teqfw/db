@@ -1,5 +1,15 @@
 # @teqfw/db: releases
 
+## 0.5.0
+
+* Documentation improvement.
+* Comments & JsDoc improvement.
+* `TeqFw_Db_Back_Api_RDb_IQueryBuilder` is added.
+* Reflect changes in `TeqFw_Core_Shared_Api_...`.
+* `tiny` modifier is added to `integer` datatype.
+* `json` datatype is added.
+* Improvements in `TeqFw_Db_Back_RDb_Connect`,`TeqFw_Db_Back_RDb_CrudEngine`, `TeqFw_Db_Back_Util`.
+
 ## 0.4.0
 
 * Improve CRUD engine.

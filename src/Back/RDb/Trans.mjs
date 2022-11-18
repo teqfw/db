@@ -48,6 +48,10 @@ export default class TeqFw_Db_Back_RDb_Trans {
         return this.#trx.rollback();
     }
 
+    raw(exp, params) {
+        return this.#trx.raw(exp, params);
+    }
+
     getTableName(meta) {
         return this.#resolver.getTableName(meta);
     }
@@ -56,7 +60,7 @@ export default class TeqFw_Db_Back_RDb_Trans {
         return this.#trx(table);
     }
 
-    getTrx() {
+    getKnexTrx() {
         return this.#trx;
     }
 }

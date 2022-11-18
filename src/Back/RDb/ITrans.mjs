@@ -39,8 +39,14 @@ export default class TeqFw_Db_Back_RDb_ITrans {
      */
     isSqlite() {}
 
-    async rollback() {}
+    /**
+     * Return row expression for input data.
+     * @param {string} exp SQL expression
+     * @param {array} params parameters for SQL exp (knex.raw('status <> ?', [1]))
+     */
+    raw(exp, params) {}
 
+    async rollback() {}
 
     /**
      * TODO: remove it
@@ -51,9 +57,8 @@ export default class TeqFw_Db_Back_RDb_ITrans {
     getQuery(table) { }
 
     /**
-     * TODO: remove it
+     * 'Knex' object
      * @return {Knex}
-     * @deprecated temporary solution for refactoring period
      */
-    getTrx() { }
+    getKnexTrx() { }
 }

@@ -65,5 +65,14 @@ export default class TeqFw_Db_Back_Api_RDb_ICrudEngine {
      */
     async updateOne(trx, meta, data) {};
 
-    async updateSet(trx, meta, data) {};
+    /**
+     * Update data for set of entities by where clause.
+     *
+     * @param {TeqFw_Db_Back_RDb_ITrans} trx DB transaction for data processing
+     * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
+     * @param {Object|Array} data data to process
+     * @param {Object|string|function} where
+     * @return {Promise<number>}
+     */
+    async updateSet(trx, meta, data, where) {};
 }

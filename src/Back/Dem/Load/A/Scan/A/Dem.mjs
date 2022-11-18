@@ -1,11 +1,11 @@
 /**
  * Load DEM data for a plugin and parse it.
  *
- * @implements TeqFw_Core_Shared_Api_IAction
+ * @implements TeqFw_Core_Shared_Api_Action_IAsync
  */
 export default class TeqFw_Db_Back_Dem_Load_A_Scan_A_Dem {
     constructor(spec) {
-        // EXTRACT DEPS
+        // DEPS
         /** @type {Function|TeqFw_Core_Back_Util.readJson} */
         const readJson = spec['TeqFw_Core_Back_Util#readJson'];
         /** @type {TeqFw_Db_Back_Dto_Dem.Factory} */

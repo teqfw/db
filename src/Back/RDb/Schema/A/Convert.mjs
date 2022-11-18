@@ -1,12 +1,12 @@
 /**
  * Convert DEM DTO Entity to RDB DTO Table.
  *
- * @implements TeqFw_Core_Shared_Api_IAction
+ * @implements TeqFw_Core_Shared_Api_Action_IAsync
  */
 export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
 
     constructor(spec) {
-        // EXTRACT DEPS
+        // DEPS
         /** @type {TeqFw_Db_Back_Defaults} */
         const DEF = spec['TeqFw_Db_Back_Defaults$'];
         /** @type {TeqFw_Db_Back_Dto_RDb_Column.Factory} */
@@ -30,7 +30,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
         /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Action} */
         const TDbActionType = spec['TeqFw_Db_Back_Enum_Db_Type_Action$'];
 
-        // DEFINE WORKING VARS / PROPS
+        // VARS
         const mapAction = {
             [TDemAction.CASCADE]: TDbActionType.CASCADE,
             [TDemAction.RESTRICT]: TDbActionType.RESTRICT,
@@ -42,6 +42,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
             [TDemAttr.ENUM]: TDbColType.ENUM,
             [TDemAttr.ID]: TDbColType.INCREMENTS,
             [TDemAttr.INTEGER]: TDbColType.INTEGER,
+            [TDemAttr.JSON]: TDbColType.JSONB,
             [TDemAttr.NUMBER]: TDbColType.DECIMAL,
             [TDemAttr.REF]: TDbColType.INTEGER,
             [TDemAttr.STRING]: TDbColType.STRING,
@@ -53,7 +54,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
             [TDemIndex.UNIQUE]: TDbIndexType.UNIQUE,
         };
 
-        // DEFINE INNER FUNCTIONS
+        // FUNCS
         /**
          * Normalize table name.
          * @param {string} name
@@ -64,7 +65,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
             return (res[0] === DEF.NS) ? res.substr(1) : res;
         }
 
-        // DEFINE INSTANCE METHODS
+        // INSTANCE METHODS
         /**
          * Convert DEM DTO Entity to RDB DTO Table.
          *
@@ -73,7 +74,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
          * @return {Promise<TeqFw_Db_Back_Dto_RDb_Table>}
          */
         this.exec = async function ({entity, cfg}) {
-            // DEFINE INNER FUNCTIONS
+            // FUNCS
             /**
              * @param {TeqFw_Db_Back_Dto_RDb_Table} tbl
              * @param {TeqFw_Db_Back_Dto_Dem_Entity_Attr} dem
@@ -93,11 +94,13 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
                     col.precision = dem?.options?.precision;
                     col.scale = dem?.options?.scale;
                     col.unsigned = dem?.options?.unsigned;
-                    if (!col.scale && !col.precision) {
-                        col.type = TDbColType.INTEGER;
-                    }
+                    if (!col.scale && !col.precision) col.type = TDbColType.INTEGER;
+                } else if (dem.type === TDemAttr.INTEGER) {
+                    col.unsigned = dem?.options?.unsigned;
+                    if (dem?.options?.isTiny) col.type = TDbColType.TINYINT;
                 }
                 col.default = dem.default;
+                col.nullable = dem.nullable;
                 tbl.columns.push(col);
             }
 
@@ -142,7 +145,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
                 return normName(res);
             }
 
-            // MAIN FUNCTIONALITY
+            // MAIN
             const res = fTable.create();
             res.name = convertTableName(entity, cfg);
             res.comment = entity.comment;

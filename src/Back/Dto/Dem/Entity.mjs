@@ -28,6 +28,8 @@ TeqFw_Db_Back_Dto_Dem_Entity.NAME = 'name';
  * @memberOf TeqFw_Db_Back_Dto_Dem_Entity
  */
 export class Factory {
+    static namespace = NS;
+
     constructor(spec) {
         const {castString} = spec['TeqFw_Core_Shared_Util_Cast'];
         /** @type {TeqFw_Db_Back_Dto_Dem_Entity_Attr.Factory} */
@@ -42,7 +44,7 @@ export class Factory {
          * @return {TeqFw_Db_Back_Dto_Dem_Entity}
          */
         this.create = function (data = null) {
-            // DEFINE INNER FUNCTIONS
+            // FUNCS
 
             function parse(fnCreate, data) {
                 const res = {};
@@ -56,7 +58,7 @@ export class Factory {
                 return res;
             }
 
-            // MAIN FUNCTIONALITY
+            // MAIN
             const res = new TeqFw_Db_Back_Dto_Dem_Entity();
             res.attr = parse(fAttr.create, data?.attr);
             res.comment = castString(data?.comment);
@@ -71,5 +73,3 @@ export class Factory {
 
 // finalize code components for this es6-module
 Object.freeze(TeqFw_Db_Back_Dto_Dem_Entity);
-Object.defineProperty(Factory, 'name', {value: `${NS}.${Factory.constructor.name}`});
-

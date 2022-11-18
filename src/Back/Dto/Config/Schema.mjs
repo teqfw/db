@@ -18,6 +18,8 @@ export default class TeqFw_Db_Back_Dto_Config_Schema {
  * @memberOf TeqFw_Db_Back_Dto_Config_Schema
  */
 export class Factory {
+    static namespace = NS;
+
     constructor(spec) {
         /** @type {TeqFw_Core_Shared_Util_Cast.castString|function} */
         const castString = spec['TeqFw_Core_Shared_Util_Cast#castString'];
@@ -33,6 +35,3 @@ export class Factory {
         }
     }
 }
-
-// finalize code components for this es6-module
-Object.defineProperty(Factory, 'name', {value: `${NS}.${Factory.constructor.name}`});

@@ -33,6 +33,8 @@ TeqFw_Db_Back_Dto_Map_Ref.PATH = 'path';
  * @memberOf TeqFw_Db_Back_Dto_Map_Ref
  */
 export class Factory {
+    static namespace = NS;
+
     constructor(spec) {
         const {castString} = spec['TeqFw_Core_Shared_Util_Cast'];
         /**
@@ -52,5 +54,3 @@ export class Factory {
 
 // finalize code components for this es6-module
 Object.freeze(TeqFw_Db_Back_Dto_Map_Ref);
-Object.defineProperty(Factory, 'name', {value: `${NS}.${Factory.constructor.name}`});
-

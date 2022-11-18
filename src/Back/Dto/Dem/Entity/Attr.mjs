@@ -25,6 +25,8 @@ export default class TeqFw_Db_Back_Dto_Dem_Entity_Attr {
  * @memberOf TeqFw_Db_Back_Dto_Dem_Entity_Attr
  */
 export class Factory {
+    static namespace = NS;
+
     constructor(spec) {
         const {castBoolean, castPrimitive, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
         /** @type {TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options.Factory} */
@@ -49,5 +51,3 @@ export class Factory {
 
 // finalize code components for this es6-module
 Object.freeze(TeqFw_Db_Back_Dto_Dem_Entity_Attr);
-Object.defineProperty(Factory, 'name', {value: `${NS}.${Factory.constructor.name}`});
-

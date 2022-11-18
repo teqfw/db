@@ -6,9 +6,9 @@
 export default class TeqFw_Db_Back_RDb_Schema {
 
     constructor(spec) {
-        // EXTRACT DEPS
-        /** @type {TeqFw_Core_Shared_Logger} */
-        const _logger = spec['TeqFw_Core_Shared_Logger$'];
+        // DEPS
+        /** @type {TeqFw_Core_Shared_Api_ILogger} */
+        const _logger = spec['TeqFw_Core_Shared_Api_ILogger$'];
         /** @type {TeqFw_Db_Back_RDb_Schema_A_Convert} */
         const _aConvert = spec['TeqFw_Db_Back_RDb_Schema_A_Convert$'];
         /** @type {TeqFw_Db_Back_RDb_Schema_A_Order} */
@@ -16,13 +16,13 @@ export default class TeqFw_Db_Back_RDb_Schema {
         /** @type {TeqFw_Db_Back_RDb_Schema_A_Builder} */
         const _builder = spec['TeqFw_Db_Back_RDb_Schema_A_Builder$'];
 
-        // DEFINE WORKING VARS / PROPS
+        // VARS
         /** @type {TeqFw_Db_Back_Dto_Dem} */
         let _dem;
         /** @type {TeqFw_Db_Back_Dto_Config_Schema} */
         let _cfg;
 
-        // DEFINE INSTANCE METHODS
+        // INSTANCE METHODS
         this.createAllTables = async function ({conn}) {
             // prepare schema (populate with CREATE TABLE statements)
             const schema = conn.getSchemaBuilder();
@@ -56,6 +56,17 @@ export default class TeqFw_Db_Back_RDb_Schema {
             await schema;
         }
 
+        this.getTablesList = async function () {
+            const res = [];
+            /** @type {TeqFw_Db_Back_Dto_Dem_Entity[]} */
+            const entities = await _aOrder.exec({dem: _dem});
+            for (const entity of entities) {
+                const tbl = await _aConvert.exec({entity, cfg: _cfg});
+                res.push(tbl.name);
+            }
+            return res;
+        }
+
         this.setCfg = function ({cfg}) {
             _cfg = cfg;
         }
@@ -63,5 +74,6 @@ export default class TeqFw_Db_Back_RDb_Schema {
             _dem = dem;
         }
     }
+
 
 }

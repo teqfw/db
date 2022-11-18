@@ -18,12 +18,12 @@ function normName(data) {
 
 // MODULE'S CLASSES
 /**
- * @implements TeqFw_Core_Shared_Api_IAction
+ * @implements TeqFw_Core_Shared_Api_Action_IAsync
  */
 export default class TeqFw_Db_Back_Dem_Load_A_Norm {
 
     constructor(spec) {
-        // EXTRACT DEPS
+        // DEPS
         /** @type {TeqFw_Db_Back_Defaults} */
         const DEF = spec['TeqFw_Db_Back_Defaults$'];
         /** @type {Function|TeqFw_Core_Shared_Util.deepMerge} */
@@ -32,14 +32,14 @@ export default class TeqFw_Db_Back_Dem_Load_A_Norm {
         const _factory = spec['TeqFw_Db_Back_Dto_Dem#Factory$'];
 
 
-        // DEFINE INSTANCE METHODS
+        // INSTANCE METHODS
         /**
          * @param {Object<string, TeqFw_Db_Back_Dto_Dem>} dems
          * @param {TeqFw_Db_Back_Dto_Map} map
          * @return {Promise<{dem: TeqFw_Db_Back_Dto_Dem}>}
          */
         this.exec = async function ({dems, map}) {
-            // DEFINE INNER FUNCTIONS
+            // FUNCS
 
             /**
              * @param {TeqFw_Db_Back_Dto_Dem|TeqFw_Db_Back_Dto_Dem_Package} dem
@@ -84,7 +84,7 @@ export default class TeqFw_Db_Back_Dem_Load_A_Norm {
                 }
             }
 
-            // MAIN FUNCTIONALITY
+            // MAIN
             /** @type {TeqFw_Db_Back_Dto_Dem} */
             const dem = _factory.create();
             delete dem.refs;

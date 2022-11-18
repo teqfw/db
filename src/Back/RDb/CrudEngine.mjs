@@ -5,7 +5,32 @@
 export default class TeqFw_Db_Back_RDb_CrudEngine {
     constructor() {
 
-        // DEFINE INSTANCE METHODS
+        // FUNCS
+        /**
+         * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
+         * @param {*} key
+         */
+        function composeWhere(meta, key) {
+            const res = {};
+            if (
+                (typeof key === 'number') ||
+                (typeof key === 'string') ||
+                (typeof key === 'boolean')
+            ) {
+                // simple key
+                const [pk] = meta.getPrimaryKey();
+                res[pk] = key;
+            } else {
+                // complex key
+                const attrs = meta.getAttrNames();
+                const keyParts = Array.isArray(key) ? Object.fromEntries(key) : key;
+                for (const one of Object.keys(keyParts))
+                    if (attrs.includes(one)) res[one] = key[one];
+            }
+            return res;
+        }
+
+        // INSTANCE METHODS
 
         this.create = async function (trx, meta, data) {
             const res = {};
@@ -39,15 +64,11 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
         }
         this.deleteOne = async function (trx, meta, key) {
             const table = trx.getTableName(meta);
-            const attrs = meta.getAttrNames();
             /** @type {Knex.QueryBuilder} */
             const query = trx.createQuery();
             query.table(table);
             // check key values according to allowed attributes and set record filter
-            const where = {};
-            const keyParts = Array.isArray(key) ? Object.fromEntries(key) : key;
-            for (const one of Object.keys(keyParts))
-                if (attrs.includes(one)) where[one] = key[one];
+            const where = composeWhere(meta, key);
             if (Object.keys(where) <= 0) throw new Error('You want to delete one entity but key is missed. Execution is interrupted.');
             query.where(where);
             return await query.del();
@@ -63,32 +84,6 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
         }
 
         this.readOne = async function (trx, meta, key) {
-            // DEFINE INNER FUNCTIONS
-            /**
-             * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
-             * @param {*} key
-             */
-            function composeWhere(meta, key) {
-                const res = {};
-                if (
-                    (typeof key === 'number') ||
-                    (typeof key === 'string') ||
-                    (typeof key === 'boolean')
-                ) {
-                    // simple key
-                    const [pk] = meta.getPrimaryKey();
-                    res[pk] = key;
-                } else {
-                    // complex key
-                    const attrs = meta.getAttrNames();
-                    const keyParts = Array.isArray(key) ? Object.fromEntries(key) : key;
-                    for (const one of Object.keys(keyParts))
-                        if (attrs.includes(one)) res[one] = key[one];
-                }
-                return res;
-            }
-
-            // MAIN FUNCTIONALITY
             let res = null;
             const table = trx.getTableName(meta);
             /** @type {Knex.QueryBuilder} */
@@ -142,8 +137,25 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
                 else if (attrs.includes(one)) updates[one] = parts[one]; // add to updating values
             query.update(updates);
             query.where(where);
-            return query; // return await query?
+            return query;
         }
-        this.updateSet = async function (trx, meta, data) {}
+
+        this.updateSet = async function (trx, meta, data, where) {
+            const table = trx.getTableName(meta);
+            const pkey = meta.getPrimaryKey();
+            const attrs = meta.getAttrNames();
+            /** @type {Knex.QueryBuilder} */
+            const query = trx.createQuery();
+            query.table(table);
+            // collect data part and primary key part
+            const updates = {};
+            const parts = Array.isArray(data) ? Object.fromEntries(data) : data;
+            for (const one of Object.keys(parts))
+                if (pkey.includes(one)) where[one] = parts[one]; // add to primary key
+                else if (attrs.includes(one)) updates[one] = parts[one]; // add to updating values
+            query.update(updates);
+            query.where(where);
+            return query;
+        }
     }
 }

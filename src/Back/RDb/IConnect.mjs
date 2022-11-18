@@ -7,7 +7,7 @@ export default class TeqFw_Db_Back_RDb_IConnect {
     async disconnect() {}
 
     /**
-     * @deprecated this is hard binding to the lib, we should use more lib-independent naming
+     * This is hard binding to the lib, we should use more lib-independent naming (but I cannot do it yet)
      */
     getKnex() {}
 

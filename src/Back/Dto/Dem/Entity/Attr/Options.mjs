@@ -8,6 +8,11 @@ const NS = 'TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options';
 export default class TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options {
     /** @type {boolean} */
     dateOnly;
+    /**
+     * Used with 'integer' attributes.
+     * @type {boolean}
+     */
+    isTiny;
     /** @type {number} */
     length;
     /** @type {number} */
@@ -29,6 +34,8 @@ export default class TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options {
  * @memberOf TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options
  */
 export class Factory {
+    static namespace = NS;
+
     constructor(spec) {
         const {castArray, castBooleanIfExists, castInt} = spec['TeqFw_Core_Shared_Util_Cast'];
         /**
@@ -38,6 +45,7 @@ export class Factory {
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options();
             res.dateOnly = castBooleanIfExists(data?.dateOnly);
+            res.isTiny = castBooleanIfExists(data?.isTiny);
             res.length = castInt(data?.length);
             res.precision = castInt(data?.precision);
             res.scale = castInt(data?.scale);
@@ -50,5 +58,3 @@ export class Factory {
 
 // finalize code components for this es6-module
 Object.freeze(TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options);
-Object.defineProperty(Factory, 'name', {value: `${NS}.${Factory.constructor.name}`});
-

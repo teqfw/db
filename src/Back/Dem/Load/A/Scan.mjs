@@ -8,15 +8,15 @@ import {join} from 'path';
 const DEM = 'etc/teqfw.schema.json';
 const MAP = 'etc/teqfw.schema.map.json';
 /**
- * @implements TeqFw_Core_Shared_Api_IAction
+ * @implements TeqFw_Core_Shared_Api_Action_IAsync
  */
 export default class TeqFw_Db_Back_Dem_Load_A_Scan {
     constructor(spec) {
-        // EXTRACT DEPS
+        // DEPS
         /** @type {Function|TeqFw_Core_Back_Util.scanNodeModules} */
         const _scanNodeModules = spec['TeqFw_Core_Back_Util#scanNodeModules'];
-        /** @type {TeqFw_Core_Back_Scan_Plugin_Registry} */
-        const _regPlugins = spec['TeqFw_Core_Back_Scan_Plugin_Registry$'];
+        /** @type {TeqFw_Core_Back_Mod_Init_Plugin_Registry} */
+        const _regPlugins = spec['TeqFw_Core_Back_Mod_Init_Plugin_Registry$'];
         /** @type {TeqFw_Db_Back_Dem_Load_A_Scan_A_Dem} */
         const _loadDem = spec['TeqFw_Db_Back_Dem_Load_A_Scan_A_Dem$'];
         /** @type {TeqFw_Db_Back_Dem_Load_A_Scan_A_Map} */
