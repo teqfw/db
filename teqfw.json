@@ -9,5 +9,10 @@
       "TeqFw_Db_Back_Api_RDb_ISchema": {"back": "TeqFw_Db_Back_RDb_Schema"},
       "TeqFw_Db_Back_RDb_IConnect": {"back": "TeqFw_Db_Back_RDb_Connect"}
     }
+  },
+  "@teqfw/core": {
+    "commands": [
+      "TeqFw_Db_Back_Cli_Init"
+    ]
   }
 }

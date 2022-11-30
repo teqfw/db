@@ -2,6 +2,8 @@
 
 ## 0.6.0 - new
 
+* Create CLI action to re-create RDB structure using DEM;
+
 ## 0.5.1
 
 * Remove dependency from `@teqfw/web`.
