@@ -7,8 +7,9 @@ export default class TeqFw_Db_Back_Api_RDb_IQueryBuilder {
     /**
      * Build and return query.
      * @param {TeqFw_Db_Back_RDb_ITrans} trx
+     * @param {Object} opts additional options for query builder (where, order, etc.)
      */
-    build(trx) {}
+    build(trx, opts = {}) {}
 
     /**
      * Get codifier for columns of this query.
