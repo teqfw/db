@@ -1,5 +1,5 @@
 /**
- * Meta information for entities.
+ * Meta information for RDB entities.
  * @see {TeqFw_Db_Back_RDb_Schema_EntityBase}
  * @interface
  */
@@ -16,12 +16,6 @@ export default class TeqFw_Db_Back_RDb_Meta_IEntity {
      * @return {Object}
      */
     getAttributes() {}
-
-    /**
-     * Return array with names of entity attributes.
-     * @return {string[]}
-     */
-    getAttrNames() {}
 
     /**
      * Get entity name: '@vnd/plugin/path/to/entity'.

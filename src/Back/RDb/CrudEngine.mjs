@@ -7,6 +7,15 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
 
         // FUNCS
         /**
+         * Extract attribute names from metadata.
+         * @param {TeqFw_Db_Back_RDb_Meta_IEntity} entity
+         * @returns {string[]}
+         */
+        function _getAttrNames(entity) {
+            return Object.values(entity.getAttributes());
+        }
+
+        /**
          * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
          * @param {*} key
          */
@@ -22,7 +31,7 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
                 res[pk] = key;
             } else {
                 // complex key
-                const attrs = meta.getAttrNames();
+                const attrs = _getAttrNames(meta);
                 const keyParts = Array.isArray(key) ? Object.fromEntries(key) : key;
                 for (const one of Object.keys(keyParts))
                     if (attrs.includes(one)) res[one] = key[one];
@@ -35,7 +44,7 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
         this.create = async function (trx, meta, data) {
             const res = {};
             const table = trx.getTableName(meta);
-            const attrs = meta.getAttrNames();
+            const attrs = _getAttrNames(meta);
             /** @type {Knex.QueryBuilder} */
             const query = trx.createQuery();
             query.table(table);
@@ -125,7 +134,7 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
         this.updateOne = async function (trx, meta, data) {
             const table = trx.getTableName(meta);
             const pkey = meta.getPrimaryKey();
-            const attrs = meta.getAttrNames();
+            const attrs = _getAttrNames(meta);
             /** @type {Knex.QueryBuilder} */
             const query = trx.createQuery();
             query.table(table);
@@ -143,7 +152,7 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
         this.updateSet = async function (trx, meta, data, where) {
             const table = trx.getTableName(meta);
             const pkey = meta.getPrimaryKey();
-            const attrs = meta.getAttrNames();
+            const attrs = _getAttrNames(meta);
             /** @type {Knex.QueryBuilder} */
             const query = trx.createQuery();
             query.table(table);
