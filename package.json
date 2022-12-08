@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/teqfw/db#readme",
   "dependencies": {
-    "@teqfw/web": "*",
+    "@teqfw/core": "*",
     "knex": "*"
   },
   "devDependencies": {

@@ -13,6 +13,10 @@
   "@teqfw/core": {
     "commands": [
       "TeqFw_Db_Back_Cli_Init"
-    ]
+    ],
+    "plugin": {
+      "onInit": "TeqFw_Db_Back_Plugin_Init",
+      "onStop": "TeqFw_Db_Back_Plugin_Stop"
+    }
   }
 }
