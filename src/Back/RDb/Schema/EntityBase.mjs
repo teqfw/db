@@ -32,14 +32,9 @@ export default class TeqFw_Db_Back_RDb_Schema_EntityBase {
                 return attrs;
             }
 
-            inst.getAttrNames = function () {
-                return attrNames;
-            }
-
             inst.getEntityName = function () {
                 return name;
             }
-
 
             inst.getPrimaryKey = function () {
                 return pkey;
