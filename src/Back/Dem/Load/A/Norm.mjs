@@ -18,7 +18,7 @@ function normName(data) {
 
 // MODULE'S CLASSES
 /**
- * @implements TeqFw_Core_Shared_Api_Action_IAsync
+ * @implements TeqFw_Core_Shared_Api_Action_Async
  */
 export default class TeqFw_Db_Back_Dem_Load_A_Norm {
 

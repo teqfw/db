@@ -14,8 +14,8 @@ export default class TeqFw_Db_Back_RDb_Connect {
 
     constructor(spec) {
         // DEPS
-        /** @type {TeqFw_Core_Shared_Api_ILogger} */
-        const _logger = spec['TeqFw_Core_Shared_Api_ILogger$'];
+        /** @type {TeqFw_Core_Shared_Api_Logger} */
+        const _logger = spec['TeqFw_Core_Shared_Api_Logger$'];
         /** @type {TeqFw_Db_Back_RDb_Connect_Resolver} */
         const _resolver = spec['TeqFw_Db_Back_RDb_Connect_Resolver$$']; // instance per connection
         /** @type {typeof TeqFw_Db_Back_RDb_Trans} */

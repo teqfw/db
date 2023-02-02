@@ -8,7 +8,7 @@ import {join} from 'path';
 const DEM = 'etc/teqfw.schema.json';
 const MAP = 'etc/teqfw.schema.map.json';
 /**
- * @implements TeqFw_Core_Shared_Api_Action_IAsync
+ * @implements TeqFw_Core_Shared_Api_Action_Async
  */
 export default class TeqFw_Db_Back_Dem_Load_A_Scan {
     constructor(spec) {

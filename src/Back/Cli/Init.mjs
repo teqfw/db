@@ -19,8 +19,8 @@ export default function Factory(spec) {
     // DEPS
     /** @type {TeqFw_Db_Back_Defaults} */
     const DEF = spec['TeqFw_Db_Back_Defaults$'];
-    /** @type {TeqFw_Core_Shared_Api_ILogger} */
-    const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
+    /** @type {TeqFw_Core_Shared_Api_Logger} */
+    const logger = spec['TeqFw_Core_Shared_Api_Logger$$']; // instance
     /** @type {TeqFw_Core_Back_Api_Dto_Command.Factory} */
     const fCommand = spec['TeqFw_Core_Back_Api_Dto_Command#Factory$'];
     /** @type {TeqFw_Db_Back_RDb_IConnect} */

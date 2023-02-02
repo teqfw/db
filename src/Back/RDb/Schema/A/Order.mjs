@@ -1,6 +1,6 @@
 /**
  * Order DEM entities (dependencies go first: [base, dep, ...]).
- * @implements TeqFw_Core_Shared_Api_Action_IAsync
+ * @implements TeqFw_Core_Shared_Api_Action_Async
  */
 export default class TeqFw_Db_Back_RDb_Schema_A_Order {
     /**
