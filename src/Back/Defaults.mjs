@@ -7,6 +7,7 @@ export default class TeqFw_Db_Back_Defaults {
     CLI_PREFIX = 'db'; // prefix for CLI actions
     NS = '_'; // name separator for DB elements ('table_name')
     PS = '/'; // path separator for DEM entities ('/path/to/entity')
+    ROWS_LIMIT = 100; // default rows limit for listings
     SCOPE_CHAR = '@'; // marker for NPM scope (@vnd/plugin)
 
     constructor() {

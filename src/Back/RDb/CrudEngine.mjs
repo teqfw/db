@@ -131,6 +131,19 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
             return res;
         }
 
+        this.readSetCount = async function (trx, meta, where, bind) {
+            const table = trx.getTableName(meta);
+            /** @type {Knex.QueryBuilder} */
+            const query = trx.createQuery();
+            query.table(table);
+            query.count('*'); // compose COUNT(*)
+            if (where) query.where(where); // set WHERE filter
+            // const sql = query.toString();
+            const rs = await query;
+            const [first] = rs;
+            return Number.parseInt(first['count']);
+        }
+
         this.updateOne = async function (trx, meta, data) {
             const table = trx.getTableName(meta);
             const pkey = meta.getPrimaryKey();

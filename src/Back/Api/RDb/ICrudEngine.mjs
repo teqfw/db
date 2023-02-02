@@ -1,6 +1,7 @@
 /**
  * Interface for engine to perform simple CRUD queries.
  * @interface
+ * TODO: use ..._Name instead of ..._IName (we have _Api_ in classname)
  */
 export default class TeqFw_Db_Back_Api_RDb_ICrudEngine {
     /**
@@ -54,6 +55,16 @@ export default class TeqFw_Db_Back_Api_RDb_ICrudEngine {
      * @return {Promise<Array>}
      */
     async readSet(trx, meta, where, bind, order, limit, offset) {};
+
+    /**
+     * Read count of rows matching WHERE clause.
+     * @param {TeqFw_Db_Back_RDb_ITrans} trx DB transaction for data processing
+     * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
+     * @param {Object|string|function} [where]
+     * @param [bind]
+     * @return {Promise<number>}
+     */
+    async readSetCount(trx, meta, where, bind) {};
 
     /**
      * Update data for one entity by primary key.
