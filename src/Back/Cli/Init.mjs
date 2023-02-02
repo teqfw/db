@@ -45,7 +45,7 @@ export default function Factory(spec) {
      */
     async function action() {
         // load DEMs then drop/create all tables
-        const path = config.getBoot().projectRoot;
+        const path = config.getPathToRoot();
         const {dem, cfg} = await demLoad.exec({path});
         await dbSchema.setDem({dem});
         await dbSchema.setCfg({cfg});
