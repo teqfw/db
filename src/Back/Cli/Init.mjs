@@ -22,7 +22,7 @@ export default function Factory(spec) {
     /** @type {TeqFw_Core_Shared_Api_Logger} */
     const logger = spec['TeqFw_Core_Shared_Api_Logger$$']; // instance
     /** @type {TeqFw_Core_Back_Api_Dto_Command.Factory} */
-    const fCommand = spec['TeqFw_Core_Back_Api_Dto_Command#Factory$'];
+    const fCommand = spec['TeqFw_Core_Back_Api_Dto_Command.Factory$'];
     /** @type {TeqFw_Db_Back_RDb_IConnect} */
     const conn = spec['TeqFw_Db_Back_RDb_IConnect$'];
     /** @type {TeqFw_Core_Back_Config} */
@@ -61,7 +61,7 @@ export default function Factory(spec) {
     const res = fCommand.create();
     res.realm = DEF.CLI_PREFIX;
     res.name = 'init';
-    res.desc = '(Re)create RDB structure.';
+    res.desc = '(re)create RDB structure.';
     res.action = action;
     return res;
 }
