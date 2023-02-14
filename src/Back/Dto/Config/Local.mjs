@@ -39,7 +39,7 @@ export class Factory {
     constructor(spec) {
         const {castArrayOfStr, castString, castBoolean} = spec['TeqFw_Core_Shared_Util_Cast'];
         /** @type {TeqFw_Db_Back_Dto_Config_Local_Connection.Factory} */
-        const fConn = spec['TeqFw_Db_Back_Dto_Config_Local_Connection#Factory$'];
+        const fConn = spec['TeqFw_Db_Back_Dto_Config_Local_Connection.Factory$'];
 
         /**
          * @param {TeqFw_Db_Back_Dto_Config_Local|null} data

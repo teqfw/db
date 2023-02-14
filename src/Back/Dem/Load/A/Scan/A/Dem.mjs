@@ -9,7 +9,7 @@ export default class TeqFw_Db_Back_Dem_Load_A_Scan_A_Dem {
         /** @type {Function|TeqFw_Core_Back_Util.readJson} */
         const readJson = spec['TeqFw_Core_Back_Util#readJson'];
         /** @type {TeqFw_Db_Back_Dto_Dem.Factory} */
-        const factory = spec['TeqFw_Db_Back_Dto_Dem#Factory$'];
+        const factory = spec['TeqFw_Db_Back_Dto_Dem.Factory$'];
 
         /**
          * Load DEM data for a plugin and parse it.

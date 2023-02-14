@@ -33,11 +33,11 @@ export class Factory {
     constructor(spec) {
         const {castArrayOfObj, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
         /** @type {TeqFw_Db_Back_Dto_RDb_Column.Factory} */
-        const fColumn = spec['TeqFw_Db_Back_Dto_RDb_Column#Factory$'];
+        const fColumn = spec['TeqFw_Db_Back_Dto_RDb_Column.Factory$'];
         /** @type {TeqFw_Db_Back_Dto_RDb_Index.Factory} */
-        const fIndex = spec['TeqFw_Db_Back_Dto_RDb_Index#Factory$'];
+        const fIndex = spec['TeqFw_Db_Back_Dto_RDb_Index.Factory$'];
         /** @type {TeqFw_Db_Back_Dto_RDb_Relation.Factory} */
-        const fRelation = spec['TeqFw_Db_Back_Dto_RDb_Relation#Factory$'];
+        const fRelation = spec['TeqFw_Db_Back_Dto_RDb_Relation.Factory$'];
 
         /**
          * @param {TeqFw_Db_Back_Dto_RDb_Table|null} data

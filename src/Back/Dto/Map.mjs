@@ -31,7 +31,7 @@ export class Factory {
 
     constructor(spec) {
         /** @type {TeqFw_Db_Back_Dto_Map_Ref.Factory} */
-        const fRef = spec['TeqFw_Db_Back_Dto_Map_Ref#Factory$'];
+        const fRef = spec['TeqFw_Db_Back_Dto_Map_Ref.Factory$'];
 
         /**
          * @param {TeqFw_Db_Back_Dto_Map|null} data

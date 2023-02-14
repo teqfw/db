@@ -26,9 +26,9 @@ export class Factory {
     constructor(spec) {
         const {castArray, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
         /** @type {TeqFw_Db_Back_Dto_Dem_Entity_Relation_Ref.Factory} */
-        const fRef = spec['TeqFw_Db_Back_Dto_Dem_Entity_Relation_Ref#Factory$'];
+        const fRef = spec['TeqFw_Db_Back_Dto_Dem_Entity_Relation_Ref.Factory$'];
         /** @type {TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action.Factory} */
-        const fAction = spec['TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action#Factory$'];
+        const fAction = spec['TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action.Factory$'];
 
         /**
          * @param {TeqFw_Db_Back_Dto_Dem_Entity_Relation|null} data

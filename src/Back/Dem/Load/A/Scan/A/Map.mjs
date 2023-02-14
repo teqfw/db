@@ -10,7 +10,7 @@ export default class TeqFw_Db_Back_Dem_Load_A_Scan_A_Map {
         /** @type {Function|TeqFw_Core_Back_Util.readJson} */
         const readJson = spec['TeqFw_Core_Back_Util#readJson'];
         /** @type {TeqFw_Db_Back_Dto_Map.Factory} */
-        const factory = spec['TeqFw_Db_Back_Dto_Map#Factory$'];
+        const factory = spec['TeqFw_Db_Back_Dto_Map.Factory$'];
 
         /**
          * Load DEM mapping data for the application and parse it.

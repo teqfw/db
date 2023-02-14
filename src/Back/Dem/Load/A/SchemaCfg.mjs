@@ -7,7 +7,7 @@ export default class TeqFw_Db_Back_Dem_Load_A_SchemaCfg {
     constructor(spec) {
         // DEPS
         /** @type {TeqFw_Db_Back_Dto_Config_Schema.Factory} */
-        const factory = spec['TeqFw_Db_Back_Dto_Config_Schema#Factory$'];
+        const factory = spec['TeqFw_Db_Back_Dto_Config_Schema.Factory$'];
 
         // noinspection JSCheckFunctionSignatures
         /**

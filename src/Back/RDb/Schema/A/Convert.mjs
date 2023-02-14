@@ -10,13 +10,13 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
         /** @type {TeqFw_Db_Back_Defaults} */
         const DEF = spec['TeqFw_Db_Back_Defaults$'];
         /** @type {TeqFw_Db_Back_Dto_RDb_Column.Factory} */
-        const fColumn = spec['TeqFw_Db_Back_Dto_RDb_Column#Factory$'];
+        const fColumn = spec['TeqFw_Db_Back_Dto_RDb_Column.Factory$'];
         /** @type {TeqFw_Db_Back_Dto_RDb_Index.Factory} */
-        const fIndex = spec['TeqFw_Db_Back_Dto_RDb_Index#Factory$'];
+        const fIndex = spec['TeqFw_Db_Back_Dto_RDb_Index.Factory$'];
         /** @type {TeqFw_Db_Back_Dto_RDb_Relation.Factory} */
-        const fRelation = spec['TeqFw_Db_Back_Dto_RDb_Relation#Factory$'];
+        const fRelation = spec['TeqFw_Db_Back_Dto_RDb_Relation.Factory$'];
         /** @type {TeqFw_Db_Back_Dto_RDb_Table.Factory} */
-        const fTable = spec['TeqFw_Db_Back_Dto_RDb_Table#Factory$'];
+        const fTable = spec['TeqFw_Db_Back_Dto_RDb_Table.Factory$'];
         /** @type {typeof TeqFw_Db_Back_Enum_Dem_Type_Attr} */
         const TDemAttr = spec['TeqFw_Db_Back_Enum_Dem_Type_Attr$'];
         /** @type {typeof TeqFw_Db_Back_Enum_Dem_Type_Index} */
