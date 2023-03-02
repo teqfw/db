@@ -2,6 +2,7 @@
  * This builder adds methods for empty object according to 'TeqFw_Db_Back_RDb_Meta_IEntity' interface.
  *
  * @namespace TeqFw_Db_Back_RDb_Schema_EntityBase
+ * @deprecated create all methods in entities itself
  */
 export default class TeqFw_Db_Back_RDb_Schema_EntityBase {
     constructor() {
