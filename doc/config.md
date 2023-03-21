@@ -1,6 +1,6 @@
 # Local configuration options
 
-These options are the same as connection options of [knex](https://knexjs.org/#Installation-client) lib:
+These options are the same as connection options of [knex](https://knexjs.org/guide/#configuration-options) lib:
 ```json
 {
   "client": "mysql2",
