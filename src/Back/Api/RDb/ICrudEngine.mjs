@@ -29,7 +29,7 @@ export default class TeqFw_Db_Back_Api_RDb_ICrudEngine {
      *
      * @param {TeqFw_Db_Back_RDb_ITrans} trx DB transaction for data processing
      * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
-     * @param {Object|function} where
+     * @param {Object|function} [where]
      * @return {Promise<number>}
      */
     async deleteSet(trx, meta, where) {};

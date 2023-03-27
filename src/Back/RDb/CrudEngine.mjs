@@ -88,7 +88,7 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
             /** @type {Knex.QueryBuilder} */
             const query = trx.createQuery();
             query.table(table);
-            query.where(where);
+            if (where) query.where(where);
             return await query.del();
         }
 
