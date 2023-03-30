@@ -2,7 +2,7 @@
  * Interface for engine to perform simple CRUD queries.
  * @interface
  */
-export default class TeqFw_Db_Back_Api_RDb_ICrudEngine {
+export default class TeqFw_Db_Back_Api_RDb_CrudEngine {
     /**
      * Create new instance of an entity in DB.
      *
@@ -28,7 +28,7 @@ export default class TeqFw_Db_Back_Api_RDb_ICrudEngine {
      *
      * @param {TeqFw_Db_Back_RDb_ITrans} trx DB transaction for data processing
      * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
-     * @param {Object|function} where
+     * @param {Object|function} [where]
      * @return {Promise<number>}
      */
     async deleteSet(trx, meta, where) {};
@@ -54,6 +54,16 @@ export default class TeqFw_Db_Back_Api_RDb_ICrudEngine {
      * @return {Promise<Array>}
      */
     async readSet(trx, meta, where, bind, order, limit, offset) {};
+
+    /**
+     * Read count of rows matching WHERE clause.
+     * @param {TeqFw_Db_Back_RDb_ITrans} trx DB transaction for data processing
+     * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
+     * @param {Object|string|function} [where]
+     * @param [bind]
+     * @return {Promise<number>}
+     */
+    async readSetCount(trx, meta, where, bind) {};
 
     /**
      * Update data for one entity by primary key.

@@ -37,9 +37,9 @@ export class Factory {
         /** @type {typeof TeqFw_Db_Back_Dto_Dem_Entity} */
         const TEntity = spec['TeqFw_Db_Back_Dto_Dem_Entity#'];
         /** @type {TeqFw_Db_Back_Dto_Dem_Entity.Factory} */
-        const fEntity = spec['TeqFw_Db_Back_Dto_Dem_Entity#Factory$'];
+        const fEntity = spec['TeqFw_Db_Back_Dto_Dem_Entity.Factory$'];
         /** @type {TeqFw_Db_Back_Dto_Dem_Package.Factory} */
-        const fPkg = spec['TeqFw_Db_Back_Dto_Dem_Package#Factory$'];
+        const fPkg = spec['TeqFw_Db_Back_Dto_Dem_Package.Factory$'];
 
         /**
          * @param {TeqFw_Db_Back_Dto_Dem|null} data

@@ -22,7 +22,7 @@ export class Factory {
     constructor(spec) {
         // DEPS
         /** @type {TeqFw_Db_Back_Dto_Dem_Entity.Factory} */
-        const fEntity = spec['TeqFw_Db_Back_Dto_Dem_Entity#Factory$'];
+        const fEntity = spec['TeqFw_Db_Back_Dto_Dem_Entity.Factory$'];
 
         /**
          * @param {TeqFw_Db_Back_Dto_Dem_Package|null} data

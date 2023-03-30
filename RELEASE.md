@@ -1,5 +1,11 @@
 # @teqfw/db: releases
 
+## 0.6.0
+
+* Create CLI action to re-create RDB structure using DEM.
+* Improve JSDoc comments.
+* Rename interfaces in `_Api_` space.
+
 ## 0.5.1
 
 * Remove dependency from `@teqfw/web`.

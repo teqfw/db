@@ -56,10 +56,6 @@ export default class TeqFw_Db_Back_RDb_Trans {
         return this.#resolver.getTableName(meta);
     }
 
-    getQuery(table) {
-        return this.#trx(table);
-    }
-
     getKnexTrx() {
         return this.#trx;
     }

@@ -30,7 +30,7 @@ export class Factory {
     constructor(spec) {
         const {castBoolean, castPrimitive, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
         /** @type {TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options.Factory} */
-        const fOPts = spec['TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options#Factory$'];
+        const fOPts = spec['TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options.Factory$'];
 
         /**
          * @param {TeqFw_Db_Back_Dto_Dem_Entity_Attr|null} data
