@@ -1,8 +1,10 @@
 # @teqfw/db: releases
 
-## 0.6.0 - new
+## 0.6.0
 
-* Create CLI action to re-create RDB structure using DEM;
+* Create CLI action to re-create RDB structure using DEM.
+* Improve JSDoc comments.
+* Rename interfaces in `_Api_` space.
 
 ## 0.5.1
 
@@ -12,7 +14,7 @@
 
 * Documentation improvement.
 * Comments & JsDoc improvement.
-* `TeqFw_Db_Back_Api_RDb_IQueryBuilder` is added.
+* `TeqFw_Db_Back_Api_RDb_QueryBuilder` is added.
 * Reflect changes in `TeqFw_Core_Shared_Api_...`.
 * `tiny` modifier is added to `integer` datatype.
 * `json` datatype is added.

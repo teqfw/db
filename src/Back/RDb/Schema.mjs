@@ -1,7 +1,7 @@
 /**
  * Default implementation for schema builder using DEM.
  *
- * @implements TeqFw_Db_Back_Api_RDb_ISchema
+ * @implements TeqFw_Db_Back_Api_RDb_Schema
  */
 export default class TeqFw_Db_Back_RDb_Schema {
 

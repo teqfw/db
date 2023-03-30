@@ -1,6 +1,7 @@
 /**
  * Interface for RDBMS connection based on 'knex' library.
  * @interface
+ * TODO: move to _Api_ namespace
  */
 export default class TeqFw_Db_Back_RDb_IConnect {
 

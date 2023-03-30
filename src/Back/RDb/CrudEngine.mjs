@@ -1,6 +1,6 @@
 /**
  * 'knex' based engine to perform simple CRUD operations.
- * @implements TeqFw_Db_Back_Api_RDb_ICrudEngine
+ * @implements TeqFw_Db_Back_Api_RDb_CrudEngine
  */
 export default class TeqFw_Db_Back_RDb_CrudEngine {
     constructor() {

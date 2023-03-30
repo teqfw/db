@@ -2,6 +2,7 @@
  * Interface for single transaction to manipulate data in DB.
  * Connection creates transaction.
  * @interface
+ * TODO: move to _Api_ namespace
  */
 export default class TeqFw_Db_Back_RDb_ITrans {
     async commit() {}
@@ -47,14 +48,6 @@ export default class TeqFw_Db_Back_RDb_ITrans {
     raw(exp, params) {}
 
     async rollback() {}
-
-    /**
-     * TODO: remove it
-     * @param {string|Object} table
-     * @return {Knex.Builder}
-     * @deprecated temporary solution for refactoring period
-     */
-    getQuery(table) { }
 
     /**
      * 'Knex' object

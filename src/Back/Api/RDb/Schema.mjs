@@ -1,9 +1,8 @@
 /**
  * Interface for RDBMS schema builder that uses DEM (Domain Entities Model) to describe structure.
  * @interface
- * TODO: use ..._Name instead of ..._IName (we have _Api_ in classname)
  */
-export default class TeqFw_Db_Back_Api_RDb_ISchema {
+export default class TeqFw_Db_Back_Api_RDb_Schema {
     /**
      * Create all tables using given connection.
      * @param {TeqFw_Db_Back_RDb_IConnect} conn

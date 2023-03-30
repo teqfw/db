@@ -27,8 +27,8 @@ export default function Factory(spec) {
     const conn = spec['TeqFw_Db_Back_RDb_IConnect$'];
     /** @type {TeqFw_Core_Back_Config} */
     const config = spec['TeqFw_Core_Back_Config$'];
-    /** @type {TeqFw_Db_Back_Api_RDb_ISchema} */
-    const dbSchema = spec['TeqFw_Db_Back_Api_RDb_ISchema$'];
+    /** @type {TeqFw_Db_Back_Api_RDb_Schema} */
+    const dbSchema = spec['TeqFw_Db_Back_Api_RDb_Schema$'];
     /** @type {TeqFw_Db_Back_Dem_Load} */
     const demLoad = spec['TeqFw_Db_Back_Dem_Load$'];
     /** @type {TeqFw_Core_Back_App} */

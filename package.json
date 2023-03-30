@@ -3,7 +3,7 @@
   "version": "0.6.0",
   "description": "TeqFW: DB connectivity.",
   "scripts": {
-    "test": "./node_modules/mocha/bin/mocha --recursive './test/mod/**/*.test.mjs'"
+    "test": "./node_modules/mocha/bin/_mocha --recursive './test/mod/**/*.test.mjs'"
   },
   "repository": {
     "type": "git",

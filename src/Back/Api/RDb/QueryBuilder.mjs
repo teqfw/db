@@ -1,9 +1,8 @@
 /**
  * Interface for RDBMS queries builders.
  * @interface
- * TODO: use ..._Name instead of ..._IName (we have _Api_ in classname)
  */
-export default class TeqFw_Db_Back_Api_RDb_IQueryBuilder {
+export default class TeqFw_Db_Back_Api_RDb_QueryBuilder {
 
     /**
      * Build and return query.

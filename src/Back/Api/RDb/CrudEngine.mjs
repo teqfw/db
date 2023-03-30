@@ -1,9 +1,8 @@
 /**
  * Interface for engine to perform simple CRUD queries.
  * @interface
- * TODO: use ..._Name instead of ..._IName (we have _Api_ in classname)
  */
-export default class TeqFw_Db_Back_Api_RDb_ICrudEngine {
+export default class TeqFw_Db_Back_Api_RDb_CrudEngine {
     /**
      * Create new instance of an entity in DB.
      *

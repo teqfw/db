@@ -1,7 +1,7 @@
 /**
  * Interface for RDBMS queries builders to get items for listings.
  * @interface
- * @extends TeqFw_Db_Back_Api_RDb_IQueryBuilder
+ * @extends TeqFw_Db_Back_Api_RDb_QueryBuilder
  */
 export default class TeqFw_Db_Back_Api_RDb_Query_List {
 
