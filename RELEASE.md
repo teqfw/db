@@ -1,5 +1,9 @@
 # @teqfw/db: releases
 
+## X.X.X
+
+* Add list of deprecated tables to drop on re-installation.
+
 ## 0.6.0
 
 * Create CLI action to re-create RDB structure using DEM.

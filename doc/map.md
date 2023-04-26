@@ -5,7 +5,8 @@
 ```json
 {
   "namespace": "teq",
-  "ref": {}
+  "ref": {},
+  "deprecated": {}
 }
 ```
 
@@ -43,3 +44,18 @@ Short form when attributes are the same:
   }
 }
 ```
+
+## `deprecated`
+
+List of deprecated entities to be dropped when DB is re-created:
+
+```json
+{
+  "deprecated": {
+    "/app/email": ["/web/user"]
+  }
+}
+```
+
+* `/app/email`: full name for entity to drop (w/o namespace defined by the application) ;
+* `[]`: list of entities (FQN) that must be dropped before this entity (foreign keys); 

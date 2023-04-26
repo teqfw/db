@@ -29,7 +29,7 @@ export default class TeqFw_Db_Back_RDb_Schema {
             const knex = conn.getKnex();
             const dem = _dem;
             /** @type {TeqFw_Db_Back_Dto_Dem_Entity[]} */
-            const entities = await _aOrder.exec({dem});
+            const entities = await _aOrder.exec({dem, addDeprecated: false});
             _logger.info(`Total ${entities.length} entities are in DEM.`);
             for (const entity of entities) {
                 const tbl = await _aConvert.exec({entity, cfg: _cfg});
@@ -39,14 +39,14 @@ export default class TeqFw_Db_Back_RDb_Schema {
             // perform operations
             // const sql = schema.toString();
             await schema;
-        }
+        };
 
         this.dropAllTables = async function ({conn}) {
             // prepare schema (populate with DROP statements)
             const schema = conn.getSchemaBuilder();
             const dem = _dem;
             /** @type {TeqFw_Db_Back_Dto_Dem_Entity[]} */
-            const entities = await _aOrder.exec({dem});
+            const entities = await _aOrder.exec({dem, addDeprecated: true});
             entities.reverse(); // reverse order for tables drop
             for (const entity of entities) {
                 const tbl = await _aConvert.exec({entity, cfg: _cfg});
@@ -54,7 +54,7 @@ export default class TeqFw_Db_Back_RDb_Schema {
             }
             // perform operations
             await schema;
-        }
+        };
 
         this.getTablesList = async function () {
             const res = [];
@@ -65,14 +65,14 @@ export default class TeqFw_Db_Back_RDb_Schema {
                 res.push(tbl.name);
             }
             return res;
-        }
+        };
 
         this.setCfg = function ({cfg}) {
             _cfg = cfg;
-        }
+        };
         this.setDem = function ({dem}) {
             _dem = dem;
-        }
+        };
     }
 
 

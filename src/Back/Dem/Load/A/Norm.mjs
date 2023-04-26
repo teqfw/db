@@ -88,6 +88,7 @@ export default class TeqFw_Db_Back_Dem_Load_A_Norm {
             /** @type {TeqFw_Db_Back_Dto_Dem} */
             const dem = _factory.create();
             delete dem.refs;
+            if (map?.deprecated) dem.deprecated = map.deprecated;
 
             for (const plugin of Object.keys(dems)) {
                 // make a copy of the DEM fragment
@@ -99,6 +100,6 @@ export default class TeqFw_Db_Back_Dem_Load_A_Norm {
             }
 
             return {dem};
-        }
+        };
     }
 }
