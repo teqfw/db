@@ -1,5 +1,7 @@
 # @teqfw/db: releases
 
+## 0.8.0 - NEW
+
 ## 0.7.0
 
 * Add list of deprecated tables to drop on re-installation.
