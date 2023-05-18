@@ -7,15 +7,20 @@ const NS = 'TeqFw_Db_Back_Dto_Map';
 // MODULE'S CLASSES
 export default class TeqFw_Db_Back_Dto_Map {
     /**
-     * Plugin's references resolutions (map plugin's external reference to existing entity & attr).
-     * @type {Object<string, Object<string, TeqFw_Db_Back_Dto_Map_Ref>>}
+     * List of deprecated tables with dependencies (foreign keys).
+     * @type {Object<string, string[]>}
      */
-    ref;
+    deprecated;
     /**
      * Prefix for tables in RDB ('teq' => 'teq_table_name'). Default: use w/o prefix.
      * @type {string}
      */
     namespace;
+    /**
+     * Plugin's references resolutions (map plugin's external reference to existing entity & attr).
+     * @type {Object<string, Object<string, TeqFw_Db_Back_Dto_Map_Ref>>}
+     */
+    ref;
 }
 
 // attributes names to use as aliases in queries to object props
@@ -30,6 +35,8 @@ export class Factory {
     static namespace = NS;
 
     constructor(spec) {
+        /** @type {TeqFw_Core_Shared_Util_Cast.castArrayOfStr|function} */
+        const castArrayOfStr = spec['TeqFw_Core_Shared_Util_Cast.castArrayOfStr'];
         /** @type {TeqFw_Db_Back_Dto_Map_Ref.Factory} */
         const fRef = spec['TeqFw_Db_Back_Dto_Map_Ref.Factory$'];
 
@@ -39,6 +46,15 @@ export class Factory {
          */
         this.create = function create(data = null) {
             // FUNCS
+
+            function parseDeprecated(data) {
+                const res = {};
+                if (typeof data === 'object')
+                    for (const name of Object.keys(data))
+                        res[name] = castArrayOfStr(data[name]);
+                return res;
+            }
+
             function parseRef(data) {
                 const res = {};
                 if (typeof data === 'object')
@@ -55,10 +71,11 @@ export class Factory {
 
             // MAIN
             const res = new TeqFw_Db_Back_Dto_Map();
+            res.deprecated = parseDeprecated(data?.deprecated);
             res.namespace = data?.namespace;
             res.ref = parseRef(data?.ref);
             return res;
-        }
+        };
     }
 }
 

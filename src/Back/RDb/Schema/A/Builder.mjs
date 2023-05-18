@@ -20,11 +20,16 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Builder {
                  */
                 function addColumn(table, dto) {
                     /** @type {Knex.ColumnBuilder} */
-                    const column = (dto.type === TDbColType.ENUM)
-                        ? table[dto.type](dto.name, dto.enum)
-                        : (dto.type === TDbColType.DECIMAL)
-                            ? table[dto.type](dto.name, dto.precision, dto.scale)
-                            : table[dto.type](dto.name);
+                    let column;
+                    if (dto.type === TDbColType.ENUM) {
+                        column = table[dto.type](dto.name, dto.enum);
+                    } else if (dto.type === TDbColType.DECIMAL) {
+                        column = table[dto.type](dto.name, dto.precision, dto.scale);
+                    } else if (dto.type === TDbColType.BINARY) {
+                        column = table[dto.type](dto.name, dto?.length);
+                    } else {
+                        column = table[dto.type](dto.name);
+                    }
                     if (dto.comment) column.comment(dto.comment);
                     (dto?.nullable) ? column.nullable() : column.notNullable();
                     if (dto.default !== undefined) {
@@ -34,7 +39,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Builder {
                         ) {
                             column.defaultTo(knex.fn.now());
                         } else {
-                            column.defaultTo(dto.default)
+                            column.defaultTo(dto.default);
                         }
                     }
                     if (dto.unsigned === true) column.unsigned();
@@ -66,7 +71,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Builder {
                 for (const one of dto.indexes) addIndex(table, one);
                 for (const one of dto.relations) addRelation(table, one);
             });
-        }
+        };
 
         /**
          * @param {Knex.SchemaBuilder} schema
@@ -74,7 +79,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Builder {
          */
         this.dropTable = function (schema, dto) {
             schema.dropTableIfExists(dto.name);
-        }
+        };
     }
 
 

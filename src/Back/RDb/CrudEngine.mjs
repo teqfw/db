@@ -24,7 +24,8 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
             if (
                 (typeof key === 'number') ||
                 (typeof key === 'string') ||
-                (typeof key === 'boolean')
+                (typeof key === 'boolean') ||
+                (key instanceof Buffer)
             ) {
                 // simple key
                 const [pk] = meta.getPrimaryKey();

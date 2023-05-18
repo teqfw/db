@@ -12,6 +12,8 @@ export default class TeqFw_Db_Back_Dto_RDb_Column {
     default;
     /** @type {Array} */
     enum;
+    /** @type {number} */
+    length;
     /** @type {string} */
     name;
     /** @type {boolean} */
@@ -25,13 +27,6 @@ export default class TeqFw_Db_Back_Dto_RDb_Column {
     /** @type {boolean} */
     unsigned;
 }
-// attributes names to use as aliases in queries to object props
-TeqFw_Db_Back_Dto_RDb_Column.COMMENT = 'comment';
-TeqFw_Db_Back_Dto_RDb_Column.DEFAULT = 'default';
-TeqFw_Db_Back_Dto_RDb_Column.NAME = 'name';
-TeqFw_Db_Back_Dto_RDb_Column.NULLABLE = 'nullable';
-TeqFw_Db_Back_Dto_RDb_Column.TYPE = 'type';
-TeqFw_Db_Back_Dto_RDb_Column.UNSIGNED = 'unsigned';
 
 // noinspection JSCheckFunctionSignatures
 /**
@@ -55,6 +50,7 @@ export class Factory {
             res.comment = castString(data?.comment);
             res.default = castString(data?.default);
             res.enum = castArray(data?.enum);
+            res.length = castInt(data?.length);
             res.name = castString(data?.name);
             res.nullable = castBooleanIfExists(data?.nullable);
             res.precision = castInt(data?.precision);
@@ -62,7 +58,7 @@ export class Factory {
             res.type = castEnum(data?.type, COLUMN);
             res.unsigned = castBooleanIfExists(data?.unsigned);
             return res;
-        }
+        };
     }
 }
 

@@ -1,5 +1,10 @@
 # @teqfw/db: releases
 
+## 0.7.0
+
+* Add list of deprecated tables to drop on re-installation.
+* Binary data type (`Buffer`) is added to DEM.
+
 ## 0.6.0
 
 * Create CLI action to re-create RDB structure using DEM.

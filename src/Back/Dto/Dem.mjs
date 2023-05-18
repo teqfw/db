@@ -10,6 +10,11 @@ const NS = 'TeqFw_Db_Back_Dto_Dem';
 
 // MODULE'S CLASSES
 export default class TeqFw_Db_Back_Dto_Dem {
+    /**
+     * List of deprecated tables with dependencies (foreign keys).
+     * @type {Object<string, string[]>}
+     */
+    deprecated;
     /** @type {Object<string, TeqFw_Db_Back_Dto_Dem_Entity>} */
     entity;
     /** @type {Object<string, TeqFw_Db_Back_Dto_Dem_Package>} */
