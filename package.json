@@ -29,13 +29,13 @@
   },
   "homepage": "https://github.com/teqfw/db#readme",
   "dependencies": {
-    "@teqfw/core": "*",
-    "knex": "*"
+    "@teqfw/core": "~0.10.0",
+    "knex": "latest"
   },
   "devDependencies": {
-    "mocha": "*",
-    "mysql2": "*",
-    "pg": "*",
-    "sqlite3": "*"
+    "mocha": "latest",
+    "mysql2": "latest",
+    "pg": "latest",
+    "sqlite3": "latest"
   }
 }

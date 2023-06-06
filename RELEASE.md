@@ -1,6 +1,8 @@
 # @teqfw/db: releases
 
-## 0.8.0 - NEW
+## 0.8.0
+
+* Add `TeqFw_Db_Back_Process_CreateStruct` to create DB structure on startup.
 
 ## 0.7.0
 
