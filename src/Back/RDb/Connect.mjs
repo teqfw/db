@@ -15,13 +15,14 @@ export default class TeqFw_Db_Back_RDb_Connect {
     constructor(spec) {
         // DEPS
         /** @type {TeqFw_Core_Shared_Api_Logger} */
-        const _logger = spec['TeqFw_Core_Shared_Api_Logger$'];
+        const _logger = spec['TeqFw_Core_Shared_Api_Logger$$']; // instance
         /** @type {TeqFw_Db_Back_RDb_Connect_Resolver} */
         const _resolver = spec['TeqFw_Db_Back_RDb_Connect_Resolver$$']; // instance per connection
         /** @type {typeof TeqFw_Db_Back_RDb_Trans} */
         const Trans = spec['TeqFw_Db_Back_RDb_Trans#'];
 
         // VARS
+        _logger.setNamespace(this.constructor.name);
         /** @type {Knex} */
         let _knex;
         /** @type {string} */
@@ -63,7 +64,7 @@ export default class TeqFw_Db_Back_RDb_Connect {
          */
         this.setSchemaConfig = function (cfg) {
             _resolver.setConfig(cfg);
-        }
+        };
         /**
          * Accessor for 'knex' object.
          *
