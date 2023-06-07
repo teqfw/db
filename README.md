@@ -1,9 +1,14 @@
 # @teqfw/db
 
-|CAUTION: TeqFW is an unstable project w/o backward compatibility. Use it at your own risk.|
-|---|
+| CAUTION: TeqFW is an unstable project w/o backward compatibility. Use it at your own risk. |
+|--------------------------------------------------------------------------------------------|
 
-TeqFW: DB connectivity based on [knex](https://knexjs.org/) package.
+This plugin allows you to create table structures for RDB (Relational Database) from a JSON definition on the TeqFW
+platform. Each `teq`-plugin that needs to store data in RDB has its own JSON declaration for its part of the entire
+data. `@teqfw/db` combines all the parts into one common declaration and creates or drops tables in the RDB.
+
+Connectivity to PostgreSQL, MySQL/MariaDB, SQLite, MS SQL, and Oracle servers is made possible using
+the [Knex.js](https://knexjs.org/) library.
 
 ## Install
 

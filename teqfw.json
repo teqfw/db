@@ -12,6 +12,7 @@
   },
   "@teqfw/core": {
     "commands": [
+      "TeqFw_Db_Back_Cli_Drop",
       "TeqFw_Db_Back_Cli_Init"
     ],
     "plugin": {

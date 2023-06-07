@@ -1,5 +1,9 @@
 # @teqfw/db: releases
 
+## 0.X.X
+
+* Command `TeqFw_Db_Back_Cli_Drop` to drop all tables.
+
 ## 0.8.0
 
 * Add `TeqFw_Db_Back_Process_CreateStruct` to create DB structure on startup.

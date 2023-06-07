@@ -1,10 +1,10 @@
 /**
- * (Re)create RDB structure.
+ * Drop all tables in RDB.
  *
- * @namespace TeqFw_Db_Back_Cli_Init
+ * @namespace TeqFw_Db_Back_Cli_Drop
  */
 // MODULE'S VARS
-const NS = 'TeqFw_Db_Back_Cli_Init';
+const NS = 'TeqFw_Db_Back_Cli_Drop';
 
 // MODULE'S FUNCTIONS
 /**
@@ -13,7 +13,7 @@ const NS = 'TeqFw_Db_Back_Cli_Init';
  * @param {TeqFw_Di_Shared_SpecProxy} spec
  * @returns {TeqFw_Core_Back_Api_Dto_Command}
  * @constructor
- * @memberOf TeqFw_Db_Back_Cli_Init
+ * @memberOf TeqFw_Db_Back_Cli_Drop
  */
 export default function Factory(spec) {
     // DEPS
@@ -41,7 +41,7 @@ export default function Factory(spec) {
     /**
      * Command action.
      * @returns {Promise<void>}
-     * @memberOf TeqFw_Db_Back_Cli_Init
+     * @memberOf TeqFw_Db_Back_Cli_Drop
      */
     async function action() {
         // load DEMs then drop/create all tables
@@ -50,8 +50,7 @@ export default function Factory(spec) {
         await dbSchema.setDem({dem});
         await dbSchema.setCfg({cfg});
         await dbSchema.dropAllTables({conn});
-        await dbSchema.createAllTables({conn});
-        logger.info('Database structure is recreated.');
+        logger.info('All tables are dropped.');
         await app.stop();
     }
 
@@ -60,8 +59,8 @@ export default function Factory(spec) {
     // MAIN
     const res = fCommand.create();
     res.realm = DEF.CLI_PREFIX;
-    res.name = 'init';
-    res.desc = '(re)create RDB structure';
+    res.name = 'drop';
+    res.desc = 'drop all tables in RDB';
     res.action = action;
     return res;
 }
