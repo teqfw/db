@@ -1,5 +1,7 @@
 # Structure for RDB schema declaration
 
+Default name: `./etc/teqfw.schema.json`.
+
 ## Top level entries
 
 ```json
@@ -110,8 +112,7 @@
 Available functions:
 
 * `datetime`:
-  * `current`: current timestamp
-
+    * `current`: current timestamp
 
 ## `entity/index`
 

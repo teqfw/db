@@ -1,5 +1,7 @@
 # Structure for project's map file
 
+Default name: `./etc/teqfw.schema.map.json`.
+
 ## Top level entries
 
 ```json

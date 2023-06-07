@@ -3,6 +3,7 @@
 ## 0.X.X
 
 * Command `TeqFw_Db_Back_Cli_Drop` to drop all tables.
+* Rename `./doc/struct.md` to `./doc/schema.md` and improve documentation.
 
 ## 0.8.0
 
