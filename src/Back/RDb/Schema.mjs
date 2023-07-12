@@ -47,10 +47,12 @@ export default class TeqFw_Db_Back_RDb_Schema {
             const dem = _dem;
             /** @type {TeqFw_Db_Back_Dto_Dem_Entity[]} */
             const entities = await _aOrder.exec({dem, addDeprecated: true});
+            _logger.info(`Total ${entities.length} entities are in DEM.`);
             entities.reverse(); // reverse order for tables drop
             for (const entity of entities) {
                 const tbl = await _aConvert.exec({entity, cfg: _cfg});
                 _builder.dropTable(schema, tbl);
+                _logger.info(`Table '${tbl.name}' is dropped.`);
             }
             // perform operations
             await schema;

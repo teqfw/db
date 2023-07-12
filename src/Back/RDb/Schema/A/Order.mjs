@@ -47,7 +47,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Order {
                         const deps = dem.deprecated[key];
                         const relations = {};
                         for (const one of deps) {
-                            relations[one] = {ref: one}; // part of relation, reference to other table in FK
+                            relations[one] = {ref: {path: one}}; // part of relation, reference to other table in FK
                         }
                         entity.relation = relations;
                         res[key] = entity;
