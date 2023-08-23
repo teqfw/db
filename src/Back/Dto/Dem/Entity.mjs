@@ -30,14 +30,19 @@ TeqFw_Db_Back_Dto_Dem_Entity.NAME = 'name';
 export class Factory {
     static namespace = NS;
 
-    constructor(spec) {
-        const {castString} = spec['TeqFw_Core_Shared_Util_Cast'];
-        /** @type {TeqFw_Db_Back_Dto_Dem_Entity_Attr.Factory} */
-        const fAttr = spec['TeqFw_Db_Back_Dto_Dem_Entity_Attr.Factory$'];
-        /** @type {TeqFw_Db_Back_Dto_Dem_Entity_Index.Factory} */
-        const fIndex = spec['TeqFw_Db_Back_Dto_Dem_Entity_Index.Factory$'];
-        /** @type {TeqFw_Db_Back_Dto_Dem_Entity_Relation.Factory} */
-        const fRelation = spec['TeqFw_Db_Back_Dto_Dem_Entity_Relation.Factory$'];
+    /**
+     * @param {TeqFw_Core_Shared_Util_Cast.castString|function} castString
+     * @param {TeqFw_Db_Back_Dto_Dem_Entity_Attr.Factory} fAttr
+     * @param {TeqFw_Db_Back_Dto_Dem_Entity_Index.Factory} fIndex
+     * @param {TeqFw_Db_Back_Dto_Dem_Entity_Relation.Factory} fRelation
+     */
+    constructor(
+        {
+            'TeqFw_Core_Shared_Util_Cast.castString': castString,
+            'TeqFw_Db_Back_Dto_Dem_Entity_Attr.Factory$': fAttr,
+            'TeqFw_Db_Back_Dto_Dem_Entity_Index.Factory$': fIndex,
+            'TeqFw_Db_Back_Dto_Dem_Entity_Relation.Factory$': fRelation,
+        }) {
 
         /**
          * @param {TeqFw_Db_Back_Dto_Dem_Entity|null} data

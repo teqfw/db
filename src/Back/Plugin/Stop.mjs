@@ -3,12 +3,14 @@
  */
 // MODULE'S VARS
 const NS = 'TeqFw_Db_Back_Plugin_Stop';
+/**
+ * @param {TeqFw_Db_Back_RDb_IConnect} connect
+ */
 
-export default function Factory(spec) {
-    // DEPS
-    /** @type {TeqFw_Db_Back_RDb_IConnect} */
-    const connect = spec['TeqFw_Db_Back_RDb_IConnect$'];
-
+export default function Factory(
+    {
+        TeqFw_Db_Back_RDb_IConnect$: connect,
+    }) {
     // COMPOSE RESULT
     async function exec() {
         // web-plugin works with DB, so we need to disconnect from RDBMS

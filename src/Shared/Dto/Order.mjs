@@ -48,13 +48,16 @@ class Dto {
  * @implements TeqFw_Core_Shared_Api_Factory_Dto_Meta
  */
 export default class TeqFw_Db_Shared_Dto_Order {
+    /**
+     * @param {TeqFw_Core_Shared_Util_Cast.castString|function} castString
+     * @param {TeqFw_Core_Shared_Util_Cast.castEnum|function} castEnum
+     */
 
-    constructor(spec) {
-        /** @type {TeqFw_Core_Shared_Util_Cast.castString|function} */
-        const castString = spec['TeqFw_Core_Shared_Util_Cast.castString'];
-        /** @type {TeqFw_Core_Shared_Util_Cast.castEnum|function} */
-        const castEnum = spec['TeqFw_Core_Shared_Util_Cast.castEnum'];
-
+    constructor(
+        {
+            'TeqFw_Core_Shared_Util_Cast.castString': castString,
+            'TeqFw_Core_Shared_Util_Cast.castEnum': castEnum,
+        }) {
         // INSTANCE METHODS
         /**
          * @param {TeqFw_Db_Shared_Dto_Order.Dto} [data]

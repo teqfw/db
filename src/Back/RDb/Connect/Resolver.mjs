@@ -2,11 +2,13 @@
  * Resolve entities names to tables names according to connection configuration.
  */
 export default class TeqFw_Db_Back_RDb_Connect_Resolver {
-    constructor(spec) {
-        // DEPS
-        /** @type {TeqFw_Db_Back_Defaults} */
-        const DEF = spec['TeqFw_Db_Back_Defaults$'];
-
+    /**
+     * @param {TeqFw_Db_Back_Defaults} DEF
+     */
+    constructor(
+        {
+            TeqFw_Db_Back_Defaults$: DEF,
+        }) {
         // VARS
         /** @type {TeqFw_Db_Back_Dto_Config_Schema} */
         let _cfg;

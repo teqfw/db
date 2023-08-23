@@ -2,21 +2,23 @@
  * Process to create DB structure from DEM descriptor.
  */
 export default class TeqFw_Db_Back_Process_CreateStruct {
-    constructor(spec) {
-        // DEPS
-        /** @type {TeqFw_Core_Shared_Api_Logger} */
-        const logger = spec['TeqFw_Core_Shared_Api_Logger$$']; // instance
-        /** @type {TeqFw_Core_Back_Config} */
-        const config = spec['TeqFw_Core_Back_Config$'];
-        /** @type {TeqFw_Db_Back_RDb_IConnect} */
-        const conn = spec['TeqFw_Db_Back_RDb_IConnect$'];
-        /** @type {TeqFw_Db_Back_Api_RDb_CrudEngine} */
-        const crud = spec['TeqFw_Db_Back_Api_RDb_CrudEngine$'];
-        /** @type {TeqFw_Db_Back_Api_RDb_Schema} */
-        const dbSchema = spec['TeqFw_Db_Back_Api_RDb_Schema$'];
-        /** @type {TeqFw_Db_Back_Dem_Load} */
-        const demLoad = spec['TeqFw_Db_Back_Dem_Load$'];
-
+    /**
+     * @param {TeqFw_Core_Shared_Api_Logger} logger -  instance
+     * @param {TeqFw_Core_Back_Config} config
+     * @param {TeqFw_Db_Back_RDb_IConnect} conn
+     * @param {TeqFw_Db_Back_Api_RDb_CrudEngine} crud
+     * @param {TeqFw_Db_Back_Api_RDb_Schema} dbSchema
+     * @param {TeqFw_Db_Back_Dem_Load} demLoad
+     */
+    constructor(
+        {
+            TeqFw_Core_Shared_Api_Logger$$: logger,
+            TeqFw_Core_Back_Config$: config,
+            TeqFw_Db_Back_RDb_IConnect$: conn,
+            TeqFw_Db_Back_Api_RDb_CrudEngine$: crud,
+            TeqFw_Db_Back_Api_RDb_Schema$: dbSchema,
+            TeqFw_Db_Back_Dem_Load$: demLoad,
+        }) {
         // VARS
         logger.setNamespace(this.constructor.name);
 

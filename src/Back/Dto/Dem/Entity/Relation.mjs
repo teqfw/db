@@ -23,12 +23,20 @@ export default class TeqFw_Db_Back_Dto_Dem_Entity_Relation {
 export class Factory {
     static namespace = NS;
 
-    constructor(spec) {
-        const {castArray, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
-        /** @type {TeqFw_Db_Back_Dto_Dem_Entity_Relation_Ref.Factory} */
-        const fRef = spec['TeqFw_Db_Back_Dto_Dem_Entity_Relation_Ref.Factory$'];
-        /** @type {TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action.Factory} */
-        const fAction = spec['TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action.Factory$'];
+    /**
+     * @param {TeqFw_Core_Shared_Util_Cast.castArray|function} castArray
+     * @param {TeqFw_Core_Shared_Util_Cast.castString|function} castString
+     * @param {TeqFw_Db_Back_Dto_Dem_Entity_Relation_Ref.Factory} fRef
+     * @param {TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action.Factory} fAction
+     */
+    constructor(
+        {
+            'TeqFw_Core_Shared_Util_Cast.castArray': castArray,
+            'TeqFw_Core_Shared_Util_Cast.castString': castString,
+            'TeqFw_Db_Back_Dto_Dem_Entity_Relation_Ref.Factory$': fRef,
+            'TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action.Factory$': fAction,
+        }
+    ) {
 
         /**
          * @param {TeqFw_Db_Back_Dto_Dem_Entity_Relation|null} data

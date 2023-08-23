@@ -4,18 +4,20 @@
  * @implements TeqFw_Db_Back_Api_RDb_Schema
  */
 export default class TeqFw_Db_Back_RDb_Schema {
+    /**
+     * @param {TeqFw_Core_Shared_Api_Logger} _logger
+     * @param {TeqFw_Db_Back_RDb_Schema_A_Convert} _aConvert
+     * @param {TeqFw_Db_Back_RDb_Schema_A_Order} _aOrder
+     * @param {TeqFw_Db_Back_RDb_Schema_A_Builder} _builder
+     */
 
-    constructor(spec) {
-        // DEPS
-        /** @type {TeqFw_Core_Shared_Api_Logger} */
-        const _logger = spec['TeqFw_Core_Shared_Api_Logger$'];
-        /** @type {TeqFw_Db_Back_RDb_Schema_A_Convert} */
-        const _aConvert = spec['TeqFw_Db_Back_RDb_Schema_A_Convert$'];
-        /** @type {TeqFw_Db_Back_RDb_Schema_A_Order} */
-        const _aOrder = spec['TeqFw_Db_Back_RDb_Schema_A_Order$'];
-        /** @type {TeqFw_Db_Back_RDb_Schema_A_Builder} */
-        const _builder = spec['TeqFw_Db_Back_RDb_Schema_A_Builder$'];
-
+    constructor(
+        {
+            TeqFw_Core_Shared_Api_Logger$: _logger,
+            TeqFw_Db_Back_RDb_Schema_A_Convert$: _aConvert,
+            TeqFw_Db_Back_RDb_Schema_A_Order$: _aOrder,
+            TeqFw_Db_Back_RDb_Schema_A_Builder$: _builder,
+        }) {
         // VARS
         /** @type {TeqFw_Db_Back_Dto_Dem} */
         let _dem;

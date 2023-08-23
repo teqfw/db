@@ -27,11 +27,20 @@ export default class TeqFw_Db_Back_Dto_Dem_Entity_Attr {
 export class Factory {
     static namespace = NS;
 
-    constructor(spec) {
-        const {castBoolean, castPrimitive, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
-        /** @type {TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options.Factory} */
-        const fOPts = spec['TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options.Factory$'];
-
+    /**
+     * @param {TeqFw_Core_Shared_Util_Cast.castBoolean|function} castBoolean
+     * @param {TeqFw_Core_Shared_Util_Cast.castPrimitive|function} castPrimitive
+     * @param {TeqFw_Core_Shared_Util_Cast.castString|function} castString
+     * @param {TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options.Factory} fOpts
+     */
+    constructor(
+        {
+            'TeqFw_Core_Shared_Util_Cast.castBoolean': castBoolean,
+            'TeqFw_Core_Shared_Util_Cast.castPrimitive': castPrimitive,
+            'TeqFw_Core_Shared_Util_Cast.castString': castString,
+            'TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options.Factory$': fOpts,
+        }
+    ) {
         /**
          * @param {TeqFw_Db_Back_Dto_Dem_Entity_Attr|null} data
          * @return {TeqFw_Db_Back_Dto_Dem_Entity_Attr}
@@ -42,7 +51,7 @@ export class Factory {
             res.default = castPrimitive(data?.default);
             res.name = castString(data?.name);
             res.nullable = castBoolean(data?.nullable);
-            res.options = fOPts.create(data?.options);
+            res.options = fOpts.create(data?.options);
             res.type = castString(data?.type);
             return res;
         }

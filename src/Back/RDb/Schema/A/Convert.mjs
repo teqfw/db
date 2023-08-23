@@ -4,32 +4,34 @@
  * @implements TeqFw_Core_Shared_Api_Action_Async
  */
 export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
+    /**
+     * @param {TeqFw_Db_Back_Defaults} DEF
+     * @param {TeqFw_Db_Back_Dto_RDb_Column.Factory} fColumn
+     * @param {TeqFw_Db_Back_Dto_RDb_Index.Factory} fIndex
+     * @param {TeqFw_Db_Back_Dto_RDb_Relation.Factory} fRelation
+     * @param {TeqFw_Db_Back_Dto_RDb_Table.Factory} fTable
+     * @param {typeof TeqFw_Db_Back_Enum_Dem_Type_Attr} TDemAttr
+     * @param {typeof TeqFw_Db_Back_Enum_Dem_Type_Index} TDemIndex
+     * @param {typeof TeqFw_Db_Back_Enum_Dem_Type_Action} TDemAction
+     * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Column} TDbColType
+     * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Index} TDbIndexType
+     * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Action} TDbActionType
+     */
 
-    constructor(spec) {
-        // DEPS
-        /** @type {TeqFw_Db_Back_Defaults} */
-        const DEF = spec['TeqFw_Db_Back_Defaults$'];
-        /** @type {TeqFw_Db_Back_Dto_RDb_Column.Factory} */
-        const fColumn = spec['TeqFw_Db_Back_Dto_RDb_Column.Factory$'];
-        /** @type {TeqFw_Db_Back_Dto_RDb_Index.Factory} */
-        const fIndex = spec['TeqFw_Db_Back_Dto_RDb_Index.Factory$'];
-        /** @type {TeqFw_Db_Back_Dto_RDb_Relation.Factory} */
-        const fRelation = spec['TeqFw_Db_Back_Dto_RDb_Relation.Factory$'];
-        /** @type {TeqFw_Db_Back_Dto_RDb_Table.Factory} */
-        const fTable = spec['TeqFw_Db_Back_Dto_RDb_Table.Factory$'];
-        /** @type {typeof TeqFw_Db_Back_Enum_Dem_Type_Attr} */
-        const TDemAttr = spec['TeqFw_Db_Back_Enum_Dem_Type_Attr$'];
-        /** @type {typeof TeqFw_Db_Back_Enum_Dem_Type_Index} */
-        const TDemIndex = spec['TeqFw_Db_Back_Enum_Dem_Type_Index$'];
-        /** @type {typeof TeqFw_Db_Back_Enum_Dem_Type_Action} */
-        const TDemAction = spec['TeqFw_Db_Back_Enum_Dem_Type_Action$'];
-        /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Column} */
-        const TDbColType = spec['TeqFw_Db_Back_Enum_Db_Type_Column$'];
-        /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Index} */
-        const TDbIndexType = spec['TeqFw_Db_Back_Enum_Db_Type_Index$'];
-        /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Action} */
-        const TDbActionType = spec['TeqFw_Db_Back_Enum_Db_Type_Action$'];
-
+    constructor(
+        {
+            TeqFw_Db_Back_Defaults$: DEF,
+            'TeqFw_Db_Back_Dto_RDb_Column.Factory$': fColumn,
+            'TeqFw_Db_Back_Dto_RDb_Index.Factory$': fIndex,
+            'TeqFw_Db_Back_Dto_RDb_Relation.Factory$': fRelation,
+            'TeqFw_Db_Back_Dto_RDb_Table.Factory$': fTable,
+            TeqFw_Db_Back_Enum_Dem_Type_Attr$: TDemAttr,
+            TeqFw_Db_Back_Enum_Dem_Type_Index$: TDemIndex,
+            TeqFw_Db_Back_Enum_Dem_Type_Action$: TDemAction,
+            TeqFw_Db_Back_Enum_Db_Type_Column$: TDbColType,
+            TeqFw_Db_Back_Enum_Db_Type_Index$: TDbIndexType,
+            TeqFw_Db_Back_Enum_Db_Type_Action$: TDbActionType,
+        }) {
         // VARS
         const mapAction = {
             [TDemAction.CASCADE]: TDbActionType.CASCADE,

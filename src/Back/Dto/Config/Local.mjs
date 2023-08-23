@@ -36,11 +36,20 @@ export default class TeqFw_Db_Back_Dto_Config_Local {
 export class Factory {
     static namespace = NS;
 
-    constructor(spec) {
-        const {castArrayOfStr, castString, castBoolean} = spec['TeqFw_Core_Shared_Util_Cast'];
-        /** @type {TeqFw_Db_Back_Dto_Config_Local_Connection.Factory} */
-        const fConn = spec['TeqFw_Db_Back_Dto_Config_Local_Connection.Factory$'];
-
+    /**
+     * @param {TeqFw_Core_Shared_Util_Cast.castArrayOfStr|function} castArrayOfStr
+     * @param {TeqFw_Core_Shared_Util_Cast.castBoolean|function} castBoolean
+     * @param {TeqFw_Core_Shared_Util_Cast.castString|function} castString
+     * @param {TeqFw_Db_Back_Dto_Config_Local_Connection.Factory} fConn
+     */
+    constructor(
+        {
+            'TeqFw_Core_Shared_Util_Cast.castArrayOfStr': castArrayOfStr,
+            'TeqFw_Core_Shared_Util_Cast.castBoolean': castBoolean,
+            'TeqFw_Core_Shared_Util_Cast.castString': castString,
+            'TeqFw_Db_Back_Dto_Config_Local_Connection.Factory$': fConn,
+        }
+    ) {
         /**
          * @param {TeqFw_Db_Back_Dto_Config_Local|null} data
          * @return {TeqFw_Db_Back_Dto_Config_Local}

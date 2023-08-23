@@ -4,11 +4,13 @@
  * @implements TeqFw_Core_Shared_Api_Action_Async
  */
 export default class TeqFw_Db_Back_Dem_Load_A_SchemaCfg {
-    constructor(spec) {
-        // DEPS
-        /** @type {TeqFw_Db_Back_Dto_Config_Schema.Factory} */
-        const factory = spec['TeqFw_Db_Back_Dto_Config_Schema.Factory$'];
-
+    /**
+     * @param {TeqFw_Db_Back_Dto_Config_Schema.Factory} factory
+     */
+    constructor(
+        {
+            'TeqFw_Db_Back_Dto_Config_Schema.Factory$': factory,
+        }) {
         // noinspection JSCheckFunctionSignatures
         /**
          * Load DEM mapping data for the application and parse it.

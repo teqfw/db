@@ -1,10 +1,12 @@
 export default class TeqFw_Db_Back_RDb_Schema_A_Builder {
+    /**
+     * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Column} TDbColType
+     */
 
-    constructor(spec) {
-        // DEPS
-        /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Column} */
-        const TDbColType = spec['TeqFw_Db_Back_Enum_Db_Type_Column$'];
-
+    constructor(
+        {
+            TeqFw_Db_Back_Enum_Db_Type_Column$: TDbColType,
+        }) {
         // INSTANCE METHODS
         /**
          * @param {Knex.SchemaBuilder} schema

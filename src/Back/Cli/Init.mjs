@@ -15,25 +15,27 @@ const NS = 'TeqFw_Db_Back_Cli_Init';
  * @constructor
  * @memberOf TeqFw_Db_Back_Cli_Init
  */
-export default function Factory(spec) {
-    // DEPS
-    /** @type {TeqFw_Db_Back_Defaults} */
-    const DEF = spec['TeqFw_Db_Back_Defaults$'];
-    /** @type {TeqFw_Core_Shared_Api_Logger} */
-    const logger = spec['TeqFw_Core_Shared_Api_Logger$$']; // instance
-    /** @type {TeqFw_Core_Back_Api_Dto_Command.Factory} */
-    const fCommand = spec['TeqFw_Core_Back_Api_Dto_Command.Factory$'];
-    /** @type {TeqFw_Db_Back_RDb_IConnect} */
-    const conn = spec['TeqFw_Db_Back_RDb_IConnect$'];
-    /** @type {TeqFw_Core_Back_Config} */
-    const config = spec['TeqFw_Core_Back_Config$'];
-    /** @type {TeqFw_Db_Back_Api_RDb_Schema} */
-    const dbSchema = spec['TeqFw_Db_Back_Api_RDb_Schema$'];
-    /** @type {TeqFw_Db_Back_Dem_Load} */
-    const demLoad = spec['TeqFw_Db_Back_Dem_Load$'];
-    /** @type {TeqFw_Core_Back_App} */
-    const app = spec['TeqFw_Core_Back_App$'];
-
+/**
+ * @param {TeqFw_Db_Back_Defaults} DEF
+ * @param {TeqFw_Core_Shared_Api_Logger} logger -  instance
+ * @param {TeqFw_Core_Back_Api_Dto_Command.Factory} fCommand
+ * @param {TeqFw_Db_Back_RDb_IConnect} conn
+ * @param {TeqFw_Core_Back_Config} config
+ * @param {TeqFw_Db_Back_Api_RDb_Schema} dbSchema
+ * @param {TeqFw_Db_Back_Dem_Load} demLoad
+ * @param {TeqFw_Core_Back_App} app
+ */
+export default function Factory(
+    {
+        TeqFw_Db_Back_Defaults$: DEF,
+        TeqFw_Core_Shared_Api_Logger$$: logger,
+        'TeqFw_Core_Back_Api_Dto_Command.Factory$': fCommand,
+        TeqFw_Db_Back_RDb_IConnect$: conn,
+        TeqFw_Core_Back_Config$: config,
+        TeqFw_Db_Back_Api_RDb_Schema$: dbSchema,
+        TeqFw_Db_Back_Dem_Load$: demLoad,
+        TeqFw_Core_Back_App$: app,
+    }) {
     // VARS
     logger.setNamespace(NS);
 

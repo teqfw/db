@@ -26,9 +26,16 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Dto_Ref {
 export class Factory {
     static namespace = NS;
 
-    constructor(spec) {
-        const {castArray, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
-
+    /**
+     * @param {TeqFw_Core_Shared_Util_Cast.castArray|function} castArray
+     * @param {TeqFw_Core_Shared_Util_Cast.castString|function} castString
+     */
+    constructor(
+        {
+            'TeqFw_Core_Shared_Util_Cast.castArray': castArray,
+            'TeqFw_Core_Shared_Util_Cast.castString': castString,
+        }
+    ) {
         /**
          * @param {TeqFw_Db_Back_RDb_Schema_A_Dto_Ref|null} data
          * @return {TeqFw_Db_Back_RDb_Schema_A_Dto_Ref}
@@ -38,7 +45,7 @@ export class Factory {
             res.path = castString(data?.path);
             res.attrs = castArray(data?.attrs);
             return res;
-        }
+        };
     }
 }
 
