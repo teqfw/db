@@ -4,7 +4,7 @@ import {describe, it} from 'mocha';
 import {join} from 'path';
 import {existsSync} from 'fs';
 
-/** @type {TeqFw_Di_Shared_Container} */
+/** @type {TeqFw_Di_Container} */
 // const container = await testEnv();
 /** @type {TeqFw_Db_Back_Dem_Load_A_Scan_A_Dem} */
 const obj = await container.get('TeqFw_Db_Back_Dem_Load_A_Scan_A_Dem$');
