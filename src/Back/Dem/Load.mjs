@@ -4,15 +4,17 @@
  * @implements TeqFw_Core_Shared_Api_Action_Async
  */
 export default class TeqFw_Db_Back_Dem_Load {
-    constructor(spec) {
-        // DEPS
-        /** @type {TeqFw_Db_Back_Dem_Load_A_Scan} */
-        const scan = spec['TeqFw_Db_Back_Dem_Load_A_Scan$'];
-        /** @type {TeqFw_Db_Back_Dem_Load_A_Norm} */
-        const norm = spec['TeqFw_Db_Back_Dem_Load_A_Norm$'];
-        /** @type {TeqFw_Db_Back_Dem_Load_A_SchemaCfg} */
-        const schemaCfg = spec['TeqFw_Db_Back_Dem_Load_A_SchemaCfg$'];
-
+    /**
+     * @param {TeqFw_Db_Back_Dem_Load_A_Scan} scan
+     * @param {TeqFw_Db_Back_Dem_Load_A_Norm} norm
+     * @param {TeqFw_Db_Back_Dem_Load_A_SchemaCfg} schemaCfg
+     */
+    constructor(
+        {
+            TeqFw_Db_Back_Dem_Load_A_Scan$: scan,
+            TeqFw_Db_Back_Dem_Load_A_Norm$: norm,
+            TeqFw_Db_Back_Dem_Load_A_SchemaCfg$: schemaCfg,
+        }) {
         /**
          * Load all DEMs (app & plugins), merge all fragments and normalize its using map data.
          * @param {string} path

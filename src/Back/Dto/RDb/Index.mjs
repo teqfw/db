@@ -25,10 +25,20 @@ TeqFw_Db_Back_Dto_RDb_Index.TYPE = 'type';
 export class Factory {
     static namespace = NS;
 
-    constructor(spec) {
-        const {castArray, castEnum, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
-        /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Index} */
-        const INDEX = spec['TeqFw_Db_Back_Enum_Db_Type_Index#'];
+    /**
+     * @param {TeqFw_Core_Shared_Util_Cast.castArray|function} castArray
+     * @param {TeqFw_Core_Shared_Util_Cast.castEnum|function} castEnum
+     * @param {TeqFw_Core_Shared_Util_Cast.castString|function} castString
+     * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Index} INDEX
+     */
+    constructor(
+        {
+            'TeqFw_Core_Shared_Util_Cast.castArray': castArray,
+            'TeqFw_Core_Shared_Util_Cast.castEnum': castEnum,
+            'TeqFw_Core_Shared_Util_Cast.castString': castString,
+            'TeqFw_Db_Back_Enum_Db_Type_Index#': INDEX
+        }
+    ) {
 
         /**
          * @param {TeqFw_Db_Back_Dto_RDb_Index|null} data

@@ -21,16 +21,18 @@ function normName(data) {
  * @implements TeqFw_Core_Shared_Api_Action_Async
  */
 export default class TeqFw_Db_Back_Dem_Load_A_Norm {
+    /**
+     * @param {TeqFw_Db_Back_Defaults} DEF
+     * @param {TeqFw_Core_Shared_Util_Probe.deepMerge|function} _deepMerge
+     * @param {TeqFw_Db_Back_Dto_Dem.Factory} _factory
+     */
 
-    constructor(spec) {
-        // DEPS
-        /** @type {TeqFw_Db_Back_Defaults} */
-        const DEF = spec['TeqFw_Db_Back_Defaults$'];
-        /** @type {TeqFw_Core_Shared_Util_Probe.deepMerge|function} */
-        const _deepMerge = spec['TeqFw_Core_Shared_Util_Probe.deepMerge'];
-        /** @type {TeqFw_Db_Back_Dto_Dem.Factory} */
-        const _factory = spec['TeqFw_Db_Back_Dto_Dem.Factory$'];
-
+    constructor(
+        {
+            TeqFw_Db_Back_Defaults$: DEF,
+            'TeqFw_Core_Shared_Util_Probe.deepMerge': _deepMerge,
+            'TeqFw_Db_Back_Dto_Dem.Factory$': _factory,
+        }) {
 
         // INSTANCE METHODS
         /**

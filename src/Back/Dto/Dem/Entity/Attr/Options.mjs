@@ -36,8 +36,19 @@ export default class TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options {
 export class Factory {
     static namespace = NS;
 
-    constructor(spec) {
-        const {castArray, castBooleanIfExists, castInt} = spec['TeqFw_Core_Shared_Util_Cast'];
+    /**
+     *
+     * @param {TeqFw_Core_Shared_Util_Cast.castArray|function} castArray
+     * @param {TeqFw_Core_Shared_Util_Cast.castBooleanIfExists|function} castBooleanIfExists
+     * @param {TeqFw_Core_Shared_Util_Cast.castInt|function} castInt
+     */
+    constructor(
+        {
+            'TeqFw_Core_Shared_Util_Cast.castArray': castArray,
+            'TeqFw_Core_Shared_Util_Cast.castBooleanIfExists': castBooleanIfExists,
+            'TeqFw_Core_Shared_Util_Cast.castInt': castInt,
+        }
+    ) {
         /**
          * @param {TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options|null} data
          * @return {TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options}

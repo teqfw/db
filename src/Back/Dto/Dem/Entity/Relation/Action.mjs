@@ -19,12 +19,16 @@ export default class TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action {
 export class Factory {
     static namespace = NS;
 
-    constructor(spec) {
-        /** @type {TeqFw_Core_Shared_Util_Cast.castEnum|function} */
-        const castEnum = spec['TeqFw_Core_Shared_Util_Cast.castEnum'];
-        /** @type {typeof TeqFw_Db_Back_Enum_Dem_Type_Action} */
-        const ACTION = spec['TeqFw_Db_Back_Enum_Dem_Type_Action#'];
+    /**
+     * @param {TeqFw_Core_Shared_Util_Cast.castEnum|function} castEnum
+     * @param {typeof TeqFw_Db_Back_Enum_Dem_Type_Action} ACTION
+     */
 
+    constructor(
+        {
+            'TeqFw_Core_Shared_Util_Cast.castEnum': castEnum,
+            'TeqFw_Db_Back_Enum_Dem_Type_Action#': ACTION,
+        }) {
         /**
          * @param {TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action|null} data
          * @return {TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action}
@@ -34,7 +38,7 @@ export class Factory {
             res.delete = castEnum(data?.delete, ACTION);
             res.update = castEnum(data?.update, ACTION);
             return res;
-        }
+        };
     }
 }
 

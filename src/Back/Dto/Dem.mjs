@@ -38,14 +38,18 @@ TeqFw_Db_Back_Dto_Dem.REFS = 'refs';
 export class Factory {
     static namespace = NS;
 
-    constructor(spec) {
-        /** @type {typeof TeqFw_Db_Back_Dto_Dem_Entity} */
-        const TEntity = spec['TeqFw_Db_Back_Dto_Dem_Entity#'];
-        /** @type {TeqFw_Db_Back_Dto_Dem_Entity.Factory} */
-        const fEntity = spec['TeqFw_Db_Back_Dto_Dem_Entity.Factory$'];
-        /** @type {TeqFw_Db_Back_Dto_Dem_Package.Factory} */
-        const fPkg = spec['TeqFw_Db_Back_Dto_Dem_Package.Factory$'];
+    /**
+     * @param {typeof TeqFw_Db_Back_Dto_Dem_Entity} TEntity
+     * @param {TeqFw_Db_Back_Dto_Dem_Entity.Factory} fEntity
+     * @param {TeqFw_Db_Back_Dto_Dem_Package.Factory} fPkg
+     */
 
+    constructor(
+        {
+            'TeqFw_Db_Back_Dto_Dem_Entity#': TEntity,
+            'TeqFw_Db_Back_Dto_Dem_Entity.Factory$': fEntity,
+            'TeqFw_Db_Back_Dto_Dem_Package.Factory$': fPkg,
+        }) {
         /**
          * @param {TeqFw_Db_Back_Dto_Dem|null} data
          * @return {TeqFw_Db_Back_Dto_Dem}

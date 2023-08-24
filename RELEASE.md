@@ -1,5 +1,11 @@
 # @teqfw/db: releases
 
+## 0.20.0
+
+* These changes are related to the new architecture of the `@teqfw/di` package.
+* Command `TeqFw_Db_Back_Cli_Drop` to drop all tables.
+* Rename `./doc/struct.md` to `./doc/schema.md` and improve documentation.
+
 ## 0.8.0
 
 * Add `TeqFw_Db_Back_Process_CreateStruct` to create DB structure on startup.

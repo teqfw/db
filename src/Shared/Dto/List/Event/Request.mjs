@@ -18,11 +18,13 @@ class Dto {
  * @implements TeqFw_Core_Shared_Api_Factory_Dto
  */
 export default class TeqFw_Db_Shared_Dto_List_Event_Request {
-    constructor(spec) {
-        // DEPS
-        /** @type {TeqFw_Db_Shared_Dto_List_Selection} */
-        const dtoSelection = spec['TeqFw_Db_Shared_Dto_List_Selection$'];
-
+    /**
+     * @param {TeqFw_Db_Shared_Dto_List_Selection} dtoSelection
+     */
+    constructor(
+        {
+            TeqFw_Db_Shared_Dto_List_Selection$: dtoSelection,
+        }) {
         // INSTANCE METHODS
         /**
          * @param {TeqFw_Db_Shared_Dto_List_Event_Request.Dto} [data]

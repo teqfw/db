@@ -30,15 +30,22 @@ TeqFw_Db_Back_Dto_RDb_Table.RELATIONS = 'relations';
 export class Factory {
     static namespace = NS;
 
-    constructor(spec) {
-        const {castArrayOfObj, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
-        /** @type {TeqFw_Db_Back_Dto_RDb_Column.Factory} */
-        const fColumn = spec['TeqFw_Db_Back_Dto_RDb_Column.Factory$'];
-        /** @type {TeqFw_Db_Back_Dto_RDb_Index.Factory} */
-        const fIndex = spec['TeqFw_Db_Back_Dto_RDb_Index.Factory$'];
-        /** @type {TeqFw_Db_Back_Dto_RDb_Relation.Factory} */
-        const fRelation = spec['TeqFw_Db_Back_Dto_RDb_Relation.Factory$'];
-
+    /**
+     * @param {TeqFw_Core_Shared_Util_Cast.castArrayOfObj|function} castArrayOfObj
+     * @param {TeqFw_Core_Shared_Util_Cast.castString|function} castString
+     * @param {TeqFw_Db_Back_Dto_RDb_Column.Factory} fColumn
+     * @param {TeqFw_Db_Back_Dto_RDb_Index.Factory} fIndex
+     * @param {TeqFw_Db_Back_Dto_RDb_Relation.Factory} fRelation
+     */
+    constructor(
+        {
+            'TeqFw_Core_Shared_Util_Cast.castArrayOfObj': castArrayOfObj,
+            'TeqFw_Core_Shared_Util_Cast.castString': castString,
+            'TeqFw_Db_Back_Dto_RDb_Column.Factory$': fColumn,
+            'TeqFw_Db_Back_Dto_RDb_Index.Factory$': fIndex,
+            'TeqFw_Db_Back_Dto_RDb_Relation.Factory$': fRelation,
+        }
+    ) {
         /**
          * @param {TeqFw_Db_Back_Dto_RDb_Table|null} data
          * @return {TeqFw_Db_Back_Dto_RDb_Table}

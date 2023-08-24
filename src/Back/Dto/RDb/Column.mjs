@@ -36,11 +36,24 @@ export default class TeqFw_Db_Back_Dto_RDb_Column {
 export class Factory {
     static namespace = NS;
 
-    constructor(spec) {
-        const {castArray, castBooleanIfExists, castEnum, castInt, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
-        /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Column} */
-        const COLUMN = spec['TeqFw_Db_Back_Enum_Db_Type_Column#'];
-
+    /**
+     * @param {TeqFw_Core_Shared_Util_Cast.castArray|function} castArray
+     * @param {TeqFw_Core_Shared_Util_Cast.castBooleanIfExists|function} castBooleanIfExists
+     * @param {TeqFw_Core_Shared_Util_Cast.castEnum|function} castEnum
+     * @param {TeqFw_Core_Shared_Util_Cast.castInt|function} castInt
+     * @param {TeqFw_Core_Shared_Util_Cast.castString|function} castString
+     * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Column} COLUMN
+     */
+    constructor(
+        {
+            'TeqFw_Core_Shared_Util_Cast.castArray': castArray,
+            'TeqFw_Core_Shared_Util_Cast.castBooleanIfExists': castBooleanIfExists,
+            'TeqFw_Core_Shared_Util_Cast.castEnum': castEnum,
+            'TeqFw_Core_Shared_Util_Cast.castInt': castInt,
+            'TeqFw_Core_Shared_Util_Cast.castString': castString,
+            'TeqFw_Db_Back_Enum_Db_Type_Column#': COLUMN
+        }
+    ) {
         /**
          * @param {TeqFw_Db_Back_Dto_RDb_Column|null} data
          * @return {TeqFw_Db_Back_Dto_RDb_Column}

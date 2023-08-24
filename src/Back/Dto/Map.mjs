@@ -34,12 +34,16 @@ TeqFw_Db_Back_Dto_Map.NAMESPACE = 'namespace';
 export class Factory {
     static namespace = NS;
 
-    constructor(spec) {
-        /** @type {TeqFw_Core_Shared_Util_Cast.castArrayOfStr|function} */
-        const castArrayOfStr = spec['TeqFw_Core_Shared_Util_Cast.castArrayOfStr'];
-        /** @type {TeqFw_Db_Back_Dto_Map_Ref.Factory} */
-        const fRef = spec['TeqFw_Db_Back_Dto_Map_Ref.Factory$'];
+    /**
+     * @param {TeqFw_Core_Shared_Util_Cast.castArrayOfStr|function} castArrayOfStr
+     * @param {TeqFw_Db_Back_Dto_Map_Ref.Factory} fRef
+     */
 
+    constructor(
+        {
+            'TeqFw_Core_Shared_Util_Cast.castArrayOfStr': castArrayOfStr,
+            'TeqFw_Db_Back_Dto_Map_Ref.Factory$': fRef,
+        }) {
         /**
          * @param {TeqFw_Db_Back_Dto_Map|null} data
          * @return {TeqFw_Db_Back_Dto_Map}

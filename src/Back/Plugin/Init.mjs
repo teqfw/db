@@ -4,22 +4,25 @@
 // MODULE'S VARS
 const NS = 'TeqFw_Db_Back_Plugin_Init';
 
-export default function Factory(spec) {
-    // DEPS
-    /** @type {TeqFw_Db_Back_Defaults} */
-    const DEF = spec['TeqFw_Db_Back_Defaults$'];
-    /** @type {TeqFw_Core_Back_Config} */
-    const config = spec['TeqFw_Core_Back_Config$'];
-    /** @type {TeqFw_Db_Back_RDb_Connect} */
-    const conn = spec['TeqFw_Db_Back_RDb_IConnect$']; // use interface as implementation
-
+/**
+ * @param {TeqFw_Db_Back_Defaults} DEF
+ * @param {TeqFw_Core_Back_Config} config
+ * @param {TeqFw_Db_Back_RDb_Connect} conn -  use interface as implementation
+ */
+export default function Factory(
+    {
+        TeqFw_Db_Back_Defaults$: DEF,
+        TeqFw_Core_Back_Config$: config,
+        TeqFw_Db_Back_RDb_IConnect$: conn,
+    }) {
     // FUNCS
     async function action() {
         // RDB connection
         /** @type {TeqFw_Db_Back_Dto_Config_Local} */
         const cfg = config.getLocal(DEF.NAME);
         if (cfg?.connection)
-            await conn.init(cfg);
+            // to prevent 'Cannot redefine property: password'
+            await conn.init(JSON.parse(JSON.stringify(cfg)));
     }
 
     // MAIN

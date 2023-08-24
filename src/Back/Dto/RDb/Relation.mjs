@@ -34,10 +34,20 @@ TeqFw_Db_Back_Dto_RDb_Relation.OWN_COLUMNS = 'ownColumns';
 export class Factory {
     static namespace = NS;
 
-    constructor(spec) {
-        const {castArray, castEnum, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
-        /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Action} */
-        const ACTION = spec['TeqFw_Db_Back_Enum_Db_Type_Action#'];
+    /**
+     * @param {TeqFw_Core_Shared_Util_Cast.castArray|function} castArray
+     * @param {TeqFw_Core_Shared_Util_Cast.castEnum|function} castEnum
+     * @param {TeqFw_Core_Shared_Util_Cast.castString|function} castString
+     * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Action} ACTION
+     */
+    constructor(
+        {
+            'TeqFw_Core_Shared_Util_Cast.castArray': castArray,
+            'TeqFw_Core_Shared_Util_Cast.castEnum': castEnum,
+            'TeqFw_Core_Shared_Util_Cast.castString': castString,
+            'TeqFw_Db_Back_Enum_Db_Type_Action#': ACTION
+        }
+    ) {
         /**
          * @param {TeqFw_Db_Back_Dto_RDb_Relation|null} data
          * @return {TeqFw_Db_Back_Dto_RDb_Relation}

@@ -19,16 +19,19 @@ export default class TeqFw_Db_Back_Dto_Dem_Package {
 export class Factory {
     static namespace = NS;
 
-    constructor(spec) {
-        // DEPS
-        /** @type {TeqFw_Db_Back_Dto_Dem_Entity.Factory} */
-        const fEntity = spec['TeqFw_Db_Back_Dto_Dem_Entity.Factory$'];
+    /**
+     * @param {TeqFw_Db_Back_Dto_Dem_Entity.Factory} fEntity
+     */
 
+    constructor(
+        {
+            'TeqFw_Db_Back_Dto_Dem_Entity.Factory$': fEntity,
+        }) {
         /**
          * @param {TeqFw_Db_Back_Dto_Dem_Package|null} data
          * @return {TeqFw_Db_Back_Dto_Dem_Package}
          */
-        this.create = function create (data = null) {
+        this.create = function create(data = null) {
             // FUNCS
             function parse(fnCreate, data) {
                 const res = {};

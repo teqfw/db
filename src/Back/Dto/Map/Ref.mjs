@@ -35,15 +35,21 @@ TeqFw_Db_Back_Dto_Map_Ref.PATH = 'path';
 export class Factory {
     static namespace = NS;
 
-    constructor(spec) {
-        const {castString} = spec['TeqFw_Core_Shared_Util_Cast'];
+    /**
+     * @param {TeqFw_Core_Shared_Util_Cast.castString|function} castString
+     */
+    constructor(
+        {
+            'TeqFw_Core_Shared_Util_Cast.castString': castString,
+        }
+    ) {
         /**
          * @param {TeqFw_Db_Back_Dto_Map_Ref|null} data
          * @return {TeqFw_Db_Back_Dto_Map_Ref}
          */
         this.create = function create(data = null) {
             const res = new TeqFw_Db_Back_Dto_Map_Ref();
-            res.attrs = (typeof data?.attrs === 'object')
+            res.attrs = (typeof (data?.attrs) === 'object')
                 ? JSON.parse(JSON.stringify(data.attrs)) : {};
             res.path = castString(data?.path);
             res.alias = castString(data?.alias);

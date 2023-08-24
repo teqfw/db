@@ -39,7 +39,7 @@ export default class TeqFw_Db_Back_Api_RDb_CrudEngine {
      * @param {TeqFw_Db_Back_RDb_ITrans} trx DB transaction for data processing
      * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
      * @param {number|string|boolean|Array|Object} key JS primitive for simple PK or object/array for complex PK or unique key
-     * @return {Promise<Object|null>}
+     * @return {Promise<*>}
      * TODO: add columns filter to select (some cols could be a too big to be stored in memory)
      */
     async readOne(trx, meta, key) {};

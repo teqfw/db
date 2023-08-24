@@ -29,15 +29,17 @@ class Dto {
  * @implements TeqFw_Core_Shared_Api_Factory_Dto
  */
 export default class TeqFw_Db_Shared_Dto_List_Event_Response {
-    constructor(spec) {
-        // DEPS
-        // /** @type {TeqFw_Core_Shared_Util_Cast.castArrayOfObj|function} */
-        // const castArrayOfObj = spec['TeqFw_Core_Shared_Util_Cast.castArrayOfObj'];
-        /** @type {TeqFw_Core_Shared_Util_Cast.castInt|function} */
-        const castInt = spec['TeqFw_Core_Shared_Util_Cast.castInt'];
-        /** @type {TeqFw_Db_Shared_Dto_List_Selection} */
-        const dtoSelection = spec['TeqFw_Db_Shared_Dto_List_Selection$'];
-
+    /**
+     * @param {TeqFw_Core_Shared_Util_Cast.castArrayOfObj|function} castArrayOfObj
+     * @param {TeqFw_Core_Shared_Util_Cast.castInt|function} castInt
+     * @param {TeqFw_Db_Shared_Dto_List_Selection} dtoSelection
+     */
+    constructor(
+        {
+            'TeqFw_Core_Shared_Util_Cast.castArrayOfObj': castArrayOfObj,
+            'TeqFw_Core_Shared_Util_Cast.castInt': castInt,
+            TeqFw_Db_Shared_Dto_List_Selection$: dtoSelection,
+        }) {
         // INSTANCE METHODS
         /**
          * @param {TeqFw_Db_Shared_Dto_List_Event_Response.Dto} [data]

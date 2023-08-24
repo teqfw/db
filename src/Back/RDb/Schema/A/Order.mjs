@@ -3,11 +3,13 @@
  * @implements TeqFw_Core_Shared_Api_Action_Async
  */
 export default class TeqFw_Db_Back_RDb_Schema_A_Order {
-    constructor(spec) {
-        // DEPS
-        /** @type {TeqFw_Db_Back_Dto_Dem_Entity.Factory} */
-        const factEntity = spec['TeqFw_Db_Back_Dto_Dem_Entity.Factory$'];
-
+    /**
+     * @param {TeqFw_Db_Back_Dto_Dem_Entity.Factory} factEntity
+     */
+    constructor(
+        {
+            'TeqFw_Db_Back_Dto_Dem_Entity.Factory$': factEntity,
+        }) {
         // INSTANCE METHODS
         /**
          * @param {TeqFw_Db_Back_Dto_Dem} dem
@@ -47,7 +49,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Order {
                         const deps = dem.deprecated[key];
                         const relations = {};
                         for (const one of deps) {
-                            relations[one] = {ref: one}; // part of relation, reference to other table in FK
+                            relations[one] = {ref: {path: one}}; // part of relation, reference to other table in FK
                         }
                         entity.relation = relations;
                         res[key] = entity;

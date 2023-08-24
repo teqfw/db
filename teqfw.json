@@ -2,9 +2,10 @@
   "@teqfw/di": {
     "autoload": {
       "ns": "TeqFw_Db",
-      "path": "./src"
+      "path": "./src",
+      "ext": "mjs"
     },
-    "replace": {
+    "replaces": {
       "TeqFw_Db_Back_Api_RDb_CrudEngine": {"back": "TeqFw_Db_Back_RDb_CrudEngine"},
       "TeqFw_Db_Back_Api_RDb_Schema": {"back": "TeqFw_Db_Back_RDb_Schema"},
       "TeqFw_Db_Back_RDb_IConnect": {"back": "TeqFw_Db_Back_RDb_Connect"}
@@ -12,6 +13,7 @@
   },
   "@teqfw/core": {
     "commands": [
+      "TeqFw_Db_Back_Cli_Drop",
       "TeqFw_Db_Back_Cli_Init"
     ],
     "plugin": {

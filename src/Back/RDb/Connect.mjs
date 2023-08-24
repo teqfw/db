@@ -11,16 +11,18 @@ import knex from 'knex';
  * @implements TeqFw_Db_Back_RDb_IConnect
  */
 export default class TeqFw_Db_Back_RDb_Connect {
+    /**
+     * @param {TeqFw_Core_Shared_Api_Logger} _logger -  instance
+     * @param {TeqFw_Db_Back_RDb_Connect_Resolver} _resolver -  instance per connection
+     * @param {typeof TeqFw_Db_Back_RDb_Trans} Trans
+     */
 
-    constructor(spec) {
-        // DEPS
-        /** @type {TeqFw_Core_Shared_Api_Logger} */
-        const _logger = spec['TeqFw_Core_Shared_Api_Logger$$']; // instance
-        /** @type {TeqFw_Db_Back_RDb_Connect_Resolver} */
-        const _resolver = spec['TeqFw_Db_Back_RDb_Connect_Resolver$$']; // instance per connection
-        /** @type {typeof TeqFw_Db_Back_RDb_Trans} */
-        const Trans = spec['TeqFw_Db_Back_RDb_Trans#'];
-
+    constructor(
+        {
+            TeqFw_Core_Shared_Api_Logger$$: _logger,
+            TeqFw_Db_Back_RDb_Connect_Resolver$$: _resolver,
+            'TeqFw_Db_Back_RDb_Trans#': Trans,
+        }) {
         // VARS
         _logger.setNamespace(this.constructor.name);
         /** @type {Knex} */

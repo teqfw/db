@@ -40,8 +40,18 @@ export default class TeqFw_Db_Back_Dto_Config_Local_Connection {
 export class Factory {
     static namespace = NS;
 
-    constructor(spec) {
-        const {castArrayOfStr, castInt, castString} = spec['TeqFw_Core_Shared_Util_Cast'];
+    /**
+     * @param {TeqFw_Core_Shared_Util_Cast.castArrayOfStr|function} castArrayOfStr
+     * @param {TeqFw_Core_Shared_Util_Cast.castInt|function} castInt
+     * @param {TeqFw_Core_Shared_Util_Cast.castString|function} castString
+     */
+    constructor(
+        {
+            'TeqFw_Core_Shared_Util_Cast.castArrayOfStr': castArrayOfStr,
+            'TeqFw_Core_Shared_Util_Cast.castInt': castInt,
+            'TeqFw_Core_Shared_Util_Cast.castString': castString,
+        }
+    ) {
         /**
          * @param {TeqFw_Db_Back_Dto_Config_Local_Connection|null} data
          * @return {TeqFw_Db_Back_Dto_Config_Local_Connection}
