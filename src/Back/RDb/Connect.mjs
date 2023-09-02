@@ -38,17 +38,19 @@ export default class TeqFw_Db_Back_RDb_Connect {
          * @returns {Promise<void>}
          */
         this.init = async function (cfg) {
-            const filename = cfg?.connection?.filename;
+            // to prevent 'Cannot redefine property: password'
+            const clone = JSON.parse(JSON.stringify(cfg));
+            const filename = clone?.connection?.filename;
             if (filename) {
                 _info = `'${filename}'`;
             } else {
-                const db = cfg?.connection?.database;
-                const host = cfg?.connection?.host;
-                const user = cfg?.connection?.user;
+                const db = clone?.connection?.database;
+                const host = clone?.connection?.host;
+                const user = clone?.connection?.user;
                 _info = `'${db}@${host}' as '${user}'`;
             }
             try {
-                _knex = await knex(cfg);
+                _knex = await knex(clone);
                 _logger.info(`Setup connection to DB ${_info}.`);
             } catch (e) {
                 _logger.error(`Cannot setup connection to DB ${_info}. Error: ${e}`);

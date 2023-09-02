@@ -21,8 +21,7 @@ export default function Factory(
         /** @type {TeqFw_Db_Back_Dto_Config_Local} */
         const cfg = config.getLocal(DEF.NAME);
         if (cfg?.connection)
-            // to prevent 'Cannot redefine property: password'
-            await conn.init(JSON.parse(JSON.stringify(cfg)));
+            await conn.init(cfg);
     }
 
     // MAIN
