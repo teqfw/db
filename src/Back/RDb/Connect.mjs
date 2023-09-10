@@ -24,7 +24,6 @@ export default class TeqFw_Db_Back_RDb_Connect {
             'TeqFw_Db_Back_RDb_Trans#': Trans,
         }) {
         // VARS
-        _logger.setNamespace(this.constructor.name);
         /** @type {Knex} */
         let _knex;
         /** @type {string} */
