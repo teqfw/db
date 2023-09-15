@@ -1,5 +1,10 @@
 # @teqfw/db: releases
 
+## 0.20.1
+
+* WF-674 Update knex version in RA
+* WF-677 Add postprocessor chunk for loggers
+
 ## 0.20.0
 
 * These changes are related to the new architecture of the `@teqfw/di` package.
