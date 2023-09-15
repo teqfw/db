@@ -36,8 +36,6 @@ export default function Factory(
         TeqFw_Db_Back_Dem_Load$: demLoad,
         TeqFw_Core_Back_App$: app,
     }) {
-    // VARS
-    logger.setNamespace(NS);
 
     // FUNCS
     /**

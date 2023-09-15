@@ -19,9 +19,6 @@ export default class TeqFw_Db_Back_Process_CreateStruct {
             TeqFw_Db_Back_Api_RDb_Schema$: dbSchema,
             TeqFw_Db_Back_Dem_Load$: demLoad,
         }) {
-        // VARS
-        logger.setNamespace(this.constructor.name);
-
         // INSTANCE METHODS
 
         /**
