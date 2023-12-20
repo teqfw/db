@@ -16,7 +16,6 @@ export default class TeqFw_Db_Back_RDb_Connect {
      * @param {TeqFw_Db_Back_RDb_Connect_Resolver} _resolver -  instance per connection
      * @param {typeof TeqFw_Db_Back_RDb_Trans} Trans
      */
-
     constructor(
         {
             TeqFw_Core_Shared_Api_Logger$$: _logger,
