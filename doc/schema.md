@@ -42,6 +42,18 @@ Default name: `./etc/teqfw.schema.json`.
 }
 ```
 
+## `refs`
+
+All unresolved references to external entities (tables) and referenced attributes:
+
+```json
+{
+  "refs": {
+    "/ext/entity": ["id"]
+  }
+}
+```
+
 ## `entity/attr`
 
 ```json
