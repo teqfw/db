@@ -31,7 +31,7 @@ export default function Factory(
         TeqFw_Core_Back_Config$: config,
         TeqFw_Db_Back_Api_RDb_Schema$: dbSchema,
         TeqFw_Db_Back_Dem_Load$: demLoad,
-        TeqFw_Core_Back_App$: app,
+        TeqFw_Core_Back_App2$: app,
     }) {
 
     // FUNCS
