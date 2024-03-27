@@ -45,6 +45,7 @@ export default function Factory(
     // FUNCS
     /**
      * Command action.
+     * @param {Object} [opts]
      * @returns {Promise<void>}
      * @memberOf TeqFw_Db_Back_Cli_Export
      */
