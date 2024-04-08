@@ -104,9 +104,15 @@ export default class TeqFw_Db_Back_RDb_Connect {
                             setTimeout(checkPool, WAIT);
                         } else {
                             // close all connections
-                            await _knex.destroy();
-                            _logger.info(`Connections to ${_info} are closed.`);
-                            resolve();
+                            _knex.destroy()
+                                .then(() => {
+                                    _logger.info(`Connections to ${_info} are closed.`);
+                                    resolve();
+                                })
+                                .catch((e) => {
+                                    _logger.exception(e);
+                                    resolve();
+                                });
                         }
                     }
 
