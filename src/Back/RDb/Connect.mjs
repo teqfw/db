@@ -16,7 +16,6 @@ export default class TeqFw_Db_Back_RDb_Connect {
      * @param {TeqFw_Db_Back_RDb_Connect_Resolver} _resolver -  instance per connection
      * @param {typeof TeqFw_Db_Back_RDb_Trans} Trans
      */
-
     constructor(
         {
             TeqFw_Core_Shared_Api_Logger$$: _logger,
@@ -105,9 +104,15 @@ export default class TeqFw_Db_Back_RDb_Connect {
                             setTimeout(checkPool, WAIT);
                         } else {
                             // close all connections
-                            await _knex.destroy();
-                            _logger.info(`Connections to ${_info} are closed.`);
-                            resolve();
+                            _knex.destroy()
+                                .then(() => {
+                                    _logger.info(`Connections to ${_info} are closed.`);
+                                    resolve();
+                                })
+                                .catch((e) => {
+                                    _logger.exception(e);
+                                    resolve();
+                                });
                         }
                     }
 

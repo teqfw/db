@@ -7,7 +7,7 @@ export default class TeqFw_Db_Back_Api_RDb_QueryBuilder {
     /**
      * Build and return query.
      * @param {TeqFw_Db_Back_RDb_ITrans} trx
-     * @param {Object} opts additional options for query builder (where, order, etc.)
+     * @param {Object} [opts] additional options for query builder (where, order, etc.)
      */
     build(trx, opts = {}) {}
 

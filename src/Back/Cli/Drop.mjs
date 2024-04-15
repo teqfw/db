@@ -10,12 +10,6 @@ const NS = 'TeqFw_Db_Back_Cli_Drop';
 /**
  * Factory to create CLI command.
  *
- * @param {TeqFw_Di_Shared_SpecProxy} spec
- * @returns {TeqFw_Core_Back_Api_Dto_Command}
- * @constructor
- * @memberOf TeqFw_Db_Back_Cli_Drop
- */
-/**
  * @param {TeqFw_Db_Back_Defaults} DEF
  * @param {TeqFw_Core_Shared_Api_Logger} logger -  instance
  * @param {TeqFw_Core_Back_Api_Dto_Command.Factory} fCommand
@@ -24,6 +18,9 @@ const NS = 'TeqFw_Db_Back_Cli_Drop';
  * @param {TeqFw_Db_Back_Api_RDb_Schema} dbSchema
  * @param {TeqFw_Db_Back_Dem_Load} demLoad
  * @param {TeqFw_Core_Back_App} app
+ * @returns {TeqFw_Core_Back_Api_Dto_Command}
+ * @constructor
+ * @memberOf TeqFw_Db_Back_Cli_Drop
  */
 export default function Factory(
     {

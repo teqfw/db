@@ -2,11 +2,12 @@
  * Load DEM fragments for all plugins (including application itself).
  */
 // MODULE'S IMPORT
-import {join} from 'path';
+import {join, sep} from 'path';
+import {platform} from 'node:process';
 
 // MODULE'S VARS
-const DEM = 'etc/teqfw.schema.json';
-const MAP = 'etc/teqfw.schema.map.json';
+const DEM = `etc${sep}teqfw.schema.json`;
+const MAP = `etc${sep}teqfw.schema.map.json`;
 /**
  * @implements TeqFw_Core_Shared_Api_Action_Async
  */
@@ -40,7 +41,7 @@ export default class TeqFw_Db_Back_Dem_Load_A_Scan {
             // parse 'schema' JSON for plugin in 'node_modules'
             const filenames = _scanNodeModules(path, DEM);
             for (const filename of filenames) {
-                const pathPlugin = filename.replace(`/${DEM}`, '');
+                const pathPlugin = filename.replace(`${sep}${DEM}`, '');
                 const name = mapPath2Name[pathPlugin];
                 dems[name] = await _loadDem.exec({filename});
             }

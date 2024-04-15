@@ -3,9 +3,6 @@
  *
  * @namespace TeqFw_Db_Back_Util
  */
-// MODULE'S VARS
-const NS = 'TeqFw_Db_Back_Util';
-
 // MODULE'S FUNCTIONS
 
 /**
@@ -87,41 +84,14 @@ function isPostgres(client) {
     return client.constructor.name === 'Client_PG';
 }
 
-/**
- * Insert table items selected by 'itemsSelect'.
- * @param {TeqFw_Db_Back_RDb_ITrans} trx
- * @param {string} table raw name (with prefix, if exists)
- * @param {array} rows
- * @return {Promise<void>}
- * @memberOf TeqFw_Db_Back_Util
- */
+/** @deprecated */
 async function itemsInsert(trx, table, rows) {
-    const knex = trx.getKnexTrx();
-    if (Array.isArray(rows) && rows.length > 0) {
-        await knex(table).insert(rows);
-    }
+    return me.itemsInsert(trx, table, rows);
 }
 
-/**
- * Select * from 'entity' if 'entity' exists in 'tables' or null otherwise.
- * @param {TeqFw_Db_Back_RDb_ITrans} trx
- * @param {string[]} tables list of raw names (with prefix, if exists)
- * @param {string} entity
- * @param {string[]|null} cols
- * @returns {Promise<*|null>}
- * @memberOf TeqFw_Db_Back_Util
- */
+/** @deprecated */
 async function itemsSelect(trx, tables, entity, cols = null) {
-    const knex = trx.getKnexTrx();
-    if (tables.includes(entity)) {
-        if (Array.isArray(cols)) {
-            return await knex.select(cols).from(entity);
-        } else {
-            return await knex.select().from(entity);
-        }
-    } else {
-        return null;
-    }
+    return me.itemsSelect(trx, tables, entity, cols);
 }
 
 /**
@@ -183,25 +153,9 @@ function nameUQ(tbl, fld) {
     return result;
 }
 
-
-/**
- * Get 'nextval' for Postgres serials.
- * @param {TeqFw_Db_Back_RDb_ITrans} trx
- * @returns {Promise<Object<string, string>>}
- * @memberOf TeqFw_Db_Back_Util
- */
+/** @deprecated */
 async function pgSerialsGet(trx) {
-    const res = {};
-    const all = await trx.raw('SELECT sequence_name FROM information_schema.sequences  WHERE sequence_schema = \'public\'');
-    if (Array.isArray(all?.rows)) {
-        // prepare batch of SQLs
-        for (const one of all.rows) {
-            const name = one['sequence_name'];
-            const rs = await trx.raw(`SELECT nextval('${name}')`);
-            res[name] = rs.rows[0]['nextval'];
-        }
-    }
-    return res;
+    return me.pgSerialsGet(trx);
 }
 
 /**
@@ -242,36 +196,89 @@ async function serialsGetOne(schema, serial) {
     }
 }
 
-/**
- * Get nextval for Postgres serial.
- * @param schema
- * @param {Object} serials
- * @returns {Promise<void>}
- * @memberOf TeqFw_Db_Back_Util
- */
+/** @deprecated */
 async function serialsSet(schema, serials) {
-    for (const one of Object.keys(serials)) {
-        if (serials[one] !== null)
-            schema.raw(`SELECT setval('${one}', ${serials[one]})`);
-    }
-    await schema;
+    return me.pgSerialsSet(schema, serials);
 }
 
 
-// finalize code components for this es6-module
-Object.defineProperty(dateUtc, 'namespace', {value: NS});
-Object.defineProperty(formatAsDateTime, 'namespace', {value: NS});
-Object.defineProperty(getTables, 'namespace', {value: NS});
-Object.defineProperty(isPostgres, 'namespace', {value: NS});
-Object.defineProperty(itemsInsert, 'namespace', {value: NS});
-Object.defineProperty(itemsSelect, 'namespace', {value: NS});
-Object.defineProperty(nameFK, 'namespace', {value: NS});
-Object.defineProperty(nameNX, 'namespace', {value: NS});
-Object.defineProperty(nameUQ, 'namespace', {value: NS});
-Object.defineProperty(pgSerialsGet, 'namespace', {value: NS});
-Object.defineProperty(serialsGet, 'namespace', {value: NS});
-Object.defineProperty(serialsSet, 'namespace', {value: NS});
+// MODULE'S CLASSES
+export default class TeqFw_Db_Back_Util {
+    /**
+     * Insert table items selected by 'itemsSelect'.
+     * @param {TeqFw_Db_Back_RDb_ITrans} trx
+     * @param {string} table raw name (with prefix, if exists)
+     * @param {array} rows
+     * @return {Promise<void>}
+     */
+    async itemsInsert(trx, table, rows) {
+        const knex = trx.getKnexTrx();
+        if (Array.isArray(rows) && rows.length > 0) {
+            await knex(table).insert(rows);
+        }
+    }
 
+    /**
+     * Select * from 'entity' if 'entity' exists in 'tables' or null otherwise.
+     * @param {TeqFw_Db_Back_RDb_ITrans} trx
+     * @param {string[]} tables list of raw names (with prefix, if exists)
+     * @param {string} entity
+     * @param {string[]|null} cols
+     * @returns {Promise<*|null>}
+     * @memberOf TeqFw_Db_Back_Util
+     */
+    async itemsSelect(trx, tables, entity, cols = null) {
+        const knex = trx.getKnexTrx();
+        if (tables.includes(entity)) {
+            if (Array.isArray(cols)) {
+                return await knex.select(cols).from(entity);
+            } else {
+                return await knex.select().from(entity);
+            }
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Get 'nextval' for Postgres serials.
+     * @param {TeqFw_Db_Back_RDb_ITrans} trx
+     * @returns {Promise<Object<string, string>>}
+     * @memberOf TeqFw_Db_Back_Util
+     */
+    async pgSerialsGet(trx) {
+        const res = {};
+        const all = await trx.raw('SELECT sequence_name FROM information_schema.sequences  WHERE sequence_schema = \'public\'');
+        if (Array.isArray(all?.rows)) {
+            // prepare batch of SQLs
+            for (const one of all.rows) {
+                const name = one['sequence_name'];
+                const rs = await trx.raw(`SELECT nextval('${name}')`);
+                res[name] = rs.rows[0]['nextval'];
+            }
+        }
+        return res;
+    }
+
+    /**
+     * Set nextval for Postgres serial.
+     * @param schema
+     * @param {Object} serials
+     * @returns {Promise<void>}
+     * @memberOf TeqFw_Db_Back_Util
+     */
+    async pgSerialsSet(schema, serials) {
+        for (const one of Object.keys(serials)) {
+            if (serials[one] !== null)
+                schema.raw(`SELECT setval('${one}', ${serials[one]})`);
+        }
+        await schema;
+    }
+
+}
+
+// MAIN
+const me = new TeqFw_Db_Back_Util();
 export {
     dateUtc,
     formatAsDateTime,
