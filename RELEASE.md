@@ -1,5 +1,12 @@
 # @teqfw/db: releases
 
+## 0.21.0
+
+* Add the common export/import CLI commands.
+* Add the `TeqFw_Db_Back_Act_Dem_Tables` action.
+* Use platform specific paths separators (win/*nix).
+* The class-based form for the `TeqFw_Db_Back_Util`.
+
 ## 0.20.1
 
 * WF-674 Update knex version in RA
