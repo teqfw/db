@@ -6,9 +6,11 @@
       "ext": "mjs"
     },
     "replaces": {
-      "TeqFw_Db_Back_Api_RDb_CrudEngine": {"back": "TeqFw_Db_Back_RDb_CrudEngine"},
-      "TeqFw_Db_Back_Api_RDb_Schema": {"back": "TeqFw_Db_Back_RDb_Schema"},
-      "TeqFw_Db_Back_RDb_IConnect": {"back": "TeqFw_Db_Back_RDb_Connect"}
+      "back": {
+        "TeqFw_Db_Back_Api_RDb_CrudEngine": "TeqFw_Db_Back_RDb_CrudEngine",
+        "TeqFw_Db_Back_Api_RDb_Schema": "TeqFw_Db_Back_RDb_Schema",
+        "TeqFw_Db_Back_RDb_IConnect": "TeqFw_Db_Back_RDb_Connect"
+      }
     }
   },
   "@teqfw/core": {
