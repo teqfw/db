@@ -12,8 +12,8 @@ export default class TeqFw_Db_Back_Api_RDb_QueryBuilder {
     build(trx, opts = {}) {}
 
     /**
-     * Get codifier for columns of this query.
-     * @returns {Object<string, string>}
+     * Retrieve the aliases for the selected columns in the query.
+     * @returns {Object<string, *>}
      */
     getColumns() {}
 
