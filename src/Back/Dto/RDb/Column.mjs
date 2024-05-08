@@ -37,20 +37,12 @@ export class Factory {
     static namespace = NS;
 
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast.castArray|function} castArray
-     * @param {TeqFw_Core_Shared_Util_Cast.castBooleanIfExists|function} castBooleanIfExists
-     * @param {TeqFw_Core_Shared_Util_Cast.castEnum|function} castEnum
-     * @param {TeqFw_Core_Shared_Util_Cast.castInt|function} castInt
-     * @param {TeqFw_Core_Shared_Util_Cast.castString|function} castString
+     * @param {TeqFw_Core_Shared_Util_Cast} cast
      * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Column} COLUMN
      */
     constructor(
         {
-            'TeqFw_Core_Shared_Util_Cast.castArray': castArray,
-            'TeqFw_Core_Shared_Util_Cast.castBooleanIfExists': castBooleanIfExists,
-            'TeqFw_Core_Shared_Util_Cast.castEnum': castEnum,
-            'TeqFw_Core_Shared_Util_Cast.castInt': castInt,
-            'TeqFw_Core_Shared_Util_Cast.castString': castString,
+            TeqFw_Core_Shared_Util_Cast$: cast,
             'TeqFw_Db_Back_Enum_Db_Type_Column#': COLUMN
         }
     ) {
@@ -60,16 +52,16 @@ export class Factory {
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_RDb_Column();
-            res.comment = castString(data?.comment);
-            res.default = castString(data?.default);
-            res.enum = castArray(data?.enum);
-            res.length = castInt(data?.length);
-            res.name = castString(data?.name);
-            res.nullable = castBooleanIfExists(data?.nullable);
-            res.precision = castInt(data?.precision);
-            res.scale = castInt(data?.scale);
-            res.type = castEnum(data?.type, COLUMN);
-            res.unsigned = castBooleanIfExists(data?.unsigned);
+            res.comment = cast.string(data?.comment);
+            res.default = cast.string(data?.default);
+            res.enum = cast.array(data?.enum);
+            res.length = cast.int(data?.length);
+            res.name = cast.string(data?.name);
+            res.nullable = cast.booleanIfExists(data?.nullable);
+            res.precision = cast.int(data?.precision);
+            res.scale = cast.int(data?.scale);
+            res.type = cast.enum(data?.type, COLUMN);
+            res.unsigned = cast.booleanIfExists(data?.unsigned);
             return res;
         };
     }

@@ -26,16 +26,12 @@ export class Factory {
     static namespace = NS;
 
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast.castArray|function} castArray
-     * @param {TeqFw_Core_Shared_Util_Cast.castEnum|function} castEnum
-     * @param {TeqFw_Core_Shared_Util_Cast.castString|function} castString
+     * @param {TeqFw_Core_Shared_Util_Cast} cast
      * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Index} INDEX
      */
     constructor(
         {
-            'TeqFw_Core_Shared_Util_Cast.castArray': castArray,
-            'TeqFw_Core_Shared_Util_Cast.castEnum': castEnum,
-            'TeqFw_Core_Shared_Util_Cast.castString': castString,
+            TeqFw_Core_Shared_Util_Cast$: cast,
             'TeqFw_Db_Back_Enum_Db_Type_Index#': INDEX
         }
     ) {
@@ -46,11 +42,11 @@ export class Factory {
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_RDb_Index();
-            res.columns = castArray(data?.columns);
-            res.name = castString(data?.name);
-            res.type = castEnum(data?.type, INDEX);
+            res.columns = cast.array(data?.columns);
+            res.name = cast.string(data?.name);
+            res.type = cast.enum(data?.type, INDEX);
             return res;
-        }
+        };
     }
 }
 

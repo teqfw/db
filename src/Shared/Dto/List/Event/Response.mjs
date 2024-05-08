@@ -30,16 +30,15 @@ class Dto {
  */
 export default class TeqFw_Db_Shared_Dto_List_Event_Response {
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast.castArrayOfObj|function} castArrayOfObj
-     * @param {TeqFw_Core_Shared_Util_Cast.castInt|function} castInt
+     * @param {TeqFw_Core_Shared_Util_Cast} cast
      * @param {TeqFw_Db_Shared_Dto_List_Selection} dtoSelection
      */
     constructor(
         {
-            'TeqFw_Core_Shared_Util_Cast.castArrayOfObj': castArrayOfObj,
-            'TeqFw_Core_Shared_Util_Cast.castInt': castInt,
+            TeqFw_Core_Shared_Util_Cast$: cast,
             TeqFw_Db_Shared_Dto_List_Selection$: dtoSelection,
-        }) {
+        }
+    ) {
         // INSTANCE METHODS
         /**
          * @param {TeqFw_Db_Shared_Dto_List_Event_Response.Dto} [data]
@@ -49,10 +48,10 @@ export default class TeqFw_Db_Shared_Dto_List_Event_Response {
             // create new DTO and populate it with initialization data
             const res = Object.assign(new Dto(), data);
             // cast known attributes
-            // res.items = castArrayOfObj(data?.items);
-            res.rowsTotal = castInt(data?.rowsTotal);
+            res.items = cast.arrayOfObj(data?.items); // was disabled with comment
+            res.rowsTotal = cast.int(data?.rowsTotal);
             res.selection = dtoSelection.createDto(data?.selection);
             return res;
-        }
+        };
     }
 }

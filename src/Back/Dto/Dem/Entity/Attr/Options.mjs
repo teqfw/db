@@ -37,16 +37,11 @@ export class Factory {
     static namespace = NS;
 
     /**
-     *
-     * @param {TeqFw_Core_Shared_Util_Cast.castArray|function} castArray
-     * @param {TeqFw_Core_Shared_Util_Cast.castBooleanIfExists|function} castBooleanIfExists
-     * @param {TeqFw_Core_Shared_Util_Cast.castInt|function} castInt
+     * @param {TeqFw_Core_Shared_Util_Cast} cast
      */
     constructor(
         {
-            'TeqFw_Core_Shared_Util_Cast.castArray': castArray,
-            'TeqFw_Core_Shared_Util_Cast.castBooleanIfExists': castBooleanIfExists,
-            'TeqFw_Core_Shared_Util_Cast.castInt': castInt,
+            TeqFw_Core_Shared_Util_Cast$: cast,
         }
     ) {
         /**
@@ -55,15 +50,15 @@ export class Factory {
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options();
-            res.dateOnly = castBooleanIfExists(data?.dateOnly);
-            res.isTiny = castBooleanIfExists(data?.isTiny);
-            res.length = castInt(data?.length);
-            res.precision = castInt(data?.precision);
-            res.scale = castInt(data?.scale);
-            res.unsigned = castBooleanIfExists(data?.unsigned);
-            res.values = castArray(data?.values);
+            res.dateOnly = cast.booleanIfExists(data?.dateOnly);
+            res.isTiny = cast.booleanIfExists(data?.isTiny);
+            res.length = cast.int(data?.length);
+            res.precision = cast.int(data?.precision);
+            res.scale = cast.int(data?.scale);
+            res.unsigned = cast.booleanIfExists(data?.unsigned);
+            res.values = cast.array(data?.values);
             return res;
-        }
+        };
     }
 }
 

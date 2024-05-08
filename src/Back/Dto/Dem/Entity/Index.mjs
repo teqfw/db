@@ -22,13 +22,11 @@ export class Factory {
     static namespace = NS;
 
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast.castArray|function} castArray
-     * @param {TeqFw_Core_Shared_Util_Cast.castString|function} castString
+     * @param {TeqFw_Core_Shared_Util_Cast} cast
      */
     constructor(
         {
-            'TeqFw_Core_Shared_Util_Cast.castArray': castArray,
-            'TeqFw_Core_Shared_Util_Cast.castString': castString,
+            TeqFw_Core_Shared_Util_Cast$: cast,
         }
     ) {
         /**
@@ -37,11 +35,11 @@ export class Factory {
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_Dem_Entity_Index();
-            res.attrs = castArray(data?.attrs);
-            res.name = castString(data?.name);
-            res.type = castString(data?.type);
+            res.attrs = cast.array(data?.attrs);
+            res.name = cast.string(data?.name);
+            res.type = cast.string(data?.type);
             return res;
-        }
+        };
     }
 }
 

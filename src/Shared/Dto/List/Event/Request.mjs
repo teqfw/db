@@ -24,7 +24,8 @@ export default class TeqFw_Db_Shared_Dto_List_Event_Request {
     constructor(
         {
             TeqFw_Db_Shared_Dto_List_Selection$: dtoSelection,
-        }) {
+        }
+    ) {
         // INSTANCE METHODS
         /**
          * @param {TeqFw_Db_Shared_Dto_List_Event_Request.Dto} [data]
@@ -36,6 +37,6 @@ export default class TeqFw_Db_Shared_Dto_List_Event_Request {
             // cast known attributes
             res.selection = dtoSelection.createDto(data?.selection);
             return res;
-        }
+        };
     }
 }

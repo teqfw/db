@@ -31,16 +31,14 @@ export class Factory {
     static namespace = NS;
 
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast.castArrayOfObj|function} castArrayOfObj
-     * @param {TeqFw_Core_Shared_Util_Cast.castString|function} castString
+     * @param {TeqFw_Core_Shared_Util_Cast} cast
      * @param {TeqFw_Db_Back_Dto_RDb_Column.Factory} fColumn
      * @param {TeqFw_Db_Back_Dto_RDb_Index.Factory} fIndex
      * @param {TeqFw_Db_Back_Dto_RDb_Relation.Factory} fRelation
      */
     constructor(
         {
-            'TeqFw_Core_Shared_Util_Cast.castArrayOfObj': castArrayOfObj,
-            'TeqFw_Core_Shared_Util_Cast.castString': castString,
+            TeqFw_Core_Shared_Util_Cast$: cast,
             'TeqFw_Db_Back_Dto_RDb_Column.Factory$': fColumn,
             'TeqFw_Db_Back_Dto_RDb_Index.Factory$': fIndex,
             'TeqFw_Db_Back_Dto_RDb_Relation.Factory$': fRelation,
@@ -52,13 +50,13 @@ export class Factory {
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_RDb_Table();
-            res.columns = castArrayOfObj(data?.columns, fColumn);
-            res.comment = castString(data?.comment);
-            res.indexes = castArrayOfObj(data?.indexes, fIndex.create);
-            res.name = castString(data?.name);
-            res.relations = castArrayOfObj(data?.relations, fRelation.create);
+            res.columns = cast.arrayOfObj(data?.columns, fColumn);
+            res.comment = cast.string(data?.comment);
+            res.indexes = cast.arrayOfObj(data?.indexes, fIndex.create);
+            res.name = cast.string(data?.name);
+            res.relations = cast.arrayOfObj(data?.relations, fRelation.create);
             return res;
-        }
+        };
     }
 }
 

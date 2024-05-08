@@ -10,10 +10,10 @@ const NS = 'TeqFw_Db_Shared_Dto_List_Selection';
  * @type {Object}
  */
 const ATTR = {
+    ORDER_BY: 'orderBy',
     ROWS_LIMIT: 'rowsLimit',
     ROWS_OFFSET: 'rowsOffset',
 };
-
 Object.freeze(ATTR);
 
 // MODULE'S CLASSES
@@ -37,17 +37,15 @@ class Dto {
  */
 export default class TeqFw_Db_Shared_Dto_List_Selection {
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast.castArrayOfObj|function} castArrayOfObj
-     * @param {TeqFw_Core_Shared_Util_Cast.castInt|function} castInt
+     * @param {TeqFw_Core_Shared_Util_Cast} cast
      * @param {TeqFw_Db_Shared_Dto_Order} dtoOrder
      */
-
     constructor(
         {
-            'TeqFw_Core_Shared_Util_Cast.castArrayOfObj': castArrayOfObj,
-            'TeqFw_Core_Shared_Util_Cast.castInt': castInt,
+            TeqFw_Core_Shared_Util_Cast$: cast,
             TeqFw_Db_Shared_Dto_Order$: dtoOrder,
-        }) {
+        }
+    ) {
         // INSTANCE METHODS
         /**
          * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} [data]
@@ -57,11 +55,11 @@ export default class TeqFw_Db_Shared_Dto_List_Selection {
             // create new DTO and populate it with initialization data
             const res = Object.assign(new Dto(), data);
             // cast known attributes
-            res.orderBy = castArrayOfObj(data?.orderBy, dtoOrder.createDto);
-            res.rowsLimit = castInt(data?.rowsLimit);
-            res.rowsOffset = castInt(data?.rowsOffset);
+            res.orderBy = cast.arrayOfObj(data?.orderBy, dtoOrder.createDto);
+            res.rowsLimit = cast.int(data?.rowsLimit);
+            res.rowsOffset = cast.int(data?.rowsOffset);
             return res;
-        }
+        };
 
         this.getAttributes = () => ATTR;
     }

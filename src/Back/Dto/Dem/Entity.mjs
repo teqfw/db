@@ -31,18 +31,19 @@ export class Factory {
     static namespace = NS;
 
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast.castString|function} castString
+     * @param {TeqFw_Core_Shared_Util_Cast} cast
      * @param {TeqFw_Db_Back_Dto_Dem_Entity_Attr.Factory} fAttr
      * @param {TeqFw_Db_Back_Dto_Dem_Entity_Index.Factory} fIndex
      * @param {TeqFw_Db_Back_Dto_Dem_Entity_Relation.Factory} fRelation
      */
     constructor(
         {
-            'TeqFw_Core_Shared_Util_Cast.castString': castString,
+            TeqFw_Core_Shared_Util_Cast$: cast,
             'TeqFw_Db_Back_Dto_Dem_Entity_Attr.Factory$': fAttr,
             'TeqFw_Db_Back_Dto_Dem_Entity_Index.Factory$': fIndex,
             'TeqFw_Db_Back_Dto_Dem_Entity_Relation.Factory$': fRelation,
-        }) {
+        }
+    ) {
 
         /**
          * @param {TeqFw_Db_Back_Dto_Dem_Entity|null} data
@@ -66,13 +67,13 @@ export class Factory {
             // MAIN
             const res = new TeqFw_Db_Back_Dto_Dem_Entity();
             res.attr = parse(fAttr.create, data?.attr);
-            res.comment = castString(data?.comment);
+            res.comment = cast.string(data?.comment);
             res.index = parse(fIndex.create, data?.index);
-            res.name = castString(data?.name);
-            res.path = castString(data?.path);
+            res.name = cast.string(data?.name);
+            res.path = cast.string(data?.path);
             res.relation = parse(fRelation.create, data?.relation);
             return res;
-        }
+        };
     }
 }
 
