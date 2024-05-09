@@ -1,5 +1,10 @@
 # @teqfw/db: releases
 
+## 0.22.0 - TODO
+
+* Add the selection DTO for listing queries.
+* Add the model to convert the selection DTO to the knex query.
+
 ## 0.21.0
 
 * Add the common export/import CLI commands.
