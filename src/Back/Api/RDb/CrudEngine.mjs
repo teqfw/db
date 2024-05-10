@@ -19,7 +19,7 @@ export default class TeqFw_Db_Back_Api_RDb_CrudEngine {
      * @param {TeqFw_Db_Back_RDb_ITrans} trx DB transaction for data processing
      * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
      * @param {Object|Array} key key values (primary or unique)
-     * @return {Promise<number>}
+     * @return {Promise<number>} the number of deleted records
      */
     async deleteOne(trx, meta, key) {};
 
