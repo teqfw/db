@@ -15,17 +15,6 @@ const ATTR = {
 };
 Object.freeze(ATTR);
 
-/**
- * @memberOf TeqFw_Db_Shared_Dto_Order
- * @type {Object}
- * @exports
- */
-const DIRECTION = {
-    ASC: 'asc',
-    DESC: 'desc',
-};
-Object.freeze(DIRECTION);
-
 // MODULE'S CLASSES
 /**
  * @memberOf TeqFw_Db_Shared_Dto_Order
@@ -37,8 +26,8 @@ class Dto {
      */
     alias;
     /**
-     * @see TeqFw_Db_Shared_Dto_Order.DIRECTION
      * @type {string}
+     * @see TeqFw_Db_Shared_Enum_Direction
      */
     dir;
 }
@@ -49,10 +38,12 @@ class Dto {
 export default class TeqFw_Db_Shared_Dto_Order {
     /**
      * @param {TeqFw_Core_Shared_Util_Cast} cast
+     * @param {typeof TeqFw_Db_Shared_Enum_Direction} DIR
      */
     constructor(
         {
             TeqFw_Core_Shared_Util_Cast$: cast,
+            TeqFw_Db_Shared_Enum_Direction$: DIR,
         }
     ) {
         // INSTANCE METHODS
@@ -65,14 +56,10 @@ export default class TeqFw_Db_Shared_Dto_Order {
             const res = Object.assign(new Dto(), data);
             // cast known attributes
             res.alias = cast.string(data?.alias);
-            res.dir = cast.enum(data?.dir, DIRECTION, false);
+            res.dir = cast.enum(data?.dir, DIR, false);
             return res;
         };
 
         this.getAttributes = () => ATTR;
     }
 }
-
-export {
-    DIRECTION,
-};

@@ -4,6 +4,7 @@
 
 * Add the selection DTO for listing queries.
 * Add the model to convert the selection DTO to the knex query.
+* Extract the `TeqFw_Db_Shared_Enum_Direction` enumeration.
 
 ## 0.21.0
 
