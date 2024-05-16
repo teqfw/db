@@ -55,6 +55,11 @@ export default function Factory(
             logger.info(`Importing data from the '${filename}'...`);
             const trx = await conn.startTransaction();
             try {
+                // prepare RDBMS engine
+                if (trx.isMariaDB()) {
+                    // to prevent MariaDB from errors like 'ER_TRUNCATED_WRONG_VALUE'
+                    await trx.getKnexTrx().raw("SET SESSION sql_mode = 'ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION';");
+                }
                 // read JSON with data
                 /** @type {TeqFw_Db_Back_Dto_Export.Dto} */
                 const dump = utilFile.readJson(filename);
