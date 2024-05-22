@@ -1,6 +1,9 @@
 /**
  * Interface for engine to perform simple CRUD queries.
  * @interface
+ *
+ * TODO: add `storeOne` method to save new or update existing record
+ *
  */
 export default class TeqFw_Db_Back_Api_RDb_CrudEngine {
     /**
