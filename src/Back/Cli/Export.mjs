@@ -59,7 +59,13 @@ export default function Factory(
                 const tables = await aDemTables.act();
                 // read all rows from all tables
                 const exp = dtoExport.createDto();
-                for (const table of tables) exp.tables[table] = await util.itemsSelect(trx, tables, table);
+                for (const table of tables) {
+                    try {
+                        exp.tables[table] = await util.itemsSelect(trx, tables, table);
+                    } catch (e) {
+                        logger.exception(e);
+                    }
+                }
                 // serials for Postgres
                 const isPg = trx.isPostgres();
                 if (isPg) exp.serials = await util.pgSerialsGet(trx);
