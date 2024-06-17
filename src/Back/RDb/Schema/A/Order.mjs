@@ -6,11 +6,13 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Order {
     /**
      * @param {TeqFw_Core_Shared_Api_Logger} logger -  instance
      * @param {TeqFw_Db_Back_Dto_Dem_Entity.Factory} factEntity
+     * @param {TeqFw_Core_Shared_Util_Deep} deep
      */
     constructor(
         {
             TeqFw_Core_Shared_Logger$$: logger, // inject the implementation
             'TeqFw_Db_Back_Dto_Dem_Entity.Factory$': factEntity,
+            TeqFw_Core_Shared_Util_Deep$: deep,
         }
     ) {
         // INSTANCE METHODS
@@ -111,7 +113,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Order {
                  */
                 function setWeights(name, weight, paths) {
                     if (paths.includes(name)) {
-                        logger.error(`The entity '${name}' has a circular dependency: ${JSON.stringify(paths)}.`);
+                        logger.info(`The entity '${name}' has a circular dependency: ${JSON.stringify(paths)}.`);
                     } else {
                         if (weights[name]) weight = weights[name] + 1;
                         // increment weights for all successors of the current entity
@@ -175,7 +177,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Order {
             let entities = collectEntities(dem);
             if (addDeprecated) {
                 const deprecated = collectDeprecated(dem);
-                entities = Object.assign(entities, deprecated);
+                entities = deep.merge(entities, deprecated);
             }
             const levels = composeLevels(entities);
             return mapEntitiesByLevel(entities, levels);
