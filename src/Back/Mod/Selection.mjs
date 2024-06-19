@@ -53,6 +53,7 @@ export default class TeqFw_Db_Back_Mod_Selection {
             else if (name === FUNC.GTE) return '>=';
             else if (name === FUNC.LTE) return '<=';
             else if (name === FUNC.NOT_EQ) return '!=';
+            else if (name === FUNC.NULL) return '!=';
         }
 
         /**
@@ -93,31 +94,32 @@ export default class TeqFw_Db_Back_Mod_Selection {
                             }
                         }
                         // add the function to the condition
-                        const opr = getOperation(name);
-                        queryBuilder.where(params[0], opr, params[1]);
+                        if (name === FUNC.NULL) queryBuilder.whereNull(params[0]);
+                        if (name === FUNC.NOT_NULL) queryBuilder.whereNotNull(params[0]);
+                        else {
+                            const opr = getOperation(name);
+                            queryBuilder.where(params[0], opr, params[1]);
+                        }
                     }
                 }
             }
 
             // MAIN
             const operator = filter?.[A_COND.WITH];
-            if (operator) { // conditions
-                let where;
-                if (operator === COND.AND) {
-                    where = 'andWhere';
-                } else if (operator === COND.OR) {
-                    where = 'orWhere';
-                } else if (operator === COND.NOT) {
-                    where = 'notWhere';
-                }
-                queryBuilder[where]((qB) => {
-                    if (Array.isArray(filter?.[A_COND.ITEMS])) {
-                        for (const item of filter[A_COND.ITEMS]) {
-                            processFilter(trx, meta, qB, item);
-                        }
-                    }
-                });
-            } else if (filter?.[A_FUNC.NAME]) { // function
+            const items = filter?.[A_COND.ITEMS];
+            if (operator && Array.isArray(items)) {
+                // this is a set of other filters (conditions)
+                let whereType;
+                if (operator === COND.AND) whereType = 'andWhere';
+                else if (operator === COND.OR) whereType = 'orWhere';
+                else if (operator === COND.NOT) whereType = 'notWhere';
+                // process al items with required condition
+                if (whereType)
+                    for (const item of items)
+                        queryBuilder[whereType]((qB) => processFilter(trx, meta, qB, item));
+
+            } else if (filter?.[A_FUNC.NAME]) {
+                // this is a description of a function
                 processFunc(trx, meta, queryBuilder, filter);
             }
         }
@@ -148,5 +150,21 @@ export default class TeqFw_Db_Back_Mod_Selection {
             }
         };
 
+        /**
+         * Add 'AND' wrapper for the filter in the given selection.
+         * This function is used when some query already has own filter and the filters from the given selection
+         * must be added on the 'AND' basis (see this.populate).
+         *
+         * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} selection
+         * @return {TeqFw_Db_Shared_Dto_List_Selection.Dto}
+         */
+        this.wrapSelectionAnd = function (selection) {
+            const res = dtoSelect.createDto(selection);
+            const wrapper = dtoCond.createDto();
+            wrapper.with = COND.AND;
+            wrapper.items = [selection.filter];
+            res.filter = wrapper;
+            return res;
+        };
     }
 }

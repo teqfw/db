@@ -8,6 +8,8 @@ const TeqFw_Db_Shared_Enum_Filter_Func = {
     LT: 'LT', // less than
     LTE: 'LTE', // less or equal than
     NOT_EQ: 'NOT_EQ', // not equal
+    NOT_NULL: 'NOT_NULL', // is not null
+    NULL: 'NULL', // is null
 };
 
 Object.freeze(TeqFw_Db_Shared_Enum_Filter_Func);
