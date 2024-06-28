@@ -27,6 +27,7 @@ class Dto {
      */
     name;
     /**
+     * TODO: alias is a column in a result set, value - is a `tbl.col` pair.
      * @type {(
      * TeqFw_Db_Shared_Dto_List_Selection_Filter_Alias.Dto|
      * TeqFw_Db_Shared_Dto_List_Selection_Filter_Value.Dto|
