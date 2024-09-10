@@ -26,7 +26,7 @@ export class Factory {
     constructor(
         {
             TeqFw_Core_Shared_Util_Cast$: cast,
-            'TeqFw_Db_Back_Enum_Dem_Type_Action#': ACTION,
+            'TeqFw_Db_Back_Enum_Dem_Type_Action.default': ACTION,
         }) {
         /**
          * @param {TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action|null} data

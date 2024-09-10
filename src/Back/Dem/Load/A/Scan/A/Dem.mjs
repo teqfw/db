@@ -10,7 +10,7 @@ export default class TeqFw_Db_Back_Dem_Load_A_Scan_A_Dem {
      */
     constructor(
         {
-            'TeqFw_Core_Back_Util#readJson': readJson,
+            'TeqFw_Core_Back_Util.readJson': readJson,
             'TeqFw_Db_Back_Dto_Dem.Factory$': factory,
         }) {
         /**

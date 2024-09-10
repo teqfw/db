@@ -41,7 +41,7 @@ export class Factory {
     constructor(
         {
             TeqFw_Core_Shared_Util_Cast$: cast,
-            'TeqFw_Db_Back_Enum_Db_Type_Action#': ACTION
+            'TeqFw_Db_Back_Enum_Db_Type_Action.default': ACTION
         }
     ) {
         /**
