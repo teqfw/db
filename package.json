@@ -13,14 +13,9 @@
     "db",
     "ecmascript 2015",
     "es6+",
-    "idb",
-    "pwa",
     "rdbms",
-    "spa",
     "teqfw",
-    "tequila framework",
-    "web applications",
-    "web-apps"
+    "tequila framework"
   ],
   "author": "Alex Gusev <alex@flancer64.com>",
   "license": "Apache-2.0",
