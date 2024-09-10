@@ -20,7 +20,7 @@ export default class TeqFw_Db_Back_RDb_Connect {
         {
             TeqFw_Core_Shared_Api_Logger$$: _logger,
             TeqFw_Db_Back_RDb_Connect_Resolver$$: _resolver,
-            'TeqFw_Db_Back_RDb_Trans#': Trans,
+            'TeqFw_Db_Back_RDb_Trans.default': Trans,
         }) {
         // VARS
         /** @type {Knex} */

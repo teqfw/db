@@ -25,7 +25,7 @@ export default class TeqFw_Db_Back_Dto_Config_Local_Connection {
     /** @type {number} */
     port;
     /**
-     * You can also connect via an unix domain socket, which will ignore host and port.
+     * You can also connect via a unix domain socket, which will ignore host and port.
      * @type {string}
      */
     socketPath;
@@ -41,15 +41,11 @@ export class Factory {
     static namespace = NS;
 
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast.castArrayOfStr|function} castArrayOfStr
-     * @param {TeqFw_Core_Shared_Util_Cast.castInt|function} castInt
-     * @param {TeqFw_Core_Shared_Util_Cast.castString|function} castString
+     * @param {TeqFw_Core_Shared_Util_Cast} cast
      */
     constructor(
         {
-            'TeqFw_Core_Shared_Util_Cast.castArrayOfStr': castArrayOfStr,
-            'TeqFw_Core_Shared_Util_Cast.castInt': castInt,
-            'TeqFw_Core_Shared_Util_Cast.castString': castString,
+            TeqFw_Core_Shared_Util_Cast$: cast,
         }
     ) {
         /**
@@ -58,15 +54,15 @@ export class Factory {
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_Config_Local_Connection();
-            res.database = castString(data?.database);
-            res.filename = castString(data?.filename);
-            res.flags = castArrayOfStr(data?.flags);
-            res.host = castString(data?.host);
-            res.password = castString(data?.password);
-            res.port = castInt(data?.port);
-            res.socketPath = castInt(data?.socketPath);
-            res.user = castString(data?.user);
+            res.database = cast.string(data?.database);
+            res.filename = cast.string(data?.filename);
+            res.flags = cast.arrayOfStr(data?.flags);
+            res.host = cast.string(data?.host);
+            res.password = cast.string(data?.password);
+            res.port = cast.int(data?.port);
+            res.socketPath = cast.int(data?.socketPath);
+            res.user = cast.string(data?.user);
             return res;
-        }
+        };
     }
 }

@@ -37,16 +37,12 @@ export class Factory {
     static namespace = NS;
 
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast.castArrayOfStr|function} castArrayOfStr
-     * @param {TeqFw_Core_Shared_Util_Cast.castBoolean|function} castBoolean
-     * @param {TeqFw_Core_Shared_Util_Cast.castString|function} castString
+     * @param {TeqFw_Core_Shared_Util_Cast} cast
      * @param {TeqFw_Db_Back_Dto_Config_Local_Connection.Factory} fConn
      */
     constructor(
         {
-            'TeqFw_Core_Shared_Util_Cast.castArrayOfStr': castArrayOfStr,
-            'TeqFw_Core_Shared_Util_Cast.castBoolean': castBoolean,
-            'TeqFw_Core_Shared_Util_Cast.castString': castString,
+            TeqFw_Core_Shared_Util_Cast$: cast,
             'TeqFw_Db_Back_Dto_Config_Local_Connection.Factory$': fConn,
         }
     ) {
@@ -56,12 +52,12 @@ export class Factory {
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_Config_Local();
-            res.client = castString(data?.client);
+            res.client = cast.string(data?.client);
             res.connection = fConn.create(data?.connection);
-            res.searchPath = castArrayOfStr(data?.searchPath);
-            res.useNullAsDefault = castBoolean(data?.useNullAsDefault);
-            res.version = castString(data?.version);
+            res.searchPath = cast.arrayOfStr(data?.searchPath);
+            res.useNullAsDefault = cast.boolean(data?.useNullAsDefault);
+            res.version = cast.string(data?.version);
             return res;
-        }
+        };
     }
 }

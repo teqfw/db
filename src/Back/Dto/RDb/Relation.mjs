@@ -35,17 +35,13 @@ export class Factory {
     static namespace = NS;
 
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast.castArray|function} castArray
-     * @param {TeqFw_Core_Shared_Util_Cast.castEnum|function} castEnum
-     * @param {TeqFw_Core_Shared_Util_Cast.castString|function} castString
+     * @param {TeqFw_Core_Shared_Util_Cast} cast
      * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Action} ACTION
      */
     constructor(
         {
-            'TeqFw_Core_Shared_Util_Cast.castArray': castArray,
-            'TeqFw_Core_Shared_Util_Cast.castEnum': castEnum,
-            'TeqFw_Core_Shared_Util_Cast.castString': castString,
-            'TeqFw_Db_Back_Enum_Db_Type_Action#': ACTION
+            TeqFw_Core_Shared_Util_Cast$: cast,
+            'TeqFw_Db_Back_Enum_Db_Type_Action.default': ACTION
         }
     ) {
         /**
@@ -54,14 +50,14 @@ export class Factory {
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_RDb_Relation();
-            res.itsColumns = castArray(data?.itsColumns);
-            res.itsTable = castString(data?.itsTable);
-            res.name = castString(data?.name);
-            res.onDelete = castEnum(data?.onDelete, ACTION);
-            res.onUpdate = castEnum(data?.onUpdate, ACTION);
-            res.ownColumns = castArray(data?.ownColumns);
+            res.itsColumns = cast.array(data?.itsColumns);
+            res.itsTable = cast.string(data?.itsTable);
+            res.name = cast.string(data?.name);
+            res.onDelete = cast.enum(data?.onDelete, ACTION);
+            res.onUpdate = cast.enum(data?.onUpdate, ACTION);
+            res.ownColumns = cast.array(data?.ownColumns);
             return res;
-        }
+        };
     }
 }
 

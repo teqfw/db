@@ -71,7 +71,7 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
                 if (Array.isArray(rs) && (typeof rs[0] === 'object')) Object.assign(res, rs[0]);
             }
             return res;
-        }
+        };
         this.deleteOne = async function (trx, meta, key) {
             const table = trx.getTableName(meta);
             /** @type {Knex.QueryBuilder} */
@@ -82,7 +82,7 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
             if (Object.keys(where) <= 0) throw new Error('You want to delete one entity but key is missed. Execution is interrupted.');
             query.where(where);
             return await query.del();
-        }
+        };
 
         this.deleteSet = async function (trx, meta, where) {
             const table = trx.getTableName(meta);
@@ -91,7 +91,7 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
             query.table(table);
             if (where) query.where(where);
             return await query.del();
-        }
+        };
 
         this.readOne = async function (trx, meta, key) {
             let res = null;
@@ -110,7 +110,7 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
                 res = meta.createDto(first);
             }
             return res;
-        }
+        };
 
         this.readSet = async function (trx, meta, where, bind, order, limit, offset) {
             let res = [];
@@ -130,7 +130,7 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
                     res.push(item);
                 }
             return res;
-        }
+        };
 
         this.readSetCount = async function (trx, meta, where, bind) {
             const table = trx.getTableName(meta);
@@ -143,7 +143,7 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
             const rs = await query;
             const [first] = rs;
             return Number.parseInt(first['count']);
-        }
+        };
 
         this.updateOne = async function (trx, meta, data) {
             const table = trx.getTableName(meta);
@@ -160,8 +160,9 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
                 else if (attrs.includes(one)) updates[one] = parts[one]; // add to updating values
             query.update(updates);
             query.where(where);
+            if (Object.keys(where).length === 0) throw new Error(`Incorrect where clause in the SQL: ${query.toString()}`);
             return query;
-        }
+        };
 
         this.updateSet = async function (trx, meta, data, where) {
             const table = trx.getTableName(meta);
@@ -179,6 +180,6 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
             query.update(updates);
             query.where(where);
             return query;
-        }
+        };
     }
 }

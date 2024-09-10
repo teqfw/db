@@ -28,16 +28,12 @@ export class Factory {
     static namespace = NS;
 
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast.castBoolean|function} castBoolean
-     * @param {TeqFw_Core_Shared_Util_Cast.castPrimitive|function} castPrimitive
-     * @param {TeqFw_Core_Shared_Util_Cast.castString|function} castString
+     * @param {TeqFw_Core_Shared_Util_Cast} cast
      * @param {TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options.Factory} fOpts
      */
     constructor(
         {
-            'TeqFw_Core_Shared_Util_Cast.castBoolean': castBoolean,
-            'TeqFw_Core_Shared_Util_Cast.castPrimitive': castPrimitive,
-            'TeqFw_Core_Shared_Util_Cast.castString': castString,
+            TeqFw_Core_Shared_Util_Cast$: cast,
             'TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options.Factory$': fOpts,
         }
     ) {
@@ -47,12 +43,12 @@ export class Factory {
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_Dem_Entity_Attr();
-            res.comment = castString(data?.comment);
-            res.default = castPrimitive(data?.default);
-            res.name = castString(data?.name);
-            res.nullable = castBoolean(data?.nullable);
+            res.comment = cast.string(data?.comment);
+            res.default = cast.primitive(data?.default);
+            res.name = cast.string(data?.name);
+            res.nullable = cast.boolean(data?.nullable);
             res.options = fOpts.create(data?.options);
-            res.type = castString(data?.type);
+            res.type = cast.string(data?.type);
             return res;
         }
     }

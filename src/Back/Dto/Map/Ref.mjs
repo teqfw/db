@@ -36,11 +36,11 @@ export class Factory {
     static namespace = NS;
 
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast.castString|function} castString
+     * @param {TeqFw_Core_Shared_Util_Cast} cast
      */
     constructor(
         {
-            'TeqFw_Core_Shared_Util_Cast.castString': castString,
+            TeqFw_Core_Shared_Util_Cast$: cast,
         }
     ) {
         /**
@@ -51,10 +51,10 @@ export class Factory {
             const res = new TeqFw_Db_Back_Dto_Map_Ref();
             res.attrs = (typeof (data?.attrs) === 'object')
                 ? JSON.parse(JSON.stringify(data.attrs)) : {};
-            res.path = castString(data?.path);
-            res.alias = castString(data?.alias);
+            res.path = cast.string(data?.path);
+            res.alias = cast.string(data?.alias);
             return res;
-        }
+        };
     }
 }
 

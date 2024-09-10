@@ -1,6 +1,9 @@
 /**
  * Interface for engine to perform simple CRUD queries.
  * @interface
+ *
+ * TODO: add `storeOne` method to save new or update existing record
+ *
  */
 export default class TeqFw_Db_Back_Api_RDb_CrudEngine {
     /**
@@ -9,7 +12,7 @@ export default class TeqFw_Db_Back_Api_RDb_CrudEngine {
      * @param {TeqFw_Db_Back_RDb_ITrans} trx DB transaction for data processing
      * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
      * @param {Object|Array} [data] data to process
-     * @return {Promise<Object>} object with primary key data ({key1: ..., key2: ..., ...})
+     * @return {Promise<*>} object with primary key data ({key1: ..., key2: ..., ...})
      */
     async create(trx, meta, data) {};
 
@@ -19,7 +22,7 @@ export default class TeqFw_Db_Back_Api_RDb_CrudEngine {
      * @param {TeqFw_Db_Back_RDb_ITrans} trx DB transaction for data processing
      * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
      * @param {Object|Array} key key values (primary or unique)
-     * @return {Promise<number>}
+     * @return {Promise<number>} the number of deleted records
      */
     async deleteOne(trx, meta, key) {};
 

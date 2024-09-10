@@ -18,7 +18,7 @@ export default class TeqFw_Db_Back_Act_Dem_Tables {
     ) {
         // VARS
 
-        // MAIN
+        // MAINdi
         /**
          * @return {Promise<string[]>}
          */

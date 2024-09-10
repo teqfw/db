@@ -3,7 +3,6 @@
  */
 // MODULE'S IMPORT
 import {join, sep} from 'path';
-import {platform} from 'node:process';
 
 // MODULE'S VARS
 const DEM = `etc${sep}teqfw.schema.json`;
@@ -20,7 +19,7 @@ export default class TeqFw_Db_Back_Dem_Load_A_Scan {
      */
     constructor(
         {
-            'TeqFw_Core_Back_Util#scanNodeModules': _scanNodeModules,
+            'TeqFw_Core_Back_Util.scanNodeModules': _scanNodeModules,
             TeqFw_Core_Back_Api_Plugin_Registry$: _regPlugins,
             TeqFw_Db_Back_Dem_Load_A_Scan_A_Dem$: _loadDem,
             TeqFw_Db_Back_Dem_Load_A_Scan_A_Map$: _loadMap,

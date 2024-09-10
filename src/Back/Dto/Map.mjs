@@ -35,15 +35,15 @@ export class Factory {
     static namespace = NS;
 
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast.castArrayOfStr|function} castArrayOfStr
+     * @param {TeqFw_Core_Shared_Util_Cast} cast
      * @param {TeqFw_Db_Back_Dto_Map_Ref.Factory} fRef
      */
-
     constructor(
         {
-            'TeqFw_Core_Shared_Util_Cast.castArrayOfStr': castArrayOfStr,
+            TeqFw_Core_Shared_Util_Cast$: cast,
             'TeqFw_Db_Back_Dto_Map_Ref.Factory$': fRef,
-        }) {
+        }
+    ) {
         /**
          * @param {TeqFw_Db_Back_Dto_Map|null} data
          * @return {TeqFw_Db_Back_Dto_Map}
@@ -55,7 +55,7 @@ export class Factory {
                 const res = {};
                 if (typeof data === 'object')
                     for (const name of Object.keys(data))
-                        res[name] = castArrayOfStr(data[name]);
+                        res[name] = cast.arrayOfStr(data[name]);
                 return res;
             }
 

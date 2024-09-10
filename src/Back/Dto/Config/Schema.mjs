@@ -21,20 +21,20 @@ export class Factory {
     static namespace = NS;
 
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast.castString|function} castString
+     * @param {TeqFw_Core_Shared_Util_Cast} cast
      */
-
     constructor(
         {
-            'TeqFw_Core_Shared_Util_Cast#castString': castString,
-        }) {
+            TeqFw_Core_Shared_Util_Cast$: cast,
+        }
+    ) {
         /**
          * @param {TeqFw_Db_Back_Dto_Config_Schema|null} data
          * @return {TeqFw_Db_Back_Dto_Config_Schema}
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_Config_Schema();
-            res.prefix = castString(data?.prefix);
+            res.prefix = cast.string(data?.prefix);
             return res;
         };
     }

@@ -33,7 +33,7 @@ export default function Factory(
         TeqFw_Db_Back_Defaults$: DEF,
         TeqFw_Core_Shared_Api_Logger$$: logger,
         'TeqFw_Core_Back_Api_Dto_Command.Factory$': fCommand,
-        'TeqFw_Core_Back_Api_Dto_Command_Option#Factory$': fOpt,
+        'TeqFw_Core_Back_Api_Dto_Command_Option.Factory$': fOpt,
         TeqFw_Core_Back_App$: app,
         TeqFw_Db_Back_RDb_IConnect$: conn,
         TeqFw_Db_Back_Util$: util,
@@ -59,7 +59,13 @@ export default function Factory(
                 const tables = await aDemTables.act();
                 // read all rows from all tables
                 const exp = dtoExport.createDto();
-                for (const table of tables) exp.tables[table] = await util.itemsSelect(trx, tables, table);
+                for (const table of tables) {
+                    try {
+                        exp.tables[table] = await util.itemsSelect(trx, tables, table);
+                    } catch (e) {
+                        logger.exception(e);
+                    }
+                }
                 // serials for Postgres
                 const isPg = trx.isPostgres();
                 if (isPg) exp.serials = await util.pgSerialsGet(trx);

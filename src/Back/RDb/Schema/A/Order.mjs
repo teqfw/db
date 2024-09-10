@@ -4,12 +4,17 @@
  */
 export default class TeqFw_Db_Back_RDb_Schema_A_Order {
     /**
+     * @param {TeqFw_Core_Shared_Api_Logger} logger -  instance
      * @param {TeqFw_Db_Back_Dto_Dem_Entity.Factory} factEntity
+     * @param {TeqFw_Core_Shared_Util_Deep} deep
      */
     constructor(
         {
+            TeqFw_Core_Shared_Logger$$: logger, // inject the implementation
             'TeqFw_Db_Back_Dto_Dem_Entity.Factory$': factEntity,
-        }) {
+            TeqFw_Core_Shared_Util_Deep$: deep,
+        }
+    ) {
         // INSTANCE METHODS
         /**
          * @param {TeqFw_Db_Back_Dto_Dem} dem
@@ -84,8 +89,17 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Order {
              */
             function composeLevels(entities) {
                 // PARSE INPUT & DEFINE WORKING VARS
-                /** @type {Object<string, Array>} */
+                /**
+                 * The map where the key is the name of an entity and the value is an array of other entities
+                 * that have a foreign key to this entity.
+                 *
+                 * @type {Object<string, Array>}
+                 */
                 const successors = {}; // {/user => [/app/profile, ...]}
+                /**
+                 * The weights for every entity ({['/user']:8, ...})
+                 * @type {Object<string, number>}
+                 */
                 const weights = {};
 
                 // FUNCS
@@ -93,43 +107,53 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Order {
                  * Recursive function to update items weights in hierarchy.
                  * 1 - item has no deps, 2 - item has one dep's level below, ...
                  *
-                 * Circular dependencies should be resolved externally.
-                 *
                  * @param {string} name
                  * @param {number} weight
+                 * @param {string[]} paths
                  */
-                function setWeights(name, weight) {
-                    if (weights[name]) weight = weights[name] + 1;
-                    if (successors[name])
-                        for (const one of successors[name]) {
-                            if (one !== name) {
-                                if (weights[one]) {
-                                    setWeights(one, weights[one] + 1);
-                                } else {
-                                    setWeights(one, 1);
+                function setWeights(name, weight, paths) {
+                    if (paths.includes(name)) {
+                        logger.info(`The entity '${name}' has a circular dependency: ${JSON.stringify(paths)}.`);
+                    } else {
+                        if (weights[name]) weight = weights[name] + 1;
+                        // increment weights for all successors of the current entity
+                        if (successors[name])
+                            for (const one of successors[name]) {
+                                if (one !== name) {
+                                    const pathDeep = [...paths, name];
+                                    if (weights[one]) {
+                                        setWeights(one, weights[one] + 1, pathDeep);
+                                    } else {
+                                        setWeights(one, 1, pathDeep);
+                                    }
                                 }
                             }
-                        }
+                    }
                     weights[name] = weight;
                 }
 
                 // MAIN
                 // collect items successors
-                for (const address of Object.keys(entities)) {
-                    const entity = entities[address];
+                for (const pathThis of Object.keys(entities)) {
+                    const entity = entities[pathThis];
                     if (typeof entity.relation === 'object') {
+                        // this entity has references to other entities
                         for (const key of Object.keys(entity.relation)) {
                             /** @type {TeqFw_Db_Back_Dto_Dem_Entity_Relation} */
                             const rel = entity.relation[key];
-                            const dep = rel.ref.path;
-                            if (!successors[dep]) successors[dep] = [];
-                            if (!successors[dep].includes(address))
-                                successors[dep].push(address);
+                            const pathOther = rel.ref.path;
+                            // the other entity does not have incoming relations yet.
+                            if (!successors[pathOther]) successors[pathOther] = [];
+                            // add the current path to the set of successors of other entity
+                            if (!successors[pathOther].includes(pathThis))
+                                successors[pathOther].push(pathThis);
                         }
                     }
                 }
+                // set weights for all successors
+                for (const path of Object.keys(entities))
+                    setWeights(path, 1, []);
 
-                for (const address of Object.keys(entities)) setWeights(address, 1);
                 // convert weights to levels
                 const result = {};
                 for (const name of Object.keys(weights)) {
@@ -153,7 +177,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Order {
             let entities = collectEntities(dem);
             if (addDeprecated) {
                 const deprecated = collectDeprecated(dem);
-                entities = Object.assign(entities, deprecated);
+                entities = deep.merge(entities, deprecated);
             }
             const levels = composeLevels(entities);
             return mapEntitiesByLevel(entities, levels);

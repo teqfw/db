@@ -10,10 +10,11 @@ const NS = 'TeqFw_Db_Shared_Dto_List_Selection';
  * @type {Object}
  */
 const ATTR = {
+    FILTER: 'filter',
+    ORDER_BY: 'orderBy',
     ROWS_LIMIT: 'rowsLimit',
     ROWS_OFFSET: 'rowsOffset',
 };
-
 Object.freeze(ATTR);
 
 // MODULE'S CLASSES
@@ -23,6 +24,14 @@ Object.freeze(ATTR);
 class Dto {
     static namespace = NS;
     /**
+     * @type {
+     * TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond.Dto|
+     * TeqFw_Db_Shared_Dto_List_Selection_Filter_Func.Dto
+     * }
+     */
+    filter;
+    /**
+     * The array of the ordering rules.
      * @type {TeqFw_Db_Shared_Dto_Order.Dto[]}
      */
     orderBy;
@@ -37,17 +46,19 @@ class Dto {
  */
 export default class TeqFw_Db_Shared_Dto_List_Selection {
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast.castArrayOfObj|function} castArrayOfObj
-     * @param {TeqFw_Core_Shared_Util_Cast.castInt|function} castInt
+     * @param {TeqFw_Core_Shared_Util_Cast} cast
      * @param {TeqFw_Db_Shared_Dto_Order} dtoOrder
+     * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond} dtoCond
+     * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Func} dtoFunc
      */
-
     constructor(
         {
-            'TeqFw_Core_Shared_Util_Cast.castArrayOfObj': castArrayOfObj,
-            'TeqFw_Core_Shared_Util_Cast.castInt': castInt,
+            TeqFw_Core_Shared_Util_Cast$: cast,
             TeqFw_Db_Shared_Dto_Order$: dtoOrder,
-        }) {
+            TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond$: dtoCond,
+            TeqFw_Db_Shared_Dto_List_Selection_Filter_Func$: dtoFunc,
+        }
+    ) {
         // INSTANCE METHODS
         /**
          * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} [data]
@@ -55,13 +66,15 @@ export default class TeqFw_Db_Shared_Dto_List_Selection {
          */
         this.createDto = function (data) {
             // create new DTO and populate it with initialization data
-            const res = Object.assign(new Dto(), data);
+            const res = new Dto();
             // cast known attributes
-            res.orderBy = castArrayOfObj(data?.orderBy, dtoOrder.createDto);
-            res.rowsLimit = castInt(data?.rowsLimit);
-            res.rowsOffset = castInt(data?.rowsOffset);
+            if (data?.filter?.with) res.filter = dtoCond.createDto(data?.filter);
+            else if (data?.filter?.name) res.filter = dtoFunc.createDto(data?.filter);
+            res.orderBy = cast.arrayOfObj(data?.orderBy, dtoOrder.createDto);
+            res.rowsLimit = cast.int(data?.rowsLimit);
+            res.rowsOffset = cast.int(data?.rowsOffset);
             return res;
-        }
+        };
 
         this.getAttributes = () => ATTR;
     }

@@ -1,5 +1,13 @@
 # @teqfw/db: releases
 
+## 0.22.0 - TODO
+
+* Add the selection DTO for listing queries.
+* Add the model to convert the selection DTO to the knex query.
+* Extract the `TeqFw_Db_Shared_Enum_Direction` enumeration.
+* Fix the error in `TeqFw_Db_Back_Cli_Export` with the export from missed table.
+* Drop/create FK separately from the tables.
+
 ## 0.21.0
 
 * Add the common export/import CLI commands.

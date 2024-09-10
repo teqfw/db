@@ -46,7 +46,7 @@ export class Factory {
 
     constructor(
         {
-            'TeqFw_Db_Back_Dto_Dem_Entity#': TEntity,
+            'TeqFw_Db_Back_Dto_Dem_Entity.default': TEntity,
             'TeqFw_Db_Back_Dto_Dem_Entity.Factory$': fEntity,
             'TeqFw_Db_Back_Dto_Dem_Package.Factory$': fPkg,
         }) {
