@@ -37,7 +37,8 @@ export default class TeqFw_Db_Back_RDb_Trans {
     }
 
     isSqlite() {
-        return this.#trx?.client?.constructor?.name === 'Client_SQLite3';
+        const name = this.#trx?.client?.constructor?.name;
+        return (name === 'Client_SQLite3') || (name === 'Client_BetterSQLite3');
     }
 
     async commit() {

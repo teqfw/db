@@ -1,5 +1,9 @@
 # @teqfw/db: releases
 
+## 0.22.1
+
+* Detect `Client_BetterSQLite3` constructor.
+
 ## 0.22.0
 
 * Add the selection DTO for listing queries.
