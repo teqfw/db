@@ -58,7 +58,7 @@ export default class TeqFw_Db_Shared_Dto_List_Selection_Filter_Func {
         // INSTANCE METHODS
         /**
          * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Func.Dto} [data]
-         * @return {TeqFw_Db_Shared_Dto_List_Selection_Filter_Func.Dto}
+         * @returns {TeqFw_Db_Shared_Dto_List_Selection_Filter_Func.Dto}
          */
         this.createDto = function (data) {
             // create new DTO and populate it with initialization data

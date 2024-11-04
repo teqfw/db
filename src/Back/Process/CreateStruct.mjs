@@ -23,14 +23,14 @@ export default class TeqFw_Db_Back_Process_CreateStruct {
 
         /**
          * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta
-         * @return {Promise<void>}
+         * @returns {Promise<void>}
          */
         this.run = async function ({meta}) {
             // FUNCS
             /**
              * Don't (re-)create DB structure if the meta related table exists.
              * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta
-             * @return {Promise<boolean>}
+             * @returns {Promise<boolean>}
              */
             async function needDbStruct(meta) {
                 let res = true;
@@ -53,7 +53,7 @@ export default class TeqFw_Db_Back_Process_CreateStruct {
 
             /**
              * Load DEM and re-create DB structure.
-             * @return {Promise<void>}
+             * @returns {Promise<void>}
              */
             async function createDbStruct() {
                 // load DEMs then drop/create all tables

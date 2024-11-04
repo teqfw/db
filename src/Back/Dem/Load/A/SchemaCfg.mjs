@@ -15,7 +15,7 @@ export default class TeqFw_Db_Back_Dem_Load_A_SchemaCfg {
         /**
          * Load DEM mapping data for the application and parse it.
          * @param {TeqFw_Db_Back_Dto_Map} map
-         * @return {Promise<{cfg: TeqFw_Db_Back_Dto_Config_Schema}>}
+         * @returns {Promise<{cfg: TeqFw_Db_Back_Dto_Config_Schema}>}
          */
         this.exec = async function ({map}) {
             /** @type {TeqFw_Db_Back_Dto_Config_Schema} */

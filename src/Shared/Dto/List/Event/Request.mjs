@@ -29,7 +29,7 @@ export default class TeqFw_Db_Shared_Dto_List_Event_Request {
         // INSTANCE METHODS
         /**
          * @param {TeqFw_Db_Shared_Dto_List_Event_Request.Dto} [data]
-         * @return {TeqFw_Db_Shared_Dto_List_Event_Request.Dto}
+         * @returns {TeqFw_Db_Shared_Dto_List_Event_Request.Dto}
          */
         this.createDto = function (data) {
             // create new DTO and populate it with initialization data

@@ -17,7 +17,7 @@ export default class TeqFw_Db_Back_RDb_IConnect {
     /**
      * Create new transaction to manipulate data in DB.
      * @param {*} [opts]
-     * @return {Promise<TeqFw_Db_Back_RDb_ITrans>}
+     * @returns {Promise<TeqFw_Db_Back_RDb_ITrans>}
      */
     async startTransaction(opts) {}
 

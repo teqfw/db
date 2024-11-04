@@ -14,7 +14,7 @@ export default class TeqFw_Db_Back_RDb_Schema_EntityBase {
          * @param {Object} attrs
          * @param {Array} pkey
          * @param {Function} Dto class to create new DTO for the entity
-         * @return {TeqFw_Db_Back_RDb_Meta_IEntity}
+         * @returns {TeqFw_Db_Back_RDb_Meta_IEntity}
          */
         this.create = function (inst, name, attrs, pkey, Dto) {
             /** @type {string[]} */

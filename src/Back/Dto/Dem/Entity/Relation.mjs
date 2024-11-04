@@ -38,7 +38,7 @@ export class Factory {
 
         /**
          * @param {TeqFw_Db_Back_Dto_Dem_Entity_Relation|null} data
-         * @return {TeqFw_Db_Back_Dto_Dem_Entity_Relation}
+         * @returns {TeqFw_Db_Back_Dto_Dem_Entity_Relation}
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_Dem_Entity_Relation();

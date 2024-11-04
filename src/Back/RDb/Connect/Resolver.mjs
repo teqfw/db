@@ -17,7 +17,7 @@ export default class TeqFw_Db_Back_RDb_Connect_Resolver {
         /**
          *
          * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta
-         * @return {string|string}
+         * @returns {string|string}
          */
         this.getTableName = function (meta) {
             const entity = meta.getEntityName();

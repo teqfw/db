@@ -29,7 +29,7 @@ function dateUtc(dateIn) {
  * Format input data to be used as MySQL datetime compatible string (UTC).
  *
  * @param {Date|string|null} [dateIn]
- * @return {string}
+ * @returns {string}
  * @memberOf TeqFw_Db_Back_Util
  * @deprecated use TeqFw_Db_Back_Util.dateUtc
  */
@@ -50,7 +50,7 @@ function formatAsDateTime(dateIn) {
 /**
  * Get list of available tables.
  * @param {TeqFw_Db_Back_RDb_ITrans} trx
- * @return {Promise<*[]>}
+ * @returns {Promise<*[]>}
  * @memberOf TeqFw_Db_Back_Util
  */
 async function getTables(trx) {
@@ -77,7 +77,7 @@ async function getTables(trx) {
 /**
  * Return 'true' if knex client is connected to Postgres DB.
  * @param client
- * @return {boolean}
+ * @returns {boolean}
  * @memberOf TeqFw_Db_Back_Util
  */
 function isPostgres(client) {
@@ -209,7 +209,7 @@ export default class TeqFw_Db_Back_Util {
      * @param {TeqFw_Db_Back_RDb_ITrans} trx
      * @param {string} table raw name (with prefix, if exists)
      * @param {array} rows
-     * @return {Promise<void>}
+     * @returns {Promise<void>}
      */
     async itemsInsert(trx, table, rows) {
         const knex = trx.getKnexTrx();

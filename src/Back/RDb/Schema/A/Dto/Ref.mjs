@@ -36,7 +36,7 @@ export class Factory {
     ) {
         /**
          * @param {TeqFw_Db_Back_RDb_Schema_A_Dto_Ref|null} data
-         * @return {TeqFw_Db_Back_RDb_Schema_A_Dto_Ref}
+         * @returns {TeqFw_Db_Back_RDb_Schema_A_Dto_Ref}
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_RDb_Schema_A_Dto_Ref();

@@ -10,7 +10,7 @@
  * Normalize names and paths.
  *
  * @param {string} data
- * @return {string}
+ * @returns {string}
  */
 function normName(data) {
     return data.toLowerCase().trim();
@@ -38,7 +38,7 @@ export default class TeqFw_Db_Back_Dem_Load_A_Norm {
         /**
          * @param {Object<string, TeqFw_Db_Back_Dto_Dem>} dems
          * @param {TeqFw_Db_Back_Dto_Map} map
-         * @return {Promise<{dem: TeqFw_Db_Back_Dto_Dem}>}
+         * @returns {Promise<{dem: TeqFw_Db_Back_Dto_Dem}>}
          */
         this.exec = async function ({dems, map}) {
             // FUNCS

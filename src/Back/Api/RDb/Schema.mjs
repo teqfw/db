@@ -6,14 +6,14 @@ export default class TeqFw_Db_Back_Api_RDb_Schema {
     /**
      * Create all tables using given connection.
      * @param {TeqFw_Db_Back_RDb_IConnect} conn
-     * @return {Promise<void>}
+     * @returns {Promise<void>}
      */
     async createAllTables({conn}) {}
 
     /**
      * Drop all tables using given connection.
      * @param {TeqFw_Db_Back_RDb_IConnect} conn
-     * @return {Promise<void>}
+     * @returns {Promise<void>}
      */
     async dropAllTables({conn}) {}
 

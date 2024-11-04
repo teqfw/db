@@ -66,7 +66,7 @@ const localCfg = await (async function (cfg, container) {
      * Default connection parameters to PostgreSQL/MariaDB/MuSQL database.
      * Override these params in local configuration (test/data/cfg/local.json).
      *
-     * @return {Object}
+     * @returns {Object}
      */
     function generateDefault() {
         const connection = {
@@ -95,7 +95,7 @@ const localCfg = await (async function (cfg, container) {
 /**
  * Use this function in tests to init DB connections.
  *
- * @return {Promise<TeqFw_Db_Back_RDb_Connect>}
+ * @returns {Promise<TeqFw_Db_Back_RDb_Connect>}
  */
 const dbConnect = async function () {
     /** @type {TeqFw_Db_Back_RDb_Connect} */

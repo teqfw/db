@@ -11,7 +11,7 @@ const NS = 'TeqFw_Db_Shared_Util_List';
 /**
  * Extract Knex compatible data for RDB data ordering.
  * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} selection
- * @return {[{column: string, order: string}]}
+ * @returns {[{column: string, order: string}]}
  * @memberOf TeqFw_Db_Shared_Util_List
  */
 function getOrderFromSelection(selection) {

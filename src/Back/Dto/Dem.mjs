@@ -52,7 +52,7 @@ export class Factory {
         }) {
         /**
          * @param {TeqFw_Db_Back_Dto_Dem|null} data
-         * @return {TeqFw_Db_Back_Dto_Dem}
+         * @returns {TeqFw_Db_Back_Dto_Dem}
          */
         this.create = function (data = null) {
             // FUNCS
@@ -63,7 +63,7 @@ export class Factory {
              * @param {Function} fnCreate
              * @param {Object} data
              * @param {string|null} key
-             * @return {Object<string, *>}
+             * @returns {Object<string, *>}
              */
             function parse(fnCreate, data, key = null) {
                 const res = {};

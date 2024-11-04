@@ -9,7 +9,7 @@ export default class TeqFw_Db_Back_RDb_ITrans {
 
     /**
      * Return knex based query builder.
-     * @return {Knex.QueryBuilder}
+     * @returns {Knex.QueryBuilder}
      */
     createQuery() {}
 
@@ -18,25 +18,25 @@ export default class TeqFw_Db_Back_RDb_ITrans {
     /**
      * Convert entity name to table name ('@vnd/plugin/package/entity' => 'prefix_package_entity').
      * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta
-     * @return {string}
+     * @returns {string}
      */
     getTableName(meta) {}
 
     /**
      * 'true' if type of connected RDBMS is MariaDB or MySQL.
-     * @return {boolean}
+     * @returns {boolean}
      */
     isMariaDB() {}
 
     /**
      * 'true' if type of connected RDBMS is PostgreSQL
-     * @return {boolean}
+     * @returns {boolean}
      */
     isPostgres() {}
 
     /**
      * 'true' if type of connected RDBMS is SQLite
-     * @return {boolean}
+     * @returns {boolean}
      */
     isSqlite() {}
 
@@ -51,7 +51,7 @@ export default class TeqFw_Db_Back_RDb_ITrans {
 
     /**
      * 'Knex' object
-     * @return {Knex}
+     * @returns {Knex}
      */
     getKnexTrx() { }
 }

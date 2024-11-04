@@ -36,7 +36,7 @@ export default class TeqFw_Db_Back_Dto_Export {
     ) {
         /**
          * @param {TeqFw_Db_Back_Dto_Export.Dto} [data]
-         * @return {TeqFw_Db_Back_Dto_Export.Dto}
+         * @returns {TeqFw_Db_Back_Dto_Export.Dto}
          */
         this.createDto = function (data) {
             // create a new DTO

@@ -8,7 +8,7 @@ import {join} from 'path';
  * This function has classic input-output interface (low variability is expected).
  * @param {TeqFw_Di_Api_Container} container
  * @param {string} pathData
- * @return {Promise<{cfg: TeqFw_Db_Back_Dto_Config_Schema, dem: TeqFw_Db_Back_Dto_Dem}>}
+ * @returns {Promise<{cfg: TeqFw_Db_Back_Dto_Config_Schema, dem: TeqFw_Db_Back_Dto_Dem}>}
  */
 export async function load(container, pathData) {
     /** @type {TeqFw_Db_Back_Dem_Load_A_Scan_A_Dem} */

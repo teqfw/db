@@ -19,7 +19,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Order {
         /**
          * @param {TeqFw_Db_Back_Dto_Dem} dem
          * @param {boolean} addDeprecated
-         * @return {Promise<TeqFw_Db_Back_Dto_Dem_Entity[]>}
+         * @returns {Promise<TeqFw_Db_Back_Dto_Dem_Entity[]>}
          */
         this.exec = async function ({dem, addDeprecated}) {
             // FUNCS
@@ -27,14 +27,14 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Order {
             /**
              * Compose object with deprecated tables to drop.
              * @param {TeqFw_Db_Back_Dto_Dem} dem
-             * @return {Object<string, TeqFw_Db_Back_Dto_Dem_Entity[]>}
+             * @returns {Object<string, TeqFw_Db_Back_Dto_Dem_Entity[]>}
              */
             function collectDeprecated(dem) {
                 // FUNCS
                 /**
                  * '/web/event/front' => {name:'front', path:'/web/event'}
                  * @param fqn
-                 * @return {{path: string, name: string}}
+                 * @returns {{path: string, name: string}}
                  */
                 function splitName(fqn) {
                     const parts = fqn.split('/');
@@ -66,7 +66,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Order {
             /**
              * Collect entities from package and all subpackages.
              * @param {TeqFw_Db_Back_Dto_Dem|TeqFw_Db_Back_Dto_Dem_Package} dem
-             * @return {Object<string, TeqFw_Db_Back_Dto_Dem_Entity>}
+             * @returns {Object<string, TeqFw_Db_Back_Dto_Dem_Entity>}
              */
             function collectEntities(dem) {
                 const res = {};
@@ -85,7 +85,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Order {
 
             /**
              * @param {Object<string, TeqFw_Db_Back_Dto_Dem_Entity>} entities
-             * @return {{}}
+             * @returns {{}}
              */
             function composeLevels(entities) {
                 // PARSE INPUT & DEFINE WORKING VARS
