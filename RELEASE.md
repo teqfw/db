@@ -1,5 +1,9 @@
 # @teqfw/db: releases
 
+## 0.23.0 - TODO
+
+* Add ability to process test DEM.
+
 ## 0.22.1
 
 * Detect `Client_BetterSQLite3` constructor.

@@ -1,6 +1,6 @@
 {
   "name": "@teqfw/db",
-  "version": "0.22.1",
+  "version": "0.23.0",
   "description": "TeqFW: DB connectivity.",
   "scripts": {
     "test": "./node_modules/mocha/bin/_mocha --recursive './test/mod/**/*.test.mjs'"
