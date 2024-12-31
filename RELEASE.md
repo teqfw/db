@@ -3,6 +3,7 @@
 ## 0.23.0 - TODO
 
 * Add ability to process test DEM.
+* `TeqFw_Db_Back_Api_RDb_Schema_Object` interface is introduced (`TeqFw_Db_Back_RDb_Meta_IEntity` is deprecated).
 
 ## 0.22.1
 

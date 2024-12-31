@@ -2,6 +2,7 @@
  * Meta information for RDB entities.
  * @see {TeqFw_Db_Back_RDb_Schema_EntityBase}
  * @interface
+ * @deprecated use TeqFw_Db_Back_Api_RDb_Schema_Object
  */
 export default class TeqFw_Db_Back_RDb_Meta_IEntity {
     /**

@@ -10,7 +10,7 @@ export default class TeqFw_Db_Back_Api_RDb_CrudEngine {
      * Create new instance of an entity in DB.
      *
      * @param {TeqFw_Db_Back_RDb_ITrans} trx DB transaction for data processing
-     * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
+     * @param {TeqFw_Db_Back_Api_RDb_Schema_Object|TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
      * @param {Object|Array} [data] data to process
      * @returns {Promise<*>} object with primary key data ({key1: ..., key2: ..., ...})
      */
@@ -20,7 +20,7 @@ export default class TeqFw_Db_Back_Api_RDb_CrudEngine {
      * Delete one entity by key (primary or unique).
      *
      * @param {TeqFw_Db_Back_RDb_ITrans} trx DB transaction for data processing
-     * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
+     * @param {TeqFw_Db_Back_Api_RDb_Schema_Object|TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
      * @param {Object|Array} key key values (primary or unique)
      * @returns {Promise<number>} the number of deleted records
      */
@@ -30,7 +30,7 @@ export default class TeqFw_Db_Back_Api_RDb_CrudEngine {
      * Delete entities using some condition ('where' clause).
      *
      * @param {TeqFw_Db_Back_RDb_ITrans} trx DB transaction for data processing
-     * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
+     * @param {TeqFw_Db_Back_Api_RDb_Schema_Object|TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
      * @param {Object|function} [where]
      * @returns {Promise<number>}
      */
@@ -40,7 +40,7 @@ export default class TeqFw_Db_Back_Api_RDb_CrudEngine {
      * Get one entity by key (primary or unique). Return 'null' if result set contains more than one item.
      *
      * @param {TeqFw_Db_Back_RDb_ITrans} trx DB transaction for data processing
-     * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
+     * @param {TeqFw_Db_Back_Api_RDb_Schema_Object|TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
      * @param {number|string|boolean|Array|Object} key JS primitive for simple PK or object/array for complex PK or unique key
      * @returns {Promise<*>}
      * TODO: add columns filter to select (some cols could be a too big to be stored in memory)
@@ -49,7 +49,7 @@ export default class TeqFw_Db_Back_Api_RDb_CrudEngine {
 
     /**
      * @param {TeqFw_Db_Back_RDb_ITrans} trx DB transaction for data processing
-     * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
+     * @param {TeqFw_Db_Back_Api_RDb_Schema_Object|TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
      * @param {Object|string|function} [where]
      * @param [bind]
      * @param [order]
@@ -62,7 +62,7 @@ export default class TeqFw_Db_Back_Api_RDb_CrudEngine {
     /**
      * Read count of rows matching WHERE clause.
      * @param {TeqFw_Db_Back_RDb_ITrans} trx DB transaction for data processing
-     * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
+     * @param {TeqFw_Db_Back_Api_RDb_Schema_Object|TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
      * @param {Object|string|function} [where]
      * @param [bind]
      * @returns {Promise<number>}
@@ -73,7 +73,7 @@ export default class TeqFw_Db_Back_Api_RDb_CrudEngine {
      * Update data for one entity by primary key.
      *
      * @param {TeqFw_Db_Back_RDb_ITrans} trx DB transaction for data processing
-     * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
+     * @param {TeqFw_Db_Back_Api_RDb_Schema_Object|TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
      * @param {Object|Array} data data to process (must contain primary key)
      * @returns {Promise<number>}
      */
@@ -83,7 +83,7 @@ export default class TeqFw_Db_Back_Api_RDb_CrudEngine {
      * Update data for set of entities by where clause.
      *
      * @param {TeqFw_Db_Back_RDb_ITrans} trx DB transaction for data processing
-     * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
+     * @param {TeqFw_Db_Back_Api_RDb_Schema_Object|TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
      * @param {Object|Array} data data to process
      * @param {Object|string|function} where
      * @returns {Promise<number>}
