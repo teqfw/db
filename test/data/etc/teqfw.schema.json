@@ -1,0 +1,23 @@
+{
+  "package": {
+    "test": {
+      "package": {
+        "teqfw": {
+          "package": {
+            "db": {
+              "entity": {
+                "user": {
+                  "comment": "The registry of the Telegram users.",
+                  "attr": {
+                    "id": {"type": "id"},
+                    "name": {"type": "string", "comment": "User name from Telegram."}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

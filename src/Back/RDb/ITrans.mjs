@@ -17,7 +17,7 @@ export default class TeqFw_Db_Back_RDb_ITrans {
 
     /**
      * Convert entity name to table name ('@vnd/plugin/package/entity' => 'prefix_package_entity').
-     * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta
+     * @param {TeqFw_Db_Back_Api_RDb_Schema_Object|TeqFw_Db_Back_RDb_Meta_IEntity} meta
      * @returns {string}
      */
     getTableName(meta) {}
