@@ -78,20 +78,20 @@ export default class TeqFw_Db_Back_App_Crud {
         }
 
         /**
-         * Executes a database operation within a transaction.
-         * @param {TeqFw_Db_Back_RDb_ITrans} [trx] - Optional transaction object.
+         * Executes a database operation within an outer transaction or created transaction.
+         * @param {TeqFw_Db_Back_RDb_ITrans} [trxOuter] - Optional transaction object.
          * @param {Function} operation - Operation to execute.
          * @returns {Promise<*>} - Result of the operation.
          * @throws {Error} - If the operation fails.
          */
-        async function execute(trx, operation) {
-            const activeTrx = trx ?? await conn.startTransaction();
+        async function execute(trxOuter, operation) {
+            const trx = trxOuter ?? await conn.startTransaction();
             try {
-                const result = await operation(activeTrx);
-                if (!trx) await activeTrx.commit();
+                const result = await operation(trx);
+                if (!trxOuter) await trx.commit();
                 return result;
             } catch (error) {
-                if (!trx) await activeTrx.rollback();
+                if (!trxOuter) await trx.rollback();
                 throw error;
             }
         }
@@ -105,25 +105,25 @@ export default class TeqFw_Db_Back_App_Crud {
          * @returns {Promise<{primaryKey: Object<string, string|number>}>}
          * @throws {Error}
          */
-        this.createOne = async function ({schema, trx, dto}) {
+        this.createOne = async function ({schema, trx: trxOuter, dto}) {
             if (!schema) throw new Error('Schema is required.');
             if (!dto) throw new Error('DTO is required.');
 
             /**
-             * @param {TeqFw_Db_Back_RDb_ITrans} activeTrx
+             * @param {TeqFw_Db_Back_RDb_ITrans} trx
              * @returns {Promise<{primaryKey: Object<string, string|number>}>}
              */
-            const operation = async (activeTrx) => {
+            const operation = async (trx) => {
                 const primaryKey = {};
-                const table = activeTrx.getTableName(schema);
+                const table = trx.getTableName(schema);
 
                 /** @type {Knex.QueryBuilder} */
-                const query = activeTrx.createQuery();
+                const query = trx.createQuery();
                 query.table(table);
                 const record = schema.createDto(dto);
                 query.insert(record);
 
-                if (activeTrx.isPostgres() || activeTrx.isSqlite()) {
+                if (trx.isPostgres() || trx.isSqlite()) {
                     query.returning(schema.getPrimaryKey());
                 }
 
@@ -162,7 +162,7 @@ export default class TeqFw_Db_Back_App_Crud {
                 }
                 return {primaryKey};
             };
-            return execute(trx, operation);
+            return execute(trxOuter, operation);
         };
 
         /**
@@ -173,18 +173,18 @@ export default class TeqFw_Db_Back_App_Crud {
          * @returns {Promise<{deletedCount: number}>}
          * @throws {Error}
          */
-        this.deleteOne = async function ({schema, trx, key}) {
+        this.deleteOne = async function ({schema, trx: trxOuter, key}) {
             if (!schema) throw new Error('Schema is required.');
             if (!key) throw new Error('Search key is required.');
 
             /**
-             * @param {TeqFw_Db_Back_RDb_ITrans} activeTrx
+             * @param {TeqFw_Db_Back_RDb_ITrans} trx
              * @return {Promise<{deletedCount: number}>}
              */
-            const operation = async (activeTrx) => {
-                const table = activeTrx.getTableName(schema);
+            const operation = async (trx) => {
+                const table = trx.getTableName(schema);
                 /** @type {Knex.QueryBuilder} */
-                const query = activeTrx.createQuery();
+                const query = trx.createQuery();
                 query.table(table);
                 // check key values according to allowed attributes and set record filter
                 if (Object.keys(key).length <= 0)
@@ -195,7 +195,7 @@ export default class TeqFw_Db_Back_App_Crud {
                 return {deletedCount};
             };
 
-            return execute(trx, operation);
+            return execute(trxOuter, operation);
         };
 
         /**
@@ -206,18 +206,18 @@ export default class TeqFw_Db_Back_App_Crud {
          * @returns {Promise<{deletedCount: number}>}
          * @throws {Error}
          */
-        this.deleteMany = async function ({schema, trx, conditions}) {
+        this.deleteMany = async function ({schema, trx: trxOuter, conditions}) {
             if (!schema) throw new Error('Schema is required.');
             if (!conditions) throw new Error('Filter conditions are required.');
 
             /**
-             * @param {TeqFw_Db_Back_RDb_ITrans} activeTrx
+             * @param {TeqFw_Db_Back_RDb_ITrans} trx
              * @return {Promise<{deletedCount: number}>}
              */
-            const operation = async (activeTrx) => {
-                const table = activeTrx.getTableName(schema);
+            const operation = async (trx) => {
+                const table = trx.getTableName(schema);
                 /** @type {Knex.QueryBuilder} */
-                const query = activeTrx.createQuery();
+                const query = trx.createQuery();
                 query.table(table);
                 // check key values according to allowed attributes and set record filter
                 composeWhere(query, schema, conditions);
@@ -226,7 +226,7 @@ export default class TeqFw_Db_Back_App_Crud {
                 return {deletedCount};
             };
 
-            return execute(trx, operation);
+            return execute(trxOuter, operation);
         };
 
         /**
@@ -238,18 +238,18 @@ export default class TeqFw_Db_Back_App_Crud {
          * @returns {Promise<{record: Object|null}>}
          * @throws {Error}
          */
-        this.readOne = async function ({schema, trx, key, select}) {
+        this.readOne = async function ({schema, trx: trxOuter, key, select}) {
             if (!schema) throw new Error('Schema is required.');
             if (!key) throw new Error('Search key is required.');
 
             /**
-             * @param {TeqFw_Db_Back_RDb_ITrans} activeTrx
+             * @param {TeqFw_Db_Back_RDb_ITrans} trx
              * @return {Promise<{record: Object|null}>}
              */
-            const operation = async (activeTrx) => {
-                const table = activeTrx.getTableName(schema);
+            const operation = async (trx) => {
+                const table = trx.getTableName(schema);
                 /** @type {Knex.QueryBuilder} */
-                const query = activeTrx.createQuery();
+                const query = trx.createQuery();
                 query.table(table);
                 // set record filter
                 composeWhere(query, schema, key);
@@ -259,7 +259,7 @@ export default class TeqFw_Db_Back_App_Crud {
                 return {record};
             };
 
-            return execute(trx, operation);
+            return execute(trxOuter, operation);
         };
 
         /**
@@ -272,17 +272,17 @@ export default class TeqFw_Db_Back_App_Crud {
          * @returns {Promise<{records: Array<Object>}>}
          * @throws {Error}
          */
-        this.readMany = async function ({schema, trx, conditions = {}, sorting, pagination}) {
+        this.readMany = async function ({schema, trx: trxOuter, conditions = {}, sorting, pagination}) {
             if (!schema) throw new Error('Schema is required.');
 
             /**
-             * @param {TeqFw_Db_Back_RDb_ITrans} activeTrx
+             * @param {TeqFw_Db_Back_RDb_ITrans} trx
              * @return {Promise<{records: Array<Object>}>}
              */
-            const operation = async (activeTrx) => {
-                const table = activeTrx.getTableName(schema);
+            const operation = async (trx) => {
+                const table = trx.getTableName(schema);
                 /** @type {Knex.QueryBuilder} */
-                const query = activeTrx.createQuery().table(table);
+                const query = trx.createQuery().table(table);
 
                 composeWhere(query, schema, conditions);
 
@@ -315,7 +315,7 @@ export default class TeqFw_Db_Back_App_Crud {
                 return {records};
             };
 
-            return execute(trx, operation);
+            return execute(trxOuter, operation);
         };
 
         /**
@@ -327,20 +327,20 @@ export default class TeqFw_Db_Back_App_Crud {
          * @returns {Promise<{updatedCount: number}>}
          * @throws {Error}
          */
-        this.updateOne = async function ({schema, trx, key, updates}) {
+        this.updateOne = async function ({schema, trx: trxOuter, key, updates}) {
             if (!schema) throw new Error('Schema is required.');
             if (!key) throw new Error('Search key is required.');
             if (!updates) throw new Error('Updates data is required.');
 
             /**
-             * @param {TeqFw_Db_Back_RDb_ITrans} activeTrx
+             * @param {TeqFw_Db_Back_RDb_ITrans} trx
              * @return {Promise<{updatedCount: number}>}
              */
-            const operation = async (activeTrx) => {
+            const operation = async (trx) => {
                 let updatedCount = 0;
-                const table = activeTrx.getTableName(schema);
+                const table = trx.getTableName(schema);
                 /** @type {Knex.QueryBuilder} */
-                const query = activeTrx.createQuery();
+                const query = trx.createQuery();
                 query.table(table);
                 // check key values according to allowed attributes and set record filter
                 if (Object.keys(key).length <= 0)
@@ -351,7 +351,7 @@ export default class TeqFw_Db_Back_App_Crud {
                 return {updatedCount};
             };
 
-            return execute(trx, operation);
+            return execute(trxOuter, operation);
         };
 
         /**
@@ -363,18 +363,18 @@ export default class TeqFw_Db_Back_App_Crud {
          * @returns {Promise<{updatedCount: number}>}
          * @throws {Error}
          */
-        this.updateMany = async function ({schema, trx, conditions, updates}) {
+        this.updateMany = async function ({schema, trx: trxOuter, conditions, updates}) {
             if (!schema) throw new Error('Schema is required.');
             if (!updates) throw new Error('Updates data is required.');
 
             /**
-             * @param {TeqFw_Db_Back_RDb_ITrans} activeTrx
+             * @param {TeqFw_Db_Back_RDb_ITrans} trx
              * @return {Promise<{updatedCount: number}>}
              */
-            const operation = async (activeTrx) => {
-                const table = activeTrx.getTableName(schema);
+            const operation = async (trx) => {
+                const table = trx.getTableName(schema);
                 /** @type {Knex.QueryBuilder} */
-                const query = activeTrx.createQuery();
+                const query = trx.createQuery();
                 query.table(table);
                 // check key values according to allowed attributes and set record filter
                 composeWhere(query, schema, conditions);
@@ -383,7 +383,7 @@ export default class TeqFw_Db_Back_App_Crud {
                 return {updatedCount};
             };
 
-            return execute(trx, operation);
+            return execute(trxOuter, operation);
         };
     }
 }
