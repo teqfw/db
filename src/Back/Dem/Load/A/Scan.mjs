@@ -30,9 +30,10 @@ export default class TeqFw_Db_Back_Dem_Load_A_Scan {
          * Load DEM mapping data for the application and parse it.
          * @param {string} path
          * @param {Object<string, string>} testDems
+         * @param {string} testMapRoot
          * @return {Promise<{dems: Object<string, TeqFw_Db_Back_Dto_Dem>, map: TeqFw_Db_Back_Dto_Map}>}
          */
-        this.exec = async function ({path, testDems}) {
+        this.exec = async function ({path, testDems, testMapRoot}) {
             const dems = {};
             // map to get plugin name by filepath to plugin root
             const mapPath2Name = _regPlugins.getMapPath2Name();
@@ -58,7 +59,7 @@ export default class TeqFw_Db_Back_Dem_Load_A_Scan {
                 dems[name] = await _loadDem.exec({filename});
             }
             // load map file
-            const pathMap = join(path, MAP);
+            const pathMap = join(testMapRoot ?? path, MAP);
             const map = await _loadMap.exec({filename: pathMap});
             return {dems, map};
         };

@@ -251,9 +251,7 @@ export default class TeqFw_Db_Back_App_Crud {
                 /** @type {Knex.QueryBuilder} */
                 const query = activeTrx.createQuery();
                 query.table(table);
-                // check key values according to allowed attributes and set record filter
-                if (Object.keys(key).length <= 0)
-                    throw new Error('You want to read one entity but key is missed. Execution is interrupted.');
+                // set record filter
                 composeWhere(query, schema, key);
                 query.limit(2); // should be one only item, limit if search key is not unique
                 const rs = await query;
