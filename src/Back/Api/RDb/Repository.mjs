@@ -47,6 +47,12 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
     deleteMany({trx, conditions}) {}
 
     /**
+     * Get schema object related to the repo.
+     * @returns {TeqFw_Db_Back_Api_RDb_Schema_Object}
+     */
+    getSchema() {}
+
+    /**
      * Read a single record by primary or unique key(s).
      * Optionally filters the selected columns to reduce the size of the result.
      *
