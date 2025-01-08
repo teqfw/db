@@ -5,6 +5,7 @@
 * Add ability to process test DEM.
 * `TeqFw_Db_Back_Api_RDb_Schema_Object` interface is introduced (`TeqFw_Db_Back_RDb_Meta_IEntity` is deprecated).
 * New CRUD engine `TeqFw_Db_Back_App_Crud`.
+* New transaction wrapper `TeqFw_Db_Back_App_TrxWrapper`.
 * New `TeqFw_Db_Back_Api_RDb_Repository` interface for repositories.
 
 ## 0.22.1
