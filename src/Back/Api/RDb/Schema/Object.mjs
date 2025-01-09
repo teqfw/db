@@ -16,7 +16,6 @@ export default class TeqFw_Db_Back_Api_RDb_Schema_Object {
      */
     createDto(data) {}
 
-
     /**
      * Get codifier for entity attributes.
      * The returned object maps logical attribute names to their physical column names.
