@@ -8,12 +8,10 @@
  */
 export default class TeqFw_Db_Back_App_Crud {
     /**
-     * @param {TeqFw_Db_Back_RDb_IConnect} conn - Default database connection.
      * @param {TeqFw_Db_Back_App_TrxWrapper} trxWrapper
      */
     constructor(
         {
-            TeqFw_Db_Back_RDb_IConnect$: conn,
             TeqFw_Db_Back_App_TrxWrapper$: trxWrapper,
         }
     ) {
