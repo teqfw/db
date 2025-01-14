@@ -18,26 +18,6 @@ export default class TeqFw_Db_Back_App_Crud {
         // FUNCS
 
         /**
-         * Validates and filters attributes based on schema.
-         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} schema - Schema object to validate attributes.
-         * @param {Object<string, *>} values - Input values to be filtered.
-         * @return {Object<string, *>} - Filtered attributes.
-         */
-        function filterAttributes(schema, values) {
-            const res = {};
-            const attrs = Object.values(schema.getAttributes());
-            const keyParts = Array.isArray(values) ? Object.fromEntries(values) : values;
-
-            for (const [attr, value] of Object.entries(keyParts)) {
-                if (!attrs.includes(attr)) {
-                    throw new Error(`Attribute "${attr}" is not defined in the schema.`);
-                }
-                res[attr] = value;
-            }
-            return res;
-        }
-
-        /**
          * Populates a WHERE clause for a Knex query based on the key.
          * @param {Knex.QueryBuilder} query - query object to populate.
          * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} schema - Schema object.
@@ -75,6 +55,51 @@ export default class TeqFw_Db_Back_App_Crud {
                     query.where(key, value);
                 }
             });
+        }
+
+        /**
+         * Extracts primary key values from updates and constructs a WHERE clause for Knex query.
+         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} schema - Schema object to validate attributes.
+         * @param {Object<string, *>} updates - DTO containing updates including the primary key values.
+         * @returns {Object<string, *>} - WHERE clause with primary key attribute-value pairs.
+         * @throws {Error} - If the primary key values are missing or invalid.
+         */
+        function extractPkWhere(schema, updates) {
+            const primaryKeyAttributes = schema.getPrimaryKey();
+            if (!primaryKeyAttributes || primaryKeyAttributes.length === 0) {
+                throw new Error('Schema does not define a primary key.');
+            }
+
+            const whereClause = {};
+            for (const pkAttr of primaryKeyAttributes) {
+                if (!(pkAttr in updates)) {
+                    throw new Error(`Missing primary key attribute "${pkAttr}" in updates.`);
+                }
+                whereClause[pkAttr] = updates[pkAttr];
+            }
+
+            return whereClause;
+        }
+
+
+        /**
+         * Validates and filters attributes based on schema.
+         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} schema - Schema object to validate attributes.
+         * @param {Object<string, *>} values - Input values to be filtered.
+         * @return {Object<string, *>} - Filtered attributes.
+         */
+        function filterAttributes(schema, values) {
+            const res = {};
+            const attrs = Object.values(schema.getAttributes());
+            const keyParts = Array.isArray(values) ? Object.fromEntries(values) : values;
+
+            for (const [attr, value] of Object.entries(keyParts)) {
+                if (!attrs.includes(attr)) {
+                    throw new Error(`Attribute "${attr}" is not defined in the schema.`);
+                }
+                res[attr] = value;
+            }
+            return res;
         }
 
         // MAIN
@@ -303,36 +328,29 @@ export default class TeqFw_Db_Back_App_Crud {
          * Updates a single record matching the provided key.
          * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} schema
          * @param {TeqFw_Db_Back_RDb_ITrans} [trx]
-         * @param {Object<string, *>} key
+         * @param {Object<string, *>} [key]
          * @param {Object<string, *>} updates
          * @returns {Promise<{updatedCount: number}>}
          * @throws {Error}
          */
         this.updateOne = async function ({schema, trx: trxOuter, key, updates}) {
             if (!schema) throw new Error('Schema is required.');
-            if (!key) throw new Error('Search key is required.');
             if (!updates) throw new Error('Updates data is required.');
-
-            /**
-             * @param {TeqFw_Db_Back_RDb_ITrans} trx
-             * @return {Promise<{updatedCount: number}>}
-             */
-            const operation = async (trx) => {
+            return trxWrapper.execute(trxOuter, async (trx) => {
                 let updatedCount = 0;
                 const table = trx.getTableName(schema);
                 /** @type {Knex.QueryBuilder} */
                 const query = trx.createQuery();
                 query.table(table);
+                const keySearch = (key) ? key : extractPkWhere(schema, updates);
                 // check key values according to allowed attributes and set record filter
-                if (Object.keys(key).length <= 0)
+                if (Object.keys(keySearch).length <= 0)
                     throw new Error('You want to update one entity but key is missed. Execution is interrupted.');
-                composeWhere(query, schema, key);
+                composeWhere(query, schema, keySearch);
                 const filtered = filterAttributes(schema, updates);
                 updatedCount = await query.update(filtered);
                 return {updatedCount};
-            };
-
-            return trxWrapper.execute(trxOuter, operation);
+            });
         };
 
         /**

@@ -84,7 +84,7 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
      *
      * @param {Object} params - Parameters for the operation.
      * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx] - Optional database transaction object.
-     * @param {Object} params.key - Key attributes and their values for lookup (primary or unique key).
+     * @param {Object} [params.key] - Key attributes and their values for lookup (primary or unique key).
      * @param {Object} params.updates - Column-value pairs to update.
      * @returns {Promise<{updatedCount: number}>} - Object containing the number of updated records (always 0 or 1).
      * @throws {Error} - Throws an error if the operation fails or if parameters are invalid.
