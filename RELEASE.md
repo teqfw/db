@@ -1,12 +1,16 @@
 # @teqfw/db: releases
 
-## 0.23.0 - TODO
+## 0.23.0
 
-* Add ability to process test DEM.
-* `TeqFw_Db_Back_Api_RDb_Schema_Object` interface is introduced (`TeqFw_Db_Back_RDb_Meta_IEntity` is deprecated).
-* New CRUD engine `TeqFw_Db_Back_App_Crud`.
-* New transaction wrapper `TeqFw_Db_Back_App_TrxWrapper`.
-* New `TeqFw_Db_Back_Api_RDb_Repository` interface for repositories.
+- Introduced the `TeqFw_Db_Back_Api_RDb_Schema_Object` interface, deprecating `TeqFw_Db_Back_RDb_Meta_IEntity`.
+- Added a new CRUD engine `TeqFw_Db_Back_App_Crud`.
+- Introduced the transaction wrapper `TeqFw_Db_Back_App_TrxWrapper` for better transaction management.
+- Added the `TeqFw_Db_Back_Api_RDb_Repository` interface to define repository operations.
+- Enhanced support for SQLite in the CRUD engine, including better handling of primary keys.
+- Improved unit tests for CRUD operations with detailed scenarios.
+- Updated DEM loading logic to include optional test-specific data for schema initialization.
+- Added utilities for grouping and selecting columns in database queries.
+
 
 ## 0.22.1
 
