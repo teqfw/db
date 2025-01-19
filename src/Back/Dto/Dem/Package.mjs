@@ -29,7 +29,7 @@ export class Factory {
         }) {
         /**
          * @param {TeqFw_Db_Back_Dto_Dem_Package|null} data
-         * @return {TeqFw_Db_Back_Dto_Dem_Package}
+         * @returns {TeqFw_Db_Back_Dto_Dem_Package}
          */
         this.create = function create(data = null) {
             // FUNCS

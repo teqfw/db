@@ -50,7 +50,7 @@ export class Factory {
     ) {
         /**
          * @param {TeqFw_Db_Back_Dto_Config_Local_Connection|null} data
-         * @return {TeqFw_Db_Back_Dto_Config_Local_Connection}
+         * @returns {TeqFw_Db_Back_Dto_Config_Local_Connection}
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_Config_Local_Connection();

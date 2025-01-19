@@ -48,7 +48,7 @@ export class Factory {
     ) {
         /**
          * @param {TeqFw_Db_Back_Dto_Config_Local|null} data
-         * @return {TeqFw_Db_Back_Dto_Config_Local}
+         * @returns {TeqFw_Db_Back_Dto_Config_Local}
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_Config_Local();

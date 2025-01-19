@@ -60,7 +60,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
         /**
          * Normalize table name.
          * @param {string} name
-         * @return {string}
+         * @returns {string}
          */
         function normName(name) {
             const res = name.replace(new RegExp(DEF.PS, 'g'), DEF.NS);
@@ -73,7 +73,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
          *
          * @param {TeqFw_Db_Back_Dto_Dem_Entity} entity
          * @param {TeqFw_Db_Back_Dto_Config_Schema} cfg
-         * @return {Promise<TeqFw_Db_Back_Dto_RDb_Table>}
+         * @returns {Promise<TeqFw_Db_Back_Dto_RDb_Table>}
          */
         this.exec = async function ({entity, cfg}) {
             // FUNCS
@@ -140,7 +140,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
              * Convert entity path & name to table name.
              * @param {TeqFw_Db_Back_Dto_Dem_Entity} entity
              * @param {TeqFw_Db_Back_Dto_Config_Schema} cfg
-             * @return {string}
+             * @returns {string}
              */
             function convertTableName(entity, cfg) {
                 const prefix = (cfg?.prefix) ?? '';

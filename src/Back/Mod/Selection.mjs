@@ -44,7 +44,7 @@ export default class TeqFw_Db_Back_Mod_Selection {
         /**
          * Convert the function name to a Knex operation.
          * @param {string} name
-         * @return {string}
+         * @returns {string}
          */
         function getOperation(name) {
             if (name === FUNC.EQ) return '=';
@@ -156,7 +156,7 @@ export default class TeqFw_Db_Back_Mod_Selection {
          * must be added on the 'AND' basis (see this.populate).
          *
          * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} selection
-         * @return {TeqFw_Db_Shared_Dto_List_Selection.Dto}
+         * @returns {TeqFw_Db_Shared_Dto_List_Selection.Dto}
          */
         this.wrapSelectionAnd = function (selection) {
             const res = dtoSelect.createDto(selection);

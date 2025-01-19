@@ -9,7 +9,7 @@ export default class TeqFw_Db_Back_Api_Import_Transform {
      * Filter or modify serials for PostgreSQL.
      *
      * @param {Object<string, number|string>} serials
-     * @return {Object<string, number|string>}
+     * @returns {Object<string, number|string>}
      */
     prepareSerials(serials) {
         return serials;
@@ -20,7 +20,7 @@ export default class TeqFw_Db_Back_Api_Import_Transform {
      * @param {TeqFw_Db_Back_RDb_ITrans} trx
      * @param {Object<string, Object[]>} dump
      * @param {string} table
-     * @return {Object[]}
+     * @returns {Object[]}
      */
     prepareTables(trx, dump, table) {
         return dump[table] ?? [];

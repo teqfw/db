@@ -47,7 +47,7 @@ export class Factory {
 
         /**
          * @param {TeqFw_Db_Back_Dto_Dem_Entity|null} data
-         * @return {TeqFw_Db_Back_Dto_Dem_Entity}
+         * @returns {TeqFw_Db_Back_Dto_Dem_Entity}
          */
         this.create = function (data = null) {
             // FUNCS

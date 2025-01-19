@@ -30,7 +30,7 @@ export class Factory {
     ) {
         /**
          * @param {TeqFw_Db_Back_Dto_Config_Schema|null} data
-         * @return {TeqFw_Db_Back_Dto_Config_Schema}
+         * @returns {TeqFw_Db_Back_Dto_Config_Schema}
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_Config_Schema();

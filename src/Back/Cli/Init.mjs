@@ -37,13 +37,15 @@ export default function Factory(
     // FUNCS
     /**
      * Command action.
+     * @param {Object<string, string>} testDems
+     * @param {string} testMapRoot
      * @returns {Promise<void>}
      * @memberOf TeqFw_Db_Back_Cli_Init
      */
-    async function action() {
+    async function action({testDems, testMapRoot} = {}) {
         // load DEMs then drop/create all tables
         const path = config.getPathToRoot();
-        const {dem, cfg} = await demLoad.exec({path});
+        const {dem, cfg} = await demLoad.exec({path, testDems, testMapRoot});
         await dbSchema.setDem({dem});
         await dbSchema.setCfg({cfg});
         await dbSchema.dropAllTables({conn});

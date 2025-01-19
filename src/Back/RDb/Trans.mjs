@@ -19,7 +19,7 @@ export default class TeqFw_Db_Back_RDb_Trans {
 
     /**
      * Return new knex based query builder.
-     * @return {Knex.QueryBuilder}
+     * @returns {Knex.QueryBuilder}
      */
     createQuery() {
         return this.#trx.queryBuilder();

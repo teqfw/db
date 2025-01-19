@@ -49,7 +49,7 @@ export default class TeqFw_Db_Shared_Dto_Order {
         // INSTANCE METHODS
         /**
          * @param {TeqFw_Db_Shared_Dto_Order.Dto} [data]
-         * @return {TeqFw_Db_Shared_Dto_Order.Dto}
+         * @returns {TeqFw_Db_Shared_Dto_Order.Dto}
          */
         this.createDto = function (data) {
             // create new DTO and populate it with initialization data

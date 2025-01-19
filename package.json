@@ -1,7 +1,8 @@
 {
   "name": "@teqfw/db",
-  "version": "0.22.1",
-  "description": "TeqFW: DB connectivity.",
+  "version": "0.23.0",
+  "description": "Database abstraction and CRUD engine for RDBMS based on Knex.js, optimized for Tequila Framework.",
+  "type": "module",
   "scripts": {
     "test": "./node_modules/mocha/bin/_mocha --recursive './test/mod/**/*.test.mjs'"
   },
@@ -10,12 +11,14 @@
     "url": "git+https://github.com/teqfw/db.git"
   },
   "keywords": [
-    "db",
-    "ecmascript 2015",
-    "es6+",
+    "database",
+    "knex",
     "rdbms",
-    "teqfw",
-    "tequila framework"
+    "crud",
+    "tequila framework",
+    "es6",
+    "node.js",
+    "db-connector"
   ],
   "author": "Alex Gusev <alex@flancer64.com>",
   "license": "Apache-2.0",
@@ -23,14 +26,18 @@
     "url": "https://github.com/teqfw/db/issues"
   },
   "homepage": "https://github.com/teqfw/db#readme",
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/teqfw"
+  },
   "dependencies": {
-    "@teqfw/core": "latest",
-    "knex": "latest"
+    "@teqfw/core": "^0.32.0",
+    "knex": "^3.1.0"
   },
   "devDependencies": {
-    "mocha": "latest",
-    "mysql2": "latest",
-    "pg": "latest",
-    "sqlite3": "latest"
+    "mocha": "^11.0.1",
+    "mysql2": "^3.12.0",
+    "pg": "^8.13.1",
+    "sqlite3": "^5.1.7"
   }
 }

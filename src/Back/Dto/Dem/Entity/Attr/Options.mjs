@@ -46,7 +46,7 @@ export class Factory {
     ) {
         /**
          * @param {TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options|null} data
-         * @return {TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options}
+         * @returns {TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options}
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options();

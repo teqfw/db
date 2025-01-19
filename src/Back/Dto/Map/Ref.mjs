@@ -45,7 +45,7 @@ export class Factory {
     ) {
         /**
          * @param {TeqFw_Db_Back_Dto_Map_Ref|null} data
-         * @return {TeqFw_Db_Back_Dto_Map_Ref}
+         * @returns {TeqFw_Db_Back_Dto_Map_Ref}
          */
         this.create = function create(data = null) {
             const res = new TeqFw_Db_Back_Dto_Map_Ref();

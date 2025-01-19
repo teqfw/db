@@ -20,7 +20,7 @@ export default class TeqFw_Db_Back_Act_Dem_Tables {
 
         // MAINdi
         /**
-         * @return {Promise<string[]>}
+         * @returns {Promise<string[]>}
          */
         this.act = async function ({} = {}) {
             const path = config.getPathToRoot();

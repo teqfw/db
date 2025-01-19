@@ -31,7 +31,7 @@ export class Factory {
     ) {
         /**
          * @param {TeqFw_Db_Back_Dto_Dem_Entity_Index|null} data
-         * @return {TeqFw_Db_Back_Dto_Dem_Entity_Index}
+         * @returns {TeqFw_Db_Back_Dto_Dem_Entity_Index}
          */
         this.create = function (data = null) {
             const res = new TeqFw_Db_Back_Dto_Dem_Entity_Index();

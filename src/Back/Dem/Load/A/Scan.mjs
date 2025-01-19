@@ -23,13 +23,17 @@ export default class TeqFw_Db_Back_Dem_Load_A_Scan {
             TeqFw_Core_Back_Api_Plugin_Registry$: _regPlugins,
             TeqFw_Db_Back_Dem_Load_A_Scan_A_Dem$: _loadDem,
             TeqFw_Db_Back_Dem_Load_A_Scan_A_Map$: _loadMap,
-        }) {
+        }
+    ) {
+
         /**
          * Load DEM mapping data for the application and parse it.
          * @param {string} path
+         * @param {Object<string, string>} testDems
+         * @param {string} testMapRoot
          * @return {Promise<{dems: Object<string, TeqFw_Db_Back_Dto_Dem>, map: TeqFw_Db_Back_Dto_Map}>}
          */
-        this.exec = async function ({path}) {
+        this.exec = async function ({path, testDems, testMapRoot}) {
             const dems = {};
             // map to get plugin name by filepath to plugin root
             const mapPath2Name = _regPlugins.getMapPath2Name();
@@ -38,16 +42,26 @@ export default class TeqFw_Db_Back_Dem_Load_A_Scan {
             const name = mapPath2Name[path];
             dems[name] = await _loadDem.exec({filename: pathBaseDem});
             // parse 'schema' JSON for plugin in 'node_modules'
+            /** @type {string[]} */
             const filenames = _scanNodeModules(path, DEM);
+            // add schema from test if available
+            if (typeof testDems === 'object') {
+                for (const key of Object.keys(testDems)) {
+                    const path = testDems[key];
+                    mapPath2Name[path] = key;
+                    filenames.push(join(path, DEM));
+                }
+            }
+            // load DEMs
             for (const filename of filenames) {
                 const pathPlugin = filename.replace(`${sep}${DEM}`, '');
                 const name = mapPath2Name[pathPlugin];
                 dems[name] = await _loadDem.exec({filename});
             }
             // load map file
-            const pathMap = join(path, MAP);
+            const pathMap = join(testMapRoot ?? path, MAP);
             const map = await _loadMap.exec({filename: pathMap});
             return {dems, map};
-        }
+        };
     }
 }

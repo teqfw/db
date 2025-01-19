@@ -2,30 +2,31 @@
  * Meta information for RDB entities.
  * @see {TeqFw_Db_Back_RDb_Schema_EntityBase}
  * @interface
+ * @deprecated use TeqFw_Db_Back_Api_RDb_Schema_Object
  */
 export default class TeqFw_Db_Back_RDb_Meta_IEntity {
     /**
      * Create entity DTO from given data.
      * @param [data]
-     * @return {*}
+     * @returns {*}
      */
     createDto(data) {}
 
     /**
      * Get codifier for entity attributes.
-     * @return {Object}
+     * @returns {Object}
      */
     getAttributes() {}
 
     /**
      * Get entity name: '@vnd/plugin/path/to/entity'.
-     * @return {string}
+     * @returns {string}
      */
     getEntityName() { }
 
     /**
      * Return array with primary keys for the entity.
-     * @return {string[]}
+     * @returns {string[]}
      */
     getPrimaryKey() {}
 }
