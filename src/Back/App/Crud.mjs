@@ -193,7 +193,7 @@ export default class TeqFw_Db_Back_App_Crud {
                 const query = trx.createQuery();
                 query.table(table);
                 // check key values according to allowed attributes and set record filter
-                if (Object.keys(key).length <= 0)
+                if ((key === undefined) || ((typeof key === 'object') && (Object.keys(key).length <= 0)))
                     throw new Error('You want to delete one entity but key is missed. Execution is interrupted.');
                 composeWhere(query, schema, key);
                 /** @type {number} */
@@ -344,7 +344,7 @@ export default class TeqFw_Db_Back_App_Crud {
                 query.table(table);
                 const keySearch = (key) ? key : extractPkWhere(schema, updates);
                 // check key values according to allowed attributes and set record filter
-                if (Object.keys(keySearch).length <= 0)
+                if ((typeof keySearch === 'object') && (Object.keys(keySearch).length <= 0))
                     throw new Error('You want to update one entity but key is missed. Execution is interrupted.');
                 composeWhere(query, schema, keySearch);
                 const filtered = filterAttributes(schema, updates);
