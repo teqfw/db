@@ -326,10 +326,11 @@ export default class TeqFw_Db_Back_App_Crud {
 
         /**
          * Updates a single record matching the provided key.
-         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} schema
-         * @param {TeqFw_Db_Back_RDb_ITrans} [trx]
-         * @param {Object<string, *>} [key]
-         * @param {Object<string, *>} updates
+         * @param {Object} params
+         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} params.schema
+         * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx]
+         * @param {Object<string, *>} [params.key]
+         * @param {Object<string, *>} params.updates
          * @returns {Promise<{updatedCount: number}>}
          * @throws {Error}
          */
