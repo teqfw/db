@@ -1,5 +1,11 @@
 # @teqfw/db: releases
 
+## 0.23.1 - Use operations in `where` clause
+
+- Enhanced the query builder to handle array values in `where` clauses (e.g., `('id', ['<=', 4])` becomes
+  `('id', '<=', 4)`).
+- Improve JSDoc in `TeqFw_Db_Back_App_Crud.updateOne` to prevent IDEA highlights.
+
 ## 0.23.0
 
 - Introduced the `TeqFw_Db_Back_Api_RDb_Schema_Object` interface, deprecating `TeqFw_Db_Back_RDb_Meta_IEntity`.
@@ -10,7 +16,6 @@
 - Improved unit tests for CRUD operations with detailed scenarios.
 - Updated DEM loading logic to include optional test-specific data for schema initialization.
 - Added utilities for grouping and selecting columns in database queries.
-
 
 ## 0.22.1
 

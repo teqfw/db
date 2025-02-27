@@ -51,6 +51,8 @@ export default class TeqFw_Db_Back_App_Crud {
             Object.entries(parts).forEach(([key, value]) => {
                 if (value === null) {
                     query.whereNull(key);
+                } else if (Array.isArray(value)) {
+                    query.where(key, ...value); // ('id', ['<=', 4]) => ('id', '<=', 4)
                 } else {
                     query.where(key, value);
                 }
@@ -193,7 +195,7 @@ export default class TeqFw_Db_Back_App_Crud {
                 const query = trx.createQuery();
                 query.table(table);
                 // check key values according to allowed attributes and set record filter
-                if (Object.keys(key).length <= 0)
+                if ((key === undefined) || ((typeof key === 'object') && (Object.keys(key).length <= 0)))
                     throw new Error('You want to delete one entity but key is missed. Execution is interrupted.');
                 composeWhere(query, schema, key);
                 /** @type {number} */
@@ -326,10 +328,11 @@ export default class TeqFw_Db_Back_App_Crud {
 
         /**
          * Updates a single record matching the provided key.
-         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} schema
-         * @param {TeqFw_Db_Back_RDb_ITrans} [trx]
-         * @param {Object<string, *>} [key]
-         * @param {Object<string, *>} updates
+         * @param {Object} params
+         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} params.schema
+         * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx]
+         * @param {Object<string, *>} [params.key]
+         * @param {Object<string, *>} params.updates
          * @returns {Promise<{updatedCount: number}>}
          * @throws {Error}
          */
@@ -344,7 +347,7 @@ export default class TeqFw_Db_Back_App_Crud {
                 query.table(table);
                 const keySearch = (key) ? key : extractPkWhere(schema, updates);
                 // check key values according to allowed attributes and set record filter
-                if (Object.keys(keySearch).length <= 0)
+                if ((typeof keySearch === 'object') && (Object.keys(keySearch).length <= 0))
                     throw new Error('You want to update one entity but key is missed. Execution is interrupted.');
                 composeWhere(query, schema, keySearch);
                 const filtered = filterAttributes(schema, updates);
