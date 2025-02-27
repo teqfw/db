@@ -51,6 +51,8 @@ export default class TeqFw_Db_Back_App_Crud {
             Object.entries(parts).forEach(([key, value]) => {
                 if (value === null) {
                     query.whereNull(key);
+                } else if (Array.isArray(value)) {
+                    query.where(key, ...value); // ('id', ['<=', 4]) => ('id', '<=', 4)
                 } else {
                     query.where(key, value);
                 }
