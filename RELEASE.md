@@ -1,5 +1,9 @@
 # @teqfw/db: releases
 
+## 0.23.2 - Use Selection in CRUD Base for `readMany`
+
+- Implemented selection functionality in the CRUD base for the `readMany` operation.
+
 ## 0.23.1 - Use operations in `where` clause
 
 - Enhanced the query builder to handle array values in `where` clauses (e.g., `('id', ['<=', 4])` becomes
