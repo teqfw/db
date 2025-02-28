@@ -9,10 +9,12 @@
 export default class TeqFw_Db_Back_App_Crud {
     /**
      * @param {TeqFw_Db_Back_App_TrxWrapper} trxWrapper
+     * @param {TeqFw_Db_Back_Mod_Selection} modSelect
      */
     constructor(
         {
             TeqFw_Db_Back_App_TrxWrapper$: trxWrapper,
+            TeqFw_Db_Back_Mod_Selection$: modSelect,
         }
     ) {
         // FUNCS
@@ -83,7 +85,6 @@ export default class TeqFw_Db_Back_App_Crud {
             return whereClause;
         }
 
-
         /**
          * Validates and filters attributes based on schema.
          * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} schema - Schema object to validate attributes.
@@ -102,6 +103,20 @@ export default class TeqFw_Db_Back_App_Crud {
                 res[attr] = value;
             }
             return res;
+        }
+
+        /**
+         * Adapter to use Schema as QueryBuilder in the selection parser.
+         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} schema
+         * @returns {TeqFw_Db_Back_Api_RDb_QueryBuilder}
+         */
+        function adaptSchemaAsQueryBuilder(schema) {
+            const FIELDS = Object.values(schema.getAttributes());
+            return {
+                mapColumn(col) {
+                    return FIELDS.includes(col) ? col : undefined;
+                }
+            };
         }
 
         // MAIN
@@ -272,48 +287,49 @@ export default class TeqFw_Db_Back_App_Crud {
 
         /**
          * Reads multiple records based on the provided conditions.
-         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} schema
-         * @param {TeqFw_Db_Back_RDb_ITrans} [trx]
-         * @param {Object<string, *>} conditions
-         * @param {Object<string, 'asc'|'desc'>} [sorting]
-         * @param {{limit: number, offset: number}} [pagination]
+         * @param {Object} params
+         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} params.schema
+         * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx]
+         * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} [params.selection]
+         * @param {Object<string, *>} [params.conditions]
+         * @param {Object<string, 'asc'|'desc'>} [params.sorting]
+         * @param {{limit: number, offset: number}} [params.pagination]
          * @returns {Promise<{records: Array<Object>}>}
          * @throws {Error}
          */
-        this.readMany = async function ({schema, trx: trxOuter, conditions = {}, sorting, pagination}) {
+        this.readMany = async function ({schema, trx: trxOuter, selection = {}, conditions = {}, sorting, pagination}) {
             if (!schema) throw new Error('Schema is required.');
-
-            /**
-             * @param {TeqFw_Db_Back_RDb_ITrans} trx
-             * @return {Promise<{records: Array<Object>}>}
-             */
-            const operation = async (trx) => {
+            return await trxWrapper.execute(trxOuter, async (trx) => {
                 const table = trx.getTableName(schema);
                 /** @type {Knex.QueryBuilder} */
                 const query = trx.createQuery().table(table);
+                if (selection && Object.keys(selection).length) {
+                    // use one structure for  filters/order/pagination
+                    modSelect.populate(trx, adaptSchemaAsQueryBuilder(schema), query, selection);
+                } else {
+                    // use deprecated style
+                    composeWhere(query, schema, conditions);
 
-                composeWhere(query, schema, conditions);
+                    // Apply sorting
+                    if (sorting) {
+                        Object.entries(sorting).forEach(([key, order]) => {
+                            if (['asc', 'desc'].includes(order.toLowerCase())) {
+                                query.orderBy(key, order);
+                            }
+                        });
+                    }
 
-                // Apply sorting
-                if (sorting) {
-                    Object.entries(sorting).forEach(([key, order]) => {
-                        if (['asc', 'desc'].includes(order.toLowerCase())) {
-                            query.orderBy(key, order);
+                    // Apply pagination
+                    if (pagination) {
+                        const {limit, offset} = pagination;
+                        if (typeof limit === 'number' && limit > 0) {
+                            query.limit(limit);
                         }
-                    });
-                }
-
-                // Apply pagination
-                if (pagination) {
-                    const {limit, offset} = pagination;
-                    if (typeof limit === 'number' && limit > 0) {
-                        query.limit(limit);
-                    }
-                    if (typeof offset === 'number' && offset >= 0) {
-                        query.offset(offset);
+                        if (typeof offset === 'number' && offset >= 0) {
+                            query.offset(offset);
+                        }
                     }
                 }
-
                 // Execute the query
                 const rs = await query;
 
@@ -321,9 +337,7 @@ export default class TeqFw_Db_Back_App_Crud {
                 const records = Array.isArray(rs) ? rs.map(row => schema.createDto(row)) : [];
 
                 return {records};
-            };
-
-            return trxWrapper.execute(trxOuter, operation);
+            });
         };
 
         /**
