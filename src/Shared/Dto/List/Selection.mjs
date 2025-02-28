@@ -50,6 +50,9 @@ export default class TeqFw_Db_Shared_Dto_List_Selection {
      * @param {TeqFw_Db_Shared_Dto_Order} dtoOrder
      * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond} dtoCond
      * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Func} dtoFunc
+     * @param {typeof TeqFw_Db_Shared_Enum_Direction} DIRECTION
+     * @param {typeof TeqFw_Db_Shared_Enum_Filter_Cond} CONDITION
+     * @param {typeof TeqFw_Db_Shared_Enum_Filter_Func} FUNCTION
      */
     constructor(
         {
@@ -57,6 +60,9 @@ export default class TeqFw_Db_Shared_Dto_List_Selection {
             TeqFw_Db_Shared_Dto_Order$: dtoOrder,
             TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond$: dtoCond,
             TeqFw_Db_Shared_Dto_List_Selection_Filter_Func$: dtoFunc,
+            'TeqFw_Db_Shared_Enum_Direction.default': DIRECTION,
+            'TeqFw_Db_Shared_Enum_Filter_Cond.default': CONDITION,
+            'TeqFw_Db_Shared_Enum_Filter_Func.default': FUNCTION,
         }
     ) {
         // INSTANCE METHODS
@@ -77,5 +83,20 @@ export default class TeqFw_Db_Shared_Dto_List_Selection {
         };
 
         this.getAttributes = () => ATTR;
+
+        /**
+         * @returns {typeof TeqFw_Db_Shared_Enum_Direction}
+         */
+        this.getDirections = () => DIRECTION;
+
+        /**
+         * @returns {typeof TeqFw_Db_Shared_Enum_Filter_Cond}
+         */
+        this.getConditions = () => CONDITION;
+
+        /**
+         * @returns {typeof TeqFw_Db_Shared_Enum_Filter_Func}
+         */
+        this.getFunctions = () => FUNCTION;
     }
 }
