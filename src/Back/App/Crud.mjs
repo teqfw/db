@@ -296,6 +296,7 @@ export default class TeqFw_Db_Back_App_Crud {
          * @param {{limit: number, offset: number}} [params.pagination]
          * @returns {Promise<{records: Array<Object>}>}
          * @throws {Error}
+         * TODO: add `columns` to select required columns only.
          */
         this.readMany = async function ({schema, trx: trxOuter, selection = {}, conditions = {}, sorting, pagination}) {
             if (!schema) throw new Error('Schema is required.');
