@@ -1,5 +1,9 @@
 # @teqfw/db: releases
 
+## 0.24.0 - Added `onCommit` and `onRollback` callbacks in TrxWrapper
+
+- Added `onCommit` and `onRollback` callbacks in TrxWrapper.
+
 ## 0.23.2 - Use Selection in CRUD Base for `readMany`
 
 - Implemented selection functionality in the CRUD base for the `readMany` operation.
