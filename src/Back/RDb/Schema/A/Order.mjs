@@ -18,10 +18,10 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Order {
         // INSTANCE METHODS
         /**
          * @param {TeqFw_Db_Back_Dto_Dem} dem
-         * @param {boolean} addDeprecated
+         * @param {boolean} [addDeprecated]
          * @returns {Promise<TeqFw_Db_Back_Dto_Dem_Entity[]>}
          */
-        this.exec = async function ({dem, addDeprecated}) {
+        this.exec = async function ({dem, addDeprecated = false}) {
             // FUNCS
 
             /**

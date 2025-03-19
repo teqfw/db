@@ -19,8 +19,8 @@ export default class TeqFw_Db_Back_Dem_Load {
         /**
          * Load all DEMs (app & plugins), merge all fragments and normalize its using map data.
          * @param {string} path
-         * @param {Object<string, string>} testDems
-         * @param {string} testMapRoot
+         * @param {Object<string, string>} [testDems]
+         * @param {string} [testMapRoot]
          * @return {Promise<{dem: TeqFw_Db_Back_Dto_Dem, cfg: TeqFw_Db_Back_Dto_Config_Schema}>}
          */
         this.exec = async function ({path, testDems, testMapRoot}) {
@@ -28,6 +28,6 @@ export default class TeqFw_Db_Back_Dem_Load {
             const {dem} = await norm.exec({dems, map});
             const {cfg} = await schemaCfg.exec({map});
             return {dem, cfg};
-        }
+        };
     }
 }

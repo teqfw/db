@@ -87,6 +87,17 @@ export default class TeqFw_Db_Back_RDb_Schema {
             await schema;
         };
 
+        this.fetchTablesByDependencyOrder = async function () {
+            const res = [];
+            /** @type {TeqFw_Db_Back_Dto_Dem_Entity[]} */
+            const entities = await _aOrder.exec({dem: _dem});
+            for (const entity of entities) {
+                const tbl = await _aConvert.exec({entity, cfg: _cfg});
+                res.push(tbl);
+            }
+            return res;
+        };
+
         this.getTablesList = async function () {
             const res = [];
             /** @type {TeqFw_Db_Back_Dto_Dem_Entity[]} */

@@ -69,6 +69,7 @@ export default function Factory(
                 for (const name of demTables) {
                     // prepare the imported data to be inserted into rdb
                     const tableRows = transform.prepareTables(trx, dump.tables, name);
+                    logger.info(`Inserting '${tableRows.length}' rows for '${name}' table...`);
                     await util.itemsInsert(trx, name, tableRows);
                 }
                 // update serials
