@@ -1,5 +1,16 @@
 # @teqfw/db: releases
 
+## 0.24.0 - Added `onCommit` and `onRollback` callbacks in TrxWrapper
+
+- Added `onCommit` and `onRollback` callbacks in TrxWrapper for handling post-transaction results.
+- Implemented `fetchTablesByDependencyOrder` in RdbTables and Schema to list tables by dependency order, enhanced date
+  item formatting for exports.
+- Corrected export mechanisms in Export to properly handle table dependencies and data types.
+- Enhanced data import processing in Import, including proper sequence restoration and error handling during data
+  insertion.
+- Refactored `readMany` and related methods in Crud and Schema for improved readability and extensibility, added
+  selection parameters for data reading operations.
+
 ## 0.23.2 - Use Selection in CRUD Base for `readMany`
 
 - Implemented selection functionality in the CRUD base for the `readMany` operation.

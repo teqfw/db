@@ -1,6 +1,6 @@
 {
   "name": "@teqfw/db",
-  "version": "0.23.2",
+  "version": "0.24.0",
   "description": "Database abstraction and CRUD engine for RDBMS based on Knex.js, optimized for Tequila Framework.",
   "type": "module",
   "scripts": {

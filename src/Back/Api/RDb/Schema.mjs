@@ -17,6 +17,19 @@ export default class TeqFw_Db_Back_Api_RDb_Schema {
      */
     async dropAllTables({conn}) {}
 
+    /**
+     * Retrieves all entities from DEM in the correct dependency order.
+     * Ensures that entities are returned in the sequence required for proper processing.
+     * Convert TeqFW DEM format into Knex RDB format.
+     *
+     * @returns {Promise<TeqFw_Db_Back_Dto_RDb_Table[]>} A list of tables sorted by dependency.
+     */
+    async fetchTablesByDependencyOrder() {}
+
+
+    /**
+     * @returns {Promise<string[]>}
+     */
     async getTablesList() {}
 
     /**

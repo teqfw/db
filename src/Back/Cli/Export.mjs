@@ -21,7 +21,8 @@ const OPT_FILE = 'file';
  * @param {TeqFw_Core_Back_App} app
  * @param {TeqFw_Db_Back_RDb_IConnect} conn
  * @param {TeqFw_Db_Back_Util} util
- * @param {TeqFw_Db_Back_Act_Dem_Tables} aDemTables
+ * @param {TeqFw_Db_Back_Act_Dem_RdbTables} actTables
+ * @param {TeqFw_Db_Back_Cli_Export_A_Select} aExport
  * @param {TeqFw_Db_Back_Dto_Export} dtoExport
  *
  * @returns {TeqFw_Core_Back_Api_Dto_Command}
@@ -37,7 +38,8 @@ export default function Factory(
         TeqFw_Core_Back_App$: app,
         TeqFw_Db_Back_RDb_IConnect$: conn,
         TeqFw_Db_Back_Util$: util,
-        TeqFw_Db_Back_Act_Dem_Tables$: aDemTables,
+        TeqFw_Db_Back_Act_Dem_RdbTables$: actTables,
+        TeqFw_Db_Back_Cli_Export_A_Select$: aExport,
         TeqFw_Db_Back_Dto_Export$: dtoExport,
     }
 ) {
@@ -56,12 +58,16 @@ export default function Factory(
             const trx = await conn.startTransaction();
             try {
                 // load DEM and get list of tables in dependency order
-                const tables = await aDemTables.act();
+                const {tables} = await actTables.run();
                 // read all rows from all tables
                 const exp = dtoExport.createDto();
                 for (const table of tables) {
                     try {
-                        exp.tables[table] = await util.itemsSelect(trx, tables, table);
+                        const {items} = await aExport.run({trx, table});
+                        const name = table.name;
+                        const count = items.length;
+                        exp.tables[name] = items;
+                        logger.info(`Total '${count}' rows are exported for table '${name}'.`);
                     } catch (e) {
                         logger.exception(e);
                     }
