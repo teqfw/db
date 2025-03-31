@@ -4,8 +4,6 @@
  */
 export default class TeqFw_Db_Back_Mod_Selection {
     /**
-     * @param {TeqFw_Db_Back_Defaults} DEF
-     * @param {TeqFw_Core_Shared_Api_Logger} logger -  instance
      * @param {TeqFw_Core_Shared_Util_Cast} cast
      * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Alias} dtoAlias
      * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond} dtoCond
@@ -18,8 +16,6 @@ export default class TeqFw_Db_Back_Mod_Selection {
      */
     constructor(
         {
-            TeqFw_Db_Back_Defaults$: DEF,
-            TeqFw_Core_Shared_Api_Logger$$: logger,
             TeqFw_Core_Shared_Util_Cast$: cast,
             TeqFw_Db_Shared_Dto_List_Selection_Filter_Alias$: dtoAlias,
             TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond$: dtoCond,
@@ -147,6 +143,12 @@ export default class TeqFw_Db_Back_Mod_Selection {
             const filter = selection?.[A_SELECT.FILTER];
             if (filter) {
                 processFilter(trx, meta, query, filter);
+            }
+            if ((typeof selection?.rowsLimit === 'number') && (selection.rowsLimit > 0)) {
+                query.limit(selection.rowsLimit);
+            }
+            if ((typeof selection?.rowsOffset === 'number') && (selection.rowsOffset > 0)) {
+                query.offset(selection.rowsOffset);
             }
         };
 

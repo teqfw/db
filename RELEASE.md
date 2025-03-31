@@ -1,5 +1,9 @@
 # @teqfw/db: releases
 
+## 0.25.0 - support for `rowsLimit` and `rowsOffset` in selection
+
+- Added support for `rowsLimit` and `rowsOffset` parameters in selection queries.
+
 ## 0.24.0 - Added `onCommit` and `onRollback` callbacks in TrxWrapper
 
 - Added `onCommit` and `onRollback` callbacks in TrxWrapper for handling post-transaction results.
