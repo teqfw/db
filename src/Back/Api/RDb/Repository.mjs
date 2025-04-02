@@ -8,7 +8,7 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
      * Create a new record in the table.
      * @param {Object} params - Parameters for the operation.
      * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx] - Optional database transaction object.
-     * @param {Object} params.dto - DTO object with data to create.
+     * @param {*} params.dto - DTO object with data to create.
      * @returns {Promise<{primaryKey: Object<string, string|number>}>} - The result of the operation containing the primary key.
      * @throws {Error} - Throws an error if the operation fails.
      */
@@ -21,7 +21,7 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
      * an empty DTO is returned, where attributes are initialized to default values
      * or `undefined`.
      *
-     * @param {Object} [data] - Input data to be transformed into a DTO.
+     * @param {*} [data] - Input data to be transformed into a DTO.
      * @returns {Object} - Persistent DTO with valid structure and types.
      */
     createDto(data) {}
