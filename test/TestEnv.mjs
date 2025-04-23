@@ -41,10 +41,10 @@ const cfg = (function () {
 
 /**
  * Create and setup DI container (once per all imports).
- * @type {TeqFw_Di_Api_Container}
+ * @type {TeqFw_Di_Container}
  */
 const container = (function (cfg) {
-    /** @type {TeqFw_Di_Api_Container} */
+    /** @type {TeqFw_Di_Container} */
     const res = new Container();
     const pathNode = join(cfg.path.root, 'node_modules');
     const srcTeqFwDi = join(pathNode, '@teqfw/di/src');
@@ -109,7 +109,7 @@ const dbConnect = async function () {
 /**
  * Setup development environment (if not set before) and return DI container.
  *
- * @returns {Promise<TeqFw_Di_Api_Container>}
+ * @returns {Promise<TeqFw_Di_Container>}
  */
 export default async function () {
     return container;
