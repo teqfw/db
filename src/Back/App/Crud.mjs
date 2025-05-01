@@ -122,9 +122,10 @@ export default class TeqFw_Db_Back_App_Crud {
         // MAIN
         /**
          * Creates a new record in the database.
-         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} schema
-         * @param {TeqFw_Db_Back_RDb_ITrans} [trx]
-         * @param {Object<string, string|number>} dto
+         * @param {Object} params
+         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} params.schema
+         * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx]
+         * @param {*} params.dto
          * @returns {Promise<{primaryKey: Object<string, string|number>}>}
          * @throws {Error}
          */
@@ -190,9 +191,10 @@ export default class TeqFw_Db_Back_App_Crud {
 
         /**
          * Deletes a single record based on the provided key.
-         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} schema
-         * @param {TeqFw_Db_Back_RDb_ITrans} [trx]
-         * @param {Object<string, *>} key
+         * @param {Object} params
+         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} params.schema
+         * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx]
+         * @param {Object<string, *>} params.key
          * @returns {Promise<{deletedCount: number}>}
          * @throws {Error}
          */
@@ -223,9 +225,10 @@ export default class TeqFw_Db_Back_App_Crud {
 
         /**
          * Deletes multiple records matching the provided conditions.
-         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} schema
-         * @param {TeqFw_Db_Back_RDb_ITrans} [trx]
-         * @param {Object<string, *>} conditions
+         * @param {Object} params
+         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} params.schema
+         * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx]
+         * @param {Object<string, *>} params.conditions
          * @returns {Promise<{deletedCount: number}>}
          * @throws {Error}
          */
@@ -254,10 +257,11 @@ export default class TeqFw_Db_Back_App_Crud {
 
         /**
          * Reads a single record based on the provided key.
-         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} schema
-         * @param {TeqFw_Db_Back_RDb_ITrans} [trx]
-         * @param {Object<string, *>} key
-         * @param {Array<string>} [select] - TODO: use select
+         * @param {Object} params
+         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} params.schema
+         * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx]
+         * @param {Object<string, *>} params.key
+         * @param {Array<string>} [params.select] - TODO: use select
          * @returns {Promise<{record: Object|null}>}
          * @throws {Error}
          */
@@ -305,7 +309,7 @@ export default class TeqFw_Db_Back_App_Crud {
                 /** @type {Knex.QueryBuilder} */
                 const query = trx.createQuery().table(table);
                 if (selection && Object.keys(selection).length) {
-                    // use one structure for  filters/order/pagination
+                    // use one structure for filters/order/pagination
                     modSelect.populate(trx, adaptSchemaAsQueryBuilder(schema), query, selection);
                 } else {
                     // use deprecated style
@@ -373,10 +377,11 @@ export default class TeqFw_Db_Back_App_Crud {
 
         /**
          * Updates multiple records matching the provided conditions.
-         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} schema
-         * @param {TeqFw_Db_Back_RDb_ITrans} [trx]
-         * @param {Object<string, *>} conditions
-         * @param {Object<string, *>} updates
+         * @param {Object} params
+         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} params.schema
+         * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx]
+         * @param {Object<string, *>} params.conditions
+         * @param {Object<string, *>} params.updates
          * @returns {Promise<{updatedCount: number}>}
          * @throws {Error}
          */

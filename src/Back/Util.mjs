@@ -3,6 +3,7 @@
  *
  * @namespace TeqFw_Db_Back_Util
  */
+
 // MODULE'S FUNCTIONS
 
 /**
@@ -280,6 +281,8 @@ export default class TeqFw_Db_Back_Util {
      * @param {Object<string, string>} columns - the list of the columns in the query.
      * @param {Object<string, string>} map - the map of the columns to the tables' fields.
      * @return {Object<string, string>[]}
+     * @deprecated
+     * @see TeqFw_Db_Back_Util_ListQuery
      */
     prepareGroupBy(columns, map) {
         const res = [];
@@ -294,6 +297,8 @@ export default class TeqFw_Db_Back_Util {
      * @param {Object<string, string>} columns
      * @param {Object<string, string>} map - the map of the columns to the tables' fields and expressions.
      * @return {Object<string, string>[]}
+     * @deprecated
+     * @see TeqFw_Db_Back_Util_ListQuery
      */
     prepareSelect(columns, map) {
         const res = [];
