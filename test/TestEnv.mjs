@@ -49,12 +49,13 @@ const container = (function (cfg) {
     const pathNode = join(cfg.path.root, 'node_modules');
     const srcTeqFwDi = join(pathNode, '@teqfw/di/src');
     const srcTeqFwCore = join(pathNode, '@teqfw/core/src');
-    // add backend sources to map
-    res.addSourceMapping('TeqFw_Db', cfg.path.src, true, 'mjs');
-    res.addSourceMapping('TeqFw_Core', srcTeqFwCore, true, 'mjs');
-    res.addSourceMapping('TeqFw_Di', srcTeqFwDi, true, 'mjs');
+    // add backend sources to the map
+    res.getResolver().addNamespaceRoot('TeqFw_Db', cfg.path.src, 'mjs');
+    res.getResolver().addNamespaceRoot('TeqFw_Core', srcTeqFwCore, 'mjs');
+    res.getResolver().addNamespaceRoot('TeqFw_Di', srcTeqFwDi, 'mjs');
     return res;
 })(cfg);
+container.enableTestMode();
 
 /**
  * Load local config.
@@ -70,14 +71,14 @@ const localCfg = await (async function (cfg, container) {
      */
     function generateDefault() {
         const connection = {
-            "database": "teqfw_db_test",
-            "host": "127.0.0.1",
-            "password": "PasswordToConnectToTeqFWDb",
-            "user": "teqfw"
+            'database': 'teqfw_db_test',
+            'host': '127.0.0.1',
+            'password': 'PasswordToConnectToTeqFWDb',
+            'user': 'teqfw'
         };
         return {
-            mariadb: {client: "mysql2", connection},
-            pg: {client: "pg", connection}
+            mariadb: {client: 'mysql2', connection},
+            pg: {client: 'pg', connection}
         };
     }
 
@@ -103,7 +104,7 @@ const dbConnect = async function () {
     await conn.init(localCfg.mariadb);
     // await conn.init(localCfg.pg);
     return conn;
-}
+};
 
 
 /**

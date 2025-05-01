@@ -18,9 +18,11 @@ const regPlugins = {
         }
     }
 };
-container.set('TeqFw_Core_Back_Api_Plugin_Registry$', regPlugins);
+try {
+    container.register('TeqFw_Core_Back_Api_Plugin_Registry$', regPlugins);
+} catch (e) {}
 
-// get object from container and run tests
+// get an object from a container and run tests
 /** @type {TeqFw_Db_Back_Dem_Load} */
 const load = await container.get('TeqFw_Db_Back_Dem_Load$');
 /** @type {TeqFw_Db_Back_RDb_Schema} */

@@ -1,6 +1,18 @@
 # @teqfw/db: releases
 
-## 0.25.0 - support for `rowsLimit` and `rowsOffset` in selection
+## 0.26.0 - Enhanced selection DTO handling and order-by consistency
+
+- Refactored `TeqFw_Db_Shared_Dto_List_Selection`: separated class definition from metadata and improved DTO
+  initialization via `.create()`.
+- Added `TeqFw_Db_Shared_Util_Select` utility for composing selection DTOs from basic JS objects with support for
+  filtering, sorting, and pagination.
+- Aligned all method signatures in `Crud`, `Repository`, and `QueryBuilder` to accept unified `selection` objects
+  instead of `conditions`, `sorting`, and `pagination` separately.
+- Deprecated `createDto()` method in selection DTO, use `create()` instead for consistency.
+- Updated docblocks and type annotations across repository and query interfaces for clarity and correctness.
+- Minor refactorings to improve internal consistency and readability in database-related modules.
+
+## 0.25.0 - Support for `rowsLimit` and `rowsOffset` in selection
 
 - Added support for `rowsLimit` and `rowsOffset` parameters in selection queries.
 

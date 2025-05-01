@@ -18,9 +18,12 @@ const regPlugins = {
         }
     }
 };
-container.set('TeqFw_Core_Back_Api_Plugin_Registry$', regPlugins);
 
-// get object from container and run tests
+try {
+    container.register('TeqFw_Core_Back_Api_Plugin_Registry$', regPlugins);
+} catch (e) {}
+
+// get an object from a container and run tests
 /** @type {TeqFw_Db_Back_Dem_Load_A_Scan} */
 const obj = await container.get('TeqFw_Db_Back_Dem_Load_A_Scan$');
 
