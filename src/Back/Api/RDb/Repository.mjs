@@ -2,6 +2,10 @@
  * Interface defining CRUD operations for a single RDB table in TeqFW.
  * Designed with focus on code mutability and compositional objects.
  * @interface
+ *
+ * You can use the `selection` (high privilege) or `conditions` parameters to filter results.
+ * The good idea is to create a utility to convert conditions to selection.
+ *
  */
 export default class TeqFw_Db_Back_Api_RDb_Repository {
     /**
@@ -40,14 +44,17 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
      * Delete records matching the provided conditions.
      * @param {Object} params - Parameters for the operation.
      * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx] - Optional database transaction object.
-     * @param {Object} params.conditions - Column-value pairs for filtering records.
+     * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} [params.selection]
+     * @param {Object} [params.conditions] - Column-value pairs for filtering records.
      * @returns {Promise<{deletedCount: number}>} - Object containing the number of deleted records.
      * @throws {Error} - Throws an error if the operation fails.
+     *
+     * @deprecated The `conditions` parameter is deprecated. Use `selection` instead.
      */
-    deleteMany({trx, conditions}) {}
+    deleteMany({trx, selection, conditions}) {}
 
     /**
-     * Get schema object related to the repo.
+     * Get a schema object related to the repo.
      * @returns {TeqFw_Db_Back_Api_RDb_Schema_Object}
      */
     getSchema() {}
@@ -71,13 +78,14 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
      *
      * @param {Object} params - Parameters for the operation.
      * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx] - Optional database transaction object.
-     * @param {Object} params.conditions - Column-value pairs for filtering results.
+     * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} [params.selection]
+     * @param {Object} [params.conditions] - Column-value pairs for filtering results.
      * @param {Object<string, 'asc'|'desc'>} [params.sorting] - Sorting options where keys are column names, and values are 'asc' or 'desc'.
      * @param {{limit: number, offset: number}} [params.pagination] - Pagination options specifying the limit and offset for the query.
      * @returns {Promise<{records: Array<Object>}>} - Object containing the result of the operation, with `records` as an array of DTO objects.
      * @throws {Error} - Throws an error if the operation fails.
      */
-    readMany({trx, conditions, sorting, pagination}) {}
+    readMany({trx, selection, conditions, sorting, pagination}) {}
 
     /**
      * Update a single record matching the provided key.
@@ -96,10 +104,11 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
      *
      * @param {Object} params - Parameters for the operation.
      * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx] - Optional database transaction object.
-     * @param {Object} params.conditions - Column-value pairs for filtering records.
+     * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} [params.selection]
+     * @param {Object} [params.conditions] - Column-value pairs for filtering records.
      * @param {Object} params.updates - Column-value pairs to update.
      * @returns {Promise<{updatedCount: number}>} - Object containing the number of updated records.
      * @throws {Error} - Throws an error if the operation fails or if parameters are invalid.
      */
-    updateMany({trx, conditions, updates}) {}
+    updateMany({trx, selection, conditions, updates}) {}
 }

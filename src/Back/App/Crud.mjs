@@ -309,7 +309,7 @@ export default class TeqFw_Db_Back_App_Crud {
                 /** @type {Knex.QueryBuilder} */
                 const query = trx.createQuery().table(table);
                 if (selection && Object.keys(selection).length) {
-                    // use one structure for  filters/order/pagination
+                    // use one structure for filters/order/pagination
                     modSelect.populate(trx, adaptSchemaAsQueryBuilder(schema), query, selection);
                 } else {
                     // use deprecated style
