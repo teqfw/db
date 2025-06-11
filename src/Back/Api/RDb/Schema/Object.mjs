@@ -23,7 +23,7 @@ export default class TeqFw_Db_Back_Api_RDb_Schema_Object {
      *
      * Example: { ID: 'id', DATE_CREATED: 'date_created', ... }.
      *
-     * @returns {Object<string, string>} - Mapping of attribute names.
+     * @returns {Object<string, string>|*} - Mapping of attribute names.
      */
     getAttributes() {}
 
