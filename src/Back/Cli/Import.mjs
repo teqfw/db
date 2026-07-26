@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Cli_Import
+ * @description TeqFW database package module.
+ */
+
 /**
  * Import all the data from the JSON file into a Relational Database (RDB).
  *
@@ -28,20 +35,7 @@ const OPT_FILE = 'file';
  * @constructor
  * @memberOf TeqFw_Db_Back_Cli_Import
  */
-export default function Factory(
-    {
-        TeqFw_Db_Back_Defaults$: DEF,
-        TeqFw_Core_Shared_Api_Logger$$: logger,
-        'TeqFw_Core_Back_Api_Dto_Command.Factory$': fCommand,
-        'TeqFw_Core_Back_Api_Dto_Command_Option.Factory$': fOpt,
-        TeqFw_Core_Back_App$: app,
-        TeqFw_Db_Back_RDb_IConnect$: conn,
-        TeqFw_Db_Back_Util$: util,
-        TeqFw_Core_Back_Util_File$: utilFile,
-        TeqFw_Db_Back_Api_Import_Transform$: transform,
-        TeqFw_Db_Back_Act_Dem_Tables$: aDemTables,
-    }
-) {
+export default function Factory({DEF, logger, fCommand, fOpt, app, conn, util, utilFile, transform, aDemTables}) {
 
     // FUNCS
     /**
@@ -105,3 +99,18 @@ export default function Factory(
     res.opts.push(optFile);
     return res;
 }
+
+export const __deps__ = Object.freeze({
+    default: Object.freeze({
+            DEF: 'TeqFw_Db_Back_Defaults$',
+            logger: 'TeqFw_Db_Back_Logger$',
+            fCommand: 'TeqFw_Db_Back_Cli_Dto_Command__Factory$',
+            fOpt: 'TeqFw_Db_Back_Cli_Dto_Command_Option__Factory$',
+            app: 'TeqFw_Db_Back_App_Shutdown$',
+            conn: 'TeqFw_Db_Back_RDb_Connect$',
+            util: 'TeqFw_Db_Back_Util$',
+            utilFile: 'TeqFw_Db_Back_Util_File$',
+            transform: 'TeqFw_Db_Back_Api_Import_Transform$',
+            aDemTables: 'TeqFw_Db_Back_Act_Dem_Tables$',
+    }),
+});

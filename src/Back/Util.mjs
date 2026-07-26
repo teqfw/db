@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Util
+ * @description TeqFW database package module.
+ */
+
 /**
  * Relational DB utilities.
  *

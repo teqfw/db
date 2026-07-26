@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Cli_Export_A_Select
+ * @description TeqFW database package module.
+ */
+
 /**
  * @implements TeqFw_Core_Shared_Api_Action
  */
@@ -5,11 +12,7 @@ export default class TeqFw_Db_Back_Cli_Export_A_Select {
     /**
      * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Column} COLUMN
      */
-    constructor(
-        {
-            'TeqFw_Db_Back_Enum_Db_Type_Column.default': COLUMN,
-        }
-    ) {
+    constructor({COLUMN}) {
 
         /**
          * @param {TeqFw_Db_Back_RDb_ITrans} trx
@@ -34,3 +37,9 @@ export default class TeqFw_Db_Back_Cli_Export_A_Select {
 
     }
 }
+
+export const __deps__ = Object.freeze({
+    default: Object.freeze({
+            COLUMN: 'TeqFw_Db_Back_Enum_Db_Type_Column__default',
+    }),
+});

@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Api_Import_Transform
+ * @description TeqFW database package module.
+ */
+
 /**
  * The interface for data transformation tools specifically designed to pre-process the imported JSON data before
  * insertion into a Relational Database (RDB).

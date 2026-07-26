@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_RDb_CrudEngine
+ * @description TeqFW database package module.
+ */
+
 /**
  * 'knex' based engine to perform simple CRUD operations.
  * @implements TeqFw_Db_Back_Api_RDb_CrudEngine

@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Shared_Dto_Order
+ * @description TeqFW database package module.
+ */
+
 /**
  *  Structure for 'ORDER BY' entry.
  *  @namespace TeqFw_Db_Shared_Dto_Order
@@ -40,12 +47,7 @@ export default class TeqFw_Db_Shared_Dto_Order {
      * @param {TeqFw_Core_Shared_Util_Cast} cast
      * @param {typeof TeqFw_Db_Shared_Enum_Direction} DIR
      */
-    constructor(
-        {
-            TeqFw_Core_Shared_Util_Cast$: cast,
-            TeqFw_Db_Shared_Enum_Direction$: DIR,
-        }
-    ) {
+    constructor({cast, DIR}) {
         // INSTANCE METHODS
         /**
          * @param {TeqFw_Db_Shared_Dto_Order.Dto} [data]
@@ -63,3 +65,10 @@ export default class TeqFw_Db_Shared_Dto_Order {
         this.getAttributes = () => ATTR;
     }
 }
+
+export const __deps__ = Object.freeze({
+    default: Object.freeze({
+            cast: 'TeqFw_Db_Shared_Util_Cast$',
+            DIR: 'TeqFw_Db_Shared_Enum_Direction__default',
+    }),
+});

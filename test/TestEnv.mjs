@@ -47,15 +47,12 @@ const container = (function (cfg) {
     /** @type {TeqFw_Di_Container} */
     const res = new Container();
     const pathNode = join(cfg.path.root, 'node_modules');
-    const srcTeqFwDi = join(pathNode, '@teqfw/di/src');
-    const srcTeqFwCore = join(pathNode, '@teqfw/core/src');
+    const srcTeqFwLog = join(pathNode, "@teqfw/log/src");
     // add backend sources to the map
-    res.getResolver().addNamespaceRoot('TeqFw_Db', cfg.path.src, 'mjs');
-    res.getResolver().addNamespaceRoot('TeqFw_Core', srcTeqFwCore, 'mjs');
-    res.getResolver().addNamespaceRoot('TeqFw_Di', srcTeqFwDi, 'mjs');
+    res.addNamespaceRoot("TeqFw_Db_", cfg.path.src, ".mjs");
+    res.addNamespaceRoot("TeqFw_Log_", srcTeqFwLog, ".mjs");
     return res;
 })(cfg);
-container.enableTestMode();
 
 /**
  * Load local config.
@@ -86,7 +83,7 @@ const localCfg = await (async function (cfg, container) {
     /** @type {TeqFw_Db_Back_Defaults} */
     const DEF = await container.get('TeqFw_Db_Back_Defaults$');
     /** @type {TeqFw_Core_Back_Config} */
-    const config = await container.get('TeqFw_Core_Back_Config$');
+    const config = await container.get("TeqFw_Db_Back_Config$");
     const pathData = join(cfg.path.test, 'data');
     config.loadLocal(pathData);
     const local = config.getLocal();
@@ -100,8 +97,8 @@ const localCfg = await (async function (cfg, container) {
  */
 const dbConnect = async function () {
     /** @type {TeqFw_Db_Back_RDb_Connect} */
-    const conn = await container.get('TeqFw_Db_Back_RDb_Connect$$'); // instance
-    await conn.init(localCfg.mariadb);
+    const conn = await container.get('TeqFw_Db_Back_RDb_Connect$'); // instance
+    await conn.init({client: "sqlite3", connection: {filename: ":memory:"}, useNullAsDefault: true});
     // await conn.init(localCfg.pg);
     return conn;
 };

@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Plugin_Init
+ * @description TeqFW database package module.
+ */
+
 /**
  * Plugin initialization function.
  */
@@ -9,12 +16,7 @@ const NS = 'TeqFw_Db_Back_Plugin_Init';
  * @param {TeqFw_Core_Back_Config} config
  * @param {TeqFw_Db_Back_RDb_Connect} conn -  use interface as implementation
  */
-export default function Factory(
-    {
-        TeqFw_Db_Back_Defaults$: DEF,
-        TeqFw_Core_Back_Config$: config,
-        TeqFw_Db_Back_RDb_IConnect$: conn,
-    }) {
+export default function Factory({DEF, config, conn}) {
     // FUNCS
     async function action() {
         // RDB connection
@@ -31,3 +33,11 @@ export default function Factory(
 
 // finalize code components for this es6-module
 Object.defineProperty(Factory, 'namespace', {value: NS});
+
+export const __deps__ = Object.freeze({
+    default: Object.freeze({
+            DEF: 'TeqFw_Db_Back_Defaults$',
+            config: 'TeqFw_Db_Back_Config$',
+            conn: 'TeqFw_Db_Back_RDb_Connect$',
+    }),
+});

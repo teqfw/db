@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Defaults
+ * @description TeqFW database package module.
+ */
+
 /**
  * Plugin level constants (hardcoded configuration).
  */

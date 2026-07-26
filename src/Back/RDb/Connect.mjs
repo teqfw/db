@@ -1,11 +1,15 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_RDb_Connect
+ * @description TeqFW database package module.
+ */
+
 /**
  * RDBMS connector (based on 'knex' connector).
  *
  * @namespace TeqFw_Db_Back_RDb_Connect
  */
-// MODULE'S IMPORT
-import knex from 'knex';
-
 /**
  * Default implementation for 'knex' based database connector.
  * @implements TeqFw_Db_Back_RDb_IConnect
@@ -16,12 +20,7 @@ export default class TeqFw_Db_Back_RDb_Connect {
      * @param {TeqFw_Db_Back_RDb_Connect_Resolver} _resolver -  instance per connection
      * @param {typeof TeqFw_Db_Back_RDb_Trans} Trans
      */
-    constructor(
-        {
-            TeqFw_Core_Shared_Api_Logger$$: _logger,
-            TeqFw_Db_Back_RDb_Connect_Resolver$$: _resolver,
-            'TeqFw_Db_Back_RDb_Trans.default': Trans,
-        }) {
+    constructor({_logger, _resolver, Trans, knexFactory}) {
         // VARS
         /** @type {Knex} */
         let _knex;
@@ -48,7 +47,7 @@ export default class TeqFw_Db_Back_RDb_Connect {
                 _info = `'${db}@${host}' as '${user}'`;
             }
             try {
-                _knex = await knex(clone);
+                _knex = await knexFactory(clone);
                 _logger.info(`Setup connection to DB ${_info}.`);
             } catch (e) {
                 _logger.error(`Cannot setup connection to DB ${_info}. Error: ${e}`);
@@ -122,3 +121,12 @@ export default class TeqFw_Db_Back_RDb_Connect {
         };
     }
 }
+
+export const __deps__ = Object.freeze({
+    default: Object.freeze({
+            _logger: 'TeqFw_Db_Back_Logger$',
+            _resolver: 'TeqFw_Db_Back_RDb_Connect_Resolver$$',
+            Trans: 'TeqFw_Db_Back_RDb_Trans__default',
+            knexFactory: 'npm:knex__default',
+    }),
+});

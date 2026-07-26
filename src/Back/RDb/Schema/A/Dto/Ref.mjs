@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_RDb_Schema_A_Dto_Ref
+ * @description TeqFW database package module.
+ */
+
 /**
  * DTO for DEM 'ref' (reference to external entities and attributes).
  * This DTO is used in 'TeqFw_Db_Back_RDb_Schema_A' namespace only.
@@ -29,11 +36,7 @@ export class Factory {
     /**
      * @param {TeqFw_Core_Shared_Util_Cast} cast
      */
-    constructor(
-        {
-            TeqFw_Core_Shared_Util_Cast$: cast,
-        }
-    ) {
+    constructor({cast}) {
         /**
          * @param {TeqFw_Db_Back_RDb_Schema_A_Dto_Ref|null} data
          * @returns {TeqFw_Db_Back_RDb_Schema_A_Dto_Ref}
@@ -49,3 +52,9 @@ export class Factory {
 
 // finalize code components for this es6-module
 Object.freeze(TeqFw_Db_Back_RDb_Schema_A_Dto_Ref);
+
+export const __deps__ = Object.freeze({
+    Factory: Object.freeze({
+            cast: 'TeqFw_Db_Shared_Util_Cast$',
+    }),
+});

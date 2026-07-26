@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Dto_RDb_Relation
+ * @description TeqFW database package module.
+ */
+
 /**
  * DTO with table foreign key data.
  */
@@ -38,12 +45,7 @@ export class Factory {
      * @param {TeqFw_Core_Shared_Util_Cast} cast
      * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Action} ACTION
      */
-    constructor(
-        {
-            TeqFw_Core_Shared_Util_Cast$: cast,
-            'TeqFw_Db_Back_Enum_Db_Type_Action.default': ACTION
-        }
-    ) {
+    constructor({cast, ACTION}) {
         /**
          * @param {TeqFw_Db_Back_Dto_RDb_Relation|null} data
          * @returns {TeqFw_Db_Back_Dto_RDb_Relation}
@@ -63,3 +65,10 @@ export class Factory {
 
 // finalize code components for this es6-module
 Object.freeze(TeqFw_Db_Back_Dto_RDb_Relation);
+
+export const __deps__ = Object.freeze({
+    Factory: Object.freeze({
+            cast: 'TeqFw_Db_Shared_Util_Cast$',
+            ACTION: 'TeqFw_Db_Back_Enum_Db_Type_Action__default',
+    }),
+});

@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_RDb_ITrans
+ * @description TeqFW database package module.
+ */
+
 /**
  * Interface for single transaction to manipulate data in DB.
  * Connection creates transaction.

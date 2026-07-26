@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_RDb_Schema
+ * @description TeqFW database package module.
+ */
+
 /**
  * Default implementation for schema builder using DEM.
  *
@@ -11,13 +18,7 @@ export default class TeqFw_Db_Back_RDb_Schema {
      * @param {TeqFw_Db_Back_RDb_Schema_A_Builder} _builder
      */
 
-    constructor(
-        {
-            TeqFw_Core_Shared_Api_Logger$: _logger,
-            TeqFw_Db_Back_RDb_Schema_A_Convert$: _aConvert,
-            TeqFw_Db_Back_RDb_Schema_A_Order$: _aOrder,
-            TeqFw_Db_Back_RDb_Schema_A_Builder$: _builder,
-        }) {
+    constructor({_logger, _aConvert, _aOrder, _builder}) {
         // VARS
         /** @type {TeqFw_Db_Back_Dto_Dem} */
         let _dem;
@@ -119,3 +120,12 @@ export default class TeqFw_Db_Back_RDb_Schema {
 
 
 }
+
+export const __deps__ = Object.freeze({
+    default: Object.freeze({
+            _logger: 'TeqFw_Db_Back_Logger$',
+            _aConvert: 'TeqFw_Db_Back_RDb_Schema_A_Convert$',
+            _aOrder: 'TeqFw_Db_Back_RDb_Schema_A_Order$',
+            _builder: 'TeqFw_Db_Back_RDb_Schema_A_Builder$',
+    }),
+});

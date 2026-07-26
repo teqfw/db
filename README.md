@@ -1,5 +1,20 @@
 # @teqfw/db
 
+## Version lines
+
+- `main` contains the 2.x line for `@teqfw/di` 2.x.
+- `v1` preserves the legacy implementation and composition model.
+
+The 2.x package registers `TeqFw_Db_` from `./src` in `package.json` and uses export-scoped `__deps__` declarations with DI 2.x named-export specifiers.
+
+The authoritative project documentation is organized as ADSM cognitive context under [`ctx/docs`](ctx/docs/):
+
+- [`product`](ctx/docs/product/overview.md) — scope, roles, use cases, and terms;
+- [`architecture`](ctx/docs/architecture/overview.md) — model composition, schema, CRUD, and integrations;
+- [`environment`](ctx/docs/environment/overview.md) — runtime and database prerequisites;
+- [`code`](ctx/docs/code/overview.md) — source mapping, DI conventions, and testing.
+
+
 The base plugin to work with RDBMS databases in the Tequila Framework (TeqFW).
 
 ## Disclaimer
@@ -46,7 +61,7 @@ This plugin uses `TeqFw_Db` namespace.
       "filename": "/.../db.sqlite",
       "flags": ["for", "SQLite"],
       "host": "127.0.0.1",
-      "passwordHash": "...",
+      "password": "...",
       "port": 3210,
       "socketPath": "/path/to/socket",
       "user": "name"

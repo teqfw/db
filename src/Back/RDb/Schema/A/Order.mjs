@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_RDb_Schema_A_Order
+ * @description TeqFW database package module.
+ */
+
 /**
  * Order DEM entities (dependencies go first: [base, dep, ...]).
  * @implements TeqFw_Core_Shared_Api_Action_Async
@@ -8,13 +15,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Order {
      * @param {TeqFw_Db_Back_Dto_Dem_Entity.Factory} factEntity
      * @param {TeqFw_Core_Shared_Util_Deep} deep
      */
-    constructor(
-        {
-            TeqFw_Core_Shared_Logger$$: logger, // inject the implementation
-            'TeqFw_Db_Back_Dto_Dem_Entity.Factory$': factEntity,
-            TeqFw_Core_Shared_Util_Deep$: deep,
-        }
-    ) {
+    constructor({logger, factEntity, deep}) {
         // INSTANCE METHODS
         /**
          * @param {TeqFw_Db_Back_Dto_Dem} dem
@@ -184,3 +185,11 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Order {
         };
     }
 }
+
+export const __deps__ = Object.freeze({
+    default: Object.freeze({
+            logger: 'TeqFw_Db_Back_Logger$',
+            factEntity: 'TeqFw_Db_Back_Dto_Dem_Entity__Factory$',
+            deep: 'TeqFw_Db_Shared_Util_Deep$',
+    }),
+});

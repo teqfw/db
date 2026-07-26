@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Shared_Util_List
+ * @description TeqFW database package module.
+ */
+
 /**
  * Utilities related to listings processing.
  *

@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_RDb_IConnect
+ * @description TeqFW database package module.
+ */
+
 /**
  * Interface for RDBMS connection based on 'knex' library.
  * @interface

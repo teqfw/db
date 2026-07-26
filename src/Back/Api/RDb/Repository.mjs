@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Api_RDb_Repository
+ * @description TeqFW database package module.
+ */
+
 /**
  * Interface defining CRUD operations for a single RDB table in TeqFW.
  * Designed with focus on code mutability and compositional objects.

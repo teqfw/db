@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Util_ListQuery
+ * @description TeqFW database package module.
+ */
+
 export default class TeqFw_Db_Back_Util_ListQuery {
     /**
      * Convert the query columns into the tables' fields to group by.

@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Enum_Db_Type_Column
+ * @description TeqFW database package module.
+ */
+
 /**
  * Enumeration for column types (knex related).
  */

@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Shared_Dto_List_Event_Response
+ * @description TeqFW database package module.
+ */
+
 /**
  * Base for event responses to send listing to frontend.
  */
@@ -33,12 +40,7 @@ export default class TeqFw_Db_Shared_Dto_List_Event_Response {
      * @param {TeqFw_Core_Shared_Util_Cast} cast
      * @param {TeqFw_Db_Shared_Dto_List_Selection} dtoSelection
      */
-    constructor(
-        {
-            TeqFw_Core_Shared_Util_Cast$: cast,
-            TeqFw_Db_Shared_Dto_List_Selection$: dtoSelection,
-        }
-    ) {
+    constructor({cast, dtoSelection}) {
         // INSTANCE METHODS
         /**
          * @param {TeqFw_Db_Shared_Dto_List_Event_Response.Dto} [data]
@@ -55,3 +57,10 @@ export default class TeqFw_Db_Shared_Dto_List_Event_Response {
         };
     }
 }
+
+export const __deps__ = Object.freeze({
+    default: Object.freeze({
+            cast: 'TeqFw_Db_Shared_Util_Cast$',
+            dtoSelection: 'TeqFw_Db_Shared_Dto_List_Selection$',
+    }),
+});

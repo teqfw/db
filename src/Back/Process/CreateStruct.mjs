@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Process_CreateStruct
+ * @description TeqFW database package module.
+ */
+
 /**
  * Process to create DB structure from DEM descriptor.
  */
@@ -10,15 +17,7 @@ export default class TeqFw_Db_Back_Process_CreateStruct {
      * @param {TeqFw_Db_Back_Api_RDb_Schema} dbSchema
      * @param {TeqFw_Db_Back_Dem_Load} demLoad
      */
-    constructor(
-        {
-            TeqFw_Core_Shared_Api_Logger$$: logger,
-            TeqFw_Core_Back_Config$: config,
-            TeqFw_Db_Back_RDb_IConnect$: conn,
-            TeqFw_Db_Back_Api_RDb_CrudEngine$: crud,
-            TeqFw_Db_Back_Api_RDb_Schema$: dbSchema,
-            TeqFw_Db_Back_Dem_Load$: demLoad,
-        }) {
+    constructor({logger, config, conn, crud, dbSchema, demLoad}) {
         // INSTANCE METHODS
 
         /**
@@ -72,3 +71,14 @@ export default class TeqFw_Db_Back_Process_CreateStruct {
 
     }
 }
+
+export const __deps__ = Object.freeze({
+    default: Object.freeze({
+            logger: 'TeqFw_Db_Back_Logger$',
+            config: 'TeqFw_Db_Back_Config$',
+            conn: 'TeqFw_Db_Back_RDb_Connect$',
+            crud: 'TeqFw_Db_Back_RDb_CrudEngine$',
+            dbSchema: 'TeqFw_Db_Back_RDb_Schema$',
+            demLoad: 'TeqFw_Db_Back_Dem_Load$',
+    }),
+});

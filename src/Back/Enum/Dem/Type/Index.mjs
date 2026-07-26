@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Enum_Dem_Type_Index
+ * @description TeqFW database package module.
+ */
+
 /**
  * Enumeration for index types (DEM related).
  */

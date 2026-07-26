@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Shared_Dto_List_Selection_Filter_Value
+ * @description TeqFW database package module.
+ */
+
 /**
  *  The 'value' node used in the selection filter.
  *  @namespace TeqFw_Db_Shared_Dto_List_Selection_Filter_Value
@@ -31,11 +38,7 @@ export default class TeqFw_Db_Shared_Dto_List_Selection_Filter_Value {
     /**
      * @param {TeqFw_Core_Shared_Util_Cast} cast
      */
-    constructor(
-        {
-            TeqFw_Core_Shared_Util_Cast$: cast,
-        }
-    ) {
+    constructor({cast}) {
         // INSTANCE METHODS
         /**
          * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Value.Dto} [data]
@@ -52,3 +55,9 @@ export default class TeqFw_Db_Shared_Dto_List_Selection_Filter_Value {
         this.getAttributes = () => ATTR;
     }
 }
+
+export const __deps__ = Object.freeze({
+    default: Object.freeze({
+            cast: 'TeqFw_Db_Shared_Util_Cast$',
+    }),
+});

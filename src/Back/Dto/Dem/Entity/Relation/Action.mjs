@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action
+ * @description TeqFW database package module.
+ */
+
 /**
  * DTO for DEM 'entity/relation/action'.
  */
@@ -23,11 +30,7 @@ export class Factory {
      * @param {TeqFw_Core_Shared_Util_Cast} cast
      * @param {typeof TeqFw_Db_Back_Enum_Dem_Type_Action} ACTION
      */
-    constructor(
-        {
-            TeqFw_Core_Shared_Util_Cast$: cast,
-            'TeqFw_Db_Back_Enum_Dem_Type_Action.default': ACTION,
-        }) {
+    constructor({cast, ACTION}) {
         /**
          * @param {TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action|null} data
          * @returns {TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action}
@@ -43,3 +46,10 @@ export class Factory {
 
 // finalize code components for this es6-module
 Object.freeze(TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action);
+
+export const __deps__ = Object.freeze({
+    Factory: Object.freeze({
+            cast: 'TeqFw_Db_Shared_Util_Cast$',
+            ACTION: 'TeqFw_Db_Back_Enum_Dem_Type_Action__default',
+    }),
+});

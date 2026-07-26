@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Dem_Load_A_Norm
+ * @description TeqFW database package module.
+ */
+
 /**
  * Normalize DEM:
  *   - set paths to entities;
@@ -23,16 +30,11 @@ function normName(data) {
 export default class TeqFw_Db_Back_Dem_Load_A_Norm {
     /**
      * @param {TeqFw_Db_Back_Defaults} DEF
-     * @param {TeqFw_Core_Shared_Util_Probe.deepMerge|function} _deepMerge
+     * @param {TeqFw_Db_Shared_Util_Deep} deep
      * @param {TeqFw_Db_Back_Dto_Dem.Factory} _factory
      */
 
-    constructor(
-        {
-            TeqFw_Db_Back_Defaults$: DEF,
-            'TeqFw_Core_Shared_Util_Probe.deepMerge': _deepMerge,
-            'TeqFw_Db_Back_Dto_Dem.Factory$': _factory,
-        }) {
+    constructor({DEF, deep, _factory}) {
 
         // INSTANCE METHODS
         /**
@@ -98,10 +100,18 @@ export default class TeqFw_Db_Back_Dem_Load_A_Norm {
                 // set full paths for entities taking into account references mapping
                 setPaths(part, map.ref[plugin], DEF.PS, DEF.PS);
                 delete part.refs;
-                _deepMerge(dem, part);
+                deep.merge(dem, part);
             }
 
             return {dem};
         };
     }
 }
+
+export const __deps__ = Object.freeze({
+    default: Object.freeze({
+            DEF: 'TeqFw_Db_Back_Defaults$',
+            deep: "TeqFw_Db_Shared_Util_Deep$",
+            _factory: 'TeqFw_Db_Back_Dto_Dem__Factory$',
+    }),
+});

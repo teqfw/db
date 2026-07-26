@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_RDb_Trans
+ * @description TeqFW database package module.
+ */
+
 /**
  * Knex based implementation for single transaction to manipulate data in DB.
  * @implements TeqFw_Db_Back_RDb_ITrans

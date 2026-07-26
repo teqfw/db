@@ -1,5 +1,13 @@
 # @teqfw/db: releases
 
+## 2.0.0 - DI 2.x migration draft
+
+- Preserved the legacy line on branch `v1`.
+- Migrated runtime composition to export-scoped `__deps__` declarations for `@teqfw/di` 2.x.
+- Moved authoritative package documentation into ADSM context under `ctx/docs`.
+- Removed runtime coupling to the legacy `@teqfw/core` package.
+- Added DI graph and SQLite integration verification.
+
 ## 0.26.0 - Enhanced selection DTO handling and order-by consistency
 
 - Refactored `TeqFw_Db_Shared_Dto_List_Selection`: separated class definition from metadata and improved DTO

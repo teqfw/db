@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_RDb_Schema_A_Convert
+ * @description TeqFW database package module.
+ */
+
 /**
  * Convert DEM DTO Entity to RDB DTO Table.
  *
@@ -18,20 +25,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
      * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Action} TDbActionType
      */
 
-    constructor(
-        {
-            TeqFw_Db_Back_Defaults$: DEF,
-            'TeqFw_Db_Back_Dto_RDb_Column.Factory$': fColumn,
-            'TeqFw_Db_Back_Dto_RDb_Index.Factory$': fIndex,
-            'TeqFw_Db_Back_Dto_RDb_Relation.Factory$': fRelation,
-            'TeqFw_Db_Back_Dto_RDb_Table.Factory$': fTable,
-            TeqFw_Db_Back_Enum_Dem_Type_Attr$: TDemAttr,
-            TeqFw_Db_Back_Enum_Dem_Type_Index$: TDemIndex,
-            TeqFw_Db_Back_Enum_Dem_Type_Action$: TDemAction,
-            TeqFw_Db_Back_Enum_Db_Type_Column$: TDbColType,
-            TeqFw_Db_Back_Enum_Db_Type_Index$: TDbIndexType,
-            TeqFw_Db_Back_Enum_Db_Type_Action$: TDbActionType,
-        }) {
+    constructor({DEF, fColumn, fIndex, fRelation, fTable, TDemAttr, TDemIndex, TDemAction, TDbColType, TDbIndexType, TDbActionType}) {
         // VARS
         const mapAction = {
             [TDemAction.CASCADE]: TDbActionType.CASCADE,
@@ -163,3 +157,19 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
 
     }
 }
+
+export const __deps__ = Object.freeze({
+    default: Object.freeze({
+            DEF: 'TeqFw_Db_Back_Defaults$',
+            fColumn: 'TeqFw_Db_Back_Dto_RDb_Column__Factory$',
+            fIndex: 'TeqFw_Db_Back_Dto_RDb_Index__Factory$',
+            fRelation: 'TeqFw_Db_Back_Dto_RDb_Relation__Factory$',
+            fTable: 'TeqFw_Db_Back_Dto_RDb_Table__Factory$',
+            TDemAttr: 'TeqFw_Db_Back_Enum_Dem_Type_Attr__default',
+            TDemIndex: 'TeqFw_Db_Back_Enum_Dem_Type_Index__default',
+            TDemAction: 'TeqFw_Db_Back_Enum_Dem_Type_Action__default',
+            TDbColType: 'TeqFw_Db_Back_Enum_Db_Type_Column__default',
+            TDbIndexType: 'TeqFw_Db_Back_Enum_Db_Type_Index__default',
+            TDbActionType: 'TeqFw_Db_Back_Enum_Db_Type_Action__default',
+    }),
+});

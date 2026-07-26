@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Api_RDb_Query_List
+ * @description TeqFW database package module.
+ */
+
 /**
  * Interface for RDBMS queries builders to get items for listings.
  * @interface

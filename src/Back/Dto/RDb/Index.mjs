@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Dto_RDb_Index
+ * @description TeqFW database package module.
+ */
+
 /**
  * DTO with table index data.
  */
@@ -29,12 +36,7 @@ export class Factory {
      * @param {TeqFw_Core_Shared_Util_Cast} cast
      * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Index} INDEX
      */
-    constructor(
-        {
-            TeqFw_Core_Shared_Util_Cast$: cast,
-            'TeqFw_Db_Back_Enum_Db_Type_Index.default': INDEX
-        }
-    ) {
+    constructor({cast, INDEX}) {
 
         /**
          * @param {TeqFw_Db_Back_Dto_RDb_Index|null} data
@@ -52,3 +54,10 @@ export class Factory {
 
 // finalize code components for this es6-module
 Object.freeze(TeqFw_Db_Back_Dto_RDb_Index);
+
+export const __deps__ = Object.freeze({
+    Factory: Object.freeze({
+            cast: 'TeqFw_Db_Shared_Util_Cast$',
+            INDEX: 'TeqFw_Db_Back_Enum_Db_Type_Index__default',
+    }),
+});

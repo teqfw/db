@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Dto_Export
+ * @description TeqFW database package module.
+ */
+
 /**
  * The format in which the exported/imported information is organized.
  */
@@ -29,11 +36,7 @@ export default class TeqFw_Db_Back_Dto_Export {
     /**
      * @param {TeqFw_Core_Shared_Util_Cast} cast
      */
-    constructor(
-        {
-            TeqFw_Core_Shared_Util_Cast$: cast,
-        }
-    ) {
+    constructor({cast}) {
         /**
          * @param {TeqFw_Db_Back_Dto_Export.Dto} [data]
          * @returns {TeqFw_Db_Back_Dto_Export.Dto}
@@ -48,3 +51,9 @@ export default class TeqFw_Db_Back_Dto_Export {
         };
     }
 }
+
+export const __deps__ = Object.freeze({
+    default: Object.freeze({
+            cast: 'TeqFw_Db_Shared_Util_Cast$',
+    }),
+});

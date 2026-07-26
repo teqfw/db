@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Dem_Load_A_SchemaCfg
+ * @description TeqFW database package module.
+ */
+
 /**
  * Compose schema configuration from DEMs union and map file.
  *
@@ -7,10 +14,7 @@ export default class TeqFw_Db_Back_Dem_Load_A_SchemaCfg {
     /**
      * @param {TeqFw_Db_Back_Dto_Config_Schema.Factory} factory
      */
-    constructor(
-        {
-            'TeqFw_Db_Back_Dto_Config_Schema.Factory$': factory,
-        }) {
+    constructor({factory}) {
         // noinspection JSCheckFunctionSignatures
         /**
          * Load DEM mapping data for the application and parse it.
@@ -25,3 +29,9 @@ export default class TeqFw_Db_Back_Dem_Load_A_SchemaCfg {
         }
     }
 }
+
+export const __deps__ = Object.freeze({
+    default: Object.freeze({
+            factory: 'TeqFw_Db_Back_Dto_Config_Schema__Factory$',
+    }),
+});

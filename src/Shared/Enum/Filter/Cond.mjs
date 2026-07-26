@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Shared_Enum_Filter_Cond
+ * @description TeqFW database package module.
+ */
+
 /**
  * The enumeration for conditions used in the selection filter.
  */

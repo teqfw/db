@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_RDb_Meta_IEntity
+ * @description TeqFW database package module.
+ */
+
 /**
  * Meta information for RDB entities.
  * @see {TeqFw_Db_Back_RDb_Schema_EntityBase}

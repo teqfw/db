@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Enum_Db_Type_Action
+ * @description TeqFW database package module.
+ */
+
 /**
  * Enumeration for foreign key action types (on delete/update).
  */

@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Dto_Dem
+ * @description TeqFW database package module.
+ */
+
 /**
  * DTO for DEM (Domain Entities Model).
  *
@@ -44,12 +51,7 @@ export class Factory {
      * @param {TeqFw_Db_Back_Dto_Dem_Package.Factory} fPkg
      */
 
-    constructor(
-        {
-            'TeqFw_Db_Back_Dto_Dem_Entity.default': TEntity,
-            'TeqFw_Db_Back_Dto_Dem_Entity.Factory$': fEntity,
-            'TeqFw_Db_Back_Dto_Dem_Package.Factory$': fPkg,
-        }) {
+    constructor({TEntity, fEntity, fPkg}) {
         /**
          * @param {TeqFw_Db_Back_Dto_Dem|null} data
          * @returns {TeqFw_Db_Back_Dto_Dem}
@@ -97,3 +99,11 @@ export class Factory {
 
 // finalize code components for this es6-module
 Object.freeze(TeqFw_Db_Back_Dto_Dem);
+
+export const __deps__ = Object.freeze({
+    Factory: Object.freeze({
+            TEntity: 'TeqFw_Db_Back_Dto_Dem_Entity__default',
+            fEntity: 'TeqFw_Db_Back_Dto_Dem_Entity__Factory$',
+            fPkg: 'TeqFw_Db_Back_Dto_Dem_Package__Factory$',
+    }),
+});

@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_RDb_Schema_EntityBase
+ * @description TeqFW database package module.
+ */
+
 /**
  * This builder adds methods for empty object according to 'TeqFw_Db_Back_RDb_Meta_IEntity' interface.
  *

@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Api_RDb_QueryBuilder
+ * @description TeqFW database package module.
+ */
+
 /**
  * Interface for RDBMS queries builders.
  * @interface

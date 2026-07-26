@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_RDb_Connect_Resolver
+ * @description TeqFW database package module.
+ */
+
 /**
  * Resolve entities names to tables names according to connection configuration.
  */
@@ -5,11 +12,7 @@ export default class TeqFw_Db_Back_RDb_Connect_Resolver {
     /**
      * @param {TeqFw_Db_Back_Defaults} DEF
      */
-    constructor(
-        {
-            TeqFw_Db_Back_Defaults$: DEF,
-        }
-    ) {
+    constructor({DEF}) {
         // VARS
         /** @type {TeqFw_Db_Back_Dto_Config_Schema} */
         let _cfg;
@@ -37,3 +40,9 @@ export default class TeqFw_Db_Back_RDb_Connect_Resolver {
         this.setConfig = (cfg) => _cfg = cfg;
     }
 }
+
+export const __deps__ = Object.freeze({
+    default: Object.freeze({
+            DEF: 'TeqFw_Db_Back_Defaults$',
+    }),
+});

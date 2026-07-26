@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond
+ * @description TeqFW database package module.
+ */
+
 /**
  *  The 'cond' node used in the selection filter.
  *  @namespace TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond
@@ -44,13 +51,7 @@ export default class TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond {
      * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Func} dtoFunc
      * @param {typeof TeqFw_Db_Shared_Enum_Filter_Cond} COND
      */
-    constructor(
-        {
-            TeqFw_Core_Shared_Util_Cast$: cast,
-            TeqFw_Db_Shared_Dto_List_Selection_Filter_Func$: dtoFunc,
-            TeqFw_Db_Shared_Enum_Filter_Cond$: COND,
-        }
-    ) {
+    constructor({cast, dtoFunc, COND}) {
         // INSTANCE METHODS
         /**
          * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond.Dto} [data]
@@ -73,3 +74,11 @@ export default class TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond {
         this.getAttributes = () => ATTR;
     }
 }
+
+export const __deps__ = Object.freeze({
+    default: Object.freeze({
+            cast: 'TeqFw_Db_Shared_Util_Cast$',
+            dtoFunc: 'TeqFw_Db_Shared_Dto_List_Selection_Filter_Func$',
+            COND: 'TeqFw_Db_Shared_Enum_Filter_Cond__default',
+    }),
+});

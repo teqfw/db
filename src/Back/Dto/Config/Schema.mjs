@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Dto_Config_Schema
+ * @description TeqFW database package module.
+ */
+
 /**
  * Schema configuration DTO to couple DEM with DB.
  */
@@ -23,11 +30,7 @@ export class Factory {
     /**
      * @param {TeqFw_Core_Shared_Util_Cast} cast
      */
-    constructor(
-        {
-            TeqFw_Core_Shared_Util_Cast$: cast,
-        }
-    ) {
+    constructor({cast}) {
         /**
          * @param {TeqFw_Db_Back_Dto_Config_Schema|null} data
          * @returns {TeqFw_Db_Back_Dto_Config_Schema}
@@ -39,3 +42,9 @@ export class Factory {
         };
     }
 }
+
+export const __deps__ = Object.freeze({
+    Factory: Object.freeze({
+            cast: 'TeqFw_Db_Shared_Util_Cast$',
+    }),
+});

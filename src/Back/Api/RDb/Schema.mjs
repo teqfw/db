@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Api_RDb_Schema
+ * @description TeqFW database package module.
+ */
+
 /**
  * Interface for RDBMS schema builder that uses DEM (Domain Entities Model) to describe structure.
  * @interface

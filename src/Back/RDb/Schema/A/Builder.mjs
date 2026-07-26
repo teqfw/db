@@ -1,14 +1,16 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_RDb_Schema_A_Builder
+ * @description TeqFW database package module.
+ */
+
 export default class TeqFw_Db_Back_RDb_Schema_A_Builder {
     /**
      * @param {TeqFw_Core_Shared_Api_Logger} logger -  instance
      * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Column} TDbColType
      */
-    constructor(
-        {
-            TeqFw_Core_Shared_Logger$$: logger, // inject the implementation
-            TeqFw_Db_Back_Enum_Db_Type_Column$: TDbColType,
-        }
-    ) {
+    constructor({logger, TDbColType}) {
         // INSTANCE METHODS
 
         /**
@@ -116,3 +118,10 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Builder {
 
 
 }
+
+export const __deps__ = Object.freeze({
+    default: Object.freeze({
+            logger: 'TeqFw_Db_Back_Logger$',
+            TDbColType: 'TeqFw_Db_Back_Enum_Db_Type_Column__default',
+    }),
+});

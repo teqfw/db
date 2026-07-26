@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Shared_Util_Select
+ * @description TeqFW database package module.
+ */
+
 /**
  * Utility class for creating selection objects from data sets.
  */
@@ -6,11 +13,7 @@ export default class TeqFw_Db_Shared_Util_Select {
     /**
      * @param {TeqFw_Db_Shared_Dto_List_Selection} dtoSelect
      */
-    constructor(
-        {
-            TeqFw_Db_Shared_Dto_List_Selection$: dtoSelect,
-        }
-    ) {
+    constructor({dtoSelect}) {
         // VARS
         const COND = dtoSelect.getConditions();
         const DIR = dtoSelect.getDirections();
@@ -73,3 +76,9 @@ export default class TeqFw_Db_Shared_Util_Select {
 
     }
 }
+
+export const __deps__ = Object.freeze({
+    default: Object.freeze({
+            dtoSelect: 'TeqFw_Db_Shared_Dto_List_Selection$',
+    }),
+});

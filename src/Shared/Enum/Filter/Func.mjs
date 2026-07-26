@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Shared_Enum_Filter_Func
+ * @description TeqFW database package module.
+ */
+
 /**
  * The enumeration for function names used in the selection filter.
  */

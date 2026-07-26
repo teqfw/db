@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Dto_Config_Local
+ * @description TeqFW database package module.
+ */
+
 /**
  * Local configuration DTO for the plugin.
  * @see TeqFw_Core_Back_Config
@@ -40,12 +47,7 @@ export class Factory {
      * @param {TeqFw_Core_Shared_Util_Cast} cast
      * @param {TeqFw_Db_Back_Dto_Config_Local_Connection.Factory} fConn
      */
-    constructor(
-        {
-            TeqFw_Core_Shared_Util_Cast$: cast,
-            'TeqFw_Db_Back_Dto_Config_Local_Connection.Factory$': fConn,
-        }
-    ) {
+    constructor({cast, fConn}) {
         /**
          * @param {TeqFw_Db_Back_Dto_Config_Local|null} data
          * @returns {TeqFw_Db_Back_Dto_Config_Local}
@@ -61,3 +63,10 @@ export class Factory {
         };
     }
 }
+
+export const __deps__ = Object.freeze({
+    Factory: Object.freeze({
+            cast: 'TeqFw_Db_Shared_Util_Cast$',
+            fConn: 'TeqFw_Db_Back_Dto_Config_Local_Connection__Factory$',
+    }),
+});

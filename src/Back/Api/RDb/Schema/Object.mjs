@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Api_RDb_Schema_Object
+ * @description TeqFW database package module.
+ */
+
 /**
  * Interface defining metadata and operations for RDB entities in TeqFW.
  * Designed to standardize access to entity schema details.

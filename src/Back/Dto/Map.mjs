@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Dto_Map
+ * @description TeqFW database package module.
+ */
+
 /**
  * DTO for mapping data (paths mapping, references resolutions in plugins, tables namespace).
  */
@@ -38,12 +45,7 @@ export class Factory {
      * @param {TeqFw_Core_Shared_Util_Cast} cast
      * @param {TeqFw_Db_Back_Dto_Map_Ref.Factory} fRef
      */
-    constructor(
-        {
-            TeqFw_Core_Shared_Util_Cast$: cast,
-            'TeqFw_Db_Back_Dto_Map_Ref.Factory$': fRef,
-        }
-    ) {
+    constructor({cast, fRef}) {
         /**
          * @param {TeqFw_Db_Back_Dto_Map|null} data
          * @returns {TeqFw_Db_Back_Dto_Map}
@@ -85,3 +87,10 @@ export class Factory {
 
 // finalize code components for this es6-module
 Object.freeze(TeqFw_Db_Back_Dto_Map);
+
+export const __deps__ = Object.freeze({
+    Factory: Object.freeze({
+            cast: 'TeqFw_Db_Shared_Util_Cast$',
+            fRef: 'TeqFw_Db_Back_Dto_Map_Ref__Factory$',
+    }),
+});

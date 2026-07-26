@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Dto_RDb_Table
+ * @description TeqFW database package module.
+ */
+
 /**
  * DTO with table data (columns, indexes, foreign keys).
  */
@@ -36,14 +43,7 @@ export class Factory {
      * @param {TeqFw_Db_Back_Dto_RDb_Index.Factory} fIndex
      * @param {TeqFw_Db_Back_Dto_RDb_Relation.Factory} fRelation
      */
-    constructor(
-        {
-            TeqFw_Core_Shared_Util_Cast$: cast,
-            'TeqFw_Db_Back_Dto_RDb_Column.Factory$': fColumn,
-            'TeqFw_Db_Back_Dto_RDb_Index.Factory$': fIndex,
-            'TeqFw_Db_Back_Dto_RDb_Relation.Factory$': fRelation,
-        }
-    ) {
+    constructor({cast, fColumn, fIndex, fRelation}) {
         /**
          * @param {TeqFw_Db_Back_Dto_RDb_Table|null} data
          * @returns {TeqFw_Db_Back_Dto_RDb_Table}
@@ -62,3 +62,12 @@ export class Factory {
 
 // finalize code components for this es6-module
 Object.freeze(TeqFw_Db_Back_Dto_RDb_Table);
+
+export const __deps__ = Object.freeze({
+    Factory: Object.freeze({
+            cast: 'TeqFw_Db_Shared_Util_Cast$',
+            fColumn: 'TeqFw_Db_Back_Dto_RDb_Column__Factory$',
+            fIndex: 'TeqFw_Db_Back_Dto_RDb_Index__Factory$',
+            fRelation: 'TeqFw_Db_Back_Dto_RDb_Relation__Factory$',
+    }),
+});

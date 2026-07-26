@@ -5,22 +5,6 @@ import {join} from 'path';
 import {existsSync} from 'fs';
 
 const pathData = join(cfg.path.test, 'data/mod/ds002');
-const pathDataPlugin = join(pathData, 'node_modules/plugin');
-const pathDataVndPlugin = join(pathData, 'node_modules/@vnd/plugin');
-
-// mock dependencies
-const regPlugins = {
-    getMapPath2Name() {
-        return {
-            [pathData]: 'app',
-            [pathDataPlugin]: 'plugin',
-            [pathDataVndPlugin]: '@vnd/plugin'
-        }
-    }
-};
-try {
-    container.register('TeqFw_Core_Back_Api_Plugin_Registry$', regPlugins);
-} catch (e) {}
 
 // get an object from a container and run tests
 /** @type {TeqFw_Db_Back_Dem_Load} */

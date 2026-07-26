@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Dto_Config_Local_Connection
+ * @description TeqFW database package module.
+ */
+
 /**
  * DB connection DTO ('knex' compatible structure).
  */
@@ -43,11 +50,7 @@ export class Factory {
     /**
      * @param {TeqFw_Core_Shared_Util_Cast} cast
      */
-    constructor(
-        {
-            TeqFw_Core_Shared_Util_Cast$: cast,
-        }
-    ) {
+    constructor({cast}) {
         /**
          * @param {TeqFw_Db_Back_Dto_Config_Local_Connection|null} data
          * @returns {TeqFw_Db_Back_Dto_Config_Local_Connection}
@@ -66,3 +69,9 @@ export class Factory {
         };
     }
 }
+
+export const __deps__ = Object.freeze({
+    Factory: Object.freeze({
+            cast: 'TeqFw_Db_Shared_Util_Cast$',
+    }),
+});

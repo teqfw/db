@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Enum_Dem_Type_Attr
+ * @description TeqFW database package module.
+ */
+
 /**
  * Enumeration for attribute types (DEM related).
  */

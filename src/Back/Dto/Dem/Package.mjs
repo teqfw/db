@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Dto_Dem_Package
+ * @description TeqFW database package module.
+ */
+
 /**
  * DTO for DEM 'package'.
  */
@@ -23,10 +30,7 @@ export class Factory {
      * @param {TeqFw_Db_Back_Dto_Dem_Entity.Factory} fEntity
      */
 
-    constructor(
-        {
-            'TeqFw_Db_Back_Dto_Dem_Entity.Factory$': fEntity,
-        }) {
+    constructor({fEntity}) {
         /**
          * @param {TeqFw_Db_Back_Dto_Dem_Package|null} data
          * @returns {TeqFw_Db_Back_Dto_Dem_Package}
@@ -56,3 +60,9 @@ export class Factory {
 
 // finalize code components for this es6-module
 Object.freeze(TeqFw_Db_Back_Dto_Dem_Package);
+
+export const __deps__ = Object.freeze({
+    Factory: Object.freeze({
+            fEntity: 'TeqFw_Db_Back_Dto_Dem_Entity__Factory$',
+    }),
+});

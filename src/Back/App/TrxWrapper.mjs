@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_App_TrxWrapper
+ * @description TeqFW database package module.
+ */
+
 /**
  * Utility class for managing database operations with transaction support.
  * This class ensures that operations are executed within a transaction context,
@@ -8,12 +15,7 @@ export default class TeqFw_Db_Back_App_TrxWrapper {
      * @param {TeqFw_Core_Shared_Api_Logger} logger -  instance
      * @param {TeqFw_Db_Back_RDb_IConnect} conn - Database connection interface.
      */
-    constructor(
-        {
-            TeqFw_Core_Shared_Api_Logger$$: logger,
-            TeqFw_Db_Back_RDb_IConnect$: conn,
-        }
-    ) {
+    constructor({logger, conn}) {
         /**
          * Executes a database operation within an outer transaction or a newly created transaction.
          *
@@ -61,3 +63,10 @@ export default class TeqFw_Db_Back_App_TrxWrapper {
         };
     }
 }
+
+export const __deps__ = Object.freeze({
+    default: Object.freeze({
+            logger: 'TeqFw_Db_Back_Logger$',
+            conn: 'TeqFw_Db_Back_RDb_Connect$',
+    }),
+});

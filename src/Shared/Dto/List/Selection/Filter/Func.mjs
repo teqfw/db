@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Shared_Dto_List_Selection_Filter_Func
+ * @description TeqFW database package module.
+ */
+
 /**
  *  The 'func' node used in the selection filter.
  *  @namespace TeqFw_Db_Shared_Dto_List_Selection_Filter_Func
@@ -47,14 +54,7 @@ export default class TeqFw_Db_Shared_Dto_List_Selection_Filter_Func {
      * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Value} dtoValue
      * @param {typeof TeqFw_Db_Shared_Enum_Filter_Func} FN
      */
-    constructor(
-        {
-            TeqFw_Core_Shared_Util_Cast$: cast,
-            TeqFw_Db_Shared_Dto_List_Selection_Filter_Alias$: dtoAlias,
-            TeqFw_Db_Shared_Dto_List_Selection_Filter_Value$: dtoValue,
-            TeqFw_Db_Shared_Enum_Filter_Func$: FN,
-        }
-    ) {
+    constructor({cast, dtoAlias, dtoValue, FN}) {
         // INSTANCE METHODS
         /**
          * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Func.Dto} [data]
@@ -78,3 +78,12 @@ export default class TeqFw_Db_Shared_Dto_List_Selection_Filter_Func {
         this.getAttributes = () => ATTR;
     }
 }
+
+export const __deps__ = Object.freeze({
+    default: Object.freeze({
+            cast: 'TeqFw_Db_Shared_Util_Cast$',
+            dtoAlias: 'TeqFw_Db_Shared_Dto_List_Selection_Filter_Alias$',
+            dtoValue: 'TeqFw_Db_Shared_Dto_List_Selection_Filter_Value$',
+            FN: 'TeqFw_Db_Shared_Enum_Filter_Func__default',
+    }),
+});

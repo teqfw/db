@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Shared_Dto_List_Event_Request
+ * @description TeqFW database package module.
+ */
+
 /**
  * Base for event requests to get listing from backend.
  */
@@ -21,11 +28,7 @@ export default class TeqFw_Db_Shared_Dto_List_Event_Request {
     /**
      * @param {TeqFw_Db_Shared_Dto_List_Selection} dtoSelection
      */
-    constructor(
-        {
-            TeqFw_Db_Shared_Dto_List_Selection$: dtoSelection,
-        }
-    ) {
+    constructor({dtoSelection}) {
         // INSTANCE METHODS
         /**
          * @param {TeqFw_Db_Shared_Dto_List_Event_Request.Dto} [data]
@@ -40,3 +43,9 @@ export default class TeqFw_Db_Shared_Dto_List_Event_Request {
         };
     }
 }
+
+export const __deps__ = Object.freeze({
+    default: Object.freeze({
+            dtoSelection: 'TeqFw_Db_Shared_Dto_List_Selection$',
+    }),
+});

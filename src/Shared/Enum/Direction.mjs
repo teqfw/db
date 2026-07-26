@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Shared_Enum_Direction
+ * @description TeqFW database package module.
+ */
+
 /**
  * The enumeration for the ordering direction in the SQL quires.
  */

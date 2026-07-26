@@ -1,12 +1,7 @@
 import assert from 'assert';
-import {createContainer} from '@teqfw/test';
-import {dbConnect, dbDisconnect, dbReset, initConfig} from '../../common.mjs';
+import {container, dbConnect} from "../../../TestEnv.mjs";
 
-// SETUP CONTAINER
-const container = await createContainer();
-await initConfig(container);
 
-// SETUP ENVIRONMENT
 /** @type {TeqFw_Db_Back_App_Crud} */
 const crud = await container.get('TeqFw_Db_Back_App_Crud$');
 
@@ -20,17 +15,21 @@ class MockSchema {
 
 describe('TeqFw_Db_Back_App_Crud', () => {
     // Test variables
+    let conn;
     let PK;
     const ENTITY_NAME = 'Test Entity';
     const UPDATED_NAME = 'Updated Entity';
 
     before(async () => {
-        await dbReset(container);
-        await dbConnect(container);
+        conn = await dbConnect();
+        await conn.getSchemaBuilder().createTable("test_teqfw_db_user", (table) => {
+            table.increments("id").primary();
+            table.string("name");
+        });
     });
 
     after(async () => {
-        await dbDisconnect(container);
+        await conn.disconnect();
     });
 
     it('should successfully create a record', async () => {

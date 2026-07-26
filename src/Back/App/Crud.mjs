@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_App_Crud
+ * @description TeqFW database package module.
+ */
+
 /**
  * Class providing CRUD operations for database entities in TeqFW.
  * Methods support creating, reading, updating, and deleting records
@@ -11,12 +18,7 @@ export default class TeqFw_Db_Back_App_Crud {
      * @param {TeqFw_Db_Back_App_TrxWrapper} trxWrapper
      * @param {TeqFw_Db_Back_Mod_Selection} modSelect
      */
-    constructor(
-        {
-            TeqFw_Db_Back_App_TrxWrapper$: trxWrapper,
-            TeqFw_Db_Back_Mod_Selection$: modSelect,
-        }
-    ) {
+    constructor({trxWrapper, modSelect}) {
         // FUNCS
 
         /**
@@ -409,3 +411,10 @@ export default class TeqFw_Db_Back_App_Crud {
         };
     }
 }
+
+export const __deps__ = Object.freeze({
+    default: Object.freeze({
+            trxWrapper: 'TeqFw_Db_Back_App_TrxWrapper$',
+            modSelect: 'TeqFw_Db_Back_Mod_Selection$',
+    }),
+});

@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Dto_Dem_Entity
+ * @description TeqFW database package module.
+ */
+
 /**
  * DTO for DEM 'entity'.
  */
@@ -36,14 +43,7 @@ export class Factory {
      * @param {TeqFw_Db_Back_Dto_Dem_Entity_Index.Factory} fIndex
      * @param {TeqFw_Db_Back_Dto_Dem_Entity_Relation.Factory} fRelation
      */
-    constructor(
-        {
-            TeqFw_Core_Shared_Util_Cast$: cast,
-            'TeqFw_Db_Back_Dto_Dem_Entity_Attr.Factory$': fAttr,
-            'TeqFw_Db_Back_Dto_Dem_Entity_Index.Factory$': fIndex,
-            'TeqFw_Db_Back_Dto_Dem_Entity_Relation.Factory$': fRelation,
-        }
-    ) {
+    constructor({cast, fAttr, fIndex, fRelation}) {
 
         /**
          * @param {TeqFw_Db_Back_Dto_Dem_Entity|null} data
@@ -79,3 +79,12 @@ export class Factory {
 
 // finalize code components for this es6-module
 Object.freeze(TeqFw_Db_Back_Dto_Dem_Entity);
+
+export const __deps__ = Object.freeze({
+    Factory: Object.freeze({
+            cast: 'TeqFw_Db_Shared_Util_Cast$',
+            fAttr: 'TeqFw_Db_Back_Dto_Dem_Entity_Attr__Factory$',
+            fIndex: 'TeqFw_Db_Back_Dto_Dem_Entity_Index__Factory$',
+            fRelation: 'TeqFw_Db_Back_Dto_Dem_Entity_Relation__Factory$',
+    }),
+});

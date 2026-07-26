@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Mod_Selection
+ * @description TeqFW database package module.
+ */
+
 /**
  * The model to populate queries with clauses from selection object.
  * (@see TeqFw_Db_Shared_Dto_List_Selection)
@@ -14,19 +21,7 @@ export default class TeqFw_Db_Back_Mod_Selection {
      * @param {typeof TeqFw_Db_Shared_Enum_Filter_Cond} COND
      * @param {typeof TeqFw_Db_Shared_Enum_Filter_Func} FUNC
      */
-    constructor(
-        {
-            TeqFw_Core_Shared_Util_Cast$: cast,
-            TeqFw_Db_Shared_Dto_List_Selection_Filter_Alias$: dtoAlias,
-            TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond$: dtoCond,
-            TeqFw_Db_Shared_Dto_List_Selection_Filter_Func$: dtoFunc,
-            TeqFw_Db_Shared_Dto_List_Selection_Filter_Value$: dtoValue,
-            TeqFw_Db_Shared_Dto_List_Selection$: dtoSelect,
-            TeqFw_Db_Shared_Dto_Order$: dtoOrder,
-            TeqFw_Db_Shared_Enum_Filter_Cond$: COND,
-            TeqFw_Db_Shared_Enum_Filter_Func$: FUNC,
-        }
-    ) {
+    constructor({cast, dtoAlias, dtoCond, dtoFunc, dtoValue, dtoSelect, dtoOrder, COND, FUNC}) {
         // VARS
         const A_ALIAS = dtoAlias.getAttributes();
         const A_COND = dtoCond.getAttributes();
@@ -170,3 +165,17 @@ export default class TeqFw_Db_Back_Mod_Selection {
         };
     }
 }
+
+export const __deps__ = Object.freeze({
+    default: Object.freeze({
+            cast: 'TeqFw_Db_Shared_Util_Cast$',
+            dtoAlias: 'TeqFw_Db_Shared_Dto_List_Selection_Filter_Alias$',
+            dtoCond: 'TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond$',
+            dtoFunc: 'TeqFw_Db_Shared_Dto_List_Selection_Filter_Func$',
+            dtoValue: 'TeqFw_Db_Shared_Dto_List_Selection_Filter_Value$',
+            dtoSelect: 'TeqFw_Db_Shared_Dto_List_Selection$',
+            dtoOrder: 'TeqFw_Db_Shared_Dto_Order$',
+            COND: 'TeqFw_Db_Shared_Enum_Filter_Cond__default',
+            FUNC: 'TeqFw_Db_Shared_Enum_Filter_Func__default',
+    }),
+});

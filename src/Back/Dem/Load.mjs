@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Dem_Load
+ * @description TeqFW database package module.
+ */
+
 /**
  * Load all DEMs (app & plugins), merge all fragments and normalize its using map data.
  *
@@ -9,13 +16,7 @@ export default class TeqFw_Db_Back_Dem_Load {
      * @param {TeqFw_Db_Back_Dem_Load_A_Norm} norm
      * @param {TeqFw_Db_Back_Dem_Load_A_SchemaCfg} schemaCfg
      */
-    constructor(
-        {
-            TeqFw_Db_Back_Dem_Load_A_Scan$: scan,
-            TeqFw_Db_Back_Dem_Load_A_Norm$: norm,
-            TeqFw_Db_Back_Dem_Load_A_SchemaCfg$: schemaCfg,
-        }
-    ) {
+    constructor({scan, norm, schemaCfg}) {
         /**
          * Load all DEMs (app & plugins), merge all fragments and normalize its using map data.
          * @param {string} path
@@ -31,3 +32,11 @@ export default class TeqFw_Db_Back_Dem_Load {
         };
     }
 }
+
+export const __deps__ = Object.freeze({
+    default: Object.freeze({
+            scan: 'TeqFw_Db_Back_Dem_Load_A_Scan$',
+            norm: 'TeqFw_Db_Back_Dem_Load_A_Norm$',
+            schemaCfg: 'TeqFw_Db_Back_Dem_Load_A_SchemaCfg$',
+    }),
+});

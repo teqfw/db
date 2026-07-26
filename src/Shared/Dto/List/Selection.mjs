@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Shared_Dto_List_Selection
+ * @description TeqFW database package module.
+ */
+
 /**
  * Criteria to select items for a list.
  * @implements TeqFw_Core_Shared_Api_Factory_Dto_Meta
@@ -12,17 +19,7 @@ export default class TeqFw_Db_Shared_Dto_List_Selection {
      * @param {typeof TeqFw_Db_Shared_Enum_Filter_Cond} CONDITION
      * @param {typeof TeqFw_Db_Shared_Enum_Filter_Func} FUNCTION
      */
-    constructor(
-        {
-            TeqFw_Core_Shared_Util_Cast$: cast,
-            TeqFw_Db_Shared_Dto_Order$: dtoOrder,
-            TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond$: dtoCond,
-            TeqFw_Db_Shared_Dto_List_Selection_Filter_Func$: dtoFunc,
-            TeqFw_Db_Shared_Enum_Direction$: DIRECTION,
-            TeqFw_Db_Shared_Enum_Filter_Cond$: CONDITION,
-            TeqFw_Db_Shared_Enum_Filter_Func$: FUNCTION,
-        }
-    ) {
+    constructor({cast, dtoOrder, dtoCond, dtoFunc, DIRECTION, CONDITION, FUNCTION}) {
         /**
          * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} [data]
          * @returns {TeqFw_Db_Shared_Dto_List_Selection.Dto}
@@ -101,3 +98,15 @@ class Dto {
     /** @type {number} */
     rowsOffset;
 }
+
+export const __deps__ = Object.freeze({
+    default: Object.freeze({
+            cast: 'TeqFw_Db_Shared_Util_Cast$',
+            dtoOrder: 'TeqFw_Db_Shared_Dto_Order$',
+            dtoCond: 'TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond$',
+            dtoFunc: 'TeqFw_Db_Shared_Dto_List_Selection_Filter_Func$',
+            DIRECTION: 'TeqFw_Db_Shared_Enum_Direction__default',
+            CONDITION: 'TeqFw_Db_Shared_Enum_Filter_Cond__default',
+            FUNCTION: 'TeqFw_Db_Shared_Enum_Filter_Func__default',
+    }),
+});

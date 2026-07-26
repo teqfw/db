@@ -1,3 +1,10 @@
+// @ts-check
+
+/**
+ * @namespace TeqFw_Db_Back_Act_Dem_RdbTables
+ * @description TeqFW database package module.
+ */
+
 /**
  * Read the DEM and retrieve a list of all tables in the RDB organized by their dependency order.
  *
@@ -9,13 +16,7 @@ export default class TeqFw_Db_Back_Act_Dem_RdbTables {
      * @param {TeqFw_Db_Back_Api_RDb_Schema} dbSchema
      * @param {TeqFw_Db_Back_Dem_Load} demLoad
      */
-    constructor(
-        {
-            TeqFw_Core_Back_Config$: config,
-            TeqFw_Db_Back_Api_RDb_Schema$: dbSchema,
-            TeqFw_Db_Back_Dem_Load$: demLoad,
-        }
-    ) {
+    constructor({config, dbSchema, demLoad}) {
         /**
          * @returns {Promise<{tables: TeqFw_Db_Back_Dto_RDb_Table[]}>}
          */
@@ -30,3 +31,11 @@ export default class TeqFw_Db_Back_Act_Dem_RdbTables {
     }
 
 }
+
+export const __deps__ = Object.freeze({
+    default: Object.freeze({
+            config: 'TeqFw_Db_Back_Config$',
+            dbSchema: 'TeqFw_Db_Back_RDb_Schema$',
+            demLoad: 'TeqFw_Db_Back_Dem_Load$',
+    }),
+});
