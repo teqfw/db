@@ -22,16 +22,16 @@ class Dto {
 }
 
 /**
- * @implements TeqFw_Core_Shared_Api_Factory_Dto
  */
 export default class TeqFw_Db_Shared_Dto_List_Event_Request {
     /**
-     * @param {TeqFw_Db_Shared_Dto_List_Selection} dtoSelection
+     * @param {object} deps
+     * @param {TeqFw_Db_Shared_Dto_List_Selection} deps.dtoSelection
      */
     constructor({dtoSelection}) {
         // INSTANCE METHODS
         /**
-         * @param {TeqFw_Db_Shared_Dto_List_Event_Request.Dto} [data]
+         * @param {TeqFw_Db_Shared_Dto_List_Event_Request.Dto} data
          * @returns {TeqFw_Db_Shared_Dto_List_Event_Request.Dto}
          */
         this.createDto = function (data) {

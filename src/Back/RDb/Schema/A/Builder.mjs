@@ -7,8 +7,9 @@
 
 export default class TeqFw_Db_Back_RDb_Schema_A_Builder {
     /**
-     * @param {TeqFw_Core_Shared_Api_Logger} logger -  instance
-     * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Column} TDbColType
+     * @param {object} deps
+     * @param {TeqFw_Db_Back_Logger} deps.logger
+     * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Column} deps.TDbColType
      */
     constructor({logger, TDbColType}) {
         // INSTANCE METHODS

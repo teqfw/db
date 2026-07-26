@@ -15,7 +15,6 @@
 // MODULE'S FUNCTIONS
 /**
  * Normalize names and paths.
- *
  * @param {string} data
  * @returns {string}
  */
@@ -25,22 +24,23 @@ function normName(data) {
 
 // MODULE'S CLASSES
 /**
- * @implements TeqFw_Core_Shared_Api_Action_Async
  */
 export default class TeqFw_Db_Back_Dem_Load_A_Norm {
     /**
-     * @param {TeqFw_Db_Back_Defaults} DEF
-     * @param {TeqFw_Db_Shared_Util_Deep} deep
-     * @param {TeqFw_Db_Back_Dto_Dem.Factory} _factory
+     * @param {object} deps
+     * @param {TeqFw_Db_Back_Defaults} deps.DEF
+     * @param {TeqFw_Db_Shared_Util_Deep} deps.deep
+     * @param {TeqFw_Db_Back_Dto_Dem.Factory} deps._factory
      */
 
     constructor({DEF, deep, _factory}) {
 
         // INSTANCE METHODS
         /**
-         * @param {Object<string, TeqFw_Db_Back_Dto_Dem>} dems
-         * @param {TeqFw_Db_Back_Dto_Map} map
-         * @returns {Promise<{dem: TeqFw_Db_Back_Dto_Dem}>}
+         * @param {object} deps
+         * @param {Object<string, TeqFw_Db_Back_Dto_Dem>} deps.dems
+         * @param {TeqFw_Db_Back_Dto_Map} deps.map
+         * @returns {Promise<any>}
          */
         this.exec = async function ({dems, map}) {
             // FUNCS
@@ -48,8 +48,8 @@ export default class TeqFw_Db_Back_Dem_Load_A_Norm {
             /**
              * @param {TeqFw_Db_Back_Dto_Dem|TeqFw_Db_Back_Dto_Dem_Package} dem
              * @param {Object<string, TeqFw_Db_Back_Dto_Map_Ref>} map
-             * @param {string} current current path
-             * @param {string} ps path separator
+             * @param {string} current
+             * @param {string} ps
              */
             function setPaths(dem, map, current, ps) {
                 // set path to entities on the current level

@@ -3,6 +3,7 @@
 /**
  * @namespace TeqFw_Db_Back_RDb_IConnect
  * @description TeqFW database package module.
+ * @interface
  */
 
 /**
@@ -12,6 +13,9 @@
  */
 export default class TeqFw_Db_Back_RDb_IConnect {
 
+    /**
+     * @returns {Promise<void>}
+     */
     async disconnect() {}
 
     /**
@@ -19,11 +23,14 @@ export default class TeqFw_Db_Back_RDb_IConnect {
      */
     getKnex() {}
 
+    /**
+     * Initialize the component.
+     */
     getSchemaBuilder() {}
 
     /**
      * Create new transaction to manipulate data in DB.
-     * @param {*} [opts]
+     * @param {*} opts
      * @returns {Promise<TeqFw_Db_Back_RDb_ITrans>}
      */
     async startTransaction(opts) {}

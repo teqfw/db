@@ -8,17 +8,17 @@
 /**
  * Read the DEM and retrieve a list of all tables in the RDB organized by their dependency order.
  *
- * @implements TeqFw_Core_Shared_Api_Action
  */
 export default class TeqFw_Db_Back_Act_Dem_RdbTables {
     /**
-     * @param {TeqFw_Core_Back_Config} config
-     * @param {TeqFw_Db_Back_Api_RDb_Schema} dbSchema
-     * @param {TeqFw_Db_Back_Dem_Load} demLoad
+     * @param {object} deps
+     * @param {TeqFw_Db_Back_Config} deps.config
+     * @param {TeqFw_Db_Back_Api_RDb_Schema} deps.dbSchema
+     * @param {TeqFw_Db_Back_Dem_Load} deps.demLoad
      */
     constructor({config, dbSchema, demLoad}) {
         /**
-         * @returns {Promise<{tables: TeqFw_Db_Back_Dto_RDb_Table[]}>}
+         * @returns {Promise<any>}
          */
         this.run = async function ({} = {}) {
             const path = config.getPathToRoot();

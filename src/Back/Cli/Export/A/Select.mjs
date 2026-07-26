@@ -6,18 +6,19 @@
  */
 
 /**
- * @implements TeqFw_Core_Shared_Api_Action
  */
 export default class TeqFw_Db_Back_Cli_Export_A_Select {
     /**
-     * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Column} COLUMN
+     * @param {object} deps
+     * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Column} deps.COLUMN
      */
     constructor({COLUMN}) {
 
         /**
-         * @param {TeqFw_Db_Back_RDb_ITrans} trx
-         * @param {TeqFw_Db_Back_Dto_RDb_Table} table
-         * @returns {Promise<{items:Object[]}>}
+         * @param {object} deps
+         * @param {TeqFw_Db_Back_RDb_ITrans} deps.trx
+         * @param {TeqFw_Db_Back_Dto_RDb_Table} deps.table
+         * @returns {Promise<any>}
          */
         this.run = async function ({trx, table}) {
             const knex = trx.getKnexTrx();

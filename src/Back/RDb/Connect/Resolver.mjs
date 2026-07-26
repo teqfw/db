@@ -10,7 +10,8 @@
  */
 export default class TeqFw_Db_Back_RDb_Connect_Resolver {
     /**
-     * @param {TeqFw_Db_Back_Defaults} DEF
+     * @param {object} deps
+     * @param {TeqFw_Db_Back_Defaults} deps.DEF
      */
     constructor({DEF}) {
         // VARS
@@ -19,7 +20,6 @@ export default class TeqFw_Db_Back_RDb_Connect_Resolver {
         // INSTANCE METHODS
 
         /**
-         *
          * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta
          * @returns {string|string}
          */
@@ -36,6 +36,7 @@ export default class TeqFw_Db_Back_RDb_Connect_Resolver {
         };
         /**
          * @param {TeqFw_Db_Back_Dto_Config_Schema} cfg
+         * @returns {any}
          */
         this.setConfig = (cfg) => _cfg = cfg;
     }

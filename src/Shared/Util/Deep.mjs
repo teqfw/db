@@ -6,7 +6,15 @@
  */
 
 export default class Deep {
+    /**
+     * Initialize the component.
+     */
     constructor() {
+        /**
+         * @param {any} left
+         * @param {any} right
+         * @returns {any}
+         */
         const equal = function (left, right) {
             if (left === right) return true;
             if (left === null || right === null || left === undefined || right === undefined) return false;
@@ -16,6 +24,10 @@ export default class Deep {
             if (leftKeys.length !== rightKeys.length) return false;
             return leftKeys.every((key) => Object.prototype.hasOwnProperty.call(right, key) && equal(left[key], right[key]));
         };
+        /**
+         * @param {any} value
+         * @returns {any}
+         */
         const freeze = function (value) {
             for (const key of Reflect.ownKeys(value)) {
                 const child = value[key];
@@ -23,7 +35,16 @@ export default class Deep {
             }
             return Object.freeze(value);
         };
+        /**
+         * @param {any} target
+         * @param {any} source
+         * @returns {any}
+         */
         const merge = function (target, source) {
+            /**
+             * @param {any} value
+             * @returns {any}
+             */
             const isObject = (value) => value && typeof value === 'object';
             if (!isObject(target) || !isObject(source)) return source;
             for (const key of Object.keys(source)) {

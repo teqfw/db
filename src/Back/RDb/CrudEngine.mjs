@@ -10,6 +10,9 @@
  * @implements TeqFw_Db_Back_Api_RDb_CrudEngine
  */
 export default class TeqFw_Db_Back_RDb_CrudEngine {
+    /**
+     * Initialize the component.
+     */
     constructor() {
 
         // FUNCS
@@ -23,8 +26,9 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
         }
 
         /**
-         * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta meta data for related entity
+         * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta
          * @param {*} key
+         * @returns {any}
          */
         function composeWhere(meta, key) {
             const res = {};
@@ -49,6 +53,12 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
 
         // INSTANCE METHODS
 
+        /**
+         * @param {any} trx
+         * @param {any} meta
+         * @param {any} data
+         * @returns {Promise<any>}
+         */
         this.create = async function (trx, meta, data) {
             const res = {};
             const table = trx.getTableName(meta);
@@ -85,6 +95,12 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
             }
             return res;
         };
+        /**
+         * @param {any} trx
+         * @param {any} meta
+         * @param {any} key
+         * @returns {Promise<any>}
+         */
         this.deleteOne = async function (trx, meta, key) {
             const table = trx.getTableName(meta);
             /** @type {Knex.QueryBuilder} */
@@ -97,6 +113,12 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
             return await query.del();
         };
 
+        /**
+         * @param {any} trx
+         * @param {any} meta
+         * @param {any} where
+         * @returns {Promise<any>}
+         */
         this.deleteSet = async function (trx, meta, where) {
             const table = trx.getTableName(meta);
             /** @type {Knex.QueryBuilder} */
@@ -106,6 +128,12 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
             return await query.del();
         };
 
+        /**
+         * @param {any} trx
+         * @param {any} meta
+         * @param {any} key
+         * @returns {Promise<any>}
+         */
         this.readOne = async function (trx, meta, key) {
             let res = null;
             const table = trx.getTableName(meta);
@@ -125,6 +153,16 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
             return res;
         };
 
+        /**
+         * @param {any} trx
+         * @param {any} meta
+         * @param {any} where
+         * @param {any} bind
+         * @param {any} order
+         * @param {any} limit
+         * @param {any} offset
+         * @returns {Promise<any>}
+         */
         this.readSet = async function (trx, meta, where, bind, order, limit, offset) {
             let res = [];
             const table = trx.getTableName(meta);
@@ -145,6 +183,13 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
             return res;
         };
 
+        /**
+         * @param {any} trx
+         * @param {any} meta
+         * @param {any} where
+         * @param {any} bind
+         * @returns {Promise<any>}
+         */
         this.readSetCount = async function (trx, meta, where, bind) {
             const table = trx.getTableName(meta);
             /** @type {Knex.QueryBuilder} */
@@ -158,6 +203,12 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
             return Number.parseInt(first['count']);
         };
 
+        /**
+         * @param {any} trx
+         * @param {any} meta
+         * @param {any} data
+         * @returns {Promise<any>}
+         */
         this.updateOne = async function (trx, meta, data) {
             const table = trx.getTableName(meta);
             const pkey = meta.getPrimaryKey();
@@ -177,6 +228,13 @@ export default class TeqFw_Db_Back_RDb_CrudEngine {
             return query;
         };
 
+        /**
+         * @param {any} trx
+         * @param {any} meta
+         * @param {any} data
+         * @param {any} where
+         * @returns {Promise<any>}
+         */
         this.updateSet = async function (trx, meta, data, where) {
             const table = trx.getTableName(meta);
             const pkey = meta.getPrimaryKey();

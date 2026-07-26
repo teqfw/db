@@ -30,15 +30,15 @@ class Dto {
 }
 
 /**
- * @implements TeqFw_Core_Shared_Api_Factory_Dto
  */
 export default class TeqFw_Db_Back_Dto_Export {
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast} cast
+     * @param {object} deps
+     * @param {TeqFw_Db_Shared_Util_Cast} deps.cast
      */
     constructor({cast}) {
         /**
-         * @param {TeqFw_Db_Back_Dto_Export.Dto} [data]
+         * @param {TeqFw_Db_Back_Dto_Export.Dto} data
          * @returns {TeqFw_Db_Back_Dto_Export.Dto}
          */
         this.createDto = function (data) {

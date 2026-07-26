@@ -8,17 +8,18 @@
 /**
  * Load DEM data for a plugin and parse it.
  *
- * @implements TeqFw_Core_Shared_Api_Action_Async
  */
 export default class TeqFw_Db_Back_Dem_Load_A_Scan_A_Dem {
     /**
-     * @param {TeqFw_Db_Back_Util_File} file
-     * @param {TeqFw_Db_Back_Dto_Dem.Factory} factory
+     * @param {object} deps
+     * @param {TeqFw_Db_Back_Util_File} deps.file
+     * @param {TeqFw_Db_Back_Dto_Dem.Factory} deps.factory
      */
     constructor({file, factory}) {
         /**
          * Load DEM data for a plugin and parse it.
-         * @param {string} filename full path name to file with DEM JSON
+         * @param {object} deps
+         * @param {string} deps.filename
          * @returns {Promise<TeqFw_Db_Back_Dto_Dem>}
          */
         this.exec = async function ({filename}) {

@@ -11,6 +11,12 @@
 - `test/man/` — manual development scenarios not required by the default suite.
 - `test/data/` — declarations, maps, and database fixtures.
 
+## Native Test Platform
+
+Tests import suites, cases, and lifecycle hooks from the stable `node:test` API.
+The npm scripts invoke the Node.js test runner directly with the files in each layer, without a third-party test framework.
+`npm test` runs module, integration, and acceptance layers; `npm run test:manual` remains opt-in.
+
 ## Required Verification
 
 - Every source file parses with `node --check`.
@@ -29,8 +35,8 @@ PostgreSQL and MySQL/MariaDB-specific paths require opt-in integration environme
 The migration is not complete if only source syntax changes.
 The test suite must exercise resolution through the DI 2.x container and at least one real Knex database path.
 
-## Known Migration Debt
+## ESM Conformity
 
-The functional suite and DI graph pass, but the strict base ESM validator is not yet clean.
-The remaining findings concern legacy prototype-based interface/behavior modules and incomplete modern JSDoc contracts; they are not DI resolution or static-import failures.
-Resolve this debt, or explicitly accept it for the first 2.x release, before publishing.
+`teqfw-esm-validator src --profile base` is a release gate and must report no violations.
+Interface publication units declare `@interface` at module level. Concrete behavior is defined through constructor closures rather than prototype methods.
+Callable JSDoc contracts mirror actual parameters, DI dependency names, and asynchronous return values.

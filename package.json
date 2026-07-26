@@ -9,9 +9,10 @@
   ],
   "scripts": {
     "test": "npm run test:module && npm run test:integration && npm run test:acceptance",
-    "test:module": "mocha --recursive \"test/mod/**/*.test.mjs\"",
-    "test:integration": "mocha --recursive \"test/integration/**/*.test.mjs\"",
-    "test:acceptance": "mocha --recursive \"test/accept/**/*.test.mjs\""
+    "test:module": "node --test test/mod/Back/RDb/Schema.test.mjs test/mod/Back/Dem/Load/Load.test.mjs test/mod/Back/Dem/Load/A/Scan.test.mjs test/mod/Back/Dem/Load/A/Norm.test.mjs test/mod/Back/Dem/Load/A/Scan/A/Map.test.mjs test/mod/Back/Dem/Load/A/Scan/A/Dem.test.mjs",
+    "test:integration": "node --test test/integration/Di2.test.mjs",
+    "test:acceptance": "node --test test/accept/Back/App/Crud.test.mjs",
+    "test:manual": "node --test test/man/Schema.test.mjs test/man/CrudEngine/Simple.test.mjs test/man/CrudEngine/Complex.test.mjs"
   },
   "repository": {
     "type": "git",
@@ -43,7 +44,6 @@
   },
   "devDependencies": {
     "@teqfw/di": "^2.7.0",
-    "mocha": "^11.0.1",
     "mysql2": "^3.12.0",
     "pg": "^8.13.1",
     "sqlite3": "^5.1.7"

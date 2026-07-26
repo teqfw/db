@@ -28,7 +28,8 @@ export class Factory {
     static namespace = NS;
 
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast} cast
+     * @param {object} deps
+     * @param {TeqFw_Db_Shared_Util_Cast} deps.cast
      */
     constructor({cast}) {
         /**

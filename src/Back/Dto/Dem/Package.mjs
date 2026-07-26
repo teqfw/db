@@ -27,7 +27,8 @@ export class Factory {
     static namespace = NS;
 
     /**
-     * @param {TeqFw_Db_Back_Dto_Dem_Entity.Factory} fEntity
+     * @param {object} deps
+     * @param {TeqFw_Db_Back_Dto_Dem_Entity.Factory} deps.fEntity
      */
 
     constructor({fEntity}) {
@@ -37,6 +38,11 @@ export class Factory {
          */
         this.create = function create(data = null) {
             // FUNCS
+            /**
+             * @param {any} fnCreate
+             * @param {any} data
+             * @returns {any}
+             */
             function parse(fnCreate, data) {
                 const res = {};
                 if (typeof data === 'object') {

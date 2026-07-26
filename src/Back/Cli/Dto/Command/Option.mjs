@@ -6,6 +6,9 @@
  */
 
 export default class Option {
+    /**
+     * Initialize the component.
+     */
     constructor() {
         this.defaultValue = undefined;
         this.description = undefined;
@@ -15,7 +18,14 @@ export default class Option {
 }
 
 export class Factory {
+    /**
+     * Initialize the component.
+     */
     constructor() {
+        /**
+         * @param {any} data
+         * @returns {any}
+         */
         this.create = function (data = null) {
             const result = new Option();
             result.defaultValue = data?.defaultValue;

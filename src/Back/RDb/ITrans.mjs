@@ -3,6 +3,7 @@
 /**
  * @namespace TeqFw_Db_Back_RDb_ITrans
  * @description TeqFW database package module.
+ * @interface
  */
 
 /**
@@ -12,6 +13,9 @@
  * TODO: move to _Api_ namespace
  */
 export default class TeqFw_Db_Back_RDb_ITrans {
+    /**
+     * @returns {Promise<void>}
+     */
     async commit() {}
 
     /**
@@ -20,6 +24,9 @@ export default class TeqFw_Db_Back_RDb_ITrans {
      */
     createQuery() {}
 
+    /**
+     * @returns {Promise<void>}
+     */
     async disconnect() {}
 
     /**
@@ -49,11 +56,14 @@ export default class TeqFw_Db_Back_RDb_ITrans {
 
     /**
      * Return row expression for input data.
-     * @param {string} exp SQL expression
-     * @param {array} params parameters for SQL exp (knex.raw('status <> ?', [1]))
+     * @param {string} exp
+     * @param {array} params
      */
     raw(exp, params) {}
 
+    /**
+     * @returns {Promise<void>}
+     */
     async rollback() {}
 
     /**

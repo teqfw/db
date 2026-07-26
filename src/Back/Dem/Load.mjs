@@ -8,21 +8,22 @@
 /**
  * Load all DEMs (app & plugins), merge all fragments and normalize its using map data.
  *
- * @implements TeqFw_Core_Shared_Api_Action_Async
  */
 export default class TeqFw_Db_Back_Dem_Load {
     /**
-     * @param {TeqFw_Db_Back_Dem_Load_A_Scan} scan
-     * @param {TeqFw_Db_Back_Dem_Load_A_Norm} norm
-     * @param {TeqFw_Db_Back_Dem_Load_A_SchemaCfg} schemaCfg
+     * @param {object} deps
+     * @param {TeqFw_Db_Back_Dem_Load_A_Scan} deps.scan
+     * @param {TeqFw_Db_Back_Dem_Load_A_Norm} deps.norm
+     * @param {TeqFw_Db_Back_Dem_Load_A_SchemaCfg} deps.schemaCfg
      */
     constructor({scan, norm, schemaCfg}) {
         /**
          * Load all DEMs (app & plugins), merge all fragments and normalize its using map data.
-         * @param {string} path
-         * @param {Object<string, string>} [testDems]
-         * @param {string} [testMapRoot]
-         * @return {Promise<{dem: TeqFw_Db_Back_Dto_Dem, cfg: TeqFw_Db_Back_Dto_Config_Schema}>}
+         * @param {object} deps
+         * @param {string} deps.path
+         * @param {Object<string, string>} deps.testDems
+         * @param {string} deps.testMapRoot
+         * @returns {Promise<any>}
          */
         this.exec = async function ({path, testDems, testMapRoot}) {
             const {dems, map} = await scan.exec({path, testDems, testMapRoot});

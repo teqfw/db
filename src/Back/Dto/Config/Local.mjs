@@ -7,7 +7,7 @@
 
 /**
  * Local configuration DTO for the plugin.
- * @see TeqFw_Core_Back_Config
+ * @see TeqFw_Db_Back_Config
  */
 // MODULE'S VARS
 const NS = 'TeqFw_Db_Back_Dto_Config_Local';
@@ -44,8 +44,9 @@ export class Factory {
     static namespace = NS;
 
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast} cast
-     * @param {TeqFw_Db_Back_Dto_Config_Local_Connection.Factory} fConn
+     * @param {object} deps
+     * @param {TeqFw_Db_Shared_Util_Cast} deps.cast
+     * @param {TeqFw_Db_Back_Dto_Config_Local_Connection.Factory} deps.fConn
      */
     constructor({cast, fConn}) {
         /**

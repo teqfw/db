@@ -3,6 +3,7 @@
 /**
  * @namespace TeqFw_Db_Back_Api_RDb_Repository
  * @description TeqFW database package module.
+ * @interface
  */
 
 /**
@@ -17,11 +18,11 @@
 export default class TeqFw_Db_Back_Api_RDb_Repository {
     /**
      * Create a new record in the table.
-     * @param {Object} params - Parameters for the operation.
-     * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx] - Optional database transaction object.
-     * @param {*} params.dto - DTO object with data to create.
-     * @returns {Promise<{primaryKey: Object<string, string|number>}>} - The result of the operation containing the primary key.
+     * @param {object} deps
+     * @param {TeqFw_Db_Back_RDb_ITrans} deps.trx
+     * @param {*} deps.dto
      * @throws {Error} - Throws an error if the operation fails.
+     * @returns {Promise<any>}
      */
     createOne({trx, dto}) {}
 
@@ -31,32 +32,30 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
      * based on the entity schema, removing extra attributes. If no data is provided,
      * an empty DTO is returned, where attributes are initialized to default values
      * or `undefined`.
-     *
-     * @param {*} [data] - Input data to be transformed into a DTO.
-     * @returns {Object} - Persistent DTO with valid structure and types.
+     * @param {*} data
+     * @returns {Object}
      */
     createDto(data) {}
 
     /**
      * Delete a single record matching the provided key.
-     * @param {Object} params - Parameters for the operation.
-     * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx] - Optional database transaction object.
-     * @param {Object} params.key - Key attributes and their values for lookup (primary or unique key).
-     * @returns {Promise<{deletedCount: number}>} - Object containing the number of deleted records (always 0 or 1).
+     * @param {object} deps
+     * @param {TeqFw_Db_Back_RDb_ITrans} deps.trx
+     * @param {Object} deps.key
      * @throws {Error} - Throws an error if the operation fails.
+     * @returns {Promise<any>}
      */
     deleteOne({trx, key}) {}
 
     /**
      * Delete records matching the provided conditions.
-     * @param {Object} params - Parameters for the operation.
-     * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx] - Optional database transaction object.
-     * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} [params.selection]
-     * @param {Object} [params.conditions] - Column-value pairs for filtering records.
-     * @returns {Promise<{deletedCount: number}>} - Object containing the number of deleted records.
-     * @throws {Error} - Throws an error if the operation fails.
-     *
+     * @param {object} deps
+     * @param {TeqFw_Db_Back_RDb_ITrans} deps.trx
+     * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} deps.selection
+     * @param {Object} deps.conditions
      * @deprecated The `conditions` parameter is deprecated. Use `selection` instead.
+     * @throws {Error} - Throws an error if the operation fails.
+     * @returns {Promise<any>}
      */
     deleteMany({trx, selection, conditions}) {}
 
@@ -69,53 +68,49 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
     /**
      * Read a single record by primary or unique key(s).
      * Optionally filters the selected columns to reduce the size of the result.
-     *
-     * @param {Object} params - Parameters for the operation.
-     * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx] - Optional database transaction object.
-     * @param {Object} params.key - Key attributes and their values for lookup (primary or unique key).
-     * @param {Array<string>} [params.select] - List of columns to include in the result.
-     * @returns {Promise<{record: Object|null}>} - Object containing the found DTO or null if not found.
+     * @param {object} deps
+     * @param {TeqFw_Db_Back_RDb_ITrans} deps.trx
+     * @param {Object} deps.key
+     * @param {Array<string>} deps.select
      * @throws {Error} - Throws an error if the operation fails.
+     * @returns {Promise<any>}
      */
     readOne({trx, key, select}) {}
 
     /**
      * Read multiple records matching the provided conditions.
      * Supports filtering, sorting, and pagination.
-     *
-     * @param {Object} params - Parameters for the operation.
-     * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx] - Optional database transaction object.
-     * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} [params.selection]
-     * @param {Object} [params.conditions] - Column-value pairs for filtering results.
-     * @param {Object<string, 'asc'|'desc'>} [params.sorting] - Sorting options where keys are column names, and values are 'asc' or 'desc'.
-     * @param {{limit: number, offset: number}} [params.pagination] - Pagination options specifying the limit and offset for the query.
-     * @returns {Promise<{records: Array<Object>}>} - Object containing the result of the operation, with `records` as an array of DTO objects.
+     * @param {object} deps
+     * @param {TeqFw_Db_Back_RDb_ITrans} deps.trx
+     * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} deps.selection
+     * @param {Object} deps.conditions
+     * @param {Object<string, 'asc'|'desc'>} deps.sorting
+     * @param {any} deps.pagination
      * @throws {Error} - Throws an error if the operation fails.
+     * @returns {Promise<any>}
      */
     readMany({trx, selection, conditions, sorting, pagination}) {}
 
     /**
      * Update a single record matching the provided key.
-     *
-     * @param {Object} params - Parameters for the operation.
-     * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx] - Optional database transaction object.
-     * @param {Object} [params.key] - Key attributes and their values for lookup (primary or unique key).
-     * @param {Object} params.updates - Column-value pairs to update.
-     * @returns {Promise<{updatedCount: number}>} - Object containing the number of updated records (always 0 or 1).
+     * @param {object} deps
+     * @param {TeqFw_Db_Back_RDb_ITrans} deps.trx
+     * @param {Object} deps.key
+     * @param {Object} deps.updates
      * @throws {Error} - Throws an error if the operation fails or if parameters are invalid.
+     * @returns {Promise<any>}
      */
     updateOne({trx, key, updates}) {}
 
     /**
      * Update existing records matching the provided conditions.
-     *
-     * @param {Object} params - Parameters for the operation.
-     * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx] - Optional database transaction object.
-     * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} [params.selection]
-     * @param {Object} [params.conditions] - Column-value pairs for filtering records.
-     * @param {Object} params.updates - Column-value pairs to update.
-     * @returns {Promise<{updatedCount: number}>} - Object containing the number of updated records.
+     * @param {object} deps
+     * @param {TeqFw_Db_Back_RDb_ITrans} deps.trx
+     * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} deps.selection
+     * @param {Object} deps.conditions
+     * @param {Object} deps.updates
      * @throws {Error} - Throws an error if the operation fails or if parameters are invalid.
+     * @returns {Promise<any>}
      */
     updateMany({trx, selection, conditions, updates}) {}
 }

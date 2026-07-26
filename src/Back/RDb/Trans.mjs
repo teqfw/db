@@ -16,55 +16,86 @@ export default class TeqFw_Db_Back_RDb_Trans {
     #trx;
 
     /**
-     * @param {TeqFw_Db_Back_RDb_Connect_Resolver} resolver
-     * @param {Knex} trx
+     * @param {object} deps
+     * @param {TeqFw_Db_Back_RDb_Connect_Resolver} deps.resolver
+     * @param {Knex} deps.trx
      */
     constructor({resolver, trx}) {
         this.#resolver = resolver;
         this.#trx = trx;
-    }
 
-    /**
-     * Return new knex based query builder.
-     * @returns {Knex.QueryBuilder}
-     */
-    createQuery() {
-        return this.#trx.queryBuilder();
-    }
+        /**
+         * Return new knex based query builder.
+         * @returns {Knex.QueryBuilder}
+         */
+        this.createQuery = function() {
+            return this.#trx.queryBuilder();
+        };
 
-    async disconnect() {}
+        /**
+         * @returns {Promise<void>}
+         */
+        this.disconnect = async function() {};
 
-    isMariaDB() {
-        const name = this.#trx?.client?.constructor?.name;
-        return (name === 'Client_MySQL2') || (name === 'Client_MySQL');
-    }
+        /**
+         * @returns {any}
+         */
+        this.isMariaDB = function() {
+            const name = this.#trx?.client?.constructor?.name;
+            return (name === 'Client_MySQL2') || (name === 'Client_MySQL');
+        };
 
-    isPostgres() {
-        return this.#trx?.client?.constructor?.name === 'Client_PG';
-    }
+        /**
+         * @returns {any}
+         */
+        this.isPostgres = function() {
+            return this.#trx?.client?.constructor?.name === 'Client_PG';
+        };
 
-    isSqlite() {
-        const name = this.#trx?.client?.constructor?.name;
-        return (name === 'Client_SQLite3') || (name === 'Client_BetterSQLite3');
-    }
+        /**
+         * @returns {any}
+         */
+        this.isSqlite = function() {
+            const name = this.#trx?.client?.constructor?.name;
+            return (name === 'Client_SQLite3') || (name === 'Client_BetterSQLite3');
+        };
 
-    async commit() {
-        return this.#trx.commit();
-    }
+        /**
+         * @returns {Promise<any>}
+         */
+        this.commit = async function() {
+            return this.#trx.commit();
+        };
 
-    async rollback() {
-        return this.#trx.rollback();
-    }
+        /**
+         * @returns {Promise<any>}
+         */
+        this.rollback = async function() {
+            return this.#trx.rollback();
+        };
 
-    raw(exp, params) {
-        return this.#trx.raw(exp, params);
-    }
+        /**
+         * @param {any} exp
+         * @param {any} params
+         * @returns {any}
+         */
+        this.raw = function(exp, params) {
+            return this.#trx.raw(exp, params);
+        };
 
-    getTableName(meta) {
-        return this.#resolver.getTableName(meta);
-    }
+        /**
+         * @param {any} meta
+         * @returns {any}
+         */
+        this.getTableName = function(meta) {
+            return this.#resolver.getTableName(meta);
+        };
 
-    getKnexTrx() {
-        return this.#trx;
+        /**
+         * @returns {any}
+         */
+        this.getKnexTrx = function() {
+            return this.#trx;
+        };
     }
 }

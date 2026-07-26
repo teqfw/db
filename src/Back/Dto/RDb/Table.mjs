@@ -38,10 +38,11 @@ export class Factory {
     static namespace = NS;
 
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast} cast
-     * @param {TeqFw_Db_Back_Dto_RDb_Column.Factory} fColumn
-     * @param {TeqFw_Db_Back_Dto_RDb_Index.Factory} fIndex
-     * @param {TeqFw_Db_Back_Dto_RDb_Relation.Factory} fRelation
+     * @param {object} deps
+     * @param {TeqFw_Db_Shared_Util_Cast} deps.cast
+     * @param {TeqFw_Db_Back_Dto_RDb_Column.Factory} deps.fColumn
+     * @param {TeqFw_Db_Back_Dto_RDb_Index.Factory} deps.fIndex
+     * @param {TeqFw_Db_Back_Dto_RDb_Relation.Factory} deps.fRelation
      */
     constructor({cast, fColumn, fIndex, fRelation}) {
         /**

@@ -10,18 +10,20 @@
  */
 export default class TeqFw_Db_Back_Process_CreateStruct {
     /**
-     * @param {TeqFw_Core_Shared_Api_Logger} logger -  instance
-     * @param {TeqFw_Core_Back_Config} config
-     * @param {TeqFw_Db_Back_RDb_IConnect} conn
-     * @param {TeqFw_Db_Back_Api_RDb_CrudEngine} crud
-     * @param {TeqFw_Db_Back_Api_RDb_Schema} dbSchema
-     * @param {TeqFw_Db_Back_Dem_Load} demLoad
+     * @param {object} deps
+     * @param {TeqFw_Db_Back_Logger} deps.logger
+     * @param {TeqFw_Db_Back_Config} deps.config
+     * @param {TeqFw_Db_Back_RDb_IConnect} deps.conn
+     * @param {TeqFw_Db_Back_Api_RDb_CrudEngine} deps.crud
+     * @param {TeqFw_Db_Back_Api_RDb_Schema} deps.dbSchema
+     * @param {TeqFw_Db_Back_Dem_Load} deps.demLoad
      */
     constructor({logger, config, conn, crud, dbSchema, demLoad}) {
         // INSTANCE METHODS
 
         /**
-         * @param {TeqFw_Db_Back_RDb_Meta_IEntity} meta
+         * @param {object} deps
+         * @param {TeqFw_Db_Back_RDb_Meta_IEntity} deps.meta
          * @returns {Promise<void>}
          */
         this.run = async function ({meta}) {

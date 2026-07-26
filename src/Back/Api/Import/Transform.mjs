@@ -3,6 +3,7 @@
 /**
  * @namespace TeqFw_Db_Back_Api_Import_Transform
  * @description TeqFW database package module.
+ * @interface
  */
 
 /**
@@ -14,7 +15,6 @@ export default class TeqFw_Db_Back_Api_Import_Transform {
 
     /**
      * Filter or modify serials for PostgreSQL.
-     *
      * @param {Object<string, number|string>} serials
      * @returns {Object<string, number|string>}
      */

@@ -12,10 +12,11 @@
  */
 export default class TeqFw_Db_Back_RDb_Schema {
     /**
-     * @param {TeqFw_Core_Shared_Api_Logger} _logger
-     * @param {TeqFw_Db_Back_RDb_Schema_A_Convert} _aConvert
-     * @param {TeqFw_Db_Back_RDb_Schema_A_Order} _aOrder
-     * @param {TeqFw_Db_Back_RDb_Schema_A_Builder} _builder
+     * @param {object} deps
+     * @param {TeqFw_Db_Back_Logger} deps._logger
+     * @param {TeqFw_Db_Back_RDb_Schema_A_Convert} deps._aConvert
+     * @param {TeqFw_Db_Back_RDb_Schema_A_Order} deps._aOrder
+     * @param {TeqFw_Db_Back_RDb_Schema_A_Builder} deps._builder
      */
 
     constructor({_logger, _aConvert, _aOrder, _builder}) {
@@ -26,6 +27,11 @@ export default class TeqFw_Db_Back_RDb_Schema {
         let _cfg;
 
         // INSTANCE METHODS
+        /**
+         * @param {object} deps
+         * @param {any} deps.conn
+         * @returns {Promise<void>}
+         */
         this.createAllTables = async function ({conn}) {
             // prepare schema (populate with CREATE statements)
             const schema = conn.getSchemaBuilder();
@@ -51,6 +57,11 @@ export default class TeqFw_Db_Back_RDb_Schema {
             await schema;
         };
 
+        /**
+         * @param {object} deps
+         * @param {any} deps.conn
+         * @returns {Promise<void>}
+         */
         this.dropAllTables = async function ({conn}) {
             // TODO: we does not need the ordering if we drop/create tables and foreign keys separately
             /** @type {TeqFw_Db_Back_Dto_Dem_Entity[]} */
@@ -88,6 +99,9 @@ export default class TeqFw_Db_Back_RDb_Schema {
             await schema;
         };
 
+        /**
+         * @returns {Promise<any>}
+         */
         this.fetchTablesByDependencyOrder = async function () {
             const res = [];
             /** @type {TeqFw_Db_Back_Dto_Dem_Entity[]} */
@@ -99,6 +113,9 @@ export default class TeqFw_Db_Back_RDb_Schema {
             return res;
         };
 
+        /**
+         * @returns {Promise<any>}
+         */
         this.getTablesList = async function () {
             const res = [];
             /** @type {TeqFw_Db_Back_Dto_Dem_Entity[]} */
@@ -110,9 +127,17 @@ export default class TeqFw_Db_Back_RDb_Schema {
             return res;
         };
 
+        /**
+         * @param {object} deps
+         * @param {any} deps.cfg
+         */
         this.setCfg = function ({cfg}) {
             _cfg = cfg;
         };
+        /**
+         * @param {object} deps
+         * @param {any} deps.dem
+         */
         this.setDem = function ({dem}) {
             _dem = dem;
         };

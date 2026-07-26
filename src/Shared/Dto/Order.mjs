@@ -40,17 +40,17 @@ class Dto {
 }
 
 /**
- * @implements TeqFw_Core_Shared_Api_Factory_Dto_Meta
  */
 export default class TeqFw_Db_Shared_Dto_Order {
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast} cast
-     * @param {typeof TeqFw_Db_Shared_Enum_Direction} DIR
+     * @param {object} deps
+     * @param {TeqFw_Db_Shared_Util_Cast} deps.cast
+     * @param {typeof TeqFw_Db_Shared_Enum_Direction} deps.DIR
      */
     constructor({cast, DIR}) {
         // INSTANCE METHODS
         /**
-         * @param {TeqFw_Db_Shared_Dto_Order.Dto} [data]
+         * @param {TeqFw_Db_Shared_Dto_Order.Dto} data
          * @returns {TeqFw_Db_Shared_Dto_Order.Dto}
          */
         this.createDto = function (data) {
@@ -62,6 +62,9 @@ export default class TeqFw_Db_Shared_Dto_Order {
             return res;
         };
 
+        /**
+         * @returns {any}
+         */
         this.getAttributes = () => ATTR;
     }
 }

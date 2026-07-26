@@ -19,20 +19,18 @@ const OPT_FILE = 'file';
 // MODULE'S FUNCTIONS
 /**
  * Factory to create CLI command.
- *
- * @param {TeqFw_Db_Back_Defaults} DEF
- * @param {TeqFw_Core_Shared_Api_Logger} logger -  instance
- * @param {TeqFw_Core_Back_Api_Dto_Command.Factory} fCommand
- * @param {TeqFw_Core_Back_Api_Dto_Command_Option.Factory} fOpt
- * @param {TeqFw_Core_Back_App} app
- * @param {TeqFw_Db_Back_RDb_IConnect} conn
- * @param {TeqFw_Db_Back_Util} util
- * @param {TeqFw_Core_Back_Util_File} utilFile
- * @param {TeqFw_Db_Back_Api_Import_Transform} transform
- * @param {TeqFw_Db_Back_Act_Dem_Tables} aDemTables
- *
- * @returns {TeqFw_Core_Back_Api_Dto_Command}
- * @constructor
+ * @param {object} deps
+ * @param {TeqFw_Db_Back_Defaults} deps.DEF
+ * @param {TeqFw_Db_Back_Logger} deps.logger
+ * @param {TeqFw_Db_Back_Cli_Dto_Command__Factory} deps.fCommand
+ * @param {TeqFw_Db_Back_Cli_Dto_Command_Option__Factory} deps.fOpt
+ * @param {TeqFw_Db_Back_App_Shutdown} deps.app
+ * @param {TeqFw_Db_Back_RDb_IConnect} deps.conn
+ * @param {TeqFw_Db_Back_Util} deps.util
+ * @param {TeqFw_Db_Back_Util_File} deps.utilFile
+ * @param {TeqFw_Db_Back_Api_Import_Transform} deps.transform
+ * @param {TeqFw_Db_Back_Act_Dem_Tables} deps.aDemTables
+ * @returns {TeqFw_Db_Back_Cli_Dto_Command}
  * @memberOf TeqFw_Db_Back_Cli_Import
  */
 export default function Factory({DEF, logger, fCommand, fOpt, app, conn, util, utilFile, transform, aDemTables}) {
@@ -40,6 +38,7 @@ export default function Factory({DEF, logger, fCommand, fOpt, app, conn, util, u
     // FUNCS
     /**
      * Command action.
+     * @param {any} opts
      * @returns {Promise<void>}
      * @memberOf TeqFw_Db_Back_Cli_Import
      */

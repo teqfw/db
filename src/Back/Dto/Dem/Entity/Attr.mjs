@@ -35,8 +35,9 @@ export class Factory {
     static namespace = NS;
 
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast} cast
-     * @param {TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options.Factory} fOpts
+     * @param {object} deps
+     * @param {TeqFw_Db_Shared_Util_Cast} deps.cast
+     * @param {TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options.Factory} deps.fOpts
      */
     constructor({cast, fOpts}) {
         /**

@@ -11,15 +11,16 @@
  */
 export default class TeqFw_Db_Back_Mod_Selection {
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast} cast
-     * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Alias} dtoAlias
-     * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond} dtoCond
-     * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Func} dtoFunc
-     * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Value} dtoValue
-     * @param {TeqFw_Db_Shared_Dto_List_Selection} dtoSelect
-     * @param {TeqFw_Db_Shared_Dto_Order} dtoOrder
-     * @param {typeof TeqFw_Db_Shared_Enum_Filter_Cond} COND
-     * @param {typeof TeqFw_Db_Shared_Enum_Filter_Func} FUNC
+     * @param {object} deps
+     * @param {TeqFw_Db_Shared_Util_Cast} deps.cast
+     * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Alias} deps.dtoAlias
+     * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond} deps.dtoCond
+     * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Func} deps.dtoFunc
+     * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Value} deps.dtoValue
+     * @param {TeqFw_Db_Shared_Dto_List_Selection} deps.dtoSelect
+     * @param {TeqFw_Db_Shared_Dto_Order} deps.dtoOrder
+     * @param {typeof TeqFw_Db_Shared_Enum_Filter_Cond} deps.COND
+     * @param {typeof TeqFw_Db_Shared_Enum_Filter_Func} deps.FUNC
      */
     constructor({cast, dtoAlias, dtoCond, dtoFunc, dtoValue, dtoSelect, dtoOrder, COND, FUNC}) {
         // VARS
@@ -49,22 +50,23 @@ export default class TeqFw_Db_Back_Mod_Selection {
 
         /**
          * Populate the Knex query with clauses from the filter.
-         * @param {TeqFw_Db_Back_RDb_ITrans} trx
-         * @param {TeqFw_Db_Back_Api_RDb_Query_List} meta
-         * @param {Knex.QueryBuilder} queryBuilder
-         * @param {
          * TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond.Dto|
          * TeqFw_Db_Shared_Dto_List_Selection_Filter_Func.Dto
          * } filter
+         * @param {TeqFw_Db_Back_RDb_ITrans} trx
+         * @param {TeqFw_Db_Back_Api_RDb_Query_List} meta
+         * @param {Knex.QueryBuilder} queryBuilder
+         * @param {* TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond.Dto|
+                 * TeqFw_Db_Shared_Dto_List_Selection_Filter_Func.Dto
+                 *} filter
          */
         function processFilter(trx, meta, queryBuilder, filter) {
             // FUNCS
             /**
              * The function is a "leaf" in the SQL filter tree. So, the function is converted into the SQL query fragment:
              * ```
-             *  queryBuilder.where(params[0], opr, params[1]); // where('u.bid, '=', 32)
+             * queryBuilder.where(params[0], opr, params[1]); // where('u.bid, '=', 32)
              * ```
-             *
              * @param {TeqFw_Db_Back_RDb_ITrans} trx
              * @param {TeqFw_Db_Back_Api_RDb_Query_List} meta
              * @param {Knex.QueryBuilder} queryBuilder
@@ -120,7 +122,7 @@ export default class TeqFw_Db_Back_Mod_Selection {
         /**
          * Populate the Knex query with clauses from the selection object.
          * @param {TeqFw_Db_Back_RDb_ITrans} trx
-         * @param {TeqFw_Db_Back_Api_RDb_Query_List} meta - the query metadata
+         * @param {TeqFw_Db_Back_Api_RDb_Query_List} meta
          * @param {Knex.QueryBuilder} query
          * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} selection
          */
@@ -151,7 +153,6 @@ export default class TeqFw_Db_Back_Mod_Selection {
          * Add 'AND' wrapper for the filter in the given selection.
          * This function is used when some query already has own filter and the filters from the given selection
          * must be added on the 'AND' basis (see this.populate).
-         *
          * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} selection
          * @returns {TeqFw_Db_Shared_Dto_List_Selection.Dto}
          */

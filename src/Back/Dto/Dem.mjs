@@ -46,9 +46,10 @@ export class Factory {
     static namespace = NS;
 
     /**
-     * @param {typeof TeqFw_Db_Back_Dto_Dem_Entity} TEntity
-     * @param {TeqFw_Db_Back_Dto_Dem_Entity.Factory} fEntity
-     * @param {TeqFw_Db_Back_Dto_Dem_Package.Factory} fPkg
+     * @param {object} deps
+     * @param {typeof TeqFw_Db_Back_Dto_Dem_Entity} deps.TEntity
+     * @param {TeqFw_Db_Back_Dto_Dem_Entity.Factory} deps.fEntity
+     * @param {TeqFw_Db_Back_Dto_Dem_Package.Factory} deps.fPkg
      */
 
     constructor({TEntity, fEntity, fPkg}) {
@@ -61,7 +62,6 @@ export class Factory {
             /**
              * Create object node from ${data} using factory ${fnCreate} to create node entries.
              * Use ${key} attribute to save node key as 'name' attribute in created entry.
-             *
              * @param {Function} fnCreate
              * @param {Object} data
              * @param {string|null} key
@@ -79,6 +79,10 @@ export class Factory {
                 return res;
             }
 
+            /**
+             * @param {any} data
+             * @returns {any}
+             */
             function parseRefs(data) {
                 const res = {};
                 if (typeof data === 'object')

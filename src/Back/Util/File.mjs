@@ -6,7 +6,16 @@
  */
 
 export default class File {
+    /**
+     * @param {object} deps
+     * @param {any} deps.fs
+     * @param {any} deps.path
+     */
     constructor({fs, path}) {
+        /**
+         * @param {any} filename
+         * @returns {any}
+         */
         this.readJson = function (filename) {
             try {
                 if (!fs.statSync(filename).isFile()) return null;
@@ -17,6 +26,10 @@ export default class File {
                 throw error;
             }
         };
+        /**
+         * @param {any} root
+         * @returns {any}
+         */
         this.readPackageName = function (root) {
             const declared = this.readJson(path.join(root, "package.json"))?.name;
             if (declared) return declared;
@@ -27,6 +40,11 @@ export default class File {
                 ? parts.slice(nodeModules + 1, nodeModules + 3).join("/")
                 : parts[nodeModules + 1];
         };
+        /**
+         * @param {any} root
+         * @param {any} filename
+         * @returns {any}
+         */
         this.scanNodeModules = function (root, filename) {
             const result = [];
             const pathNode = path.join(root, 'node_modules');

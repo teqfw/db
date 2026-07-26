@@ -8,21 +8,21 @@
 /**
  * Convert DEM DTO Entity to RDB DTO Table.
  *
- * @implements TeqFw_Core_Shared_Api_Action_Async
  */
 export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
     /**
-     * @param {TeqFw_Db_Back_Defaults} DEF
-     * @param {TeqFw_Db_Back_Dto_RDb_Column.Factory} fColumn
-     * @param {TeqFw_Db_Back_Dto_RDb_Index.Factory} fIndex
-     * @param {TeqFw_Db_Back_Dto_RDb_Relation.Factory} fRelation
-     * @param {TeqFw_Db_Back_Dto_RDb_Table.Factory} fTable
-     * @param {typeof TeqFw_Db_Back_Enum_Dem_Type_Attr} TDemAttr
-     * @param {typeof TeqFw_Db_Back_Enum_Dem_Type_Index} TDemIndex
-     * @param {typeof TeqFw_Db_Back_Enum_Dem_Type_Action} TDemAction
-     * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Column} TDbColType
-     * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Index} TDbIndexType
-     * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Action} TDbActionType
+     * @param {object} deps
+     * @param {TeqFw_Db_Back_Defaults} deps.DEF
+     * @param {TeqFw_Db_Back_Dto_RDb_Column.Factory} deps.fColumn
+     * @param {TeqFw_Db_Back_Dto_RDb_Index.Factory} deps.fIndex
+     * @param {TeqFw_Db_Back_Dto_RDb_Relation.Factory} deps.fRelation
+     * @param {TeqFw_Db_Back_Dto_RDb_Table.Factory} deps.fTable
+     * @param {typeof TeqFw_Db_Back_Enum_Dem_Type_Attr} deps.TDemAttr
+     * @param {typeof TeqFw_Db_Back_Enum_Dem_Type_Index} deps.TDemIndex
+     * @param {typeof TeqFw_Db_Back_Enum_Dem_Type_Action} deps.TDemAction
+     * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Column} deps.TDbColType
+     * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Index} deps.TDbIndexType
+     * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Action} deps.TDbActionType
      */
 
     constructor({DEF, fColumn, fIndex, fRelation, fTable, TDemAttr, TDemIndex, TDemAction, TDbColType, TDbIndexType, TDbActionType}) {
@@ -64,9 +64,9 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Convert {
         // INSTANCE METHODS
         /**
          * Convert DEM DTO Entity to RDB DTO Table.
-         *
-         * @param {TeqFw_Db_Back_Dto_Dem_Entity} entity
-         * @param {TeqFw_Db_Back_Dto_Config_Schema} cfg
+         * @param {object} deps
+         * @param {TeqFw_Db_Back_Dto_Dem_Entity} deps.entity
+         * @param {TeqFw_Db_Back_Dto_Config_Schema} deps.cfg
          * @returns {Promise<TeqFw_Db_Back_Dto_RDb_Table>}
          */
         this.exec = async function ({entity, cfg}) {

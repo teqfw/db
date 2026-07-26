@@ -24,7 +24,17 @@ Decision: DEM/map DTOs remain independent of Knex; conversion produces separate 
 
 Reason: declarations must remain portable and composable before a connection exists.
 
+## Proposed CLI Contract
+
+Status: proposal for Human review; implementation is not authorized yet.
+
+- A dedicated `@teqfw/cli` package owns argument parsing, help output, exit codes, signals, and process lifecycle.
+- Feature packages publish explicit command-provider tokens through `teqfw.providers.cli` package metadata; the host loads every namespace root before resolving providers.
+- A provider returns an immutable ordered list of descriptors and startup fails on duplicate command IDs.
+- A descriptor contains a stable ID, path segments, descriptions, parser-neutral arguments/options, `execute(context)`, and optional `cleanup()`.
+- The execution context contains parsed arguments, parsed options, and an `AbortSignal`; it never exposes the DI container as a service locator.
+- The host validates input before execution, maps thrown operational errors to exit codes, owns `try/finally`, and invokes `cleanup()` exactly once. Commands never terminate the process or stop the application directly.
+
 ## Pending Human Review
 
-The exact 2.x public CLI host and application lifecycle integration are not defined by the available DI package.
-The persistence operations remain preserved as resolvable modules, but any new cross-package CLI runner contract requires a separate approved integration design.
+Approve package ownership, provider metadata shape, result/error semantics, and host-managed cleanup before replacing the local DB command DTOs and shutdown adapter.

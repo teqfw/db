@@ -11,7 +11,8 @@
 export default class TeqFw_Db_Shared_Util_Select {
     /* eslint-disable jsdoc/require-param-description */
     /**
-     * @param {TeqFw_Db_Shared_Dto_List_Selection} dtoSelect
+     * @param {object} deps
+     * @param {TeqFw_Db_Shared_Dto_List_Selection} deps.dtoSelect
      */
     constructor({dtoSelect}) {
         // VARS
@@ -23,10 +24,6 @@ export default class TeqFw_Db_Shared_Util_Select {
         /* eslint-enable jsdoc/require-param-description */
         /**
          * Creates a simple selection object from given parameters.
-         * @param {object} params - Parameters object.
-         * @param {{[key: string]: string|number|boolean}} [params.conditions] - Column-value pairs for filtering results.
-         * @param {{[key: string]: 'asc'|'desc'}} [params.sorting] - Sorting options where keys are column names, and values are 'asc' or 'desc'.
-         * @param {{limit: number, offset: number}} [params.pagination] - Pagination options specifying the limit and offset for the query.
          * @returns {TeqFw_Db_Shared_Dto_List_Selection.Dto}
          */
         this.compose = function ({conditions = {}, sorting = {}, pagination = {}} = {}) {

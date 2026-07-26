@@ -15,19 +15,20 @@
  */
 export default class TeqFw_Db_Back_App_Crud {
     /**
-     * @param {TeqFw_Db_Back_App_TrxWrapper} trxWrapper
-     * @param {TeqFw_Db_Back_Mod_Selection} modSelect
+     * @param {object} deps
+     * @param {TeqFw_Db_Back_App_TrxWrapper} deps.trxWrapper
+     * @param {TeqFw_Db_Back_Mod_Selection} deps.modSelect
      */
     constructor({trxWrapper, modSelect}) {
         // FUNCS
 
         /**
          * Populates a WHERE clause for a Knex query based on the key.
-         * @param {Knex.QueryBuilder} query - query object to populate.
-         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} schema - Schema object.
-         * @param {string|number|boolean|Buffer|Object|Array} key - Primary key or composite key object.
-         * @returns {Object} - WHERE clause with attribute-value pairs.
+         * @param {Knex.QueryBuilder} query
+         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} schema
+         * @param {string|number|boolean|Buffer|Object|Array} key
          * @throws {Error} - If the key is invalid or mismatches the schema.
+         * @returns {Object}
          */
         function composeWhere(query, schema, key) {
             const parts = {};
@@ -65,9 +66,9 @@ export default class TeqFw_Db_Back_App_Crud {
 
         /**
          * Extracts primary key values from updates and constructs a WHERE clause for Knex query.
-         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} schema - Schema object to validate attributes.
-         * @param {Object<string, *>} updates - DTO containing updates including the primary key values.
-         * @returns {Object<string, *>} - WHERE clause with primary key attribute-value pairs.
+         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} schema
+         * @param {Object<string, *>} updates
+         * @returns {Object<string, *>}
          * @throws {Error} - If the primary key values are missing or invalid.
          */
         function extractPkWhere(schema, updates) {
@@ -89,9 +90,9 @@ export default class TeqFw_Db_Back_App_Crud {
 
         /**
          * Validates and filters attributes based on schema.
-         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} schema - Schema object to validate attributes.
-         * @param {Object<string, *>} values - Input values to be filtered.
-         * @return {Object<string, *>} - Filtered attributes.
+         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} schema
+         * @param {Object<string, *>} values
+         * @returns {Object<string, *>}
          */
         function filterAttributes(schema, values) {
             const res = {};
@@ -124,11 +125,11 @@ export default class TeqFw_Db_Back_App_Crud {
         // MAIN
         /**
          * Creates a new record in the database.
-         * @param {Object} params
-         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} params.schema
-         * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx]
-         * @param {*} params.dto
-         * @returns {Promise<{primaryKey: Object<string, string|number>}>}
+         * @param {object} deps
+         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} deps.schema
+         * @param {TeqFw_Db_Back_RDb_ITrans} deps.trx
+         * @param {*} deps.dto
+         * @returns {Promise<any>}
          * @throws {Error}
          */
         this.createOne = async function ({schema, trx: trxOuter, dto}) {
@@ -137,7 +138,7 @@ export default class TeqFw_Db_Back_App_Crud {
 
             /**
              * @param {TeqFw_Db_Back_RDb_ITrans} trx
-             * @returns {Promise<{primaryKey: Object<string, string|number>}>}
+             * @returns {Promise<any>}
              */
             const operation = async (trx) => {
                 const primaryKey = {};
@@ -193,11 +194,11 @@ export default class TeqFw_Db_Back_App_Crud {
 
         /**
          * Deletes a single record based on the provided key.
-         * @param {Object} params
-         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} params.schema
-         * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx]
-         * @param {Object<string, *>} params.key
-         * @returns {Promise<{deletedCount: number}>}
+         * @param {object} deps
+         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} deps.schema
+         * @param {TeqFw_Db_Back_RDb_ITrans} deps.trx
+         * @param {Object<string, *>} deps.key
+         * @returns {Promise<any>}
          * @throws {Error}
          */
         this.deleteOne = async function ({schema, trx: trxOuter, key}) {
@@ -206,7 +207,7 @@ export default class TeqFw_Db_Back_App_Crud {
 
             /**
              * @param {TeqFw_Db_Back_RDb_ITrans} trx
-             * @return {Promise<{deletedCount: number}>}
+             * @returns {Promise<any>}
              */
             const operation = async (trx) => {
                 const table = trx.getTableName(schema);
@@ -227,11 +228,11 @@ export default class TeqFw_Db_Back_App_Crud {
 
         /**
          * Deletes multiple records matching the provided conditions.
-         * @param {Object} params
-         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} params.schema
-         * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx]
-         * @param {Object<string, *>} params.conditions
-         * @returns {Promise<{deletedCount: number}>}
+         * @param {object} deps
+         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} deps.schema
+         * @param {TeqFw_Db_Back_RDb_ITrans} deps.trx
+         * @param {Object<string, *>} deps.conditions
+         * @returns {Promise<any>}
          * @throws {Error}
          */
         this.deleteMany = async function ({schema, trx: trxOuter, conditions}) {
@@ -240,7 +241,7 @@ export default class TeqFw_Db_Back_App_Crud {
 
             /**
              * @param {TeqFw_Db_Back_RDb_ITrans} trx
-             * @return {Promise<{deletedCount: number}>}
+             * @returns {Promise<any>}
              */
             const operation = async (trx) => {
                 const table = trx.getTableName(schema);
@@ -259,12 +260,12 @@ export default class TeqFw_Db_Back_App_Crud {
 
         /**
          * Reads a single record based on the provided key.
-         * @param {Object} params
-         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} params.schema
-         * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx]
-         * @param {Object<string, *>} params.key
-         * @param {Array<string>} [params.select] - TODO: use select
-         * @returns {Promise<{record: Object|null}>}
+         * @param {object} deps
+         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} deps.schema
+         * @param {TeqFw_Db_Back_RDb_ITrans} deps.trx
+         * @param {Object<string, *>} deps.key
+         * @param {Array<string>} deps.select
+         * @returns {Promise<any>}
          * @throws {Error}
          */
         this.readOne = async function ({schema, trx: trxOuter, key, select}) {
@@ -273,7 +274,7 @@ export default class TeqFw_Db_Back_App_Crud {
 
             /**
              * @param {TeqFw_Db_Back_RDb_ITrans} trx
-             * @return {Promise<{record: Object|null}>}
+             * @returns {Promise<any>}
              */
             const operation = async (trx) => {
                 const table = trx.getTableName(schema);
@@ -293,16 +294,16 @@ export default class TeqFw_Db_Back_App_Crud {
 
         /**
          * Reads multiple records based on the provided conditions.
-         * @param {Object} params
-         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} params.schema
-         * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx]
-         * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} [params.selection]
-         * @param {Object<string, *>} [params.conditions]
-         * @param {Object<string, 'asc'|'desc'>} [params.sorting]
-         * @param {{limit: number, offset: number}} [params.pagination]
-         * @returns {Promise<{records: Array<Object>}>}
-         * @throws {Error}
          * TODO: add `columns` to select required columns only.
+         * @param {object} deps
+         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} deps.schema
+         * @param {TeqFw_Db_Back_RDb_ITrans} deps.trx
+         * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} deps.selection
+         * @param {Object<string, *>} deps.conditions
+         * @param {Object<string, 'asc'|'desc'>} deps.sorting
+         * @param {any} deps.pagination
+         * @returns {Promise<any>}
+         * @throws {Error}
          */
         this.readMany = async function ({schema, trx: trxOuter, selection = {}, conditions = {}, sorting, pagination}) {
             if (!schema) throw new Error('Schema is required.');
@@ -349,12 +350,12 @@ export default class TeqFw_Db_Back_App_Crud {
 
         /**
          * Updates a single record matching the provided key.
-         * @param {Object} params
-         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} params.schema
-         * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx]
-         * @param {Object<string, *>} [params.key]
-         * @param {Object<string, *>} params.updates
-         * @returns {Promise<{updatedCount: number}>}
+         * @param {object} deps
+         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} deps.schema
+         * @param {TeqFw_Db_Back_RDb_ITrans} deps.trx
+         * @param {Object<string, *>} deps.key
+         * @param {Object<string, *>} deps.updates
+         * @returns {Promise<any>}
          * @throws {Error}
          */
         this.updateOne = async function ({schema, trx: trxOuter, key, updates}) {
@@ -379,12 +380,12 @@ export default class TeqFw_Db_Back_App_Crud {
 
         /**
          * Updates multiple records matching the provided conditions.
-         * @param {Object} params
-         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} params.schema
-         * @param {TeqFw_Db_Back_RDb_ITrans} [params.trx]
-         * @param {Object<string, *>} params.conditions
-         * @param {Object<string, *>} params.updates
-         * @returns {Promise<{updatedCount: number}>}
+         * @param {object} deps
+         * @param {TeqFw_Db_Back_Api_RDb_Schema_Object} deps.schema
+         * @param {TeqFw_Db_Back_RDb_ITrans} deps.trx
+         * @param {Object<string, *>} deps.conditions
+         * @param {Object<string, *>} deps.updates
+         * @returns {Promise<any>}
          * @throws {Error}
          */
         this.updateMany = async function ({schema, trx: trxOuter, conditions, updates}) {
@@ -393,7 +394,7 @@ export default class TeqFw_Db_Back_App_Crud {
 
             /**
              * @param {TeqFw_Db_Back_RDb_ITrans} trx
-             * @return {Promise<{updatedCount: number}>}
+             * @returns {Promise<any>}
              */
             const operation = async (trx) => {
                 const table = trx.getTableName(schema);

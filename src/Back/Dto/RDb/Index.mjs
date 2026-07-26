@@ -33,8 +33,9 @@ export class Factory {
     static namespace = NS;
 
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast} cast
-     * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Index} INDEX
+     * @param {object} deps
+     * @param {TeqFw_Db_Shared_Util_Cast} deps.cast
+     * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Index} deps.INDEX
      */
     constructor({cast, INDEX}) {
 

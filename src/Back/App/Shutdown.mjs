@@ -6,7 +6,14 @@
  */
 
 export default class Shutdown {
+    /**
+     * @param {object} deps
+     * @param {any} deps.connection
+     */
     constructor({connection}) {
+        /**
+         * @returns {Promise<void>}
+         */
         this.stop = async function () {
             await connection.disconnect();
         };

@@ -17,6 +17,9 @@ export default class TeqFw_Db_Back_Defaults {
     ROWS_LIMIT = 100; // default rows limit for listings
     SCOPE_CHAR = '@'; // marker for NPM scope (@vnd/plugin)
 
+    /**
+     * Initialize the component.
+     */
     constructor() {
         Object.freeze(this);
     }

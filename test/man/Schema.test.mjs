@@ -3,7 +3,7 @@
  */
 import assert from 'assert';
 import {container, cfg as cfgTest, dbConnect} from '../TestEnv.mjs';
-import {describe, it} from 'mocha';
+import {describe, it} from 'node:test';
 import {join} from 'path';
 import {existsSync} from 'fs';
 

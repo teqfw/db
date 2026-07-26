@@ -32,16 +32,16 @@ class Dto {
 }
 
 /**
- * @implements TeqFw_Core_Shared_Api_Factory_Dto_Meta
  */
 export default class TeqFw_Db_Shared_Dto_List_Selection_Filter_Alias {
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast} cast
+     * @param {object} deps
+     * @param {TeqFw_Db_Shared_Util_Cast} deps.cast
      */
     constructor({cast}) {
         // INSTANCE METHODS
         /**
-         * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Alias.Dto} [data]
+         * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Alias.Dto} data
          * @returns {TeqFw_Db_Shared_Dto_List_Selection_Filter_Alias.Dto}
          */
         this.createDto = function (data) {
@@ -52,6 +52,9 @@ export default class TeqFw_Db_Shared_Dto_List_Selection_Filter_Alias {
             return res;
         };
 
+        /**
+         * @returns {any}
+         */
         this.getAttributes = () => ATTR;
     }
 }

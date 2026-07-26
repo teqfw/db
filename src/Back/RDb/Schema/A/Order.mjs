@@ -7,19 +7,20 @@
 
 /**
  * Order DEM entities (dependencies go first: [base, dep, ...]).
- * @implements TeqFw_Core_Shared_Api_Action_Async
  */
 export default class TeqFw_Db_Back_RDb_Schema_A_Order {
     /**
-     * @param {TeqFw_Core_Shared_Api_Logger} logger -  instance
-     * @param {TeqFw_Db_Back_Dto_Dem_Entity.Factory} factEntity
-     * @param {TeqFw_Core_Shared_Util_Deep} deep
+     * @param {object} deps
+     * @param {TeqFw_Db_Back_Logger} deps.logger
+     * @param {TeqFw_Db_Back_Dto_Dem_Entity.Factory} deps.factEntity
+     * @param {TeqFw_Db_Shared_Util_Deep} deps.deep
      */
     constructor({logger, factEntity, deep}) {
         // INSTANCE METHODS
         /**
-         * @param {TeqFw_Db_Back_Dto_Dem} dem
-         * @param {boolean} [addDeprecated]
+         * @param {object} deps
+         * @param {TeqFw_Db_Back_Dto_Dem} deps.dem
+         * @param {boolean} deps.addDeprecated
          * @returns {Promise<TeqFw_Db_Back_Dto_Dem_Entity[]>}
          */
         this.exec = async function ({dem, addDeprecated = false}) {
@@ -34,8 +35,8 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Order {
                 // FUNCS
                 /**
                  * '/web/event/front' => {name:'front', path:'/web/event'}
-                 * @param fqn
-                 * @returns {{path: string, name: string}}
+                 * @param {any} fqn
+                 * @returns {any}
                  */
                 function splitName(fqn) {
                     const parts = fqn.split('/');
@@ -86,7 +87,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Order {
 
             /**
              * @param {Object<string, TeqFw_Db_Back_Dto_Dem_Entity>} entities
-             * @returns {{}}
+             * @returns {any}
              */
             function composeLevels(entities) {
                 // PARSE INPUT & DEFINE WORKING VARS
@@ -107,7 +108,6 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Order {
                 /**
                  * Recursive function to update items weights in hierarchy.
                  * 1 - item has no deps, 2 - item has one dep's level below, ...
-                 *
                  * @param {string} name
                  * @param {number} weight
                  * @param {string[]} paths
@@ -165,6 +165,11 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Order {
                 return result;
             }
 
+            /**
+             * @param {any} entities
+             * @param {any} levels
+             * @returns {any}
+             */
             function mapEntitiesByLevel(entities, levels) {
                 const res = [];
                 const keys = Object.keys(levels).map(key => parseInt(key)); // get keys as integers

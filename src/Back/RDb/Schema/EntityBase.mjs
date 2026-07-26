@@ -12,6 +12,9 @@
  * @deprecated create all methods in entities itself
  */
 export default class TeqFw_Db_Back_RDb_Schema_EntityBase {
+    /**
+     * Initialize the component.
+     */
     constructor() {
 
         /**
@@ -20,7 +23,7 @@ export default class TeqFw_Db_Back_RDb_Schema_EntityBase {
          * @param {string} name
          * @param {Object} attrs
          * @param {Array} pkey
-         * @param {Function} Dto class to create new DTO for the entity
+         * @param {Function} Dto
          * @returns {TeqFw_Db_Back_RDb_Meta_IEntity}
          */
         this.create = function (inst, name, attrs, pkey, Dto) {

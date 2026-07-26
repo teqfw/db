@@ -42,8 +42,9 @@ export class Factory {
     static namespace = NS;
 
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast} cast
-     * @param {TeqFw_Db_Back_Dto_Map_Ref.Factory} fRef
+     * @param {object} deps
+     * @param {TeqFw_Db_Shared_Util_Cast} deps.cast
+     * @param {TeqFw_Db_Back_Dto_Map_Ref.Factory} deps.fRef
      */
     constructor({cast, fRef}) {
         /**
@@ -53,6 +54,10 @@ export class Factory {
         this.create = function create(data = null) {
             // FUNCS
 
+            /**
+             * @param {any} data
+             * @returns {any}
+             */
             function parseDeprecated(data) {
                 const res = {};
                 if (typeof data === 'object')
@@ -61,6 +66,10 @@ export class Factory {
                 return res;
             }
 
+            /**
+             * @param {any} data
+             * @returns {any}
+             */
             function parseRef(data) {
                 const res = {};
                 if (typeof data === 'object')

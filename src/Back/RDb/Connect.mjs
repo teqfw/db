@@ -16,9 +16,11 @@
  */
 export default class TeqFw_Db_Back_RDb_Connect {
     /**
-     * @param {TeqFw_Core_Shared_Api_Logger} _logger -  instance
-     * @param {TeqFw_Db_Back_RDb_Connect_Resolver} _resolver -  instance per connection
-     * @param {typeof TeqFw_Db_Back_RDb_Trans} Trans
+     * @param {object} deps
+     * @param {TeqFw_Db_Back_Logger} deps._logger
+     * @param {TeqFw_Db_Back_RDb_Connect_Resolver} deps._resolver
+     * @param {typeof TeqFw_Db_Back_RDb_Trans} deps.Trans
+     * @param {any} deps.knexFactory
      */
     constructor({_logger, _resolver, Trans, knexFactory}) {
         // VARS
@@ -30,7 +32,6 @@ export default class TeqFw_Db_Back_RDb_Connect {
         // INSTANCE METHODS
         /**
          * Initialize connection to database.
-         *
          * @param {TeqFw_Db_Back_Dto_Config_Local|Knex.Config} cfg
          * @returns {Promise<void>}
          */
@@ -55,6 +56,10 @@ export default class TeqFw_Db_Back_RDb_Connect {
             }
         };
 
+        /**
+         * @param {any} opts
+         * @returns {Promise<any>}
+         */
         this.startTransaction = async function (opts) {
             const trx = await _knex.transaction(opts);
             return new Trans({resolver: _resolver, trx});
@@ -68,7 +73,6 @@ export default class TeqFw_Db_Back_RDb_Connect {
         };
         /**
          * Accessor for 'knex' object.
-         *
          * @returns {*}
          * @deprecated this is hard binding to the lib, we should use more lib-independent naming
          */
@@ -85,6 +89,9 @@ export default class TeqFw_Db_Back_RDb_Connect {
             return _knex?.schema;
         };
 
+        /**
+         * @returns {Promise<any>}
+         */
         this.disconnect = async function () {
             const pool = _knex?.client?.pool;
             if (pool) {
@@ -93,6 +100,7 @@ export default class TeqFw_Db_Back_RDb_Connect {
 
                     /**
                      * Check DB connections in loop and close all when all connections will be released.
+                     * @returns {Promise<void>}
                      */
                     async function checkPool() {
                         const acquires = pool.numPendingAcquires();

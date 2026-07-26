@@ -7,21 +7,21 @@
 
 /**
  * Criteria to select items for a list.
- * @implements TeqFw_Core_Shared_Api_Factory_Dto_Meta
  */
 export default class TeqFw_Db_Shared_Dto_List_Selection {
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast} cast
-     * @param {TeqFw_Db_Shared_Dto_Order} dtoOrder
-     * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond} dtoCond
-     * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Func} dtoFunc
-     * @param {typeof TeqFw_Db_Shared_Enum_Direction} DIRECTION
-     * @param {typeof TeqFw_Db_Shared_Enum_Filter_Cond} CONDITION
-     * @param {typeof TeqFw_Db_Shared_Enum_Filter_Func} FUNCTION
+     * @param {object} deps
+     * @param {TeqFw_Db_Shared_Util_Cast} deps.cast
+     * @param {TeqFw_Db_Shared_Dto_Order} deps.dtoOrder
+     * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond} deps.dtoCond
+     * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Func} deps.dtoFunc
+     * @param {typeof TeqFw_Db_Shared_Enum_Direction} deps.DIRECTION
+     * @param {typeof TeqFw_Db_Shared_Enum_Filter_Cond} deps.CONDITION
+     * @param {typeof TeqFw_Db_Shared_Enum_Filter_Func} deps.FUNCTION
      */
     constructor({cast, dtoOrder, dtoCond, dtoFunc, DIRECTION, CONDITION, FUNCTION}) {
         /**
-         * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} [data]
+         * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} data
          * @returns {TeqFw_Db_Shared_Dto_List_Selection.Dto}
          */
         this.create = function (data) {
@@ -37,7 +37,7 @@ export default class TeqFw_Db_Shared_Dto_List_Selection {
         };
 
         /**
-         * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} [data]
+         * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} data
          * @returns {TeqFw_Db_Shared_Dto_List_Selection.Dto}
          * @deprecated Use create() instead.
          */
@@ -46,7 +46,6 @@ export default class TeqFw_Db_Shared_Dto_List_Selection {
         };
 
         /**
-         *
          * @returns {typeof TeqFw_Db_Shared_Dto_List_Selection.ATTR}
          */
         this.getAttributes = () => ATTR;

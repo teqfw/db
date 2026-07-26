@@ -6,6 +6,9 @@
  */
 
 export default class Command {
+    /**
+     * Initialize the component.
+     */
     constructor() {
         this.action = undefined;
         this.args = [];
@@ -17,7 +20,14 @@ export default class Command {
 }
 
 export class Factory {
+    /**
+     * Initialize the component.
+     */
     constructor() {
+        /**
+         * @param {any} data
+         * @returns {any}
+         */
         this.create = function (data = null) {
             const result = new Command();
             result.action = typeof data?.action === 'function' ? data.action : undefined;

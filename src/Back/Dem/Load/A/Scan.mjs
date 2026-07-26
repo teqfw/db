@@ -10,23 +10,24 @@
  */
 
 /**
- * @implements TeqFw_Core_Shared_Api_Action_Async
  */
 export default class TeqFw_Db_Back_Dem_Load_A_Scan {
     /**
-     * @param {TeqFw_Db_Back_Util_File} file
-     * @param {object} pathUtil
-     * @param {TeqFw_Db_Back_Dem_Load_A_Scan_A_Dem} _loadDem
-     * @param {TeqFw_Db_Back_Dem_Load_A_Scan_A_Map} _loadMap
+     * @param {object} deps
+     * @param {TeqFw_Db_Back_Util_File} deps.file
+     * @param {object} deps.pathUtil
+     * @param {TeqFw_Db_Back_Dem_Load_A_Scan_A_Dem} deps._loadDem
+     * @param {TeqFw_Db_Back_Dem_Load_A_Scan_A_Map} deps._loadMap
      */
     constructor({file, pathUtil, _loadDem, _loadMap}) {
 
         /**
          * Load DEM mapping data for the application and parse it.
-         * @param {string} path
-         * @param {Object<string, string>} testDems
-         * @param {string} testMapRoot
-         * @return {Promise<{dems: Object<string, TeqFw_Db_Back_Dto_Dem>, map: TeqFw_Db_Back_Dto_Map}>}
+         * @param {object} deps
+         * @param {string} deps.path
+         * @param {Object<string, string>} deps.testDems
+         * @param {string} deps.testMapRoot
+         * @returns {Promise<any>}
          */
         this.exec = async function ({path, testDems, testMapRoot}) {
             const DEM = pathUtil.join("etc", "teqfw.schema.json");

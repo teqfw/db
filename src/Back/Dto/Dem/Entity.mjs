@@ -38,10 +38,11 @@ export class Factory {
     static namespace = NS;
 
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast} cast
-     * @param {TeqFw_Db_Back_Dto_Dem_Entity_Attr.Factory} fAttr
-     * @param {TeqFw_Db_Back_Dto_Dem_Entity_Index.Factory} fIndex
-     * @param {TeqFw_Db_Back_Dto_Dem_Entity_Relation.Factory} fRelation
+     * @param {object} deps
+     * @param {TeqFw_Db_Shared_Util_Cast} deps.cast
+     * @param {TeqFw_Db_Back_Dto_Dem_Entity_Attr.Factory} deps.fAttr
+     * @param {TeqFw_Db_Back_Dto_Dem_Entity_Index.Factory} deps.fIndex
+     * @param {TeqFw_Db_Back_Dto_Dem_Entity_Relation.Factory} deps.fRelation
      */
     constructor({cast, fAttr, fIndex, fRelation}) {
 
@@ -52,6 +53,11 @@ export class Factory {
         this.create = function (data = null) {
             // FUNCS
 
+            /**
+             * @param {any} fnCreate
+             * @param {any} data
+             * @returns {any}
+             */
             function parse(fnCreate, data) {
                 const res = {};
                 if (typeof data === 'object') {

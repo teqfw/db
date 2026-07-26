@@ -45,19 +45,19 @@ class Dto {
 }
 
 /**
- * @implements TeqFw_Core_Shared_Api_Factory_Dto_Meta
  */
 export default class TeqFw_Db_Shared_Dto_List_Selection_Filter_Func {
     /**
-     * @param {TeqFw_Core_Shared_Util_Cast} cast
-     * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Alias} dtoAlias
-     * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Value} dtoValue
-     * @param {typeof TeqFw_Db_Shared_Enum_Filter_Func} FN
+     * @param {object} deps
+     * @param {TeqFw_Db_Shared_Util_Cast} deps.cast
+     * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Alias} deps.dtoAlias
+     * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Value} deps.dtoValue
+     * @param {typeof TeqFw_Db_Shared_Enum_Filter_Func} deps.FN
      */
     constructor({cast, dtoAlias, dtoValue, FN}) {
         // INSTANCE METHODS
         /**
-         * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Func.Dto} [data]
+         * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Func.Dto} data
          * @returns {TeqFw_Db_Shared_Dto_List_Selection_Filter_Func.Dto}
          */
         this.createDto = function (data) {
@@ -75,6 +75,9 @@ export default class TeqFw_Db_Shared_Dto_List_Selection_Filter_Func {
             return res;
         };
 
+        /**
+         * @returns {any}
+         */
         this.getAttributes = () => ATTR;
     }
 }

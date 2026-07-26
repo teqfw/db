@@ -16,17 +16,16 @@ const NS = 'TeqFw_Db_Back_Cli_Drop';
 // MODULE'S FUNCTIONS
 /**
  * Factory to create CLI command.
- *
- * @param {TeqFw_Db_Back_Defaults} DEF
- * @param {TeqFw_Core_Shared_Api_Logger} logger -  instance
- * @param {TeqFw_Core_Back_Api_Dto_Command.Factory} fCommand
- * @param {TeqFw_Db_Back_RDb_IConnect} conn
- * @param {TeqFw_Core_Back_Config} config
- * @param {TeqFw_Db_Back_Api_RDb_Schema} dbSchema
- * @param {TeqFw_Db_Back_Dem_Load} demLoad
- * @param {TeqFw_Core_Back_App} app
- * @returns {TeqFw_Core_Back_Api_Dto_Command}
- * @constructor
+ * @param {object} deps
+ * @param {TeqFw_Db_Back_Defaults} deps.DEF
+ * @param {TeqFw_Db_Back_Logger} deps.logger
+ * @param {TeqFw_Db_Back_Cli_Dto_Command__Factory} deps.fCommand
+ * @param {TeqFw_Db_Back_RDb_IConnect} deps.conn
+ * @param {TeqFw_Db_Back_Config} deps.config
+ * @param {TeqFw_Db_Back_Api_RDb_Schema} deps.dbSchema
+ * @param {TeqFw_Db_Back_Dem_Load} deps.demLoad
+ * @param {TeqFw_Db_Back_App_Shutdown} deps.app
+ * @returns {TeqFw_Db_Back_Cli_Dto_Command}
  * @memberOf TeqFw_Db_Back_Cli_Drop
  */
 export default function Factory({DEF, logger, fCommand, conn, config, dbSchema, demLoad, app}) {

@@ -15,7 +15,7 @@
 
 /**
  * Format UTC date-time as ISO 8601 string.
- * @param {Date|string|null} [dateIn]
+ * @param {Date|string|null} dateIn
  * @returns {string}
  * @memberOf TeqFw_Db_Back_Util
  */
@@ -35,8 +35,7 @@ function dateUtc(dateIn) {
 
 /**
  * Format input data to be used as MySQL datetime compatible string (UTC).
- *
- * @param {Date|string|null} [dateIn]
+ * @param {Date|string|null} dateIn
  * @returns {string}
  * @memberOf TeqFw_Db_Back_Util
  * @deprecated use TeqFw_Db_Back_Util.dateUtc
@@ -84,7 +83,7 @@ async function getTables(trx) {
 
 /**
  * Return 'true' if knex client is connected to Postgres DB.
- * @param client
+ * @param {any} client
  * @returns {boolean}
  * @memberOf TeqFw_Db_Back_Util
  */
@@ -92,19 +91,31 @@ function isPostgres(client) {
     return client.constructor.name === 'Client_PG';
 }
 
-/** @deprecated */
+/**
+ * @param {any} trx
+ * @param {any} table
+ * @param {any} rows
+ * @returns {Promise<any>}
+ * @deprecated
+ */
 async function itemsInsert(trx, table, rows) {
     return me.itemsInsert(trx, table, rows);
 }
 
-/** @deprecated */
+/**
+ * @param {any} trx
+ * @param {any} tables
+ * @param {any} entity
+ * @param {any} cols
+ * @returns {Promise<any>}
+ * @deprecated
+ */
 async function itemsSelect(trx, tables, entity, cols = null) {
     return me.itemsSelect(trx, tables, entity, cols);
 }
 
 /**
  * Create name for foreign key constraint.
- *
  * @param {String} tblSrc
  * @param {String|String[]} fldSrc
  * @param {String} tblTrg
@@ -127,7 +138,6 @@ function nameFK(tblSrc, fldSrc, tblTrg, fldTrg) {
 
 /**
  * Create name for index key constraint.
- *
  * @param {String} tbl
  * @param {String|String[]} fld
  * @returns {String}
@@ -145,7 +155,6 @@ function nameNX(tbl, fld) {
 
 /**
  * Create name for unique key constraint.
- *
  * @param {String} tbl
  * @param {String|String[]} fld
  * @returns {String}
@@ -161,14 +170,18 @@ function nameUQ(tbl, fld) {
     return result;
 }
 
-/** @deprecated */
+/**
+ * @param {any} trx
+ * @returns {Promise<any>}
+ * @deprecated
+ */
 async function pgSerialsGet(trx) {
     return me.pgSerialsGet(trx);
 }
 
 /**
  * Get 'nextval' for Postgres serials.
- * @param schema
+ * @param {any} schema
  * @param {String[]} serials
  * @returns {Promise<Object>}
  * @memberOf TeqFw_Db_Back_Util
@@ -188,7 +201,7 @@ async function serialsGet(schema, serials) {
 
 /**
  * Get 'nextval' for one Postgres serial.
- * @param schema
+ * @param {any} schema
  * @param {string} serial
  * @returns {Promise<string|null>}
  * @memberOf TeqFw_Db_Back_Util
@@ -204,121 +217,129 @@ async function serialsGetOne(schema, serial) {
     }
 }
 
-/** @deprecated */
+/**
+ * @param {any} schema
+ * @param {any} serials
+ * @returns {Promise<any>}
+ * @deprecated
+ */
 async function serialsSet(schema, serials) {
     return me.pgSerialsSet(schema, serials);
 }
 
-
 // MODULE'S CLASSES
 export default class TeqFw_Db_Back_Util {
     /**
-     * Insert table items selected by 'itemsSelect'.
-     * @param {TeqFw_Db_Back_RDb_ITrans} trx
-     * @param {string} table raw name (with prefix, if exists)
-     * @param {array} rows
-     * @returns {Promise<void>}
+     * Initialize the component.
      */
-    async itemsInsert(trx, table, rows) {
-        const knex = trx.getKnexTrx();
-        if (Array.isArray(rows) && rows.length > 0) {
-            await knex(table).insert(rows);
-        }
-    }
+    constructor() {
+        /**
+         * Insert table items selected by 'itemsSelect'.
+         * @param {TeqFw_Db_Back_RDb_ITrans} trx
+         * @param {string} table
+         * @param {array} rows
+         * @returns {Promise<void>}
+         */
+        this.itemsInsert = async function(trx, table, rows) {
+            const knex = trx.getKnexTrx();
+            if (Array.isArray(rows) && rows.length > 0) {
+                await knex(table).insert(rows);
+            }
+        };
 
-    /**
-     * Select * from 'entity' if 'entity' exists in 'tables' or null otherwise.
-     * @param {TeqFw_Db_Back_RDb_ITrans} trx
-     * @param {string[]} tables list of raw names (with prefix, if exists)
-     * @param {string} entity
-     * @param {string[]|null} cols
-     * @returns {Promise<*|null>}
-     * @memberOf TeqFw_Db_Back_Util
-     */
-    async itemsSelect(trx, tables, entity, cols = null) {
-        const knex = trx.getKnexTrx();
-        if (tables.includes(entity)) {
-            if (Array.isArray(cols)) {
-                return await knex.select(cols).from(entity);
+        /**
+         * Select * from 'entity' if 'entity' exists in 'tables' or null otherwise.
+         * @param {TeqFw_Db_Back_RDb_ITrans} trx
+         * @param {string[]} tables
+         * @param {string} entity
+         * @param {string[]|null} cols
+         * @returns {Promise<*|null>}
+         * @memberOf TeqFw_Db_Back_Util
+         */
+        this.itemsSelect = async function(trx, tables, entity, cols = null) {
+            const knex = trx.getKnexTrx();
+            if (tables.includes(entity)) {
+                if (Array.isArray(cols)) {
+                    return await knex.select(cols).from(entity);
+                } else {
+                    return await knex.select().from(entity);
+                }
             } else {
-                return await knex.select().from(entity);
+                return null;
             }
-        } else {
-            return null;
-        }
-    }
+        };
 
-    /**
-     * Get 'nextval' for Postgres serials.
-     * @param {TeqFw_Db_Back_RDb_ITrans} trx
-     * @returns {Promise<Object<string, string>>}
-     * @memberOf TeqFw_Db_Back_Util
-     */
-    async pgSerialsGet(trx) {
-        const res = {};
-        const all = await trx.raw('SELECT sequence_name FROM information_schema.sequences  WHERE sequence_schema = \'public\'');
-        if (Array.isArray(all?.rows)) {
-            // prepare batch of SQLs
-            for (const one of all.rows) {
-                const name = one['sequence_name'];
-                const rs = await trx.raw(`SELECT nextval('${name}')`);
-                res[name] = rs.rows[0]['nextval'];
+        /**
+         * Get 'nextval' for Postgres serials.
+         * @param {TeqFw_Db_Back_RDb_ITrans} trx
+         * @returns {Promise<any>}
+         * @memberOf TeqFw_Db_Back_Util
+         */
+        this.pgSerialsGet = async function(trx) {
+            const res = {};
+            const all = await trx.raw('SELECT sequence_name FROM information_schema.sequences  WHERE sequence_schema = \'public\'');
+            if (Array.isArray(all?.rows)) {
+                // prepare batch of SQLs
+                for (const one of all.rows) {
+                    const name = one['sequence_name'];
+                    const rs = await trx.raw(`SELECT nextval('${name}')`);
+                    res[name] = rs.rows[0]['nextval'];
+                }
             }
-        }
-        return res;
-    }
+            return res;
+        };
 
-    /**
-     * Set nextval for Postgres serial.
-     * @param schema
-     * @param {Object} serials
-     * @returns {Promise<void>}
-     * @memberOf TeqFw_Db_Back_Util
-     */
-    async pgSerialsSet(schema, serials) {
-        for (const one of Object.keys(serials)) {
-            if (serials[one] !== null)
-                schema.raw(`SELECT setval('${one}', ${serials[one]})`);
-        }
-        await schema;
-    }
-
-    /**
-     * Convert the query columns into the tables' fields to group by.
-     * @param {Object<string, string>} columns - the list of the columns in the query.
-     * @param {Object<string, string>} map - the map of the columns to the tables' fields.
-     * @return {Object<string, string>[]}
-     * @deprecated
-     * @see TeqFw_Db_Back_Util_ListQuery
-     */
-    prepareGroupBy(columns, map) {
-        const res = [];
-        for (const key of Object.values(columns))
-            if (map.hasOwnProperty(key))
-                res.push(map[key]);
-        return res;
-    }
-
-    /**
-     * Convert the query columns into the tables' fields to select.
-     * @param {Object<string, string>} columns
-     * @param {Object<string, string>} map - the map of the columns to the tables' fields and expressions.
-     * @return {Object<string, string>[]}
-     * @deprecated
-     * @see TeqFw_Db_Back_Util_ListQuery
-     */
-    prepareSelect(columns, map) {
-        const res = [];
-        for (const key of Object.values(columns)) {
-            if (map.hasOwnProperty(key)) {
-                const obj = {};
-                obj[key] = map[key];
-                res.push(obj);
+        /**
+         * Set nextval for Postgres serial.
+         * @param {any} schema
+         * @param {Object} serials
+         * @returns {Promise<void>}
+         * @memberOf TeqFw_Db_Back_Util
+         */
+        this.pgSerialsSet = async function(schema, serials) {
+            for (const one of Object.keys(serials)) {
+                if (serials[one] !== null)
+                    schema.raw(`SELECT setval('${one}', ${serials[one]})`);
             }
-        }
-        return res;
-    }
+            await schema;
+        };
 
+        /**
+         * Convert the query columns into the tables' fields to group by.
+         * @param {Object<string, string>} columns
+         * @param {Object<string, string>} map
+         * @returns {Object<string, string>[]}
+         * @deprecated
+         * @see TeqFw_Db_Back_Util_ListQuery
+         */
+        this.prepareGroupBy = function(columns, map) {
+            const res = [];
+            for (const key of Object.values(columns))
+                if (map.hasOwnProperty(key))
+                    res.push(map[key]);
+            return res;
+        };
+
+        /**
+         * Convert the query columns into the tables' fields to select.
+         * @param {Object<string, string>} columns
+         * @param {Object<string, string>} map
+         * @returns {Object<string, string>[]}
+         * @deprecated
+         * @see TeqFw_Db_Back_Util_ListQuery
+         */
+        this.prepareSelect = function(columns, map) {
+            const res = [];
+            for (const key of Object.values(columns)) {
+                if (map.hasOwnProperty(key)) {
+                    const obj = {};
+                    obj[key] = map[key];
+                    res.push(obj);
+                }
+            }
+            return res;
+        };
+    }
 }
 
 // MAIN
