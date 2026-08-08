@@ -1,7 +1,7 @@
 # DEM Schema Declaration
 
 - Path: `ctx/docs/architecture/schema-declaration.md`
-- Changed: `20260726`
+- Changed: `20260808`
 - Legacy Source: `doc/schema.md`
 
 ## Default Location
@@ -89,7 +89,7 @@ Every referenced path and attribute required by a relation must be resolved by t
 }
 ```
 
-Supported default function: `datetime.current`, meaning the current timestamp.
+Supported default function: `current`, meaning the current timestamp for date and datetime columns.
 `id` describes an identifier column and `ref` a referenced identifier.
 Text length, numeric precision/scale, integer tiny/unsigned, date-only, and enum values are expressed through `options`.
 
@@ -127,3 +127,11 @@ Text length, numeric precision/scale, integer tiny/unsigned, date-only, and enum
 ```
 
 Local and referenced attribute arrays are positional and must have equal cardinality.
+
+## Migration Meaning
+
+A DEM fragment declares the owning package's contribution to the target model.
+Changing an entity, attribute, index, or relation changes desired state but does not by itself define how existing data reaches that state.
+
+In particular, deletion plus addition is not an implicit rename, a changed type is not an implicit conversion, and a new non-nullable attribute does not define a value for existing rows.
+Such transitions require explicit transformation semantics outside the declaration contract.

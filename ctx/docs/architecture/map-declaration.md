@@ -1,7 +1,7 @@
 # Application Schema Map
 
 - Path: `ctx/docs/architecture/map-declaration.md`
-- Changed: `20260726`
+- Changed: `20260808`
 - Legacy Source: `doc/map.md`
 
 ## Default Location
@@ -70,3 +70,11 @@ When attribute names match, omit `attrs`:
 
 Each key is the logical entity path to drop.
 Its array lists entities that must be dropped first because of foreign-key dependencies.
+
+## Migration Meaning
+
+The map contributes to the target model.
+It does not describe source-to-target history, rename intent, value conversion, or application cutover.
+
+`deprecated` records explicit drop ordering for a destructive structure operation.
+It does not independently authorize that operation and must not be interpreted as permission to discard durable data without the caller's preservation decision.

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "notes": [
     "Initial context created from the canonical adsm-ctx template set.",
-    "Legacy package documentation was projected into the four ADSM documentation levels."
+    "Legacy package documentation was projected into the four ADSM documentation levels.",
+    "Context rebuilt around distributed target-model composition and bounded rebuild migration; full incremental migration is external."
   ]
 }

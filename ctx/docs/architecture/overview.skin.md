@@ -2,31 +2,32 @@
 
 ## Purpose
 
-Turn modular logical entity declarations into safe relational structure and data operations.
+Compose modular entity declarations into one relational target and provide safe persistence and rebuild mechanisms.
 
 ## Mental Model
 
-The package is a pipeline.
-It loads and normalizes declarations, derives dependency-ordered relational descriptors, then delegates physical work to Knex through explicit connection and transaction boundaries.
+The package has two related pipelines.
+One composes a target relational model; the other creates that target and transfers explicitly preservable data into it.
 
 ## Scope
 
 Includes:
 
-- Declaration, composition, schema, access, and operational blocks.
-- DI, Knex, driver, and filesystem integration boundaries.
+- Declaration, composition, relational projection, access, and rebuild blocks.
+- DI, Knex, driver, filesystem, and external migration-orchestrator boundaries.
 
 Excludes:
 
-- Application business behavior.
+- Incremental diff planning, semantic migration inference, application cutover, and release policy.
 - Source-file-level implementation details.
 
 ## Invariants
 
 - DI 2.x dependencies live in export-scoped `__deps__`.
 - Logical declarations remain independent from Knex.
-- Transaction ownership is explicit.
-- Dependency order precedes destructive and transfer operations.
+- Transaction ownership and dependency-safe operation ordering are explicit.
+- Source data is preserved explicitly before in-place replacement.
+- A rebuild reports transfer failures and never implies cutover authorization.
 - DTO factories do not retain mutable caller input.
 
 ## Agent Document

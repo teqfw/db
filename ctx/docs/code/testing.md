@@ -1,7 +1,7 @@
 # Testing Overview
 
 - Path: `ctx/docs/code/testing.md`
-- Changed: `20260726`
+- Changed: `20260808`
 
 ## Test Structure
 
@@ -25,6 +25,8 @@ The npm scripts invoke the Node.js test runner directly with the files in each l
 - A DI integration test resolves representative default and named-factory tokens using `@teqfw/di` 2.x.
 - Automated tests cover DEM composition, schema ordering/conversion, selection, transaction ownership, CRUD, and connection shutdown to the extent supported without external infrastructure.
 
+These checks describe the current 2.x implementation and do not by themselves satisfy the accepted rebuild contract.
+
 ## Database Strategy
 
 Default automated database tests use SQLite so they are deterministic and do not require an external server.
@@ -32,8 +34,29 @@ PostgreSQL and MySQL/MariaDB-specific paths require opt-in integration environme
 
 ## Acceptance Rule
 
-The migration is not complete if only source syntax changes.
+The DI 2.x migration is not complete if only source syntax changes.
 The test suite must exercise resolution through the DI 2.x container and at least one real Knex database path.
+
+## Rebuild Verification Requirements
+
+A unified rebuild implementation is incomplete until automated tests demonstrate:
+
+- in-place rebuild refuses destructive replacement when preservation is required but no verified snapshot exists;
+- explicitly authorized empty recreation remains possible;
+- a parallel target can be created without modifying its source;
+- rows are transferred in dependency order and engine-specific sequence state is restored where supported;
+- explicit transformations are invoked and identified in the result;
+- incompatible or failed required rows prevent a successful rebuild result;
+- evidence reports target identity, processed tables, row counts, failures, and transaction outcomes;
+- an unaccepted target never becomes an implicit source replacement;
+- externally supplied source or outer transactions are not committed or rolled back by nested transfer code.
+
+SQLite may provide deterministic acceptance coverage for the generic workflow.
+PostgreSQL and MariaDB/MySQL suites are required for their engine-specific sequence, session, and DDL behavior before claiming equivalent rebuild support.
+
+## Boundary Verification
+
+Tests must confirm that core rebuild code does not discover migration versions, infer renames, generate arbitrary incremental `ALTER` plans, perform application cutover, or resolve transformation implementations through an unrestricted container lookup.
 
 ## ESM Conformity
 
