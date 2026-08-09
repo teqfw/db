@@ -65,11 +65,11 @@ The canonical platform metadata shape is `teqfw.fw.di.namespaces`; changing the 
 - verified-snapshot restore, transaction ownership, and PostgreSQL generated-state restoration;
 - JSON export and import of modeled tables.
 
-### Remaining Release Verification Gap
+### Verification Status
 
 - The module, DI integration, acceptance, syntax, and ESM-validator gates pass locally.
-- The real PostgreSQL/pgvector and MariaDB/MySQL opt-in suites exist but have not passed in the current environment because usable test credentials/services are unavailable.
-- Do not claim release-complete PostgreSQL pgvector or MySQL conformance until `npm run test:optin` passes against provisioned disposable databases.
+- The real MariaDB opt-in suite passes against MariaDB 10.11, including DDL, rebuild, generated values, late indexes, and cyclic schema creation.
+- The real PostgreSQL opt-in suite passes with pgvector `0.8.6`, including storage, codecs, distances, approximate indexes, rebuild, sequence restoration, transaction-local options, and cyclic transfer.
 
 ### Intentionally External
 

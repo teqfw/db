@@ -113,6 +113,17 @@ async function create(connection, result) {
     });
 }
 
+async function decodedRows(connection, compilationResult, entity) {
+    const adapter = connection.getDialectAdapter();
+    const table = compilationResult.physical.tables.find((item) => item.entity === entity);
+    if (!table) throw new TypeError(`Physical table for '${entity}' is absent.`);
+    const rows = await connection.getKnex()(table.name).select().orderBy('id');
+    return rows.map((row) => Object.fromEntries(table.columns.map((column) => [
+        column.name,
+        adapter.decodeValue({column, value: row[column.name]}),
+    ])));
+}
+
 async function cleanup() {
     for (const connection of connections) {
         const knex = connection.getKnex();
@@ -165,6 +176,8 @@ describe('opt-in MySQL/MariaDB', () => {
             assert.deepEqual(evidence.tables.map((item) => item.targetRows), [2, 2]);
             assert.equal(evidence.phases.findIndex((item) => item.phase === 'afterData')
                 > evidence.phases.findIndex((item) => item.phase === 'data'), true);
+            assert.deepEqual(await decodedRows(target, targetCompilation, '/parent'),
+                await decodedRows(source, sourceCompilation, '/parent'));
 
             const columns = await target.getKnex()('information_schema.columns')
                 .select('column_name', 'column_default', 'character_maximum_length')

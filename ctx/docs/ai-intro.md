@@ -54,7 +54,7 @@ It does not orchestrate application releases or switch production traffic.
 
 The current worktree implements DEM v2 compilation, provenance, enforced semantic validation, dialect registries and capabilities, full index phases, typed expressions, PostgreSQL pgvector behavior, unified rebuild, and structured transfer evidence while decoding legacy v1 inputs through the same execution truth.
 These implementation tokens are not automatically a new documented public API.
-Real PostgreSQL/pgvector and MariaDB/MySQL opt-in conformance remains a release gate and has not passed in the current environment.
+The external conformance gate now passes against PostgreSQL with pgvector `0.8.6` and MariaDB 10.11 in the provisioned test environment.
 
 ## Reading Angle
 

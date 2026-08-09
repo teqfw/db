@@ -130,7 +130,8 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Builder_Execute {
                     preflight,
                     status: 'failed',
                 });
-                const error = new Error("Schema execution failed in phase '" + active.phase + "'.", {cause});
+                const message = cause?.message ?? String(cause);
+                const error = new Error("Schema execution failed in phase '" + active.phase + "': " + message, {cause});
                 error.name = 'DemSchemaExecutionError';
                 Object.defineProperty(error, 'evidence', {enumerable: true, value: evidence});
                 throw Object.freeze(error);

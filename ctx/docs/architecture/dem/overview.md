@@ -6,7 +6,7 @@
 ## Status And Scope
 
 This document defines the accepted DEM v2 target architecture.
-The current worktree implements the complete compiler through one v1/v2 canonical execution path; release completion remains gated by external PostgreSQL/pgvector and MariaDB/MySQL conformance.
+The current worktree implements the complete compiler through one v1/v2 canonical execution path, and external PostgreSQL/pgvector and MariaDB conformance passes in the provisioned test environment.
 `../../code/dem.md` maps the target to implementation work and distinguishes current facts from required behavior.
 
 The DEM describes one desired relational state.

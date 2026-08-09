@@ -18,6 +18,10 @@ Tests import suites, cases, and lifecycle hooks from the stable `node:test` API.
 The npm scripts invoke the Node.js test runner directly with the files in each layer, without a third-party test framework.
 `npm test` runs module, integration, and acceptance layers; `npm run test:manual` remains opt-in.
 `npm run test:optin` is the release gate for provisioned PostgreSQL/pgvector and MariaDB/MySQL databases.
+It first runs a read-only preflight that requires an explicit ignored local configuration, verifies the selected
+server families, confirms that both disposable databases contain no user tables, checks destructive-suite
+privileges, and requires pgvector `>= 0.7.0`. The engine-specific destructive suites run only after that preflight
+succeeds and can also be invoked through their explicit PostgreSQL and MariaDB scripts.
 
 ## Required Verification
 
@@ -27,7 +31,8 @@ The npm scripts invoke the Node.js test runner directly with the files in each l
 - A DI integration test resolves representative default and named-factory tokens using `@teqfw/di` 2.x.
 - Automated tests cover DEM composition, schema ordering/conversion, selection, transaction ownership, CRUD, and connection shutdown to the extent supported without external infrastructure.
 
-These checks pass in the current worktree but do not replace the external-database opt-in release gate.
+These checks pass in the current worktree. The separately invoked external-database opt-in release gate also passes
+in the provisioned PostgreSQL/pgvector and MariaDB environment.
 
 ## DEM v2 Compiler Verification
 

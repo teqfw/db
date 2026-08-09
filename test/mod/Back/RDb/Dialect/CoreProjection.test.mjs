@@ -41,6 +41,41 @@ describe('Knex dialect core registry projection', () => {
         }
     });
 
+    it('preserves signedness while executing MySQL identity columns', () => {
+        const actual = [];
+        const builder = {
+            comment: () => builder,
+            notNullable: () => builder,
+            nullable: () => builder,
+        };
+        const tableBuilder = {
+            specificType: (name, type) => {
+                actual.push({name, type});
+                return builder;
+            },
+        };
+        for (const physicalType of [
+            {dialect: 'mysql', type: 'integer', args: [], unsigned: false},
+            {dialect: 'mysql', type: 'bigint', args: [], unsigned: true},
+        ]) {
+            adapters.mysql.addColumn({
+                column: {
+                    comment: '',
+                    generation: {implementation: 'identity', kind: 'core.identity', params: {mode: 'byDefault'}},
+                    name: `identity_${actual.length}`,
+                    nullable: false,
+                    physicalType,
+                },
+                knex: {},
+                tableBuilder,
+            });
+        }
+        assert.deepEqual(actual, [
+            {name: 'identity_0', type: 'int auto_increment'},
+            {name: 'identity_1', type: 'bigint unsigned auto_increment'},
+        ]);
+    });
+
     it('rejects unsigned core numerics where no exact physical mapping is registered', async () => {
         for (const adapter of [adapters.postgresql, adapters.sqlite]) {
             for (const logicalType of [

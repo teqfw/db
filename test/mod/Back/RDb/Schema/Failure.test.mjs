@@ -55,6 +55,7 @@ describe('schema failed-operation evidence', () => {
             execute.exec({adapter, connection, plan: planner.exec({compilation, operation: 'create'})}),
             (error) => {
                 assert.equal(error.name, 'DemSchemaExecutionError');
+                assert.match(error.message, /required late index failed/);
                 assert.equal(error.evidence.status, 'failed');
                 assert.deepEqual(error.evidence.phases.at(-1), {
                     error: {message: 'required late index failed', name: 'Error'},

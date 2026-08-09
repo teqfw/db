@@ -71,8 +71,7 @@ An external migrator or host application supplies migration sequencing, transfor
 ## Implementation Boundary
 
 The current worktree implements the compiler, provenance, semantic validation, dialect registries and preflight, full index phases, typed expressions, PostgreSQL pgvector adapter behavior, and unified rebuild evidence described here.
-Default SQLite-backed tests and static validation pass.
-Release-level PostgreSQL/pgvector and MariaDB/MySQL conformance remains pending until the opt-in suites pass against provisioned disposable databases.
+Default SQLite-backed tests, static validation, MariaDB 10.11 conformance, and PostgreSQL/pgvector conformance pass.
 
 ## Reading Map
 

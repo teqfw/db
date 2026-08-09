@@ -8,7 +8,7 @@
 This document maps the accepted architecture in `../architecture/dem/` to source work.
 It does not redefine declaration or validation meaning.
 The current worktree implements the mapped modules and removes the legacy composition/conversion/ordering executors.
-Release completion remains conditional on the real PostgreSQL/pgvector and MariaDB/MySQL opt-in suites.
+The real PostgreSQL/pgvector and MariaDB opt-in suites pass in the provisioned test environment.
 
 Implement in the delivery order below.
 Do not begin PostgreSQL vector DDL by adding `vector` to `src/Back/Enum/Dem/Type/Attr.mjs`; that would bypass the compiler, capability, storage, index, codec, and query contracts.
