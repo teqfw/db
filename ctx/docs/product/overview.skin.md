@@ -2,31 +2,33 @@
 
 ## Purpose
 
-Provide the common relational persistence infrastructure for TeqFW applications whose data model is distributed across teq-plugins.
+Provide relational persistence for TeqFW applications whose model is distributed across teq-plugins.
 
 ## Mental Model
 
-Each teq-plugin declares its fragment of the application data model.
-`@teqfw/db` composes the fragments into one target model, projects it to a relational structure, and supplies shared access and rebuild capabilities.
+Teq-plugins declare model fragments.
+`@teqfw/db` compiles them into a validated target with provenance, projects it through a dialect adapter, and provides access and rebuild capabilities.
 
 ## Scope
 
 Includes:
 
-- Distributed DEM composition and relational projection.
-- Connection, transaction, CRUD, selection, structure recreation, and rebuild-oriented data transfer.
+- DEM compilation, validation, provenance, and dialect-aware projection.
+- Transactional access, structure recreation, and rebuild data transfer.
 
 Excludes:
 
 - Application business rules and authorization.
-- Automatic incremental schema diff, inferred data transformations, and application migration orchestration.
+- Inferred incremental migration and application cutover.
 
 ## Invariants
 
-- The composed DEM is the target structure, not a history of changes.
+- The DEM is target state, not change history.
 - External references are resolved explicitly.
-- Foreign-key dependency order governs destructive and transfer operations.
-- Nested CRUD never owns a transaction supplied by its caller.
+- Conflicting ownership, invalid relations, and unsupported capabilities fail before database mutation.
+- Logical types remain separate from physical storage and value generation.
+- Cycles and dependency order are explicit for structure and transfer operations.
+- Nested work never owns a caller-supplied transaction.
 - Rebuild migration preserves data only through an explicit snapshot or source-to-target transfer.
 - Destructive replacement requires application or operator authority.
 

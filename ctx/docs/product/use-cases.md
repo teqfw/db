@@ -10,12 +10,13 @@ The result is a reusable connection service able to create transactions, queries
 
 ## UC-2 Compose The Application Model
 
-The application loads its own DEM plus installed-package fragments, applies the root map, and receives one normalized DEM and schema configuration.
+The application loads its own DEM plus installed-package fragments, applies the root map, selects a dialect adapter, and requests compilation.
+It receives either one immutable canonical model with provenance, graph, requirements, physical plan, fingerprint, and warnings or one aggregated diagnostic failure with no executable partial model.
 
 ## UC-3 Create, Recreate, Or Drop Structure
 
-An authorized caller translates the normalized model into dependency-ordered relational objects.
-Foreign keys and tables are dropped and created in safe order, including explicitly deprecated tables.
+An authorized caller runs runtime capability preflight and executes a phase-ordered physical plan.
+Tables and key constraints precede relations; late indexes follow relations or transferred data; explicitly deprecated tables participate in safe removal.
 
 ## UC-4 Execute CRUD
 
@@ -24,8 +25,9 @@ The operation filters unknown attributes, supports simple or composite keys, and
 
 ## UC-5 Select Record Sets
 
-A developer describes filters, functions, aliases, ordering, limit, and offset through a selection DTO.
-The package maps only schema-approved columns into a Knex query and may produce a matching count query.
+A developer describes filters, derived projections, registered operator calls, expression ordering, limit, offset, and allow-listed execution options through a selection DTO.
+The package validates logical types and dialect capabilities, maps only schema-approved attributes, binds values, and may produce a matching count query.
+PostgreSQL consumers can express exact or index-assisted nearest-neighbour ordering through registered pgvector distance operators.
 
 ## UC-6 Export Data
 
@@ -42,13 +44,19 @@ The application disconnects the Knex client after work or plugin shutdown.
 
 ## UC-9 Rebuild With Data Preservation
 
-An authorized caller captures data from the source structure, creates the target structure from the current normalized DEM, transfers compatible rows in dependency order, restores engine-specific state, and receives enough evidence to verify the result before retiring the source.
+An authorized caller captures data from the source structure, creates the target structure from the current canonical DEM, transfers compatible rows in dependency order, restores engine-specific state, and receives enough evidence to verify the result before retiring the source.
 The source may be an earlier schema, another database, or a durable dump created before recreation.
 
 ## UC-10 Delegate Incompatible Transformation
 
 When source and target representations are not structurally compatible, the caller supplies explicit transformation behavior owned by the relevant package or migration orchestrator.
 `@teqfw/db` executes the bounded transfer contract but does not infer renames, conversions, or application release policy.
+
+## UC-11 Diagnose An Invalid Distributed Model
+
+A developer compiles all fragments and, when needed, plans a selected operation without mutating a database.
+It receives deterministic diagnostics for every independently detectable ownership conflict, unknown type, unresolved endpoint, invalid key, incompatible relation, unsupported capability, or operation cycle without a supported strategy.
+Each diagnostic identifies canonical location and trusted source provenance so the owning package or application map can be corrected.
 
 ## Explicitly Unsupported Use Case
 

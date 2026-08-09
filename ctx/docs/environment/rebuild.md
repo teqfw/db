@@ -12,6 +12,7 @@ Before destructive DDL begins, the caller must provide either:
 - explicit authorization to discard all previous data.
 
 The runtime must have permission to read every modeled source table, create and drop target objects, restore rows, manage constraints and indexes, and restore engine-specific sequence state where supported.
+All target capabilities must pass read-only preflight before destructive DDL begins.
 
 ## Parallel Rebuild
 
@@ -33,6 +34,17 @@ The caller must prevent source changes during a snapshot or transfer, accept a d
 - MariaDB/MySQL session behavior may require import preparation.
 - SQLite may rebuild tables internally for schema operations and must not be assumed to provide the same DDL guarantees as PostgreSQL.
 - MS SQL and Oracle behavior remains conditional on Knex and the installed driver until covered by package verification.
+
+## Index Build Boundary
+
+Primary and relation-target unique constraints are built with tables before foreign keys.
+`afterRelations` indexes are built after constraints.
+During a rebuild, `afterData` indexes are built only after required rows and engine state have transferred successfully.
+IVFFlat vector indexes require `afterData`; rebuild declarations should select
+`afterData` explicitly for HNSW.
+
+Failure of a required late index makes the target unsuccessful and appears in rebuild evidence.
+It does not authorize a parallel cutover or allow an in-place rebuild to discard its recovery snapshot.
 
 ## Failure Recovery
 

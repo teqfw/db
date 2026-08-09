@@ -12,6 +12,7 @@ Describe runtime assumptions, configuration, external prerequisites, and operati
 
 - `overview.md` — runtime and database prerequisites.
 - `configuration.md` — connection configuration migrated from legacy documentation.
+- `postgresql.md` — PostgreSQL adapter and pgvector capability requirements.
 - `rebuild.md` — operational prerequisites and engine boundaries for rebuild migration.
 
 ## Boundary

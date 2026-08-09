@@ -5,16 +5,18 @@
 
 ## Model Composition
 
-The scanner loads the root declaration and installed-package declarations.
-Missing declaration or map files produce empty DTOs.
-Normalization merges fragments under package paths, applies explicit external-reference mappings, and produces a schema configuration containing namespace and deprecated entities.
-The result is the complete target state for the selected package graph.
+The scanner loads root and installed-package declarations into trusted source envelopes.
+Missing optional declaration or map files retain their documented empty-input behavior.
+The decoder expands parsed DEM v1 or v2 input, schema-aware composition rejects conflicting owners, reference mapping retains source/map provenance, and semantic validation aggregates independently detectable errors.
+The selected adapter projects a successful canonical model and derives capabilities.
+The result is the complete validated target state and physical plan for the selected package graph and dialect.
 
 ## Schema Lifecycle
 
-Entities are ordered by relation dependencies.
-Drop removes relations before tables and reverses dependency order where necessary.
-Create builds tables before adding relations.
+Capability preflight occurs before mutation.
+Create builds all tables and target key constraints before relations, so FK cycles do not require recursive weighting.
+Data and late indexes execute in their declared phases.
+Drop removes relations before tables and uses deterministic graph order where dependencies matter.
 Deprecated tables participate in explicit pre-drop ordering.
 
 Schema lifecycle alone does not preserve rows.
@@ -27,8 +29,9 @@ Without one, the wrapper starts a transaction, commits on success, rolls back on
 
 ## Selection
 
-Selection parsing maps only columns approved by the schema/query-builder contract.
-It applies nested conditions, comparison functions, sorting, row limit, and row offset to Knex queries.
+Legacy selection parsing decodes comparison functions to core typed expressions.
+Selection v2 maps only schema-approved attributes and registered expressions, validates logical types and adapter capabilities, binds values, and applies filters, derived projections, expression sorting, limit, and offset.
+Nearest-neighbour ordering is a registered dialect expression rather than a raw query escape.
 
 ## Data Transfer
 
@@ -42,7 +45,8 @@ Import reads JSON, applies engine-specific row transformations, inserts in depen
 3. Verify that the snapshot is readable before destructive work begins.
 4. Drop and recreate the selected physical structure in dependency-safe phases.
 5. Import compatible data and apply only explicitly supplied transformations.
-6. Produce transfer evidence and leave acceptance to the caller.
+6. Build `afterData` indexes.
+7. Produce transfer evidence and leave acceptance to the caller.
 
 A failed import rolls back its owned transaction where the engine supports that boundary, but it does not reconstruct the previously dropped schema.
 Recovery therefore depends on the preserved snapshot and caller-owned retry or rollback procedure.
@@ -53,7 +57,8 @@ Recovery therefore depends on the preserved snapshot and caller-owned retry or r
 2. Build the complete target structure.
 3. Read source tables and write target tables in dependency order.
 4. Apply explicit transformations and collect evidence.
-5. Leave both source retirement and application cutover to the external orchestrator.
+5. Build `afterData` indexes and verify them.
+6. Leave both source retirement and application cutover to the external orchestrator.
 
 Failure leaves the source authoritative and the incomplete target unaccepted.
 The caller decides whether the target is cleaned, inspected, or retried.
@@ -73,4 +78,5 @@ Version discovery, multi-step migration history, online dual-write protocols, ap
 
 Schema and data operations roll back their owned transactions on failure when the selected RDBMS makes the operation transactional.
 Missing or malformed JSON outside the documented empty-file cases fails at parsing or DTO conversion.
+Ownership conflicts, semantic errors, unsupported capabilities, and unplanned transfer cycles fail before operation side effects and carry structured provenance.
 The caller remains responsible for retry policy, snapshot retention, acceptance, cutover, and deciding whether destructive operations may be repeated.

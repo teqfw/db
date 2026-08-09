@@ -51,6 +51,69 @@ Decision: transformation behavior may be executed through an explicit contract, 
 
 Reason: the persistence package can execute data movement but cannot determine whether a rename, split, merge, or conversion preserves application meaning.
 
+## AD-008 Compile Versioned Inputs Into One Canonical DEM
+
+Decision: unversioned declarations remain DEM v1 compatibility input; explicit `version: 2` selects the new declaration contract.
+Both decode into one canonical model before composition, validation, dialect projection, schema planning, or queries.
+
+Rejected: evolving the unversioned DTO in place or maintaining independent v1 and v2 execution pipelines.
+
+Reason: one canonical source of truth preserves compatibility while preventing two validation and execution semantics from drifting.
+
+## AD-009 Enforce Single Ownership And Provenance
+
+Decision: schema-aware composition permits disjoint child union and explicit capability-set union, but each semantic entity, attribute, relation, index, storage binding, default, and generation declaration has one fragment owner.
+Trusted source provenance accompanies every canonical node and conflict diagnostic.
+
+Rejected: generic deep merge with scalar overwrite and array concatenation, including last-writer-wins behavior.
+
+Reason: deterministic ordering cannot repair ambiguous authority; provenance and aggregated conflicts are required for distributed model maintenance.
+
+## AD-010 Separate Logical Meaning From Dialect Realization
+
+Decision: logical type, physical storage, default value, and generation policy are separate contracts.
+Core and provider registries validate identities and parameters; an explicit selected dialect adapter produces physical descriptors and derived capabilities.
+
+Rejected: expanding a global string enum whose values are invoked as Knex methods.
+
+Reason: PostgreSQL and extension types require physical parameters and capabilities that are neither one logical type nor uniformly supported by other databases.
+
+## AD-011 Make Indexes And Their Lifecycle First-Class
+
+Decision: an index explicitly models kind, method, ordered attribute/expression keys, operator classes, included columns, predicate, validated options, and build phase.
+Schema and rebuild plans separate table constraints, relations, data, and late indexes.
+
+Rejected: reducing every index to type plus column names or always building indexes inside table creation.
+
+Reason: provider indexes such as HNSW and IVFFlat have distinct compatibility, tuning, and data-loading behavior.
+
+## AD-012 Use Typed Registered Query Expressions
+
+Decision: Selection v2 uses attribute, bound-value, and registered-call expression nodes.
+Core and dialect operator registries define type signatures, contexts, capabilities, and safe compilation; the legacy selection enum decodes to core calls.
+
+Rejected: raw SQL expression nodes and indefinite growth of one closed comparison enum.
+
+Reason: provider operations such as nearest-neighbour distance must remain schema-checked, capability-aware, and parameter-bound through the common API.
+
+## AD-013 Treat Cycles According To Operation Semantics
+
+Decision: compilation records strongly connected relation components.
+Separated schema phases support relation cycles, while cyclic transfer requires a named adapter-supported strategy and otherwise fails before data access.
+
+Rejected: log-only cycle detection and globally rejecting every cyclic relation model.
+
+Reason: schema construction and data transfer have different enforcement mechanics; one generic order cannot safely represent both.
+
+## AD-014 Keep PostgreSQL And pgvector Behind One Adapter Boundary
+
+Decision: PostgreSQL physical types, provider indexes, vector operators, and extension preflight are implemented in a PostgreSQL adapter branch inside `@teqfw/db` while it shares the package release and connection lifecycle.
+The adapter reports missing pgvector capability but does not install it implicitly.
+
+Rejected: treating `vector` as one additional core enum value or embedding PostgreSQL conditionals throughout generic conversion and query modules.
+
+Reason: storage family, dimension, metric, operator class, method, options, query operators, and runtime extension availability must be validated together.
+
 ## Deferred CLI Hosting Decision
 
 Status: deferred; it is not part of the accepted rebuild architecture.

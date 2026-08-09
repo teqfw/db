@@ -21,6 +21,16 @@ Driver-specific packages remain consumer/runtime dependencies according to the s
 
 Knex is an execution boundary, not a guarantee that all structure operations are transactional or equally supported across engines.
 Rebuild implementation must expose engine limitations instead of claiming atomic rollback where the driver cannot provide it.
+Knex generic and `specificType` builders are mechanisms behind adapters; their availability does not make an arbitrary declaration type supported.
+
+## Dialect Adapters
+
+The connection client selects exactly one registered adapter through explicit DI/call contracts.
+The adapter contributes logical/storage mappings, default and generation behavior, full index validation/execution, expression operators, capability derivation, and read-only runtime preflight.
+The core compiler never treats database names, type strings, index methods, operator classes, or query operators as unchecked Knex methods or SQL.
+
+The PostgreSQL adapter owns PostgreSQL core behavior and the optional pgvector registry branch.
+Other database clients retain existing behavior through their own validated adapter entries; Knex connectivity alone is not a support claim.
 
 ## Filesystem
 
@@ -60,5 +70,8 @@ The result contains evidence for caller evaluation and contains no implicit cuto
 - New external runtime dependencies require documentation and Human review.
 - DI metadata must name logical tokens, never relative source paths.
 - Database-driver behavior remains behind Knex and engine predicates.
+- Adapter selection is explicit and must agree with the actual connection client.
+- Capability preflight is read-only; provisioning is separately authorized.
+- Declaration and query values are bound, and no raw SQL node crosses the DEM/selection boundary.
 - Source and target identities remain explicit; a rebuild handler must not discover an arbitrary production database on its own.
 - Transformation dependencies are selected through DI or call contracts and never by unrestricted container lookup inside transfer logic.

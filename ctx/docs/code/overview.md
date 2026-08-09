@@ -9,7 +9,10 @@
 - `src/Back/App/` — higher-level CRUD and transaction orchestration.
 - `src/Back/RDb/` — connection, transaction, schema, and legacy CRUD implementation.
 - `src/Back/Dem/` — declaration scanning, loading, and normalization.
+- `src/Back/Dem/Compile/` — target DEM v1/v2 decoding, ownership-safe composition, validation, graph, provenance, and fingerprinting; not yet implemented.
+- `src/Back/Dem/Registry/` — target core logical/default/generation/operator registries; not yet implemented.
 - `src/Back/Dto/` — backend DTOs and factories.
+- `src/Back/RDb/Dialect/` — target per-dialect physical projection, capability preflight, value codecs, and execution adapters; not yet implemented.
 - `src/Back/Api/Import/` — replaceable import transformation contract.
 - `src/Back/Act/`, `Cli/`, `Plugin/`, and `Process/` — operational entry modules.
 - `src/Shared/Dto/`, `Enum/`, and `Util/` — cross-runtime selection contracts.
@@ -42,7 +45,8 @@ The canonical platform metadata shape is `teqfw.fw.di.namespaces`; changing the 
 ## Architecture Mapping
 
 - DEM scanner, loaders, and normalizer implement target-model composition.
-- RDB conversion and ordering modules derive dependency-ordered target descriptors.
+- The target compiler in `dem.md` replaces generic merge as the authoritative composition boundary.
+- RDB conversion and ordering modules currently derive basic dependency-ordered descriptors; the target adapter and schema planner replace their unchecked type/index dispatch and log-only cycle behavior.
 - RDB schema builder implements complete structure drop and creation.
 - Connection, transaction, CRUD, and selection modules implement the persistence access layer.
 - CLI export/import modules and the import transformation interface implement separate foundations of rebuild data transfer.
@@ -61,6 +65,13 @@ The canonical platform metadata shape is `teqfw.fw.di.namespaces`; changing the 
 
 ### Required But Not Yet Unified
 
+- trusted fragment envelopes and DEM v1/v2 decoding into one canonical model;
+- single-owner schema-aware composition with provenance and aggregated diagnostics;
+- semantic validation of types, defaults, generation, indexes, relation endpoints/cardinality/compatibility/target uniqueness, and cycles;
+- dialect adapter registries, capability derivation/preflight, and immutable physical descriptors;
+- full index structure and `table`/`afterRelations`/`afterData` schema phases;
+- Selection v2 typed expressions and provider query operators;
+- PostgreSQL pgvector storage, codecs, indexes, and nearest-neighbour queries;
 - one rebuild service with explicit source and target identities;
 - durable snapshot verification before destructive in-place recreation;
 - direct source-to-target transfer independent of CLI process behavior;
@@ -86,6 +97,9 @@ The canonical platform metadata shape is `teqfw.fw.di.namespaces`; changing the 
 - Do not infer migration meaning from target DTO differences.
 - Do not report a rebuild as successful after a required table transfer failure.
 - Keep declaration formats backward-compatible within the 2.x line unless Human-approved otherwise.
+- Treat unversioned input as DEM v1 and explicit version `2` as DEM v2; do not evolve unversioned semantics in place.
+- Schema/data/query executors must accept only a successful compiler result and operation preflight.
+- Do not route declaration strings to computed Knex method access or raw SQL.
 
 ## Public Surface
 
@@ -94,3 +108,5 @@ Direct source-path imports are implementation-level unless explicitly documented
 
 No public token for the complete rebuild workflow is documented yet.
 Agents must not invent one in downstream documentation or consumer code before the architecture is implemented and verified.
+
+The target compiler and adapter module names in `dem.md` are implementation mapping, not a claim that their DI tokens are currently public.

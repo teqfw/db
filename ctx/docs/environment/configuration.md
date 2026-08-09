@@ -38,6 +38,12 @@ Common fields include:
 
 Consult the selected Knex/client documentation for additional supported options.
 
+The configured client also selects the matching dialect adapter.
+Adapter selection must agree with the actual connection during runtime preflight; an explicit mismatch fails before schema, transfer, or dialect-query work.
+
+DEM capability requirements and PostgreSQL extension presence are model/runtime state, not connection secrets and not arbitrary new configuration keys.
+Until a public adapter-selection override is implemented and documented, agents must not invent one.
+
 ## Rebuild Configuration Boundary
 
 The current 2.x local configuration contract describes one default connection.
@@ -52,3 +58,4 @@ An external migration orchestrator may maintain its own version and deployment c
 Examples use placeholders.
 Passwords, connection URLs, certificates, and production dump paths are application secrets and stay outside repository context.
 Migration evidence may contain table names, counts, and failure details and must be stored according to the application's operational data policy.
+Capability evidence may include server, extension, and adapter versions but must not contain credentials or full connection strings.

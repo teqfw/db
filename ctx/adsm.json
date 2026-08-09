@@ -4,6 +4,7 @@
   "notes": [
     "Initial context created from the canonical adsm-ctx template set.",
     "Legacy package documentation was projected into the four ADSM documentation levels.",
-    "Context rebuilt around distributed target-model composition and bounded rebuild migration; full incremental migration is external."
+    "Context rebuilt around distributed target-model composition and bounded rebuild migration; full incremental migration is external.",
+    "DEM target architecture upgraded to a versioned compiler model with provenance, enforced validation, dialect adapters, capabilities, full indexes, and typed expressions."
   ]
 }

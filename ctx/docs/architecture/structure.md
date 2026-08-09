@@ -5,26 +5,35 @@
 
 ## Declaration Block
 
-DEM DTOs represent packages, entities, attributes, options, indexes, relations, and references.
+DEM v1 DTOs represent compatibility input.
+DEM v2 declaration values represent packages, entities, logical attributes, dialect storage, defaults, generation, full indexes, relations, capabilities, and references.
 Map DTOs represent table namespace and external-reference remapping.
-RDB DTOs represent physical tables, columns, indexes, and relations.
-Shared selection DTOs represent filters and ordering.
+Compilation-result DTOs represent canonical model, provenance, diagnostics, dependency graph, requirements, fingerprint, and physical plan.
+Physical DTOs represent tables, logical/physical columns, constraints, complete indexes, and relations.
+Selection v2 DTOs represent typed expressions, projections, filters, ordering, pagination, and allow-listed execution options.
 
 ## Composition Block
 
-The scanner locates declaration files in the application and packages.
-Loaders parse JSON into DTOs.
-Normalization merges fragments and resolves mapped references.
-Ordering performs dependency traversal for safe downstream processing.
+The scanner locates declaration files and creates trusted immutable source envelopes.
+The decoder translates DEM v1 or v2 into canonical input values.
+Schema-aware composition enforces one owner per semantic node and resolves mapped references while retaining provenance.
+Logical validation checks declarations and builds a graph with strongly connected components.
 
-The composition result is immutable desired-state input to later blocks.
-Composition does not inspect a live database or infer transitions from an earlier DEM.
+The compilation result is immutable desired-state input to later blocks.
+Compilation does not inspect a live database, infer transitions from an earlier DEM, or select a winner for conflicting owners.
 
 ## Schema Block
 
-Conversion maps DEM types and relations to RDB descriptors.
-The builder translates those descriptors to Knex schema calls.
-The schema service coordinates foreign-key and table creation/drop phases.
+The selected dialect adapter resolves logical types, defaults, generation, indexes, relations, and expressions into physical descriptors and derived capabilities.
+Runtime preflight checks those capabilities on the actual connection.
+The schema planner separates tables/key constraints, relations, data, and late indexes.
+Builders execute only resolved descriptors through adapter allow-lists and parameter bindings.
+
+## Query Block
+
+The expression registry defines core and provider operators with arity, input/output types, allowed contexts, capabilities, and compiler identity.
+The query compiler resolves schema attributes, validates values and dimensions, and compiles identifiers and values through Knex.
+The legacy selection decoder maps the closed comparison contract into core expression nodes.
 
 ## Access Block
 
@@ -32,7 +41,7 @@ The connection owns the Knex client and creates transactions.
 Transactions expose engine predicates, query/schema builders, table-name resolution, and commit/rollback.
 The legacy CRUD engine provides positional APIs.
 The application CRUD service and repository contract provide parameter-object APIs.
-The selection model populates safe Knex clauses through a query-builder mapping contract.
+The selection model populates safe Knex clauses through the typed expression and query-builder mapping contracts.
 
 ## Rebuild Block
 

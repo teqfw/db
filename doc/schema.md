@@ -1,3 +1,3 @@
 # Documentation moved
 
-The authoritative DEM schema-declaration contract is maintained in [`ctx/docs/architecture/schema-declaration.md`](../ctx/docs/architecture/schema-declaration.md).
+The authoritative versioned DEM and map declaration contract is maintained in [`ctx/docs/architecture/dem/declaration.md`](../ctx/docs/architecture/dem/declaration.md).
