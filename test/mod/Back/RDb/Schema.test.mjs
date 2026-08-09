@@ -20,9 +20,9 @@ describe('TeqFw_Db_Back_RDb_Schema', function () {
     it('can drop/create tables', async () => {
         /** @type {TeqFw_Db_Back_RDb_IConnect} */
         const conn = await dbConnect();
-        const {dem, cfg} = await load.exec({path: pathData});
-        obj.setDem({dem});
-        obj.setCfg({cfg});
+        const adapter = conn.getDialectAdapter();
+        const {compilation} = await load.exec({path: pathData, adapter});
+        obj.setCompilation({compilation});
         await obj.dropAllTables({conn});
         await obj.createAllTables({conn});
         await conn.disconnect();

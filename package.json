@@ -9,9 +9,10 @@
   ],
   "scripts": {
     "test": "npm run test:module && npm run test:integration && npm run test:acceptance",
-    "test:module": "node --test test/mod/Back/RDb/Schema.test.mjs test/mod/Back/Dem/Load/Load.test.mjs test/mod/Back/Dem/Load/A/Scan.test.mjs test/mod/Back/Dem/Load/A/Norm.test.mjs test/mod/Back/Dem/Load/A/Scan/A/Map.test.mjs test/mod/Back/Dem/Load/A/Scan/A/Dem.test.mjs",
+    "test:module": "node --test test/mod/Back/Dem/Compile/*.test.mjs test/mod/Back/Mod/*.test.mjs test/mod/Back/RDb/Dialect/*.test.mjs test/mod/Back/RDb/Dialect/Postgresql/*.test.mjs test/mod/Back/RDb/Schema/*.test.mjs test/mod/Back/RDb/*.test.mjs test/mod/Back/Dem/Load/Load.test.mjs test/mod/Back/Dem/Load/A/Scan.test.mjs test/mod/Back/Dem/Load/A/Scan/A/Map.test.mjs test/mod/Back/Dem/Load/A/Scan/A/Dem.test.mjs",
     "test:integration": "node --test test/integration/Di2.test.mjs",
-    "test:acceptance": "node --test test/accept/Back/App/Crud.test.mjs",
+    "test:acceptance": "node --test test/accept/Back/App/*.test.mjs",
+    "test:optin": "node --test test/opt/Postgresql.test.mjs test/opt/Mysql.test.mjs",
     "test:manual": "node --test test/man/Schema.test.mjs test/man/CrudEngine/Simple.test.mjs test/man/CrudEngine/Complex.test.mjs"
   },
   "repository": {

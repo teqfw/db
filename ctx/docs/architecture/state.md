@@ -1,7 +1,7 @@
 # Architecture State
 
 - Path: `ctx/docs/architecture/state.md`
-- Changed: `20260808`
+- Changed: `20260809`
 
 ## Durable State
 
@@ -15,7 +15,7 @@
 
 The connection service owns the initialized Knex instance and current schema namespace configuration.
 Each transaction owns one Knex transaction handle.
-The current schema service owns the legacy normalized DEM and schema configuration; target schema executors consume a successful compilation result.
+The schema service owns an authentic compilation result and derives any read-only v1 compatibility view from that same execution truth.
 One compilation execution owns its canonical model, provenance, dependency graph, requirements, physical plan, fingerprint, warnings, and any error diagnostics.
 The selected adapter owns immutable registries; a preflight result owns connection-specific capability evidence for one operation.
 Configuration services own application root and loaded local values.

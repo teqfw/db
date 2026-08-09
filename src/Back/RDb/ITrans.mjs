@@ -66,9 +66,9 @@ export default class TeqFw_Db_Back_RDb_ITrans {
      */
     async rollback() {}
 
-    /**
-     * 'Knex' object
-     * @returns {Knex}
-     */
-    getKnexTrx() { }
+    /** @returns {TeqFw_Db_Back_Api_RDb_Dialect} */
+    getDialectAdapter() {}
+
+    /** @returns {Knex} */
+    getKnexTrx() {}
 }

@@ -17,8 +17,13 @@ describe('TeqFw_Db_Back_Dem_Load_A_Scan', function () {
 
     it('can scan app folders', async () => {
         const res = await obj.exec({path: pathData});
-        assert(typeof res?.dems === 'object');
         assert(res?.map?.namespace === 'teq');
+        assert(Array.isArray(res.fragments));
+        assert(Object.isFrozen(res.fragments));
+        assert(res.fragments.every((item) => Object.isFrozen(item) && Object.isFrozen(item.declaration)));
+        assert.equal(res.mapEnvelope.mapId, 'app:map');
+        assert(Object.isFrozen(res.mapEnvelope));
+        assert(Object.isFrozen(res.mapEnvelope.declaration));
     });
 });
 

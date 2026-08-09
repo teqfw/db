@@ -1,12 +1,13 @@
 # PostgreSQL And pgvector Runtime
 
 - Path: `ctx/docs/environment/postgresql.md`
-- Changed: `20260808`
+- Changed: `20260809`
 
 ## Status
 
-This document defines runtime requirements for the accepted PostgreSQL adapter target.
-The current 2.x code has PostgreSQL branches for basic schema/data behavior but does not yet implement the complete adapter, capability preflight, pgvector schema model, or typed vector queries.
+This document defines runtime requirements for the PostgreSQL adapter.
+The current worktree implements the adapter, read-only capability preflight, pgvector schema model, codecs, indexes, and typed vector queries.
+Module conformance passes, but release-level runtime conformance is not yet established because the current environment lacks usable opt-in PostgreSQL credentials; support must not be claimed complete until `npm run test:optin` passes.
 
 ## Adapter Selection
 

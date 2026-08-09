@@ -1,18 +1,18 @@
 # Code Overview
 
 - Path: `ctx/docs/code/overview.md`
-- Changed: `20260808`
+- Changed: `20260809`
 
 ## Source Structure
 
 - `src/Back/Api/` — abstract public contracts.
 - `src/Back/App/` — higher-level CRUD and transaction orchestration.
 - `src/Back/RDb/` — connection, transaction, schema, and legacy CRUD implementation.
-- `src/Back/Dem/` — declaration scanning, loading, and normalization.
-- `src/Back/Dem/Compile/` — target DEM v1/v2 decoding, ownership-safe composition, validation, graph, provenance, and fingerprinting; not yet implemented.
-- `src/Back/Dem/Registry/` — target core logical/default/generation/operator registries; not yet implemented.
+- `src/Back/Dem/` — trusted declaration scanning and compiler-backed loading.
+- `src/Back/Dem/Compile/` — DEM v1/v2 decoding, ownership-safe composition, validation, graph, provenance, and fingerprinting.
+- `src/Back/Dem/Registry/` — frozen core logical/default/generation/operator registries.
 - `src/Back/Dto/` — backend DTOs and factories.
-- `src/Back/RDb/Dialect/` — target per-dialect physical projection, capability preflight, value codecs, and execution adapters; not yet implemented.
+- `src/Back/RDb/Dialect/` — per-dialect physical projection, capability preflight, value codecs, and execution adapters.
 - `src/Back/Api/Import/` — replaceable import transformation contract.
 - `src/Back/Act/`, `Cli/`, `Plugin/`, and `Process/` — operational entry modules.
 - `src/Shared/Dto/`, `Enum/`, and `Util/` — cross-runtime selection contracts.
@@ -44,40 +44,32 @@ The canonical platform metadata shape is `teqfw.fw.di.namespaces`; changing the 
 
 ## Architecture Mapping
 
-- DEM scanner, loaders, and normalizer implement target-model composition.
-- The target compiler in `dem.md` replaces generic merge as the authoritative composition boundary.
-- RDB conversion and ordering modules currently derive basic dependency-ordered descriptors; the target adapter and schema planner replace their unchecked type/index dispatch and log-only cycle behavior.
+- DEM scanner and loader feed trusted envelopes to the compiler, which is the authoritative composition boundary.
+- The compiler in `dem.md` replaces generic merge with ownership-safe composition and provenance.
+- Dialect adapters and the schema planner replace unchecked conversion and recursive ordering.
 - RDB schema builder implements complete structure drop and creation.
 - Connection, transaction, CRUD, and selection modules implement the persistence access layer.
 - CLI export/import modules and the import transformation interface implement separate foundations of rebuild data transfer.
 
 ## Implementation Status
 
-### Implemented In 2.x
+### Implemented In The Current Worktree
 
 - distributed DEM loading from the application and installed packages;
-- explicit map application and normalized target composition;
-- dependency-ordered table descriptor generation;
-- destructive structure recreation;
-- JSON export and import of modeled tables;
-- PostgreSQL sequence handling and selected engine-specific transformations;
-- outer-versus-internal transaction ownership for application CRUD.
+- versioned DEM v1/v2 compilation, map application, ownership, provenance, validation, graph analysis, and branding;
+- dialect-selected physical projection and read-only capability preflight;
+- phase-ordered tables, constraints, relations, data, and late indexes;
+- Selection v2 typed expressions plus the legacy selection decoder;
+- PostgreSQL pgvector storage, codecs, operators, HNSW/IVFFlat registries, and execution options;
+- parallel and guarded in-place rebuild with transformation and failure evidence;
+- verified-snapshot restore, transaction ownership, and PostgreSQL generated-state restoration;
+- JSON export and import of modeled tables.
 
-### Required But Not Yet Unified
+### Remaining Release Verification Gap
 
-- trusted fragment envelopes and DEM v1/v2 decoding into one canonical model;
-- single-owner schema-aware composition with provenance and aggregated diagnostics;
-- semantic validation of types, defaults, generation, indexes, relation endpoints/cardinality/compatibility/target uniqueness, and cycles;
-- dialect adapter registries, capability derivation/preflight, and immutable physical descriptors;
-- full index structure and `table`/`afterRelations`/`afterData` schema phases;
-- Selection v2 typed expressions and provider query operators;
-- PostgreSQL pgvector storage, codecs, indexes, and nearest-neighbour queries;
-- one rebuild service with explicit source and target identities;
-- durable snapshot verification before destructive in-place recreation;
-- direct source-to-target transfer independent of CLI process behavior;
-- a structured rebuild evidence result;
-- failure semantics in which a required table failure prevents successful completion;
-- caller-selected transformation identity and reporting.
+- The module, DI integration, acceptance, syntax, and ESM-validator gates pass locally.
+- The real PostgreSQL/pgvector and MariaDB/MySQL opt-in suites exist but have not passed in the current environment because usable test credentials/services are unavailable.
+- Do not claim release-complete PostgreSQL pgvector or MySQL conformance until `npm run test:optin` passes against provisioned disposable databases.
 
 ### Intentionally External
 

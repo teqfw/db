@@ -14,18 +14,16 @@ export default class TeqFw_Db_Back_Dem_Load_A_Scan_A_Map {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_Util_File} deps.file
-     * @param {TeqFw_Db_Back_Dto_Map.Factory} deps.factory
      */
-    constructor({file, factory}) {
+    constructor({file}) {
         /**
          * Load DEM mapping data for the application and parse it.
          * @param {object} deps
          * @param {string|null} deps.filename
-         * @returns {Promise<TeqFw_Db_Back_Dto_Map>}
+         * @returns {Promise<object>}
          */
         this.exec = async function ({filename}) {
-            const json = file.readJson(filename) ?? {};
-            return factory.create(json);
+            return file.readJson(filename) ?? {};
         };
     }
 }
@@ -33,6 +31,5 @@ export default class TeqFw_Db_Back_Dem_Load_A_Scan_A_Map {
 export const __deps__ = Object.freeze({
     default: Object.freeze({
             file: "TeqFw_Db_Back_Util_File$",
-            factory: 'TeqFw_Db_Back_Dto_Map__Factory$',
     }),
 });

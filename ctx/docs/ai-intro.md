@@ -1,7 +1,7 @@
 # AI Introduction
 
 - Path: `ctx/docs/ai-intro.md`
-- Changed: `20260808`
+- Changed: `20260809`
 
 ## Purpose
 
@@ -52,9 +52,9 @@ It does not orchestrate application releases or switch production traffic.
 
 ## Current Delivery Boundary
 
-The 2.x implementation already deep-merges legacy DEM fragments, recreates basic structure, executes comparison-only selections, and exports/imports modeled data.
-The accepted context additionally requires the DEM v2 compiler, provenance, enforced semantic validation, dialect registries/capabilities, full index phases, typed expressions, PostgreSQL pgvector behavior, a unified rebuild workflow, and structured transfer evidence.
-Those remain implementation gaps and must not be described as current public APIs.
+The current worktree implements DEM v2 compilation, provenance, enforced semantic validation, dialect registries and capabilities, full index phases, typed expressions, PostgreSQL pgvector behavior, unified rebuild, and structured transfer evidence while decoding legacy v1 inputs through the same execution truth.
+These implementation tokens are not automatically a new documented public API.
+Real PostgreSQL/pgvector and MariaDB/MySQL opt-in conformance remains a release gate and has not passed in the current environment.
 
 ## Reading Angle
 

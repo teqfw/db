@@ -57,7 +57,7 @@ export default class TeqFw_Db_Back_App_Crud {
                 if (value === null) {
                     query.whereNull(key);
                 } else if (Array.isArray(value)) {
-                    query.where(key, ...value); // ('id', ['<=', 4]) => ('id', '<=', 4)
+                    throw new TypeError('Legacy CRUD conditions accept equality values only; use Selection for registered operators.');
                 } else {
                     query.where(key, value);
                 }
@@ -116,6 +116,12 @@ export default class TeqFw_Db_Back_App_Crud {
         function adaptSchemaAsQueryBuilder(schema) {
             const FIELDS = Object.values(schema.getAttributes());
             return {
+                getLogicalTypes() {
+                    return typeof schema.getLogicalTypes === 'function' ? schema.getLogicalTypes() : undefined;
+                },
+                getAttributes() {
+                    return schema.getAttributes();
+                },
                 mapColumn(col) {
                     return FIELDS.includes(col) ? col : undefined;
                 }
@@ -309,11 +315,13 @@ export default class TeqFw_Db_Back_App_Crud {
             if (!schema) throw new Error('Schema is required.');
             return await trxWrapper.execute(trxOuter, async (trx) => {
                 const table = trx.getTableName(schema);
+                let derivedAliases = [];
                 /** @type {Knex.QueryBuilder} */
-                const query = trx.createQuery().table(table);
+                const query = trx.createQuery().table(table).select('*');
                 if (selection && Object.keys(selection).length) {
                     // use one structure for filters/order/pagination
-                    modSelect.populate(trx, adaptSchemaAsQueryBuilder(schema), query, selection);
+                    const populated = await modSelect.populate(trx, adaptSchemaAsQueryBuilder(schema), query, selection);
+                    derivedAliases = populated.decoded.select.map((item) => item.as);
                 } else {
                     // use deprecated style
                     composeWhere(query, schema, conditions);
@@ -321,9 +329,12 @@ export default class TeqFw_Db_Back_App_Crud {
                     // Apply sorting
                     if (sorting) {
                         Object.entries(sorting).forEach(([key, order]) => {
-                            if (['asc', 'desc'].includes(order.toLowerCase())) {
-                                query.orderBy(key, order);
+                            const column = adaptSchemaAsQueryBuilder(schema).mapColumn(key);
+                            if (!column) throw new TypeError(`Sorting attribute '${key}' is not defined in the schema.`);
+                            if (typeof order !== 'string' || !['asc', 'desc'].includes(order.toLowerCase())) {
+                                throw new TypeError(`Sorting direction for '${key}' must be 'asc' or 'desc'.`);
                             }
+                            query.orderBy(column, order.toLowerCase());
                         });
                     }
 
@@ -342,7 +353,11 @@ export default class TeqFw_Db_Back_App_Crud {
                 const rs = await query;
 
                 // Convert result rows into DTOs
-                const records = Array.isArray(rs) ? rs.map(row => schema.createDto(row)) : [];
+                const records = Array.isArray(rs) ? rs.map((row) => {
+                    const dto = schema.createDto(row);
+                    for (const alias of derivedAliases) dto[alias] = row[alias];
+                    return dto;
+                }) : [];
 
                 return {records};
             });

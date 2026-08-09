@@ -12,11 +12,12 @@
 export default class TeqFw_Db_Back_Act_Dem_Tables {
     /**
      * @param {object} deps
+     * @param {TeqFw_Db_Back_RDb_IConnect} deps.conn
      * @param {TeqFw_Db_Back_Config} deps.config
      * @param {TeqFw_Db_Back_Api_RDb_Schema} deps.dbSchema
      * @param {TeqFw_Db_Back_Dem_Load} deps.demLoad
      */
-    constructor({config, dbSchema, demLoad}) {
+    constructor({conn, config, dbSchema, demLoad}) {
         // VARS
 
         // MAINdi
@@ -25,9 +26,9 @@ export default class TeqFw_Db_Back_Act_Dem_Tables {
          */
         this.act = async function ({} = {}) {
             const path = config.getPathToRoot();
-            const {dem, cfg} = await demLoad.exec({path});
-            await dbSchema.setDem({dem});
-            await dbSchema.setCfg({cfg});
+            const adapter = conn.getDialectAdapter();
+            const {compilation} = await demLoad.exec({path, adapter});
+            dbSchema.setCompilation({compilation});
             return await dbSchema.getTablesList();
         };
     }
@@ -36,6 +37,7 @@ export default class TeqFw_Db_Back_Act_Dem_Tables {
 
 export const __deps__ = Object.freeze({
     default: Object.freeze({
+            conn: 'TeqFw_Db_Back_RDb_Connect$',
             config: 'TeqFw_Db_Back_Config$',
             dbSchema: 'TeqFw_Db_Back_RDb_Schema$',
             demLoad: 'TeqFw_Db_Back_Dem_Load$',

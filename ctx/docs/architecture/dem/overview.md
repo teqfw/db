@@ -1,12 +1,12 @@
 # DEM Target Architecture
 
 - Path: `ctx/docs/architecture/dem/overview.md`
-- Changed: `20260808`
+- Changed: `20260809`
 
 ## Status And Scope
 
 This document defines the accepted DEM v2 target architecture.
-The current 2.x implementation loads an unversioned legacy declaration and does not yet implement this complete compiler.
+The current worktree implements the complete compiler through one v1/v2 canonical execution path; release completion remains gated by external PostgreSQL/pgvector and MariaDB/MySQL conformance.
 `../../code/dem.md` maps the target to implementation work and distinguishes current facts from required behavior.
 
 The DEM describes one desired relational state.

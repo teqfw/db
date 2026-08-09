@@ -39,9 +39,9 @@ export default function Factory({DEF, logger, fCommand, conn, config, dbSchema, 
     async function action() {
         // load DEMs then drop/create all tables
         const path = config.getPathToRoot();
-        const {dem, cfg} = await demLoad.exec({path});
-        await dbSchema.setDem({dem});
-        await dbSchema.setCfg({cfg});
+        const adapter = conn.getDialectAdapter();
+        const {compilation} = await demLoad.exec({path, adapter});
+        dbSchema.setCompilation({compilation});
         await dbSchema.dropAllTables({conn});
         logger.info('All tables are dropped.');
         await app.stop();

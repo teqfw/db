@@ -32,6 +32,13 @@ export default class TeqFw_Db_Back_Api_RDb_Schema_Object {
      * @returns {Object<string, string>|*}
      */
     getAttributes() {}
+    /**
+     * Return registered logical type descriptors keyed by persistent attribute name or attribute codifier key.
+     * Selection v2 requires this metadata; legacy selections may use the compatibility decoder without it.
+     * @returns {Object<string, object>}
+     */
+    getLogicalTypes() {}
+
 
     /**
      * Get the entity name combining the npm package name and the entity's path.

@@ -1,7 +1,7 @@
 # Architecture Structure
 
 - Path: `ctx/docs/architecture/structure.md`
-- Changed: `20260808`
+- Changed: `20260809`
 
 ## Declaration Block
 
@@ -69,5 +69,5 @@ Export/import preserve and restore table rows and PostgreSQL sequences.
 Lifecycle actions connect and disconnect.
 CLI modules expose command descriptors while leaving process hosting outside the persistence core.
 
-Current operation modules implement parts of the rebuild block separately.
-They are not yet a complete implementation of the target rebuild workflow.
+The current operation layer exposes compiler-backed schema actions and one unified rebuild facade over explicit planning, transfer, transformation, transaction, and evidence roles.
+External deployment orchestration and cutover remain outside the package.

@@ -1,12 +1,13 @@
 # Testing Overview
 
 - Path: `ctx/docs/code/testing.md`
-- Changed: `20260808`
+- Changed: `20260809`
 
 ## Test Structure
 
 - `test/integration/` — DI graph resolution and database-backed integration.
-- `test/mod/` — legacy module behavior retained during migration.
+- `test/mod/` — compiler, adapter, schema, selection, rebuild, and retained compatibility module behavior.
+- `test/opt/` — destructive opt-in conformance against disposable PostgreSQL/pgvector and MariaDB/MySQL databases.
 - `test/accept/` — end-to-end persistence scenarios.
 - `test/man/` — manual development scenarios not required by the default suite.
 - `test/data/` — declarations, maps, and database fixtures.
@@ -16,6 +17,7 @@
 Tests import suites, cases, and lifecycle hooks from the stable `node:test` API.
 The npm scripts invoke the Node.js test runner directly with the files in each layer, without a third-party test framework.
 `npm test` runs module, integration, and acceptance layers; `npm run test:manual` remains opt-in.
+`npm run test:optin` is the release gate for provisioned PostgreSQL/pgvector and MariaDB/MySQL databases.
 
 ## Required Verification
 
@@ -25,7 +27,7 @@ The npm scripts invoke the Node.js test runner directly with the files in each l
 - A DI integration test resolves representative default and named-factory tokens using `@teqfw/di` 2.x.
 - Automated tests cover DEM composition, schema ordering/conversion, selection, transaction ownership, CRUD, and connection shutdown to the extent supported without external infrastructure.
 
-These checks describe the current 2.x implementation and do not by themselves satisfy the accepted rebuild contract.
+These checks pass in the current worktree but do not replace the external-database opt-in release gate.
 
 ## DEM v2 Compiler Verification
 

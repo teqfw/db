@@ -10,6 +10,8 @@
  * @implements TeqFw_Db_Back_RDb_ITrans
  */
 export default class TeqFw_Db_Back_RDb_Trans {
+    /** @type {TeqFw_Db_Back_Api_RDb_Dialect} */
+    #adapter;
     /** @type {TeqFw_Db_Back_RDb_Connect_Resolver} */
     #resolver;
     /** @type {Knex} */
@@ -17,10 +19,12 @@ export default class TeqFw_Db_Back_RDb_Trans {
 
     /**
      * @param {object} deps
+     * @param {TeqFw_Db_Back_Api_RDb_Dialect} deps.adapter
      * @param {TeqFw_Db_Back_RDb_Connect_Resolver} deps.resolver
      * @param {Knex} deps.trx
      */
-    constructor({resolver, trx}) {
+    constructor({adapter, resolver, trx}) {
+        this.#adapter = adapter;
         this.#resolver = resolver;
         this.#trx = trx;
 
@@ -91,9 +95,12 @@ export default class TeqFw_Db_Back_RDb_Trans {
             return this.#resolver.getTableName(meta);
         };
 
-        /**
-         * @returns {any}
-         */
+        /** @returns {TeqFw_Db_Back_Api_RDb_Dialect} */
+        this.getDialectAdapter = function() {
+            return this.#adapter;
+        };
+
+        /** @returns {Knex} */
         this.getKnexTrx = function() {
             return this.#trx;
         };

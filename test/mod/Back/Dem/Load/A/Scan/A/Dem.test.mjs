@@ -18,6 +18,7 @@ describe('TeqFw_Db_Back_Dem_Load_A_Scan_A_Dem', function () {
 
     it('can load JSON', async () => {
         const dem = await obj.exec({filename: pathMap});
-        assert(dem?.entity?.user?.name === 'user');
+        assert(dem?.entity?.user?.attr?.id?.type === 'id');
+        assert.equal('name' in dem.entity.user, false);
     });
 });

@@ -20,6 +20,13 @@ export default class TeqFw_Db_Back_Dem_Load_A_Scan {
      * @param {TeqFw_Db_Back_Dem_Load_A_Scan_A_Map} deps._loadMap
      */
     constructor({file, pathUtil, _loadDem, _loadMap}) {
+        /** @param {any} value @returns {any} */
+        const freeze = function (value) {
+            if (!value || typeof value !== 'object' || Object.isFrozen(value)) return value;
+            for (const key of Reflect.ownKeys(value)) freeze(value[key]);
+            return Object.freeze(value);
+        };
+
 
         /**
          * Load DEM mapping data for the application and parse it.
@@ -32,11 +39,18 @@ export default class TeqFw_Db_Back_Dem_Load_A_Scan {
         this.exec = async function ({path, testDems, testMapRoot}) {
             const DEM = pathUtil.join("etc", "teqfw.schema.json");
             const MAP = pathUtil.join("etc", "teqfw.schema.map.json");
-            const dems = {};
+            const fragments = [];
             // parse 'schema' JSON for the root plugin
             const pathBaseDem = pathUtil.join(path, DEM);
-            const name = file.readPackageName(path);
-            dems[name] = await _loadDem.exec({filename: pathBaseDem});
+            const rootName = file.readPackageName(path);
+            const rootDeclaration = await _loadDem.exec({filename: pathBaseDem});
+            freeze(rootDeclaration);
+            fragments.push(Object.freeze({
+                declaration: rootDeclaration,
+                filename: pathBaseDem,
+                fragmentId: rootName,
+                packageName: rootName,
+            }));
             // parse 'schema' JSON for plugin in 'node_modules'
             /** @type {string[]} */
             const filenames = file.scanNodeModules(path, DEM);
@@ -52,12 +66,22 @@ export default class TeqFw_Db_Back_Dem_Load_A_Scan {
                 const pathPlugin = filename.slice(0, -(pathUtil.sep + DEM).length);
                 const testName = Object.entries(testDems ?? {}).find(([, testPath]) => testPath === pathPlugin)?.[0];
                 const name = testName ?? file.readPackageName(pathPlugin);
-                dems[name] = await _loadDem.exec({filename});
+                const declaration = await _loadDem.exec({filename});
+                freeze(declaration);
+                fragments.push(Object.freeze({declaration, filename, fragmentId: name, packageName: name}));
             }
             // load map file
             const pathMap = pathUtil.join(testMapRoot ?? path, MAP);
             const map = await _loadMap.exec({filename: pathMap});
-            return {dems, map};
+            freeze(map);
+            const mapEnvelope = Object.freeze({
+                declaration: map,
+                filename: pathMap,
+                mapId: `${rootName}:map`,
+                packageName: rootName,
+            });
+            fragments.sort((a, b) => a.fragmentId.localeCompare(b.fragmentId) || a.filename.localeCompare(b.filename));
+            return {fragments: Object.freeze(fragments), map, mapEnvelope};
         };
     }
 }

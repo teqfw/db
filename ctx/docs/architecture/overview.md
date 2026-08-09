@@ -1,7 +1,7 @@
 # Architecture Overview
 
 - Path: `ctx/docs/architecture/overview.md`
-- Changed: `20260808`
+- Changed: `20260809`
 
 This document is paired with `overview.skin.md` and preserves its architecture meaning.
 
@@ -70,8 +70,9 @@ An external migrator or host application supplies migration sequencing, transfor
 
 ## Implementation Boundary
 
-The current 2.x implementation contains legacy deep-merge composition, basic structure recreation, comparison-only selection, export, import, and transformation-interface foundations.
-It does not yet implement the DEM v2 compiler, provenance, complete semantic validation, dialect registries/capabilities, full index phases, typed expressions, PostgreSQL pgvector adapter behavior, a unified source-to-target rebuild service, or the complete evidence contract.
+The current worktree implements the compiler, provenance, semantic validation, dialect registries and preflight, full index phases, typed expressions, PostgreSQL pgvector adapter behavior, and unified rebuild evidence described here.
+Default SQLite-backed tests and static validation pass.
+Release-level PostgreSQL/pgvector and MariaDB/MySQL conformance remains pending until the opt-in suites pass against provisioned disposable databases.
 
 ## Reading Map
 

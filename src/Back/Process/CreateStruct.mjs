@@ -53,18 +53,17 @@ export default class TeqFw_Db_Back_Process_CreateStruct {
             }
 
             /**
-             * Load DEM and re-create DB structure.
+             * Load DEM and create an initially absent DB structure without destructive recovery.
              * @returns {Promise<void>}
              */
             async function createDbStruct() {
-                // load DEMs then drop/create all tables
+                // load DEMs and attempt initial creation only
                 const path = config.getPathToRoot();
-                const {dem, cfg} = await demLoad.exec({path});
-                await dbSchema.setDem({dem});
-                await dbSchema.setCfg({cfg});
-                await dbSchema.dropAllTables({conn});
+                const adapter = conn.getDialectAdapter();
+                const {compilation} = await demLoad.exec({path, adapter});
+                dbSchema.setCompilation({compilation});
                 await dbSchema.createAllTables({conn});
-                logger.info('Database structure is recreated.');
+                logger.info('Database structure is created.');
             }
 
             // MAIN

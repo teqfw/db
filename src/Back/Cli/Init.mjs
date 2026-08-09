@@ -39,9 +39,9 @@ export default function Factory({DEF, logger, fCommand, conn, config, dbSchema, 
     async function action({testDems, testMapRoot} = {}) {
         // load DEMs then drop/create all tables
         const path = config.getPathToRoot();
-        const {dem, cfg} = await demLoad.exec({path, testDems, testMapRoot});
-        await dbSchema.setDem({dem});
-        await dbSchema.setCfg({cfg});
+        const adapter = conn.getDialectAdapter();
+        const {compilation} = await demLoad.exec({path, testDems, testMapRoot, adapter});
+        dbSchema.setCompilation({compilation});
         await dbSchema.dropAllTables({conn});
         await dbSchema.createAllTables({conn});
         logger.info('Database structure is recreated.');

@@ -11,6 +11,10 @@ class MockSchema {
     createDto = (dto) => ({id: dto.id, name: dto.name});
     getAttributes = () => ({ID: 'id', NAME: 'name'});
     getEntityName = () => '/test/teqfw/db/user';
+    getLogicalTypes = () => ({
+        id: {id: 'core.integer', params: {bits: 32, unsigned: false}},
+        name: {id: 'core.string', params: {length: 255}},
+    });
     getPrimaryKey = () => ['id'];
 }
 
@@ -113,5 +117,23 @@ describe('TeqFw_Db_Back_App_Crud', () => {
 
         assert.ok(Array.isArray(records), 'Records should be an array.');
         assert.strictEqual(records.length, 0, 'No records should match the condition.');
+    });
+
+    it('returns only declared derived Selection v2 aliases alongside persistent DTO fields', async () => {
+        const schema = new MockSchema();
+        await crud.createOne({schema, dto: {id: 50, name: ENTITY_NAME}});
+        const {records} = await crud.readMany({
+            schema,
+            selection: {
+                version: 2,
+                select: [{as: 'derived_name', expression: {kind: 'attr', name: 'name'}}],
+                where: {
+                    kind: 'call', operator: 'core.eq', args: [
+                        {kind: 'attr', name: 'id'}, {kind: 'value', value: 50},
+                    ],
+                },
+            },
+        });
+        assert.deepEqual(records, [{derived_name: ENTITY_NAME, id: 50, name: ENTITY_NAME}]);
     });
 });

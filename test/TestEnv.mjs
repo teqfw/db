@@ -116,5 +116,6 @@ export default async function () {
 export {
     cfg,
     container,
-    dbConnect
+    dbConnect,
+    localCfg,
 };

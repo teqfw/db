@@ -17,17 +17,20 @@
 export default class TeqFw_Db_Back_RDb_Connect {
     /**
      * @param {object} deps
+     * @param {TeqFw_Db_Back_RDb_Dialect_Registry} deps._dialects
      * @param {TeqFw_Db_Back_Logger} deps._logger
      * @param {TeqFw_Db_Back_RDb_Connect_Resolver} deps._resolver
      * @param {typeof TeqFw_Db_Back_RDb_Trans} deps.Trans
      * @param {any} deps.knexFactory
      */
-    constructor({_logger, _resolver, Trans, knexFactory}) {
+    constructor({_dialects, _logger, _resolver, Trans, knexFactory}) {
         // VARS
         /** @type {Knex} */
         let _knex;
         /** @type {string} */
         let _info;
+        /** @type {TeqFw_Db_Back_Api_RDb_Dialect} */
+        let _adapter;
 
         // INSTANCE METHODS
         /**
@@ -38,6 +41,7 @@ export default class TeqFw_Db_Back_RDb_Connect {
         this.init = async function (cfg) {
             // to prevent 'Cannot redefine property: password'
             const clone = JSON.parse(JSON.stringify(cfg));
+            const adapter = _dialects.select({client: clone.client});
             const filename = clone?.connection?.filename;
             if (filename) {
                 _info = `'${filename}'`;
@@ -49,6 +53,7 @@ export default class TeqFw_Db_Back_RDb_Connect {
             }
             try {
                 _knex = await knexFactory(clone);
+                _adapter = adapter;
                 _logger.info(`Setup connection to DB ${_info}.`);
             } catch (e) {
                 _logger.error(`Cannot setup connection to DB ${_info}. Error: ${e}`);
@@ -57,12 +62,21 @@ export default class TeqFw_Db_Back_RDb_Connect {
         };
 
         /**
+         * Get the immutable dialect selected by the configured Knex client.
+         * @returns {TeqFw_Db_Back_Api_RDb_Dialect}
+         */
+        this.getDialectAdapter = function () {
+            if (!_adapter) throw new Error("The database connection is not initialized.");
+            return _adapter;
+        };
+
+        /**
          * @param {any} opts
          * @returns {Promise<any>}
          */
         this.startTransaction = async function (opts) {
             const trx = await _knex.transaction(opts);
-            return new Trans({resolver: _resolver, trx});
+            return new Trans({adapter: _adapter, resolver: _resolver, trx});
         };
         /**
          * Set schema configuration for current connection.
@@ -132,6 +146,7 @@ export default class TeqFw_Db_Back_RDb_Connect {
 
 export const __deps__ = Object.freeze({
     default: Object.freeze({
+            _dialects: 'TeqFw_Db_Back_RDb_Dialect_Registry$',
             _logger: 'TeqFw_Db_Back_Logger$',
             _resolver: 'TeqFw_Db_Back_RDb_Connect_Resolver$$',
             Trans: 'TeqFw_Db_Back_RDb_Trans__default',

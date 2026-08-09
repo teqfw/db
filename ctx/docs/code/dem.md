@@ -1,20 +1,21 @@
 # DEM v2 Implementation Mapping
 
 - Path: `ctx/docs/code/dem.md`
-- Changed: `20260808`
+- Changed: `20260809`
 
 ## Authority And Status
 
 This document maps the accepted architecture in `../architecture/dem/` to source work.
 It does not redefine declaration or validation meaning.
-Every module and contract in the target column below is required but not implemented unless the current-state column says otherwise.
+The current worktree implements the mapped modules and removes the legacy composition/conversion/ordering executors.
+Release completion remains conditional on the real PostgreSQL/pgvector and MariaDB/MySQL opt-in suites.
 
 Implement in the delivery order below.
 Do not begin PostgreSQL vector DDL by adding `vector` to `src/Back/Enum/Dem/Type/Attr.mjs`; that would bypass the compiler, capability, storage, index, codec, and query contracts.
 
-## Current Defect To Target Owner
+## Removed Legacy Defect To Target Owner
 
-| Current evidence | Current behavior | Target owner |
+| Legacy evidence | Former behavior | Target owner |
 | --- | --- | --- |
 | `src/Shared/Util/Deep.mjs`, `src/Back/Dem/Load/A/Norm.mjs` | Scalars overwrite, arrays concatenate, and origin is lost | `Back/Dem/Compile/A/Compose.mjs` plus provenance DTOs |
 | `src/Back/Dto/Dem/Entity/Attr.mjs` | Any string is accepted as an attribute type | Core/provider type registries and `Validate.mjs` |
