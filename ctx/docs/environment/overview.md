@@ -1,7 +1,7 @@
 # Environment Overview
 
 - Path: `ctx/docs/environment/overview.md`
-- Changed: `20260808`
+- Changed: `20260810`
 
 ## Runtime Model
 
@@ -11,6 +11,7 @@ The 2.x line targets Node.js 20 or newer to align with `@teqfw/di` 2.x.
 ## External Dependencies
 
 - `@teqfw/di` 2.x for runtime composition.
+- `@teqfw/cfg` 2.x for the explicitly bootstrapped raw configuration snapshot.
 - Knex 3.x for query and schema abstraction.
 - A client package matching the configured database, such as `pg`, `mysql2`, or `sqlite3`.
 - One `@teqfw/db` dialect adapter matching the configured Knex client.
@@ -29,7 +30,8 @@ PostgreSQL pgvector behavior additionally requires the `vector` extension in the
 
 ## Operational Constraints
 
-The application must register namespace roots before the first DI resolution.
+The application must register namespace roots before the first DI resolution, select cfg Sources, and await the
+one-shot cfg load before resolving database runtime components.
 Connection credentials and paths are application-owned and must not be committed to this repository.
 Schema recreation, drop, and import are destructive operations requiring operator intent.
 Extension installation and server-setting changes are separately authorized operations and are never implicit schema-build side effects.

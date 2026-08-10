@@ -1,4 +1,5 @@
 /**/local.json
+/.env
 /.idea/
 /.nyc_output/
 /dev/cfg/local.json

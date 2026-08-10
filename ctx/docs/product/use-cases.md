@@ -1,12 +1,14 @@
 # Product Use Cases
 
 - Path: `ctx/docs/product/use-cases.md`
-- Changed: `20260808`
+- Changed: `20260810`
 
 ## UC-1 Configure And Connect
 
-The application supplies a Knex-compatible client and connection configuration.
-The result is a reusable connection service able to create transactions, queries, and schema builders and to identify the active RDBMS family.
+The application bootstraps configuration Sources and supplies common or specialized Knex settings for one default
+connection and, when needed, named connections. The package exposes the default connection through its DI token; the
+host exposes each additional connection through an application-owned DI token and lifecycle. Every resulting
+connection service can create transactions, queries, and schema builders and identify its active RDBMS family.
 
 ## UC-2 Compose The Application Model
 

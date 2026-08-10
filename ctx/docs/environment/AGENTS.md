@@ -11,7 +11,7 @@ Describe runtime assumptions, configuration, external prerequisites, and operati
 ## Level Map
 
 - `overview.md` — runtime and database prerequisites.
-- `configuration.md` — connection configuration migrated from legacy documentation.
+- `configuration.md` — current `@teqfw/cfg` contract for default and named connections.
 - `postgresql.md` — PostgreSQL adapter and pgvector capability requirements.
 - `rebuild.md` — operational prerequisites and engine boundaries for rebuild migration.
 

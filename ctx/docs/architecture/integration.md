@@ -1,7 +1,7 @@
 # Architecture Integrations
 
 - Path: `ctx/docs/architecture/integration.md`
-- Changed: `20260808`
+- Changed: `20260810`
 
 ## @teqfw/di 2.x
 
@@ -10,8 +10,7 @@ Each composed export declares dependencies in an export-scoped `__deps__` object
 Named exports use DI specifiers such as `TeqFw_Db_Back_Dto_Dem__Factory$`; as-is default exports use `__default`.
 Applications configure namespace roots before the first container resolution.
 
-The current package manifest publishes the legacy-compatible `teqfw.namespaces` form.
-New metadata work must target the canonical `teqfw.fw.di.namespaces` schema when the package migration is authorized; documentation must not present the compatibility form as the preferred platform convention.
+The package manifest publishes `TeqFw_Db_` through the canonical `teqfw.fw.di.namespaces` schema.
 
 ## Knex
 
@@ -35,14 +34,26 @@ Other database clients retain existing behavior through their own validated adap
 ## Filesystem
 
 The package reads package model declarations and the root application map from `etc/`.
-Local connection configuration and dump filenames are explicit operational inputs.
+Connection configuration comes from the explicitly bootstrapped `@teqfw/cfg` snapshot; dump filenames remain
+explicit operational inputs.
 Export writes a JSON dump; import reads the same logical structure.
 A durable dump used for in-place rebuild must be stored outside the physical objects that will be dropped.
 
 ## Logging And Configuration
 
 The 2.x composition must not depend on constructor-key injection or the legacy core replacement table.
-Logging and application configuration are explicit dependency contracts or call parameters.
+Logging and application configuration are explicit dependency contracts or call parameters. The host registers
+the `@teqfw/cfg` namespace from package metadata, selects ordered Sources, and completes the one-shot load before
+database runtime starts. `TeqFw_Db_Back_Config$` depends on `TeqFw_Cfg_Reader$`, reads `TEQFW_DB`, converts the raw
+fragment to the package-owned Knex shape, and freezes it. Source selection, precedence, and loading remain host
+composition responsibilities.
+
+The package owns one default connection token, `TeqFw_Db_Back_RDb_Connect$`. Named connections are host-owned DI
+composition: an application provider receives a separate transient `TeqFw_Db_Back_RDb_Connect$$`, publishes it
+under an application token, and a host lifecycle component initializes and disconnects it. Every connection stays
+in the `TEQFW_DB` cfg namespace; named parameter keys use `<NAME>_` after the `__` separator. Configuration lookup
+never resolves or registers a runtime dependency. This keeps connection selection explicit and avoids unrestricted
+Container access inside persistence components.
 
 ## External Migration Orchestrator
 

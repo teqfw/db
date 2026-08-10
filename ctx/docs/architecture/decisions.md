@@ -114,6 +114,19 @@ Rejected: treating `vector` as one additional core enum value or embedding Postg
 
 Reason: storage family, dimension, metric, operator class, method, options, query operators, and runtime extension availability must be validated together.
 
+## AD-015 Use Shared cfg With Host-Owned Named Connections
+
+Decision: `@teqfw/db` reads default and named connection settings from the single `TEQFW_DB` namespace supplied by
+`@teqfw/cfg`. Common connection fields use scalar parameters. A per-connection `EXTRA` object carries uncommon Knex
+or driver-specific options. The package owns the default `TeqFw_Db_Back_RDb_Connect$`; additional connection tokens,
+initialization, and shutdown belong to the host application and use independent transient connector instances.
+
+Rejected: implicit reads from `process.env` or JSON files, separate cfg namespaces per connection, JSON objects for
+ordinary credentials, production use of test-only Container registration, and unrestricted runtime Container lookup.
+
+Reason: one package-owned cfg namespace keeps ownership explicit, scalar values remain operationally convenient,
+and host-owned DI tokens make every additional connection and its lifecycle visible in composition.
+
 ## Deferred CLI Hosting Decision
 
 Status: deferred; it is not part of the accepted rebuild architecture.

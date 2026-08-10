@@ -1,7 +1,7 @@
 # Architecture State
 
 - Path: `ctx/docs/architecture/state.md`
-- Changed: `20260809`
+- Changed: `20260810`
 
 ## Durable State
 
@@ -14,11 +14,15 @@
 ## Runtime State
 
 The connection service owns the initialized Knex instance and current schema namespace configuration.
+The package default connection and every host-owned named connection have independent Knex, dialect-adapter,
+resolver, transaction, and shutdown state.
 Each transaction owns one Knex transaction handle.
 The schema service owns an authentic compilation result and derives any read-only v1 compatibility view from that same execution truth.
 One compilation execution owns its canonical model, provenance, dependency graph, requirements, physical plan, fingerprint, warnings, and any error diagnostics.
 The selected adapter owns immutable registries; a preflight result owns connection-specific capability evidence for one operation.
-Configuration services own application root and loaded local values.
+`@teqfw/cfg` owns the immutable raw application snapshot. The database configuration service owns one lazily
+materialized, deeply frozen Knex configuration per default or named connection derived from the `TEQFW_DB`
+projection, plus application-root and version metadata.
 A rebuild execution owns its selected source and target identities, progress, and evidence until it returns them to the caller.
 
 ## Derived State

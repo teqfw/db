@@ -48,27 +48,36 @@ $ npm i @teqfw/db --save
 
 This plugin uses `TeqFw_Db` namespace.
 
-## `./cfg/local.json`
+## Configuration
 
-[DTO](src/Back/Dto/Config/Local.mjs) for `@teqfw/db` node.
+`@teqfw/db` consumes the `TEQFW_DB` namespace from `@teqfw/cfg`. The host must register the published
+`TeqFw_Cfg_` DI namespace, select configuration Sources, and await `TeqFw_Cfg_Loader$.load()` before database
+runtime components start.
 
-```json
-{
-  "@teqfw/db": {
-    "client": "mysql2|pg|...",
-    "connection": {
-      "database": "dup",
-      "filename": "/.../db.sqlite",
-      "flags": ["for", "SQLite"],
-      "host": "127.0.0.1",
-      "password": "...",
-      "port": 3210,
-      "socketPath": "/path/to/socket",
-      "user": "name"
-    },
-    "searchPath": ["PostgreSQL client allows you to set the initial search path"],
-    "useNullAsDefault": true,
-    "version": "When you use the PostgreSQL adapter to connect a non-standard database."
-  }
-}
+Common connection settings use individual keys and require no JSON. The supported suffixes are `CLIENT`, `HOST`,
+`PORT`, `USER`, `PASSWORD`, `DATABASE`, `FILENAME`, `SOCKET_PATH`, `SEARCH_PATH`, `USE_NULL_AS_DEFAULT`, and
+`VERSION`. `EXTRA` accepts an object or JSON string for uncommon Knex and driver-specific options:
+
+```dotenv
+TEQFW_DB__CLIENT=pg
+TEQFW_DB__HOST=127.0.0.1
+TEQFW_DB__USER=application
+TEQFW_DB__PASSWORD=secret
+TEQFW_DB__DATABASE=application
+TEQFW_DB__EXTRA='{"pool":{"min":1,"max":4},"connection":{"ssl":true}}'
 ```
+
+See [`ctx/docs/environment/configuration.md`](ctx/docs/environment/configuration.md) for the authoritative contract.
+
+### Named connections
+
+All connections stay in the `TEQFW_DB` cfg namespace. Default keys start directly after `TEQFW_DB__`; named keys
+add the normalized connection name to the parameter, for example `TEQFW_DB__REPORTING_CLIENT` and
+`TEQFW_DB__REPORTING_EXTRA`. `TeqFw_Db_Back_Config$.get('reporting')` returns its immutable Knex configuration.
+
+`TeqFw_Db_Back_RDb_Connect$` remains the package default singleton. A host that needs additional connections defines
+application-owned DI tokens. Each such provider receives a separate `TeqFw_Db_Back_RDb_Connect$$`, while a host
+lifecycle component initializes it with `config.get('<name>')` and disconnects it during shutdown. Production code
+must not use Container test registration for named connections.
+
+See [`.env.example`](.env.example) for default and named dotenv entries.

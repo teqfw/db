@@ -1,7 +1,7 @@
 # Code Overview
 
 - Path: `ctx/docs/code/overview.md`
-- Changed: `20260809`
+- Changed: `20260810`
 
 ## Source Structure
 
@@ -39,8 +39,14 @@ export const __deps__ = Object.freeze({
 Named factories use `Factory` in `__deps__` and consumers request `Module__Factory$`.
 As-is default classes use `Module__default`.
 
-The package manifest currently uses the legacy-compatible `teqfw.namespaces` declaration.
-The canonical platform metadata shape is `teqfw.fw.di.namespaces`; changing the manifest requires an explicit package-metadata migration and compatibility verification.
+The package manifest uses the canonical `teqfw.fw.di.namespaces` declaration.
+
+`src/Back/Config.mjs` resolves `TeqFw_Cfg_Reader$`, reads the `TEQFW_DB` raw namespace, converts common scalar fields
+and optional structured `EXTRA`, and freezes the resulting Knex configuration. It does not select cfg Sources or load files; those
+operations belong to the host composition root before configuration-consuming runtime is resolved.
+`Config.get()` selects unprefixed parameters from `TEQFW_DB`; `Config.get(name)` selects `<NAME>_` parameters from
+the same namespace and caches one deeply frozen typed value per connection name. Common fields are converted without
+JSON; optional `EXTRA` objects carry specialized Knex or driver-specific settings.
 
 ## Architecture Mapping
 

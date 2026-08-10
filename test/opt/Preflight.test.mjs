@@ -34,9 +34,9 @@ function versionAtLeast(actual, minimum) {
 }
 
 describe('opt-in database preflight', () => {
-    it('loads an explicit ignored local configuration', () => {
-        const filename = join(cfg.path.test, 'data', 'cfg', 'local.json');
-        assert.equal(existsSync(filename), true, `Create the ignored local configuration at ${filename}.`);
+    it('loads an explicit ignored project dotenv configuration', () => {
+        const filename = join(cfg.path.root, '.env');
+        assert.equal(existsSync(filename), true, `Create the ignored dotenv configuration at ${filename}.`);
         assertConnectionConfig('mariadb', localCfg.mariadb, 'mysql2');
         assertConnectionConfig('pg', localCfg.pg, 'pg');
     });

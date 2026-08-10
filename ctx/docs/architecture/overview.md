@@ -46,7 +46,8 @@ It is not compared with arbitrary production state to infer an incremental migra
 `@teqfw/di` resolves component graphs.
 Knex provides query and schema builders.
 Database client packages provide physical connectivity.
-Filesystem JSON files provide declarations, maps, configuration, and dumps.
+Filesystem JSON files provide declarations, maps, and dumps. Explicitly selected `@teqfw/cfg` Sources provide the
+immutable raw application configuration snapshot before database runtime starts.
 Dialect adapters provide registered physical type, index, expression, and capability behavior without turning declaration strings into Knex method names.
 An external migrator or host application supplies migration sequencing, transformation selection, source/target topology, and cutover policy when those concerns are required.
 

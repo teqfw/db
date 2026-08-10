@@ -9,7 +9,7 @@
  * Plugin level constants (hardcoded configuration).
  */
 export default class TeqFw_Db_Back_Defaults {
-    NAME = '@teqfw/db'; // plugin's node in 'teqfw.json' & './cfg/local.json'
+    NAME = '@teqfw/db'; // package identifier
 
     CLI_PREFIX = 'db'; // prefix for CLI actions
     NS = '_'; // name separator for DB elements ('table_name')

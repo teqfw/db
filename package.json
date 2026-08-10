@@ -4,6 +4,7 @@
   "description": "Relational database schema, transaction, and CRUD package for TeqFW applications using DI 2.x.",
   "type": "module",
   "files": [
+    ".env.example",
     "src/",
     "doc/"
   ],
@@ -43,6 +44,7 @@
     "url": "https://github.com/sponsors/teqfw"
   },
   "dependencies": {
+    "@teqfw/cfg": "^2.0.0",
     "@teqfw/log": ">=2.0.0",
     "knex": "^3.1.0"
   },
@@ -59,12 +61,16 @@
     "@teqfw/di": "^2.7.0"
   },
   "teqfw": {
-    "namespaces": [
-      {
-        "prefix": "TeqFw_Db_",
-        "path": "./src",
-        "ext": ".mjs"
+    "fw": {
+      "di": {
+        "namespaces": [
+          {
+            "prefix": "TeqFw_Db_",
+            "path": "./src",
+            "ext": ".mjs"
+          }
+        ]
       }
-    ]
+    }
   }
 }

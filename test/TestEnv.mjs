@@ -2,8 +2,9 @@
  * Initialize test environment to run unit or modules tests.
  * @namespace TestEnv
  */
-import {dirname, join} from 'path';
-import {parse} from 'url';
+import {existsSync} from 'node:fs';
+import {dirname, join} from 'node:path';
+import {fileURLToPath} from 'node:url';
 import Container from '@teqfw/di';
 
 /**
@@ -25,7 +26,7 @@ import Container from '@teqfw/di';
  */
 const cfg = (function () {
     /* Resolve paths to main folders */
-    const {path: currentScript} = parse(import.meta.url);
+    const currentScript = fileURLToPath(import.meta.url);
     const pathScript = dirname(currentScript);
     const pathPrj = join(pathScript, '..');
     const pathTest = join(pathPrj, 'test');
@@ -48,8 +49,10 @@ const container = (function (cfg) {
     const res = new Container();
     const pathNode = join(cfg.path.root, 'node_modules');
     const srcTeqFwLog = join(pathNode, "@teqfw/log/src");
+    const srcTeqFwCfg = join(pathNode, "@teqfw/cfg/src");
     // add backend sources to the map
     res.addNamespaceRoot("TeqFw_Db_", cfg.path.src, ".mjs");
+    res.addNamespaceRoot("TeqFw_Cfg_", srcTeqFwCfg, ".mjs");
     res.addNamespaceRoot("TeqFw_Log_", srcTeqFwLog, ".mjs");
     return res;
 })(cfg);
@@ -62,7 +65,7 @@ const localCfg = await (async function (cfg, container) {
     // FUNCS
     /**
      * Default connection parameters to PostgreSQL/MariaDB/MuSQL database.
-     * Override these params in local configuration (test/data/cfg/local.json).
+     * Override these params in the ignored project-root .env file.
      *
      * @returns {Object}
      */
@@ -80,14 +83,18 @@ const localCfg = await (async function (cfg, container) {
     }
 
     // MAIN
-    /** @type {TeqFw_Db_Back_Defaults} */
-    const DEF = await container.get('TeqFw_Db_Back_Defaults$');
-    /** @type {TeqFw_Core_Back_Config} */
-    const config = await container.get("TeqFw_Db_Back_Config$");
-    const pathData = join(cfg.path.test, 'data');
-    config.loadLocal(pathData);
-    const local = config.getLocal();
-    return local[DEF.NAME] ?? generateDefault();
+    const filename = join(cfg.path.root, '.env');
+    const loader = await container.get('TeqFw_Cfg_Loader$');
+    if (existsSync(filename)) {
+        const dotenv = await container.get('TeqFw_Cfg_Source_DotenvFile$');
+        await loader.load([dotenv.create({path: filename, id: 'db-test-dotenv'})]);
+    } else {
+        await loader.load([]);
+    }
+    const config = await container.get('TeqFw_Db_Back_Config$');
+    const mariadb = config.get('mariadb');
+    const pg = config.get('pg');
+    return mariadb.connection && pg.connection ? {mariadb, pg} : generateDefault();
 })(cfg, container);
 
 /**
