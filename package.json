@@ -50,10 +50,10 @@
     "@teqfw/di": "^2.7.0",
     "mysql2": "^3.12.0",
     "pg": "^8.13.1",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^6.0.1"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=20.17.0"
   },
   "peerDependencies": {
     "@teqfw/di": "^2.7.0"
