@@ -1,5 +1,9 @@
 # @teqfw/db: releases
 
+## 2.1.1 - README refresh
+
+- Reworked the README with the current package overview, boundaries, installation guidance, and agent-skill usage.
+
 ## 2.1.0 - DI 2.x migration and validated DEM pipeline
 
 - Preserved the legacy line on branch `v1`.

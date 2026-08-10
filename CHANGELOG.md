@@ -2,6 +2,12 @@
 
 All notable changes to this package are documented in this file.
 
+## 2.1.1 - 2026-08-10
+
+### Changed
+
+- Reworked the README with the current package overview, boundaries, installation guidance, and agent-skill usage.
+
 ## 2.1.0 - 2026-08-10
 
 ### Added

@@ -1,6 +1,6 @@
 {
   "name": "@teqfw/db",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Relational database schema, transaction, and CRUD package for TeqFW applications using DI 2.x.",
   "type": "module",
   "files": [
