@@ -4,6 +4,8 @@
 
 Configure namespace roots before the first Container resolution. Discover the installed package namespace from canonical package metadata when the host supports registry-based composition.
 
+Import supported structural contracts with `import type {...} from '@teqfw/db'`. The same declaration file installs ambient `TeqFw_Db_*` aliases for JSDoc and DI dependency declarations. These compiler-visible names do not change runtime namespace discovery or the stability status of their corresponding DI tokens.
+
 Load selected `@teqfw/cfg` Sources before database runtime components. The default configuration uses `TEQFW_DB__<SETTING>` and a named connection uses `TEQFW_DB__<NAME>_<SETTING>`; use `EXTRA` only for uncommon Knex or driver options.
 
 Resolve a separate transient connection (`TeqFw_Db_Back_RDb_Connect$$`) for every non-default connection, initialize it with the selected immutable configuration, and disconnect it through host lifecycle code. Keep the default singleton for the package default connection.

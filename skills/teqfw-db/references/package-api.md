@@ -2,7 +2,9 @@
 
 ## Exposure Rules
 
-`@teqfw/db` currently has no JavaScript `exports` entrypoint. Consume runtime behavior through TeqFW DI tokens registered by `package.json#teqfw.fw.di.namespaces`; do not import `@teqfw/db/src/**` as a supported public API.
+`@teqfw/db` publishes a type-only root export through `types.d.ts`. It has no JavaScript root entrypoint. Consume runtime behavior through TeqFW DI tokens registered by `package.json#teqfw.fw.di.namespaces`; do not import `@teqfw/db/src/**` as a supported public API.
+
+Named root declarations describe supported consumer data contracts. Ambient `TeqFw_Db_*` aliases provide the version-matched vocabulary used by JSDoc and DI declarations. Type visibility does not promote an implementation token to stable API and does not authorize a direct source import.
 
 The namespace metadata maps `TeqFw_Db_` to `./src` with `.mjs`. This addressing contract does not make every resolvable token a stable consumer API.
 

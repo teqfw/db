@@ -41,6 +41,8 @@ As-is default classes use `Module__default`.
 
 The package manifest uses the canonical `teqfw.fw.di.namespaces` declaration.
 
+The package also publishes `types.d.ts` through `package.json#types` and a type-only root export. This compiler entrypoint exposes supported structural contracts and ambient DI aliases without creating a JavaScript root entrypoint or changing namespace discovery. Ambient visibility does not make an implementation token stable public API.
+
 `src/Back/Config.mjs` resolves `TeqFw_Cfg_Reader$`, reads the `TEQFW_DB` raw namespace, converts common scalar fields
 and optional structured `EXTRA`, and freezes the resulting Knex configuration. It does not select cfg Sources or load files; those
 operations belong to the host composition root before configuration-consuming runtime is resolved.

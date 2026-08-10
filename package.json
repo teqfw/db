@@ -6,8 +6,10 @@
   "files": [
     ".env.example",
     "doc/",
+    "jsconfig.json",
     "skills/",
     "src/",
+    "types.d.ts",
     "LICENSE",
     "README.md",
     "RELEASE.md"
@@ -18,6 +20,7 @@
     "test:integration": "node --test test/integration/Di2.test.mjs",
     "test:acceptance": "node --test test/accept/Back/App/*.test.mjs",
     "test:publish": "node --test test/publish/*.test.mjs",
+    "typecheck": "tsc -p jsconfig.json",
     "lint:md": "markdownlint-cli2 \"skills/**/*.md\" \"*.md\"",
     "test:optin": "npm run test:optin:preflight && npm run test:optin:postgresql && npm run test:optin:mariadb",
     "test:optin:preflight": "node --test test/opt/Preflight.test.mjs",
@@ -46,6 +49,12 @@
     "url": "https://github.com/flancer64"
   },
   "license": "Apache-2.0",
+  "types": "types.d.ts",
+  "exports": {
+    ".": {
+      "types": "./types.d.ts"
+    }
+  },
   "bugs": {
     "url": "https://github.com/teqfw/db/issues"
   },
@@ -61,10 +70,13 @@
   },
   "devDependencies": {
     "@teqfw/di": "^2.7.0",
+    "@types/node": "^22.20.1",
     "markdownlint-cli2": "^0.23.2",
     "mysql2": "^3.12.0",
     "pg": "^8.13.1",
-    "sqlite3": "^6.0.1"
+    "sqlite3": "^6.0.1",
+    "typescript": "^5.9.3",
+    "typescript-language-server": "^4.4.1"
   },
   "engines": {
     "node": ">=20.17.0"

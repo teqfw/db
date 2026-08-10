@@ -25,6 +25,8 @@ Define root-level repository navigation.
 - `RELEASE.md` — legacy release history.
 - `package.json` — npm metadata, dependencies, scripts, and TeqFW namespace registration.
 - `package-lock.json` — reproducible npm dependency graph for the 2.x line.
+- `jsconfig.json` — strict checked-JavaScript and declaration consumer compiler configuration.
+- `types.d.ts` — type-only root contract and ambient `TeqFw_Db_` vocabulary.
 
 ## Scope Rule
 

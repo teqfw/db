@@ -42,6 +42,16 @@ npm i @teqfw/db --save
 
 This plugin uses `TeqFw_Db` namespace.
 
+## Type contract
+
+The package root is a type-only entrypoint. TypeScript and checked-JavaScript consumers can import supported structural contracts without creating a runtime dependency:
+
+```ts
+import type {DbConfig, DbConnection, DbSelectionV2} from '@teqfw/db';
+```
+
+The same versioned declaration publishes ambient `TeqFw_Db_*` names for JSDoc and DI declarations. Runtime components still resolve exclusively through the `TeqFw_Db_` namespace in package metadata. There is no JavaScript root export, and `@teqfw/db/src/**` paths are implementation details rather than supported imports. A visible ambient alias does not by itself make the corresponding DI token stable public API.
+
 ## Configuration
 
 `@teqfw/db` consumes the `TEQFW_DB` namespace from `@teqfw/cfg`. The host must register the published

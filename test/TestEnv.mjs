@@ -59,7 +59,7 @@ const container = (function (cfg) {
 
 /**
  * Load local config.
- * @typedef {Object}
+ * @type {Object}
  */
 const localCfg = await (async function (cfg, container) {
     // FUNCS

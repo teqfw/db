@@ -27,6 +27,8 @@ succeeds and can also be invoked through their explicit PostgreSQL and MariaDB s
 ## Required Verification
 
 - Every source file parses with `node --check`.
+- `npm run typecheck` strictly checks the published declaration contract and its representative consumer program.
+- Publication tests install the packed layout, type-check named and ambient consumer contracts, and prove that the export map claims neither a runtime root nor public `src/**` subpaths.
 - No constructor contains a legacy dependency-token property.
 - Every constructor that consumes injected values has a matching export-scoped `__deps__` declaration.
 - A DI integration test resolves representative default and named-factory tokens using `@teqfw/di` 2.x.
