@@ -8,6 +8,7 @@
 - `test/integration/` — DI graph resolution and database-backed integration.
 - `test/mod/` — compiler, adapter, schema, selection, rebuild, and retained compatibility module behavior.
 - `test/opt/` — destructive opt-in conformance against disposable PostgreSQL/pgvector and MariaDB/MySQL databases.
+- `test/publish/` — npm artifact composition and package-owned consumer-skill publication.
 - `test/accept/` — end-to-end persistence scenarios.
 - `test/man/` — manual development scenarios not required by the default suite.
 - `test/data/` — declarations, maps, and database fixtures.
@@ -16,7 +17,7 @@
 
 Tests import suites, cases, and lifecycle hooks from the stable `node:test` API.
 The npm scripts invoke the Node.js test runner directly with the files in each layer, without a third-party test framework.
-`npm test` runs module, integration, and acceptance layers; `npm run test:manual` remains opt-in.
+`npm test` runs module, integration, acceptance, and publication layers; `npm run test:manual` remains opt-in.
 `npm run test:optin` is the release gate for provisioned PostgreSQL/pgvector and MariaDB/MySQL databases.
 It first runs a read-only preflight that requires an explicit ignored project-root `.env`, verifies the selected
 server families, confirms that both disposable databases contain no user tables, checks destructive-suite

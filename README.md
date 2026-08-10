@@ -13,8 +13,6 @@ The authoritative project documentation is organized as ADSM cognitive context u
 - [`architecture`](ctx/docs/architecture/overview.md) — model composition, schema, CRUD, and integrations;
 - [`environment`](ctx/docs/environment/overview.md) — runtime and database prerequisites;
 - [`code`](ctx/docs/code/overview.md) — source mapping, DI conventions, and testing.
-
-
 The base plugin to work with RDBMS databases in the Tequila Framework (TeqFW).
 
 ## Disclaimer
@@ -34,14 +32,10 @@ data. `@teqfw/db` combines all the parts into one common declaration and creates
 Validated dialect adapters currently cover PostgreSQL, MySQL/MariaDB, and SQLite through
 the [Knex.js](https://knexjs.org/) library.
 
-### Namespace
-
-This plugin uses `TeqFw_Db` namespace.
-
 ## Install
 
 ```shell
-$ npm i @teqfw/db --save 
+npm i @teqfw/db --save
 ```
 
 ## Namespace

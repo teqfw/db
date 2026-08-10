@@ -1,0 +1,4 @@
+interface:
+  display_name: "TeqFW DB"
+  short_description: "Use @teqfw/db relational persistence safely"
+  default_prompt: "Use $teqfw-db to integrate relational persistence in this TeqFW project."

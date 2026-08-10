@@ -5,14 +5,20 @@
   "type": "module",
   "files": [
     ".env.example",
+    "doc/",
+    "skills/",
     "src/",
-    "doc/"
+    "LICENSE",
+    "README.md",
+    "RELEASE.md"
   ],
   "scripts": {
-    "test": "npm run test:module && npm run test:integration && npm run test:acceptance",
+    "test": "npm run test:module && npm run test:integration && npm run test:acceptance && npm run test:publish",
     "test:module": "node --test test/mod/Back/Dem/Compile/*.test.mjs test/mod/Back/Mod/*.test.mjs test/mod/Back/RDb/Dialect/*.test.mjs test/mod/Back/RDb/Dialect/Postgresql/*.test.mjs test/mod/Back/RDb/Schema/*.test.mjs test/mod/Back/RDb/*.test.mjs test/mod/Back/Dem/Load/Load.test.mjs test/mod/Back/Dem/Load/A/Scan.test.mjs test/mod/Back/Dem/Load/A/Scan/A/Map.test.mjs test/mod/Back/Dem/Load/A/Scan/A/Dem.test.mjs",
     "test:integration": "node --test test/integration/Di2.test.mjs",
     "test:acceptance": "node --test test/accept/Back/App/*.test.mjs",
+    "test:publish": "node --test test/publish/*.test.mjs",
+    "lint:md": "markdownlint-cli2 \"skills/**/*.md\" \"*.md\"",
     "test:optin": "npm run test:optin:preflight && npm run test:optin:postgresql && npm run test:optin:mariadb",
     "test:optin:preflight": "node --test test/opt/Preflight.test.mjs",
     "test:optin:postgresql": "node --test test/opt/Postgresql.test.mjs",
@@ -25,6 +31,7 @@
   },
   "keywords": [
     "database",
+    "teqfw",
     "knex",
     "rdbms",
     "crud",
@@ -33,14 +40,18 @@
     "node.js",
     "db-connector"
   ],
-  "author": "Alex Gusev <alex@flancer64.com>",
+  "author": {
+    "name": "Alex Gusev",
+    "email": "alex@flancer64.com",
+    "url": "https://github.com/flancer64"
+  },
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/teqfw/db/issues"
   },
   "homepage": "https://github.com/teqfw/db#readme",
   "funding": {
-    "type": "github",
+    "type": "individual",
     "url": "https://github.com/sponsors/teqfw"
   },
   "dependencies": {
@@ -50,6 +61,7 @@
   },
   "devDependencies": {
     "@teqfw/di": "^2.7.0",
+    "markdownlint-cli2": "^0.23.2",
     "mysql2": "^3.12.0",
     "pg": "^8.13.1",
     "sqlite3": "^6.0.1"
