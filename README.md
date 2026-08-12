@@ -27,6 +27,15 @@ npm install @teqfw/db
 
 The package registers the `TeqFw_Db_` DI namespace. Configure the connection through `@teqfw/cfg`, load its configuration before starting database services, and compose runtime components through that namespace.
 
+## Development Verification
+
+From a standalone checkout, install the locked dependency graph and run the package suite:
+
+```sh
+npm ci
+npm test
+```
+
 ## Best Fit And Boundaries
 
 Use `@teqfw/db` when a TeqFW application needs a shared relational persistence layer with declarations distributed across its packages.
