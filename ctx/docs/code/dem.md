@@ -12,9 +12,9 @@ The real PostgreSQL/pgvector and MariaDB opt-in suites pass in the provisioned t
 
 Implement in the delivery order below.
 
-## Identity And Reference Role Delivery Gap
+## Identity And Reference Role Implementation
 
-The accepted architecture defines `attr.role` and map `identityProfile`, but the current worktree still requires explicit v2 `core.integer` declarations and does not decode or resolve those fields. Implement role resolution in DecodeV2 and MapRefs before Validate, canonicalize to ordinary type/generation values, and add SQLite/PostgreSQL conformance coverage before exposing the contract.
+`DecodeV2.mjs` accepts the closed `attr.role` contract. `MapRefs.mjs`, before `Validate.mjs`, resolves `identity` through the trusted map's `identityProfile` (or the documented signed 32-bit default), creates its generated single-column primary key, and resolves `ref` from its one mapped relation target. Both roles are removed before canonical validation and physical projection. Generated identity generation and primary-key descriptors retain trusted provenance. Module conformance covers host-selected 64-bit profiles and external mapping for SQLite and PostgreSQL; the SQLite execution suite verifies the generated primary-key DDL.
 
 Do not begin PostgreSQL vector DDL by adding `vector` to `src/Back/Enum/Dem/Type/Attr.mjs`; that would bypass the compiler, capability, storage, index, codec, and query contracts.
 
@@ -41,7 +41,7 @@ Changing responsibility boundaries requires updating `../architecture/dem/` firs
 | `src/Back/Dem/Compile/A/DecodeV1.mjs` | Expand unversioned legacy syntax without changing physical meaning |
 | `src/Back/Dem/Compile/A/DecodeV2.mjs` | Validate v2 declaration shape and insert canonical defaults |
 | `src/Back/Dem/Compile/A/Compose.mjs` | Single-owner semantic insertion and explicit capability-set union |
-| `src/Back/Dem/Compile/A/MapRefs.mjs` | Owner-scoped external reference mapping with combined provenance |
+| `src/Back/Dem/Compile/A/MapRefs.mjs` | Owner-scoped external mapping and host-resolved identity/ref canonicalization with provenance |
 | `src/Back/Dem/Compile/A/Validate.mjs` | Logical type, default, generation, index, and relation validation |
 | `src/Back/Dem/Compile/A/Graph.mjs` | Deterministic adjacency, strongly connected components, and topological order |
 | `src/Back/Dem/Compile/A/Fingerprint.mjs` | Canonical serialization and versioned deterministic fingerprint |

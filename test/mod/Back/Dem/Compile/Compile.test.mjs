@@ -5,6 +5,10 @@ import {createFakeAdapter} from './FakeAdapter.mjs';
 
 /** @type {TeqFw_Db_Back_Dem_Compile} */
 const compiler = await container.get('TeqFw_Db_Back_Dem_Compile$');
+const dialectAdapters = Object.freeze({
+    postgresql: await container.get('TeqFw_Db_Back_RDb_Dialect_Postgresql$'),
+    sqlite: await container.get('TeqFw_Db_Back_RDb_Dialect_Sqlite$'),
+});
 
 function fragment(fragmentId, declaration, filename = `/fixtures/${fragmentId}/etc/teqfw.schema.json`) {
     return {declaration, filename, fragmentId, packageName: fragmentId};
@@ -269,6 +273,82 @@ describe('TeqFw_Db_Back_Dem_Compile', () => {
                 ]);
                 assert.equal(error.diagnostics[0].path, '/typo');
                 assert.equal(error.diagnostics[1].path, '/version');
+                return true;
+            },
+        );
+    });
+
+    it('resolves identity and reference roles into portable primary and foreign keys for SQLite and PostgreSQL', async () => {
+        const identity = fragment('identity', {
+            version: 2, requires: [], package: {}, refs: {},
+            entity: {user: {attr: {id: {role: 'identity'}}, index: {}, relation: {}}},
+        });
+        const content = fragment('content', {
+            version: 2, requires: [], package: {}, refs: {'/identity/user': ['id']},
+            entity: {
+                post: {
+                    attr: {id: {role: 'identity'}, owner_id: {role: 'ref'}},
+                    index: {},
+                    relation: {
+                        owner: {
+                            action: {delete: 'restrict', update: 'cascade'},
+                            attrs: ['owner_id'], deferrable: 'notDeferrable',
+                            ref: {attrs: ['id'], path: '/identity/user'},
+                        },
+                    },
+                },
+            },
+        });
+        const map = mapEnvelope({
+            version: 2,
+            namespace: 'teq',
+            identityProfile: {
+                generation: {kind: 'core.identity', params: {mode: 'byDefault'}},
+                type: {id: 'core.integer', params: {bits: 64, unsigned: false}},
+            },
+            ref: {content: {'/identity/user': {attrs: {}, path: '/user'}}},
+        });
+
+        for (const [dialect, adapter] of Object.entries(dialectAdapters)) {
+            const result = await compiler.exec({adapter, fragments: [content, identity], mapEnvelope: map});
+            const userId = result.model.entity.user.attr.id;
+            const post = result.model.entity.post;
+            assert.deepEqual(userId.type, {id: 'core.integer', params: {bits: 64, unsigned: false}});
+            assert.deepEqual(userId.generation, {kind: 'core.identity', params: {mode: 'byDefault'}});
+            assert.deepEqual(post.attr.owner_id.type, userId.type);
+            assert.equal(JSON.stringify(result.model).includes('"role"'), false);
+            assert.equal(Object.values(post.index).filter((index) => index.kind === 'primary').length, 1);
+            assert.equal(result.provenance['/entity/user/attr/id/generation'][0].fragmentId, 'app-map');
+            const userColumn = result.physical.tables.find((table) => table.entity === '/user').columns.find((column) => column.name === 'id');
+            assert.equal(userColumn.physicalType.dialect, dialect);
+            assert.equal(userColumn.physicalType.type, 'bigint');
+        }
+    });
+
+    it('rejects conflicting role declarations, invalid profiles, and ambiguous reference roles deterministically', async () => {
+        const declaration = {
+            version: 2, requires: [], package: {}, refs: {},
+            entity: {
+                user: {attr: {id: {role: 'identity', type: {id: 'core.integer', params: {}}}}, index: {}, relation: {}},
+                post: {
+                    attr: {owner_id: {role: 'ref'}}, index: {},
+                    relation: {
+                        first: {action: {}, attrs: ['owner_id'], deferrable: 'notDeferrable', ref: {attrs: ['id'], path: '/user'}},
+                        second: {action: {}, attrs: ['owner_id'], deferrable: 'notDeferrable', ref: {attrs: ['id'], path: '/user'}},
+                    },
+                },
+            },
+        };
+        await assert.rejects(
+            compiler.exec({
+                adapter: createFakeAdapter(), fragments: [fragment('app', declaration)],
+                mapEnvelope: mapEnvelope({version: 2, namespace: 'teq', identityProfile: {type: {id: 'core.integer', params: {}}}}),
+            }),
+            (error) => {
+                const diagnostics = new Map(error.diagnostics.map((item) => [`${item.code}:${item.path}`, item]));
+                assert.ok(diagnostics.has('DEM_DECLARATION_SHAPE_INVALID:/entity/user/attr/id'));
+                assert.ok(diagnostics.has('DEM_DECLARATION_SHAPE_INVALID:/identityProfile'));
+                assert.ok(diagnostics.has('DEM_RELATION_CARDINALITY:/entity/post/attr/owner_id'));
                 return true;
             },
         );

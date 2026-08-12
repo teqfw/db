@@ -131,7 +131,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
                     stage: 'parse',
                 });
             }
-            checkObject(raw, ['deprecated', 'namespace', 'ref', 'version'], '');
+            checkObject(raw, ['deprecated', 'identityProfile', 'namespace', 'ref', 'version'], '');
             if (raw.version !== undefined && raw.version !== 2) {
                 const evidence = makeSource('/version');
                 addDiagnostic({
@@ -259,6 +259,94 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
                 }
             };
             walk(model, '');
+            const profile = raw.identityProfile === undefined ? {
+                generation: {kind: 'core.identity', params: {mode: 'byDefault'}},
+                type: {id: 'core.integer', params: {bits: 32, unsigned: false}},
+            } : raw.identityProfile;
+            if (raw.identityProfile !== undefined && isObject(profile)) {
+                checkObject(profile, ['generation', 'type'], '/identityProfile');
+                if (isObject(profile.type)) {
+                    checkObject(profile.type, ['id', 'params'], '/identityProfile/type');
+                    if (profile.type.params !== undefined && !isObject(profile.type.params)) checkObject(profile.type.params, [], '/identityProfile/type/params');
+                }
+                if (isObject(profile.generation)) {
+                    checkObject(profile.generation, ['kind', 'params'], '/identityProfile/generation');
+                    if (profile.generation.params !== undefined && !isObject(profile.generation.params)) checkObject(profile.generation.params, [], '/identityProfile/generation/params');
+                }
+            }
+            if (!isObject(profile) || !isObject(profile.type) || !isObject(profile.generation)) {
+                const evidence = makeSource('/identityProfile');
+                addDiagnostic({code: 'DEM_DECLARATION_SHAPE_INVALID', details: {field: 'identityProfile', input: 'map'}, message: 'Identity profile requires type and generation objects.', path: '/identityProfile', sources: evidence ? [evidence] : []});
+            }
+            const entities = {};
+            /**
+             * @param {object} container
+             */
+            const collectEntities = function (container) {
+                for (const entity of Object.values(container.entity ?? {})) entities[entity.path] = entity;
+                for (const child of Object.values(container.package ?? {})) collectEntities(child);
+            };
+            collectEntities(model);
+            /**
+             * @param {object} container
+             * @param {string} pointer
+             */
+            const resolveIdentities = function (container, pointer) {
+                for (const [entityName, entity] of Object.entries(container.entity ?? {})) {
+                    const entityPointer = `${pointer}/entity/${escapePointer(entityName)}`;
+                    for (const [attrName, attr] of Object.entries(entity.attr ?? {})) {
+                        if (attr.role !== 'identity') continue;
+                        const attrPointer = `${entityPointer}/attr/${escapePointer(attrName)}`;
+                        if (!isObject(profile) || !isObject(profile.type) || !isObject(profile.generation)) continue;
+                        attr.type = structuredClone(profile.type);
+                        attr.generation = structuredClone(profile.generation);
+                        delete attr.role;
+                        const generationSource = raw.identityProfile === undefined
+                            ? provenance[attrPointer] ?? []
+                            : [makeSource('/identityProfile/generation')].filter(Boolean);
+                        provenance[`${attrPointer}/generation`] = generationSource;
+                        const primaryName = '__identity_primary';
+                        if (entity.index?.[primaryName]) {
+                            addDiagnostic({code: 'DEM_INDEX_INVALID', details: {index: primaryName}, message: 'Identity primary-key descriptor collides with a declared index.', path: attrPointer, sources: provenance[attrPointer] ?? [], stage: 'logical'});
+                        } else {
+                            entity.index ??= {};
+                            entity.index[primaryName] = {include: [], keys: [{attr: attrName}], kind: 'primary', name: primaryName, options: {}, phase: 'table'};
+                            provenance[`${entityPointer}/index/${primaryName}`] = [...(provenance[attrPointer] ?? [])];
+                        }
+                    }
+                }
+                for (const [name, child] of Object.entries(container.package ?? {})) resolveIdentities(child, `${pointer}/package/${escapePointer(name)}`);
+            };
+            resolveIdentities(model, '');
+            /**
+             * @param {object} container
+             * @param {string} pointer
+             */
+            const resolveReferences = function (container, pointer) {
+                for (const [entityName, entity] of Object.entries(container.entity ?? {})) {
+                    const entityPointer = `${pointer}/entity/${escapePointer(entityName)}`;
+                    for (const [attrName, attr] of Object.entries(entity.attr ?? {})) {
+                        if (attr.role !== 'ref') continue;
+                        const attrPointer = `${entityPointer}/attr/${escapePointer(attrName)}`;
+                        const matches = Object.values(entity.relation ?? {}).filter((relation) => relation.attrs?.filter((item) => item === attrName).length === 1);
+                        if (matches.length !== 1) {
+                            addDiagnostic({code: 'DEM_RELATION_CARDINALITY', details: {attribute: attrName, relations: matches.length}, message: 'A reference role must belong to exactly one relation.', path: attrPointer, sources: provenance[attrPointer] ?? [], stage: 'logical'});
+                            continue;
+                        }
+                        const relation = matches[0];
+                        const offset = relation.attrs.indexOf(attrName);
+                        const target = entities[relation.ref.path]?.attr?.[relation.ref.attrs?.[offset]];
+                        if (!target?.type || target.role === 'ref') {
+                            addDiagnostic({code: 'DEM_RELATION_TYPE_MISMATCH', details: {attribute: attrName}, message: 'A reference role target must resolve to one typed attribute.', path: attrPointer, sources: provenance[attrPointer] ?? [], stage: 'logical'});
+                            continue;
+                        }
+                        attr.type = structuredClone(target.type);
+                        delete attr.role;
+                    }
+                }
+                for (const [name, child] of Object.entries(container.package ?? {})) resolveReferences(child, `${pointer}/package/${escapePointer(name)}`);
+            };
+            resolveReferences(model, '');
             return {...composed, diagnostics, model, provenance};
         };
     }

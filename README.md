@@ -15,6 +15,7 @@ It supports PostgreSQL, MySQL/MariaDB, and SQLite through [Knex](https://knexjs.
 ## What It Provides
 
 - Composition and validation of distributed Domain Entity Model (DEM) fragments.
+- Host-resolved `identity` and `ref` roles, so reusable fragments do not choose an application's key width or signedness.
 - Dialect-aware schema projection, relational queries, and CRUD operations.
 - Explicit transaction ownership: operations can use a caller transaction or manage their own.
 - Rebuild-oriented structure recreation and compatible data transfer with evidence.

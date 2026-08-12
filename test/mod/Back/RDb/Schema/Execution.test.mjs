@@ -20,13 +20,10 @@ afterEach(async () => {
     connection = undefined;
 });
 
-function primary() {
-    return {include: [], keys: [{attr: 'id'}], kind: 'primary', options: {}, phase: 'table'};
-}
 
 async function compilation() {
     const integer = () => ({type: {id: 'core.integer', params: {bits: 32, unsigned: false}}});
-    const identity = () => ({...integer(), generation: {kind: 'core.identity', params: {mode: 'byDefault'}}});
+    const identity = () => ({role: 'identity'});
     const relation = (path) => ({
         action: {delete: 'cascade'}, attrs: ['other_id'], deferrable: 'notDeferrable', ref: {attrs: ['id'], path},
     });
@@ -44,11 +41,11 @@ async function compilation() {
                     label: {type: {id: 'core.string', params: {length: 42}}},
                     other_id: integer(),
                 },
-                index: {pk: primary()}, relation: {other: relation('/beta')},
+                index: {}, relation: {other: relation('/beta')},
             },
             beta: {
                 attr: {id: identity(), other_id: integer()},
-                index: {pk: primary()}, relation: {other: relation('/alpha')},
+                index: {}, relation: {other: relation('/alpha')},
             },
         },
     };
@@ -73,6 +70,8 @@ describe('compiled schema execution', () => {
         assert.match(sql.sql, /varchar\(42\)/i);
         assert.match(sql.sql, /default '2024-02-29'/i);
         assert.match(sql.sql, /default CURRENT_TIMESTAMP/i);
+        assert.match(sql.sql, /primary key/i);
+        assert.match(sql.sql, /autoincrement/i);
         const alphaForeign = await connection.getKnex().raw('PRAGMA foreign_key_list(??)', ['teq_alpha']);
         const betaForeign = await connection.getKnex().raw('PRAGMA foreign_key_list(??)', ['teq_beta']);
         assert.equal(alphaForeign.length, 1);
