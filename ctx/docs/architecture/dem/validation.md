@@ -36,6 +36,10 @@ For every entity:
 - every attribute logical type exists in the core or provider registry;
 - type parameters, nullable state, literal defaults, function defaults, and generation policies are valid together;
 - every index key attribute and included attribute exists;
+
+- identity roles resolve from the one application-map identity profile before type/default/generation validation;
+- reference roles resolve from exactly one mapped relation target before positional relation compatibility validation;
+- role resolution has no silent fallback: an absent profile uses only the documented default, while an ambiguous or cyclic reference role is a diagnostic;
 - an index contains at least one key and does not repeat a direct attribute key;
 - the entity has at most one primary index;
 - primary and unique indexes used as relation targets contain only direct attribute keys and have phase `table`;

@@ -20,6 +20,10 @@
 - storage binding — adapter-owned physical realization of a logical type for one dialect.
 - generation — database-side policy for creating an omitted attribute value, distinct from type and default.
 - capability — namespaced feature that an adapter supports and an actual connection may or may not provide.
+
+- identity role — a package-declared request for the host-selected identity profile and one generated single-column primary key.
+- reference role — a package-declared request to derive one local attribute type from its resolved relation target.
+- identity profile — an application-map declaration containing the logical type and generation policy used by identity-role attributes in one target model.
 - dialect adapter — registry and execution boundary for physical types, indexes, query operators, and capability preflight.
 - RDB object — validated physical table, column, index, or relation descriptor used for schema operations.
 - typed expression — schema-checked attribute, bound value, or registered operator call.

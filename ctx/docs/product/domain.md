@@ -30,6 +30,11 @@ Deprecated entities identify obsolete tables and their required drop order.
 Logical type, physical storage, default value, and generation policy are distinct.
 Database-specific types and indexes declare capabilities that the adapter supports statically and the actual connection proves at runtime.
 
+
+An identity role and a reference role let a reusable package declare key intent without choosing its width or signedness.
+The application map owns the identity profile selected for one target model; it supplies the actual logical type and generation policy.
+A reference role derives its logical type from its resolved relation target.
+The compiler makes those derived values explicit in the canonical DEM before normal type and dialect validation.
 ### Query And Data Access
 
 A schema object describes one persistent entity through its logical path, attributes, primary key, and DTO factory.

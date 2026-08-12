@@ -127,6 +127,19 @@ ordinary credentials, production use of test-only Container registration, and un
 Reason: one package-owned cfg namespace keeps ownership explicit, scalar values remain operationally convenient,
 and host-owned DI tokens make every additional connection and its lifecycle visible in composition.
 
+## AD-016 Resolve Identity And Reference Roles In The Host Target
+
+Decision: a package may declare an attribute role of `identity` or `ref` without fixing its integer width or signedness.
+The root application map owns one optional `identityProfile`; its default is signed 32-bit `core.integer` plus `core.identity` with `byDefault` mode.
+An `identity` role resolves to that profile. A `ref` role resolves to the one mapped target attribute of its relation.
+The compiler writes the resolved logical type and generation into the canonical DEM before normal relation and dialect validation.
+An `identity` role creates one generated single-column primary key. A `ref` role derives one foreign-key column type from its relation target; explicit indexes remain available for natural, unique, and composite keys.
+
+Rejected: requiring every reusable package to repeat `core.integer` parameters for identifiers and references, or inferring a type from an undeclared/ambiguous relation.
+
+Reason: package fragments express reusable entity and relation intent, while the root application alone knows the expected target scale and can select a 32-bit or 64-bit identity profile.
+Keeping the selected representation in the map makes host authority visible, preserves deterministic compilation, and keeps foreign-key compatibility enforced rather than conventional.
+
 ## Deferred CLI Hosting Decision
 
 Status: deferred; it is not part of the accepted rebuild architecture.

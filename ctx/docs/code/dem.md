@@ -11,6 +11,11 @@ The current worktree implements the mapped modules and removes the legacy compos
 The real PostgreSQL/pgvector and MariaDB opt-in suites pass in the provisioned test environment.
 
 Implement in the delivery order below.
+
+## Identity And Reference Role Delivery Gap
+
+The accepted architecture defines `attr.role` and map `identityProfile`, but the current worktree still requires explicit v2 `core.integer` declarations and does not decode or resolve those fields. Implement role resolution in DecodeV2 and MapRefs before Validate, canonicalize to ordinary type/generation values, and add SQLite/PostgreSQL conformance coverage before exposing the contract.
+
 Do not begin PostgreSQL vector DDL by adding `vector` to `src/Back/Enum/Dem/Type/Attr.mjs`; that would bypass the compiler, capability, storage, index, codec, and query contracts.
 
 ## Removed Legacy Defect To Target Owner

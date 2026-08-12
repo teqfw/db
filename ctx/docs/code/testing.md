@@ -76,6 +76,11 @@ For each error below, include one failing fixture and one nearest valid fixture:
 
 One aggregate fixture contains several independent failures and proves that all are returned in deterministic stage/path/code/source order.
 
+
+## Identity And Reference Role Matrix
+
+Before `attr.role` becomes executable, tests must prove that the same package fragment compiles with the default 32-bit profile and a host-selected 64-bit profile; every `ref` role derives the mapped target type; explicit role/type conflicts, missing or invalid profiles, ambiguous targets, and unresolved role cycles fail deterministically; and role resolution leaves no role marker in the canonical or physical model.
+SQLite and PostgreSQL coverage must show their distinct generated-column DDL while preserving the same canonical key and relation metadata.
 ## Legacy Conversion Regression Matrix
 
 The DEM v1 decoder and adapter snapshots must cover every legacy type and option.

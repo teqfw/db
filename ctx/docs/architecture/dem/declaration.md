@@ -102,7 +102,8 @@ A non-empty package metadata field such as `comment` is a semantic node and has 
 An attribute supports:
 
 - `comment` — descriptive text;
-- `type` — required logical type identity and parameters;
+- `type` — required logical type identity and parameters unless `role` derives it;
+- `role` — optional `identity` or `ref` host-resolved key role;
 - `storage` — optional map from dialect identity to physical storage binding;
 - `nullable` — boolean, default `false`;
 - `default` — optional value used when an insert omits the attribute;
@@ -197,6 +198,17 @@ Additional generators use namespaced registry identities and declare their capab
 Identity and reference meaning are not logical types.
 An identity is an integer or UUID attribute with a generation policy; a foreign-key attribute gets its meaning from a relation and must be type-compatible with its target.
 
+### Identity And Reference Roles
+
+`role: "identity"` selects the application map's identity profile. It derives the canonical logical type and generation policy; the package must not also declare `type`, `default`, or `generation` for that attribute.
+`role: "ref"` derives the canonical logical type from one resolved target attribute of a relation that lists the local attribute. It must not also declare `type`, `default`, or `generation`.
+
+An identity role creates the entity's one generated single-column primary key. A declaration must not also name the same attribute in another primary index.
+A reference role does not itself name a target; the relation and, where external, the application map remain the sole target authority.
+
+The compiler rejects a role with an explicit type/generation, an identity profile that cannot produce a valid logical type and generation pair, a reference role without exactly one resolvable target attribute, or a cycle of unresolved reference roles.
+After role resolution the canonical DEM contains ordinary explicit logical types and generation policies; downstream validation, adapters, CRUD, and schema builders do not receive roles.
+
 ## External References
 
 ```json
@@ -253,6 +265,10 @@ Default location: `etc/teqfw.schema.map.json`.
 {
   "version": 2,
   "namespace": "teq",
+  "identityProfile": {
+    "type": {"id": "core.integer", "params": {"bits": 64, "unsigned": false}},
+    "generation": {"kind": "core.identity", "params": {"mode": "byDefault"}}
+  },
   "ref": {
     "@vendor/package": {
       "/identity/user": {
@@ -268,6 +284,10 @@ Default location: `etc/teqfw.schema.map.json`.
 ```
 
 `namespace` is the physical table prefix.
+`identityProfile` is optional. When absent, it is signed 32-bit `core.integer` with `core.identity` in `byDefault` mode.
+When present, its type and generation must be accepted by the selected adapter; it is one application-wide profile, not package-owned metadata.
+Changing the profile changes desired target state and therefore requires the normal rebuild/compatibility decision.
+
 The first `ref` key identifies the fragment owner; the second is the external path used by that fragment.
 `path` supplies the canonical target path and `attrs` optionally maps external referenced names to actual target names.
 Mapping changes reference identity only; it does not transfer ownership of the target entity.
