@@ -10,7 +10,7 @@ Define package identity, users, domain language, supported outcomes, boundaries,
 
 ## Level Map
 
-- `overview.md` and `overview.skin.md` — product identity and supervision projection.
+- `overview.md` and `overview.skin.ru.md` — product identity and Russian supervision projection.
 - `domain.md` — persistence-domain concepts.
 - `roles.md` — product participants.
 - `use-cases.md` — supported user goals.

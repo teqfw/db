@@ -1,9 +1,9 @@
 # Architecture Overview
 
 - Path: `ctx/docs/architecture/overview.md`
-- Changed: `20260809`
+- Changed: `20260813`
 
-This document is paired with `overview.skin.md` and preserves its architecture meaning.
+This document is paired with `overview.skin.ru.md` and preserves its architecture meaning.
 
 ## Architecture Role
 
@@ -12,7 +12,7 @@ Components are linked by `TeqFw_Db_` dependency tokens through explicit `__deps_
 
 ## Major Areas
 
-- Declaration layer: DEM v1 compatibility input, DEM v2 logical declarations, maps, selections, and physical descriptors.
+- Declaration layer: DEM v1 compatibility input, DEM v2 logical declarations, maps including the host identity policy, selections, and physical descriptors.
 - Compiler layer: trusted fragment envelopes, version decoding, single-owner composition, reference mapping, canonical validation, provenance, graph analysis, and deterministic fingerprinting.
 - Dialect layer: type/operator registries, capability derivation and preflight, physical projection, and safe database-specific execution.
 - Schema layer: phase-ordered tables, key constraints, relations, data, and late indexes.
@@ -27,7 +27,8 @@ Components are linked by `TeqFw_Db_` dependency tokens through explicit `__deps_
 trusted package DEM fragments + application map + selected adapter
   -> DEM v1/v2 decode
   -> ownership-safe composition + provenance
-  -> resolved and validated canonical DEM + dependency graph
+  -> core.identity type + generation resolution and core.ref type derivation
+  -> validated canonical DEM + dependency graph
   -> capability-aware physical schema plan
   -> runtime preflight
   -> authorized Knex structure, data, and typed query operations
@@ -62,6 +63,7 @@ An external migrator or host application supplies migration sequencing, transfor
 - Schema cycles use separated creation phases; transfer cycles require an explicit supported strategy.
 - Capability preflight succeeds before the first database mutation or dialect query.
 - Logical type, physical storage, default, and generation remain separately inspectable.
+- Package `core.identity`/`core.ref` types express relational addressing intent; the host map materializes identities into type plus generation, relations derive each ref from exactly one identity into type only, and canonical DEM contains only explicit results.
 - Full indexes and typed expressions use registered identities and contain no declaration-provided raw SQL.
 - In-place rebuild requires a durable source snapshot before destructive replacement.
 - Parallel rebuild keeps source and target identities distinct until caller-owned acceptance.
@@ -71,7 +73,7 @@ An external migrator or host application supplies migration sequencing, transfor
 
 ## Implementation Boundary
 
-The current worktree implements the compiler, provenance, semantic validation, dialect registries and preflight, full index phases, typed expressions, PostgreSQL pgvector adapter behavior, and unified rebuild evidence described here.
+The current worktree implements the compiler, provenance, semantic validation, dialect registries and preflight, full index phases, typed expressions, PostgreSQL pgvector adapter behavior, and unified rebuild evidence described here. Identity/reference declarations still use the obsolete role representation; implementation of the accepted `core.identity`/`core.ref` type model remains a documented gap in `../code/dem.md`.
 Default SQLite-backed tests, static validation, MariaDB 10.11 conformance, and PostgreSQL/pgvector conformance pass.
 
 ## Reading Map

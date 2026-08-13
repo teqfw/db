@@ -10,7 +10,7 @@ Translate product intent into stable blocks, flows, state ownership, integration
 
 ## Level Map
 
-- `overview.md` and `overview.skin.md` — architecture entry point.
+- `overview.md` and `overview.skin.ru.md` — architecture entry point and Russian supervision projection.
 - `dem/` — versioned declarations, compiler, provenance, validation, adapters, indexes, and typed queries.
 - `structure.md` — major runtime blocks.
 - `behavior.md` — composition, access, structure, and rebuild flows with failure behavior.

@@ -2,7 +2,7 @@
 
 - Path: `ctx/docs/AGENTS.md`
 - Template Version: `20260702`
-- Changed: `20260808`
+- Changed: `20260813`
 
 ## Purpose
 
@@ -19,7 +19,7 @@ Environment and code documents must identify delivery gaps explicitly and must n
 ## Documentation Rules
 
 - Ordinary `*.md` files are agent-facing operational documents.
-- `*.skin.md` files are human-facing semantic projections paired by basename.
+- `*.skin.<language>.md` files are human-facing semantic projections paired with the same-basename agent document; `<language>` is an ISO 639-1 language code. They are written in the language denoted by their suffix; Russian skins use `*.skin.ru.md` for the Russian-speaking developer.
 - Read a matching skin before changing its agent document.
 - Put non-authoritative generated or visual artifacts under `ctx/assets/**`.
 - Preserve accepted meaning and escalate contradictions upstream.

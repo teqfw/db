@@ -1,7 +1,7 @@
 # Product Domain Model
 
 - Path: `ctx/docs/product/domain.md`
-- Changed: `20260808`
+- Changed: `20260813`
 
 ## Domain Areas
 
@@ -30,11 +30,13 @@ Deprecated entities identify obsolete tables and their required drop order.
 Logical type, physical storage, default value, and generation policy are distinct.
 Database-specific types and indexes declare capabilities that the adapter supports statically and the actual connection proves at runtime.
 
+`core.identity` and `core.ref` are special logical DEM types in the inter-entity addressing protocol, not abbreviations for a SQL column type or auto-increment mechanism.
+`core.identity` says that an attribute stores the system identity of its entity; it does not name another entity or select its representation.
+`core.ref` says that a local attribute stores the representation of exactly one relation-resolved `core.identity`; it does not identify that target by itself.
+The relation is the source of truth for the target, while external application mapping resolves package-external paths without changing ownership.
+`identityProfile` is the host-owned policy that defines how logical entity identities and their references are represented in the target application model. Its current DEM v2 structure supplies the canonical type and generation policy used to materialize `core.identity`.
+Compilation resolves `core.identity` into an explicit concrete type and generation policy, and resolves `core.ref` into only the compatible concrete type of its resolved identity target. Normal relational and dialect validation then applies without unresolved types.
 
-An identity role and a reference role let a reusable package declare key intent without choosing its width or signedness.
-The application map owns the identity profile selected for one target model; it supplies the actual logical type and generation policy.
-A reference role derives its logical type from its resolved relation target.
-The compiler makes those derived values explicit in the canonical DEM before normal type and dialect validation.
 ### Query And Data Access
 
 A schema object describes one persistent entity through its logical path, attributes, primary key, and DTO factory.
@@ -62,6 +64,8 @@ The core package can move structurally compatible data and invoke explicitly sup
 - Map — application-owned external-reference and physical namespace mapping.
 - Entity — a logical persistent record type.
 - Attribute — a logical typed entity value with separate storage, default, and generation contracts.
+- `core.identity` — special logical type for an entity's system-addressable identity.
+- `core.ref` — special logical type for a local representation derived from exactly one relation-resolved `core.identity`; it has no generation policy.
 - Relation — a foreign-key relation between entity attributes.
 - Capability — a namespaced database or extension feature required by a declaration, adapter registry item, or operation.
 - Dialect adapter — the owner of physical type, index, query-operator, and runtime capability rules for one database dialect.
@@ -80,7 +84,7 @@ The core package can move structurally compatible data and invoke explicitly sup
 ## Ownership Principles
 
 Packages own their fragments.
-The root application owns cross-package reference mapping, table namespace, connection configuration, and the decision to recreate or transfer database state.
+The root application owns cross-package reference mapping, the one target-wide identity representation policy, table namespace, connection configuration, and the decision to recreate or transfer database state.
 The core compiler owns canonicalization, validation, provenance, and diagnostics.
 The selected dialect adapter owns physical projection rules; the operator owns capability provisioning.
 Package developers own the semantics of incompatible changes to data declared by their packages.
@@ -93,6 +97,8 @@ The host application or an external migrator owns release sequencing, migration 
 - Every canonical semantic node has provenance, while provenance is excluded from model fingerprinting.
 - Relation attribute counts must match referenced attribute counts.
 - Relation endpoints and attributes exist, positional types are compatible, and target attributes form a declared primary or unique key.
+- Every `core.ref` has exactly one relation-resolved `core.identity` target and derives only its concrete type from that target.
+- Ordinary relations between explicitly typed attributes remain separate from the identity/reference protocol and may target compatible primary or unique keys.
 - Primary, unique, and ordinary indexes are explicit.
 - Index method, keys or expressions, operator class, predicate, included columns, options, and build phase are explicit when applicable.
 - A canonical model contains no unresolved external reference required by a relation.

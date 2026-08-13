@@ -1,7 +1,7 @@
 # Product Glossary
 
 - Path: `ctx/docs/product/glossary.md`
-- Changed: `20260808`
+- Changed: `20260813`
 
 ## Core Terms
 
@@ -21,9 +21,10 @@
 - generation — database-side policy for creating an omitted attribute value, distinct from type and default.
 - capability — namespaced feature that an adapter supports and an actual connection may or may not provide.
 
-- identity role — a package-declared request for the host-selected identity profile and one generated single-column primary key.
-- reference role — a package-declared request to derive one local attribute type from its resolved relation target.
-- identity profile — an application-map declaration containing the logical type and generation policy used by identity-role attributes in one target model.
+- `core.identity` — special logical DEM type for the system-addressable identity of its entity. The current materialization creates a generated single-column primary key through the host-selected profile.
+- `core.ref` — special logical DEM type for a local representation derived from exactly one relation-resolved `core.identity`. It does not name the target, declare a foreign key by itself, or receive a generation policy.
+- relation — the semantic declaration that identifies a reference target and its attribute positions; application mapping resolves package-external paths without changing target ownership.
+- identity profile — the host-owned policy defining how logical entity identities and their references are represented in one target application model. The current DEM v2 profile structure contains the concrete type and generation policy used to materialize `core.identity`; `core.ref` derives only the compatible concrete type from its resolved identity target.
 - dialect adapter — registry and execution boundary for physical types, indexes, query operators, and capability preflight.
 - RDB object — validated physical table, column, index, or relation descriptor used for schema operations.
 - typed expression — schema-checked attribute, bound value, or registered operator call.

@@ -1,7 +1,7 @@
 # DEM v2 Implementation Mapping
 
 - Path: `ctx/docs/code/dem.md`
-- Changed: `20260809`
+- Changed: `20260813`
 
 ## Authority And Status
 
@@ -12,9 +12,11 @@ The real PostgreSQL/pgvector and MariaDB opt-in suites pass in the provisioned t
 
 Implement in the delivery order below.
 
-## Identity And Reference Role Implementation
+## Identity And Reference Type Implementation Gap
 
-`DecodeV2.mjs` accepts the closed `attr.role` contract. `MapRefs.mjs`, before `Validate.mjs`, resolves `identity` through the trusted map's `identityProfile` (or the documented signed 32-bit default), creates its generated single-column primary key, and resolves `ref` from its one mapped relation target. Both roles are removed before canonical validation and physical projection. Generated identity generation and primary-key descriptors retain trusted provenance. Module conformance covers host-selected 64-bit profiles and external mapping for SQLite and PostgreSQL; the SQLite execution suite verifies the generated primary-key DDL.
+The accepted cognitive model declares `type.id: "core.identity"` and `type.id: "core.ref"`. `identityProfile` resolves `core.identity` to a concrete type plus generation policy; each `core.ref` derives only a compatible concrete type from exactly one relation-resolved `core.identity` target. Both unresolved types are removed before canonical validation and physical projection. Relations and external map entries remain target authority.
+
+Current implementation mismatch: `DecodeV2.mjs` and `MapRefs.mjs` still accept and resolve the obsolete `attr.role` representation, including reference derivation from general relation targets. This documentation-only correction does not change source, schemas, validators, or tests. A separately authorized implementation change must migrate decoding, validation, provenance, canonicalization, and conformance from roles to special logical types, enforce `core.ref` to `core.identity`, and preserve the current generated single-column primary-key materialization and external mapping behavior.
 
 Do not begin PostgreSQL vector DDL by adding `vector` to `src/Back/Enum/Dem/Type/Attr.mjs`; that would bypass the compiler, capability, storage, index, codec, and query contracts.
 
@@ -41,7 +43,7 @@ Changing responsibility boundaries requires updating `../architecture/dem/` firs
 | `src/Back/Dem/Compile/A/DecodeV1.mjs` | Expand unversioned legacy syntax without changing physical meaning |
 | `src/Back/Dem/Compile/A/DecodeV2.mjs` | Validate v2 declaration shape and insert canonical defaults |
 | `src/Back/Dem/Compile/A/Compose.mjs` | Single-owner semantic insertion and explicit capability-set union |
-| `src/Back/Dem/Compile/A/MapRefs.mjs` | Owner-scoped external mapping and host-resolved identity/ref canonicalization with provenance |
+| `src/Back/Dem/Compile/A/MapRefs.mjs` | Owner-scoped external mapping and host-resolved identity/ref type canonicalization with provenance |
 | `src/Back/Dem/Compile/A/Validate.mjs` | Logical type, default, generation, index, and relation validation |
 | `src/Back/Dem/Compile/A/Graph.mjs` | Deterministic adjacency, strongly connected components, and topological order |
 | `src/Back/Dem/Compile/A/Fingerprint.mjs` | Canonical serialization and versioned deterministic fingerprint |
@@ -126,10 +128,10 @@ Remove it from DEM compiler dependencies after cutover.
 Build entity and key registries before validating relations so all endpoints are addressable independent of declaration order.
 Then perform these passes:
 
-1. validate type/default/generation and compute logical compatibility signatures;
+1. resolve `core.identity` to type plus generation and `core.ref` to type only from exactly one `core.identity` target, then validate type/default/generation and compute logical compatibility signatures;
 2. validate index attributes/expressions, primary count, constraint-key shape, and phase;
 3. validate relation local and target existence/cardinality;
-4. compare positional logical signatures and target ordered unique key;
+4. compare positional logical signatures and target ordered unique key for ordinary relations; enforce the `core.ref` to `core.identity` invariant separately;
 5. run adapter physical resolution and compare positional physical compatibility;
 6. validate physical name uniqueness;
 7. build graph and attach cycle provenance.

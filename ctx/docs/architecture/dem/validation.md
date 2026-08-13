@@ -1,7 +1,7 @@
 # DEM Validation And Diagnostics
 
 - Path: `ctx/docs/architecture/dem/validation.md`
-- Changed: `20260808`
+- Changed: `20260813`
 
 ## Enforcement Rule
 
@@ -37,9 +37,9 @@ For every entity:
 - type parameters, nullable state, literal defaults, function defaults, and generation policies are valid together;
 - every index key attribute and included attribute exists;
 
-- identity roles resolve from the one application-map identity profile before type/default/generation validation;
-- reference roles resolve from exactly one mapped relation target before positional relation compatibility validation;
-- role resolution has no silent fallback: an absent profile uses only the documented default, while an ambiguous or cyclic reference role is a diagnostic;
+- `core.identity` types resolve from the one application-map identity profile into a concrete type and generation policy before type/default/generation validation; the resolved profile then undergoes the same logical and dialect checks as an explicit attribute;
+- `core.ref` types derive only their concrete type from exactly one mapped relation target whose unresolved declaration is `core.identity`; a `core.ref` receives no generation policy and neither chooses a representation independently nor identifies that target;
+- special-type resolution has no silent fallback: an absent profile uses only the documented default, while an ambiguous or cyclic `core.ref` derivation is a diagnostic;
 - an index contains at least one key and does not repeat a direct attribute key;
 - the entity has at most one primary index;
 - primary and unique indexes used as relation targets contain only direct attribute keys and have phase `table`;
@@ -49,6 +49,8 @@ For every entity:
 - each positional local/target pair has the same canonical logical compatibility signature;
 - the complete ordered target attribute list equals one primary or unique key;
 - actions and deferrability values are supported by the logical contract.
+
+The `core.ref` invariant is additional to the general relation contract: each `core.ref` participates in exactly one relation and its positional target must resolve from `core.identity`. Ordinary relations with explicitly typed local attributes may target compatible primary or unique keys without invoking `core.ref`.
 
 The core compatibility signature contains logical type identity and parameters that affect equality representation.
 Generation and nullable state are not part of the signature.

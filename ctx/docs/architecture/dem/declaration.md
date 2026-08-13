@@ -1,7 +1,7 @@
 # DEM And Map Declarations
 
 - Path: `ctx/docs/architecture/dem/declaration.md`
-- Changed: `20260808`
+- Changed: `20260813`
 - Legacy Sources: `doc/schema.md`, `doc/map.md`
 
 ## Version Rule
@@ -102,8 +102,7 @@ A non-empty package metadata field such as `comment` is a semantic node and has 
 An attribute supports:
 
 - `comment` — descriptive text;
-- `type` — required logical type identity and parameters unless `role` derives it;
-- `role` — optional `identity` or `ref` host-resolved key role;
+- `type` — required logical type identity and parameters;
 - `storage` — optional map from dialect identity to physical storage binding;
 - `nullable` — boolean, default `false`;
 - `default` — optional value used when an insert omits the attribute;
@@ -123,11 +122,13 @@ An adapter extension may support a combined behavior only through a new namespac
 | `core.decimal` | positive `precision`, integer `scale` from `0` through `precision`, optional `unsigned: false` | Exact decimal value |
 | `core.enum` | non-empty unique string `values` | Closed string set |
 | `core.integer` | `bits: 32` by default; allowed `8`, `16`, `32`, `64`; `unsigned: false` by default | Integer value |
+| `core.identity` | none before compilation | System identity whose concrete type and generation come from `identityProfile` |
 | `core.json` | none | Structured JSON value; physical JSON/JSONB choice belongs to storage mapping |
+| `core.ref` | none before compilation | Stored reference representation derived from exactly one relation-resolved `core.identity` |
 | `core.string` | positive `length` | Bounded character string |
 | `core.text` | none | Unbounded text value |
 | `core.uuid` | none | UUID value |
-| `core.vector` | positive `dimensions`, `element: "float"|"bit"`, `sparse: boolean` | Fixed-dimension vector value |
+| `core.vector` | positive `dimensions`, `element: "float" or "bit"`, `sparse: boolean` | Fixed-dimension vector value |
 
 A provider may register additional namespaced logical types such as `postgresql.range`.
 The core must reject an unregistered identity rather than pass it to Knex.
@@ -191,23 +192,73 @@ Unknown functions and type-incompatible literal values are errors.
 }
 ```
 
-`core.identity` is valid only for an integer logical type.
+`generation.kind: "core.identity"` is valid only for an integer logical type.
 `mode` is `byDefault` or `always`.
 Additional generators use namespaced registry identities and declare their capability requirements.
 
-Identity and reference meaning are not logical types.
-An identity is an integer or UUID attribute with a generation policy; a foreign-key attribute gets its meaning from a relation and must be type-compatible with its target.
+`core.identity` and `core.ref` are logical types whose representation is intentionally unresolved in reusable package declarations. They are not database-specific generation mechanisms.
+The current `identityProfile` contract resolves `core.identity` only to an integer logical type plus `generation.kind: "core.identity"`. Although `core.uuid` is a logical type, the current profile contract does not provide UUID identity generation; declarations must not imply that it does.
 
-### Identity And Reference Roles
+### Identity And Reference Types
 
-`role: "identity"` selects the application map's identity profile. It derives the canonical logical type and generation policy; the package must not also declare `type`, `default`, or `generation` for that attribute.
-`role: "ref"` derives the canonical logical type from one resolved target attribute of a relation that lists the local attribute. It must not also declare `type`, `default`, or `generation`.
+`type.id: "core.identity"` declares that an attribute stores the entity's system-addressable identity. The application map's `identityProfile` derives its canonical logical type and generation policy.
+`type.id: "core.ref"` declares that a local attribute stores the representation of another entity's `core.identity`. It derives only its canonical logical type from exactly one resolved `core.identity` target attribute of a relation that lists the local attribute; it receives no generation policy.
 
-An identity role creates the entity's one generated single-column primary key. A declaration must not also name the same attribute in another primary index.
-A reference role does not itself name a target; the relation and, where external, the application map remain the sole target authority.
+Conceptually, `core.ref` is the counterpart of `core.identity`:
 
-The compiler rejects a role with an explicit type/generation, an identity profile that cannot produce a valid logical type and generation pair, a reference role without exactly one resolvable target attribute, or a cycle of unresolved reference roles.
-After role resolution the canonical DEM contains ordinary explicit logical types and generation policies; downstream validation, adapters, CRUD, and schema builders do not receive roles.
+```text
+core.identity <--- core.ref
+```
+
+The current materialization of `core.identity` creates the entity's one generated single-column primary key. This normative constraint is a consequence of the current type-resolution contract, not the definition of system identity.
+`core.ref` does not itself name a target or declare a foreign key. The relation remains the sole target authority; where the target is external, the application map resolves its path and attribute mapping without changing ownership. A `core.ref` target must be `core.identity`, never an arbitrary PRIMARY, UNIQUE, natural, or other non-identity attribute.
+
+The compiler rejects an identity profile that cannot produce a valid logical type and generation pair, a `core.ref` attribute without exactly one resolvable `core.identity` target, or a cycle of unresolved reference types.
+After type resolution the canonical DEM contains ordinary explicit logical types and generation policies; downstream validation, adapters, CRUD, and schema builders do not receive unresolved `core.identity` or `core.ref` types.
+
+For example, two reusable declarations can declare:
+
+```json
+{
+  "version": 2,
+  "requires": [],
+  "package": {},
+  "refs": {},
+  "entity": {
+    "user": {"attr": {"id": {"type": {"id": "core.identity"}}}, "index": {}, "relation": {}}
+  }
+}
+```
+
+```json
+{
+  "version": 2,
+  "requires": [],
+  "package": {},
+  "refs": {"/identity/user": ["id"]},
+  "entity": {
+    "order": {
+      "attr": {"id": {"type": {"id": "core.identity"}}, "userId": {"type": {"id": "core.ref"}}},
+      "index": {},
+      "relation": {"user": {"attrs": ["userId"], "ref": {"path": "/identity/user", "attrs": ["id"]}, "action": {}, "deferrable": "notDeferrable"}}
+    }
+  }
+}
+```
+
+After the application map resolves `/identity/user`, resolution is:
+
+```text
+User.id: core.identity
+        ↓
+identityProfile
+        ↓
+User.id -> concrete logical type + generation
+        ↓
+Order.userId: core.ref -> compatible type derived from User.id through its relation; no generation
+```
+
+The selected dialect adapter later chooses the physical column and generation expression.
 
 ## External References
 
@@ -249,7 +300,7 @@ Actions are `restrict` or `cascade`.
 `deferrable` is `notDeferrable`, `immediate`, or `deferred`; the default is `notDeferrable`.
 The selected adapter must support any non-default deferrability.
 
-The referenced ordered attribute list must match one primary or unique key.
+For an ordinary relation, the referenced ordered attribute list must match one primary or unique key. If a local attribute is `core.ref`, its positional target must instead resolve to exactly one `core.identity`; this special identity/reference rule does not restrict ordinary relations between explicitly typed attributes.
 The relation contract and its validation are defined in `validation.md`.
 
 ## Index Contract
@@ -284,8 +335,9 @@ Default location: `etc/teqfw.schema.map.json`.
 ```
 
 `namespace` is the physical table prefix.
-`identityProfile` is optional. When absent, it is signed 32-bit `core.integer` with `core.identity` in `byDefault` mode.
-When present, its type and generation must be accepted by the selected adapter; it is one application-wide profile, not package-owned metadata.
+`identityProfile` is the host-owned policy that defines how logical entity identities and their references are represented in the target application model. It is one application-wide policy, not package-owned metadata or a package-selected SQL mechanism.
+
+The current DEM v2 profile structure is optional and contains `type` plus `generation`. When absent, it is signed 32-bit `core.integer` with `generation.kind: "core.identity"` in `byDefault` mode. When present, its type and generation must be accepted by the selected adapter. This current structure materializes `core.identity`; `core.ref` derives only the compatible concrete type from the resolved identity target.
 Changing the profile changes desired target state and therefore requires the normal rebuild/compatibility decision.
 
 The first `ref` key identifies the fragment owner; the second is the external path used by that fragment.
@@ -301,7 +353,7 @@ The v1 decoder must preserve the current 2.x declaration meaning and emit canoni
 
 | DEM v1 syntax | Canonical meaning |
 | --- | --- |
-| `id` | `core.integer` with 32-bit signed logical signature plus `core.identity` generation; the adapter preserves legacy increments storage |
+| `id` | `core.integer` with 32-bit signed logical signature plus `generation.kind: "core.identity"`; the adapter preserves legacy increments storage |
 | `ref` | The same 32-bit signed logical signature; a legacy physical hint preserves unsigned storage where the current adapter applies it |
 | `integer` | `core.integer`; `isTiny` and `unsigned` become explicit type parameters |
 | `number` with both precision and scale | `core.decimal` with the supplied values |

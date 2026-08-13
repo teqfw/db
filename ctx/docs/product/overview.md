@@ -1,9 +1,9 @@
 # Product Overview
 
 - Path: `ctx/docs/product/overview.md`
-- Changed: `20260808`
+- Changed: `20260813`
 
-This document is paired with `overview.skin.md` and preserves its product meaning.
+This document is paired with `overview.skin.ru.md` and preserves its product meaning.
 
 ## Product Identity
 
@@ -33,6 +33,8 @@ The package owns:
 ## Core Lifecycle
 
 A consumer configures database access and namespace roots, loads package model fragments, applies the application map, and selects the adapter for the configured connection.
+Packages can declare system identities with the `core.identity` logical type and local references to exactly one such identity with `core.ref`, while relations declare the concrete target mapping.
+The application map supplies the one target-wide `identityProfile`; compilation resolves `core.identity` into a concrete logical type plus generation policy and `core.ref` into only the compatible type of its resolved identity target before ordinary relational and dialect validation.
 The compiler either returns one immutable canonical DEM, physical plan, provenance map, requirements, graph, and deterministic fingerprint or returns aggregated diagnostics with no executable partial model.
 Before database work, the adapter confirms that required runtime capabilities are available.
 The package then executes the phase-ordered physical plan or typed query.

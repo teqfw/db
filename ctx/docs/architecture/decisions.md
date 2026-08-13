@@ -1,7 +1,7 @@
 # Architecture Decisions
 
 - Path: `ctx/docs/architecture/decisions.md`
-- Changed: `20260808`
+- Changed: `20260813`
 
 ## AD-001 Preserve Legacy Line On Branch v1
 
@@ -127,18 +127,16 @@ ordinary credentials, production use of test-only Container registration, and un
 Reason: one package-owned cfg namespace keeps ownership explicit, scalar values remain operationally convenient,
 and host-owned DI tokens make every additional connection and its lifecycle visible in composition.
 
-## AD-016 Resolve Identity And Reference Roles In The Host Target
+## AD-016 Resolve Identity And Reference Types In The Host Target
 
-Decision: a package may declare an attribute role of `identity` or `ref` without fixing its integer width or signedness.
-The root application map owns one optional `identityProfile`; its default is signed 32-bit `core.integer` plus `core.identity` with `byDefault` mode.
-An `identity` role resolves to that profile. A `ref` role resolves to the one mapped target attribute of its relation.
-The compiler writes the resolved logical type and generation into the canonical DEM before normal relation and dialect validation.
-An `identity` role creates one generated single-column primary key. A `ref` role derives one foreign-key column type from its relation target; explicit indexes remain available for natural, unique, and composite keys.
+Decision: `core.identity` and `core.ref` are special logical DEM types forming an inter-entity addressing protocol. A package uses `core.identity` when an entity attribute is system-addressable and `core.ref` when a local attribute stores the representation of exactly one relation-resolved `core.identity`; neither type chooses a SQL type or dialect mechanism.
+`identityProfile` is the host-owned policy that defines how logical entity identities and their references are represented in one target application model. The current DEM v2 profile structure supplies a concrete type plus generation policy; its default is signed 32-bit `core.integer` plus `generation.kind: "core.identity"` with `byDefault` mode.
+`core.identity` resolves through that profile into a concrete type and generation policy. `core.ref` derives only its concrete type from the one mapped `core.identity` target of its relation; the relation remains target authority, and external mapping only resolves package-external paths.
+The compiler writes these results into the canonical DEM before normal relation and dialect validation. The current materialization of `core.identity` creates one generated single-column primary key. Ordinary relations between explicitly typed attributes remain a separate mechanism and may use compatible primary or unique targets.
 
-Rejected: requiring every reusable package to repeat `core.integer` parameters for identifiers and references, or inferring a type from an undeclared/ambiguous relation.
+Rejected: requiring independently reusable packages to coordinate concrete identifier storage conventions, making `ref` an alternative foreign-key declaration, allowing `core.ref` to target an arbitrary PRIMARY or UNIQUE attribute, or inferring a type from an undeclared or ambiguous relation.
 
-Reason: package fragments express reusable entity and relation intent, while the root application alone knows the expected target scale and can select a 32-bit or 64-bit identity profile.
-Keeping the selected representation in the map makes host authority visible, preserves deterministic compilation, and keeps foreign-key compatibility enforced rather than conventional.
+Reason: packages own reusable entity and relation semantics, whereas the host owns the target database model and therefore identity representation policy. References derive their representation from their actual resolved targets, preserving compatibility across independently developed packages. Keeping the selected policy in the map makes host authority visible, preserves deterministic compilation, and leaves dialect-specific storage and generation differences below the logical DEM layer. Integer width and signedness are current examples of policy choices, not the purpose of the indirection.
 
 ## Deferred CLI Hosting Decision
 

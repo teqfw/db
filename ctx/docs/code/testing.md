@@ -1,7 +1,7 @@
 # Testing Overview
 
 - Path: `ctx/docs/code/testing.md`
-- Changed: `20260810`
+- Changed: `20260813`
 
 ## Test Structure
 
@@ -64,7 +64,7 @@ Do not assert full English messages except in a narrow presentation test.
 For each error below, include one failing fixture and one nearest valid fixture:
 
 - unknown logical type and invalid type parameters;
-- invalid literal/function default, default/generation combination, and identity on a non-integer type;
+- invalid literal/function default, default/generation combination, and `generation.kind: "core.identity"` on a non-integer type;
 - unknown local or target relation attribute;
 - missing mapped target entity;
 - empty and unequal composite relation cardinality;
@@ -76,11 +76,11 @@ For each error below, include one failing fixture and one nearest valid fixture:
 
 One aggregate fixture contains several independent failures and proves that all are returned in deterministic stage/path/code/source order.
 
+## Identity And Reference Type Matrix
 
-## Identity And Reference Role Matrix
+The accepted conformance matrix requires that the same package fragment compile under a host-selected identity representation policy; `core.identity` resolves to a concrete type plus generation, and every `core.ref` derives only the mapped `core.identity` target type, never generation or an arbitrary PRIMARY/UNIQUE target. Generated identity primary keys retain provenance, and special-type resolution leaves no unresolved `core.identity` or `core.ref` type in the canonical or physical model. It also requires invalid profiles, ambiguous `core.ref` derivations, and non-identity `core.ref` targets to produce deterministic diagnostics.
+Current implementation tests exercise the obsolete role representation; this documentation-only correction does not change them. A separately authorized implementation change must add type-form declarations and update conformance. The SQLite execution suite must verify generated identity primary-key DDL; module conformance must project the same canonical keys and relations through both SQLite and PostgreSQL adapters.
 
-The module suite proves that the same package fragment compiles with a host-selected 64-bit profile, every `ref` role derives the mapped external target type, generated identity primary keys retain provenance, and role resolution leaves no role marker in the canonical or physical model. It also covers explicit role/type conflicts, invalid profiles, and ambiguous reference roles with deterministic diagnostics.
-The SQLite execution suite verifies generated identity primary-key DDL; module conformance projects the same canonical keys and relations through both SQLite and PostgreSQL adapters.
 ## Legacy Conversion Regression Matrix
 
 The DEM v1 decoder and adapter snapshots must cover every legacy type and option.
