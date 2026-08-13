@@ -13,7 +13,7 @@
 - `src/Back/Dto/` — backend DTOs and factories.
 - `src/Back/RDb/Dialect/` — per-dialect physical projection, capability preflight, value codecs, and execution adapters.
 - `src/Back/Api/Import/` — replaceable import transformation contract.
-- `src/Back/Act/`, `Cli/`, `Plugin/`, and `Process/` — operational entry modules.
+- `src/Back/Act/`, `App/`, `Cli/`, and `Plugin/` — operational entry modules.
 - `src/Shared/Dto/`, `Enum/`, and `Util/` — cross-runtime selection contracts.
 
 ## DI 2.x Convention

@@ -45,6 +45,12 @@ describe('npm publication', () => {
         }
     });
 
+    it('keeps the documented source map aligned with the repository', () => {
+        const overview = readFileSync(join(root, 'ctx/docs/code/overview.md'), 'utf8');
+        assert.match(overview, /`src\/Back\/Act\/`, `App\/`, `Cli\/`, and `Plugin\//);
+        assert.doesNotMatch(overview, /`(?:src\/Back\/)?Process\/`/);
+    });
+
     it('publishes the type-only root contract and required artifact files', () => {
         const manifest = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
         assert.equal(manifest.types, 'types.d.ts');
