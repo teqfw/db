@@ -6,10 +6,9 @@
 ## Source Structure
 
 - `src/Back/Api/` — abstract public contracts.
-- `src/Back/App/` — higher-level CRUD and transaction orchestration.
-- `src/Back/RDb/` — connection, transaction, schema, and legacy CRUD implementation.
+- `src/Back/RDb/` — connection, transaction, schema, and rebuild execution.
 - `src/Back/Dem/` — trusted declaration scanning and compiler-backed loading.
-- `src/Back/Dem/Compile/` — DEM v1/v2 decoding, ownership-safe composition, validation, graph, provenance, and fingerprinting.
+- `src/Back/Dem/Compile/` — explicit DEM v2 decoding, ownership-safe composition, validation, graph, provenance, and fingerprinting.
 - `src/Back/Dem/Registry/` — frozen core logical/default/generation/operator registries.
 - `src/Back/Dto/` — backend DTOs and factories.
 - `src/Back/RDb/Dialect/` — per-dialect physical projection, capability preflight, value codecs, and execution adapters.
@@ -56,7 +55,7 @@ JSON; optional `EXTRA` objects carry specialized Knex or driver-specific setting
 - The compiler in `dem.md` replaces generic merge with ownership-safe composition and provenance.
 - Dialect adapters and the schema planner replace unchecked conversion and recursive ordering.
 - RDB schema builder implements complete structure drop and creation.
-- Connection, transaction, CRUD, and selection modules implement the persistence access layer.
+- Connection, transaction, typed selection, schema, and rebuild modules implement the persistence access layer.
 - CLI export/import modules and the import transformation interface implement separate foundations of rebuild data transfer.
 
 ## Implementation Status
@@ -64,10 +63,10 @@ JSON; optional `EXTRA` objects carry specialized Knex or driver-specific setting
 ### Implemented In The Current Worktree
 
 - distributed DEM loading from the application and installed packages;
-- versioned DEM v1/v2 compilation, map application, ownership, provenance, validation, graph analysis, and branding;
+- explicit DEM v2 compilation, map application, ownership, provenance, validation, graph analysis, and branding;
 - dialect-selected physical projection and read-only capability preflight;
 - phase-ordered tables, constraints, relations, data, and late indexes;
-- Selection v2 typed expressions plus the legacy selection decoder;
+- Selection v2 typed expressions;
 - PostgreSQL pgvector storage, codecs, operators, HNSW/IVFFlat registries, and execution options;
 - parallel and guarded in-place rebuild with transformation and failure evidence;
 - verified-snapshot restore, transaction ownership, and PostgreSQL generated-state restoration;
@@ -96,8 +95,7 @@ JSON; optional `EXTRA` objects carry specialized Knex or driver-specific setting
 - Keep rebuild execution independent from application deployment and cutover policy.
 - Do not infer migration meaning from target DTO differences.
 - Do not report a rebuild as successful after a required table transfer failure.
-- Keep declaration formats backward-compatible within the 2.x line unless Human-approved otherwise.
-- Treat unversioned input as DEM v1 and explicit version `2` as DEM v2; do not evolve unversioned semantics in place.
+- The evolving 2.x line permits incompatible changes; declarations and maps always require explicit `version: 2`.
 - Schema/data/query executors must accept only a successful compiler result and operation preflight.
 - Do not route declaration strings to computed Knex method access or raw SQL.
 

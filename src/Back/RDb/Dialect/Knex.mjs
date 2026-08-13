@@ -44,10 +44,8 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex {
             adapter.describe = async function () {
                 return frozenDescription;
             };
-            adapter.resolveType = async function ({compatibility, logicalType, storage: binding}) {
-                const compatibilityKey = compatibility?.physical ? `legacy.${compatibility.physical}` : null;
-                const entry = binding ? storageRegistry[binding.type]
-                    : compatibilityKey ? typeRegistry[compatibilityKey] : typeRegistry[logicalType.id];
+            adapter.resolveType = async function ({logicalType, storage: binding}) {
+                const entry = binding ? storageRegistry[binding.type] : typeRegistry[logicalType.id];
                 if (!entry) {
                     return {
                         diagnostics: [{
@@ -73,7 +71,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex {
                         };
                     }
                 }
-                const projected = entry.project({binding, compatibility, logicalType});
+                const projected = entry.project({binding, logicalType});
                 return {
                     compatibilitySignature: projected.compatibilitySignature ?? JSON.stringify(projected.physicalType),
                     diagnostics: projected.diagnostics ?? [],
@@ -210,7 +208,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex {
             };
             adapter.preflight = async function ({connection, fingerprint, operation, requirements}) {
                 const supported = new Set(frozenDescription.supportedCapabilities);
-                const client = (connection?.getKnex?.() ?? connection?.getKnexTrx?.())?.client?.config?.client;
+                const client = (connection?.getClient?.() ?? connection?.getKnexTrx?.())?.client?.config?.client;
                 const identityMatches = frozenDescription.clients.includes(client);
                 const unavailable = requirements.filter((item) => !supported.has(item) || !identityMatches);
                 return freeze({

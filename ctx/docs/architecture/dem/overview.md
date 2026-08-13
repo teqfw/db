@@ -6,7 +6,7 @@
 ## Status And Scope
 
 This document defines the accepted DEM v2 target architecture.
-The current worktree implements the compiler through one v1/v2 canonical execution path, and external PostgreSQL/pgvector and MariaDB conformance passes in the provisioned test environment. The compiler represents identity/reference declarations through `core.identity` and `core.ref`, resolves them through the host-owned `identityProfile`, and enforces that every `core.ref` targets a `core.identity`.
+The current worktree implements the explicit DEM v2 compiler path. The compiler represents identity/reference declarations through `core.identity` and `core.ref`, resolves them through the host-owned `identityProfile`, and enforces that every `core.ref` targets a `core.identity`.
 `../../code/dem.md` maps the target to implementation work and distinguishes current facts from required behavior.
 
 The DEM describes one desired relational state.
@@ -22,7 +22,7 @@ Provenance is never accepted from JSON supplied by the fragment itself.
 
 ### Canonical DEM
 
-The compiler expands legacy syntax, composes disjoint package-owned nodes, resolves references, applies canonical defaults, validates semantics, and produces an immutable application-wide logical model.
+The compiler validates and canonicalizes explicit v2 syntax, composes disjoint package-owned nodes, resolves references, applies canonical defaults, validates semantics, and produces an immutable application-wide logical model.
 The canonical DEM contains logical types, value defaults, generation policies, relations, logical indexes, and capability requirements.
 Special package types are resolved here: `core.identity` expresses a system-addressable entity identity, while `core.ref` derives a local representation only from exactly one relation-resolved `core.identity`. `identityProfile` is the host-owned policy that defines their target-model representation; its current structure materializes `core.identity` into canonical type and generation, while `core.ref` becomes only the compatible canonical type. Neither unresolved special type reaches the canonical DEM.
 The compilation result carries provenance as a sidecar to that model.
@@ -61,7 +61,7 @@ Callers that need diagnostics receive them from the thrown compilation error.
 ```text
 declaration files + application map file
   -> parse JSON and create trusted source envelopes
-  -> decode unversioned DEM v1 or explicit DEM v2
+  -> validate and decode explicit DEM v2
   -> compose with single-owner semantics and provenance
   -> resolve core.identity to type + generation through identityProfile
   -> derive core.ref type from its mapped core.identity relation target
@@ -103,7 +103,7 @@ An adapter may report a missing extension but must not install it as an implicit
 
 ## Reading Map
 
-- `declaration.md` defines the input contract and legacy decoding.
+- `declaration.md` defines the explicit v2 input contract.
 - `composition.md` defines ownership and provenance.
 - `validation.md` defines enforced invariants and diagnostics.
 - `dialects.md` defines physical projection and capability boundaries.

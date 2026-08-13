@@ -42,7 +42,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Builder_Execute {
                 throw Object.freeze(error);
             }
             const phases = [];
-            const knex = connection.getKnex();
+            const knex = connection.getClient();
             let active = {identity: 'execution', phase: 'execution'};
             try {
 

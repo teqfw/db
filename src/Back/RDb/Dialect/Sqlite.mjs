@@ -35,24 +35,6 @@ export default class TeqFw_Db_Back_RDb_Dialect_Sqlite {
                 },
             };
         };
-        /**
-         * @param {string} type
-         * @param {Function} project
-         * @returns {object}
-         */
-        const legacy = function (type, project = () => ({})) {
-            return {
-                requirements: [capability],
-                project: function ({compatibility, logicalType}) {
-                    const value = project({compatibility, logicalType});
-                    const {compatibilitySignature, ...physical} = value;
-                    return {
-                        compatibilitySignature,
-                        physicalType: {dialect: 'sqlite', type, args: [], unsigned: false, ...physical},
-                    };
-                },
-            };
-        };
         /** @param {object} type @returns {ReadonlyArray<object>} */
         const rejectUnsigned = (type) => type.params.unsigned ? [{
             code: 'DEM_STORAGE_UNSUPPORTED',
@@ -71,19 +53,6 @@ export default class TeqFw_Db_Back_RDb_Dialect_Sqlite {
             'core.string': entry('string', (type) => [type.params.length]),
             'core.text': entry('text'),
             'core.uuid': entry('uuid'),
-            'legacy.binary': legacy('binary', ({logicalType}) => ({args: logicalType.params.length ? [logicalType.params.length] : []})),
-            'legacy.boolean': legacy('boolean'),
-            'legacy.date': legacy('date'),
-            'legacy.datetime': legacy('datetime'),
-            'legacy.decimal': legacy('decimal', ({compatibility, logicalType}) => ({args: [compatibility.precision ?? undefined, compatibility.scale ?? undefined], unsigned: logicalType.params.unsigned})),
-            'legacy.enum': legacy('enum', ({logicalType}) => ({args: [logicalType.params.values]})),
-            'legacy.increments': legacy('increments', () => ({compatibilitySignature: 'legacy.integer-reference'})),
-            'legacy.integer': legacy('integer', ({logicalType}) => ({unsigned: logicalType.params.unsigned})),
-            'legacy.integerUnsigned': legacy('integer', () => ({unsigned: true, compatibilitySignature: 'legacy.integer-reference'})),
-            'legacy.jsonb': legacy('jsonb'),
-            'legacy.string': legacy('string', ({compatibility, logicalType}) => ({args: [compatibility.declaredLength ?? logicalType.params.length]})),
-            'legacy.text': legacy('text'),
-            'legacy.tinyint': legacy('tinyint', ({logicalType}) => ({unsigned: logicalType.params.unsigned})),
         };
         const storage = {
             binary: types['core.binary'],
@@ -100,28 +69,23 @@ export default class TeqFw_Db_Back_RDb_Dialect_Sqlite {
             uuid: types['core.uuid'],
         };
         const indexes = {
-            'legacy.defaultIndex': {
+            'core.btree': {
                 requirements: [capability],
                 project: function ({index, physicalName}) {
                     return {
                         descriptor: {
-                            include: [],
-                            keys: structuredClone(index.keys),
-                            kind: index.kind,
-                            method: 'index',
-                            name: physicalName,
-                            options: {},
+                            include: [], keys: structuredClone(index.keys), kind: index.kind, method: 'index',
+                            name: physicalName, options: {},
                         },
                     };
                 },
             },
         };
-        indexes['core.btree'] = indexes['legacy.defaultIndex'];
         const adapter = knex.createAdapter({
             description: {
                 id: 'sqlite',
                 clients: ['better-sqlite3', 'sqlite3'],
-                registryVersions: {core: 1, legacy: 1},
+                registryVersions: {core: 1},
                 supportedCapabilities: [capability],
             },
             defaults: {

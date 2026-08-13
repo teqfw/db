@@ -17,7 +17,7 @@ The connection service owns the initialized Knex instance and current schema nam
 The package default connection and every host-owned named connection have independent Knex, dialect-adapter,
 resolver, transaction, and shutdown state.
 Each transaction owns one Knex transaction handle.
-The schema service owns an authentic compilation result and derives any read-only v1 compatibility view from that same execution truth.
+The schema service owns an authentic v2 compilation result as its sole execution truth.
 One compilation execution owns its canonical model, provenance, dependency graph, requirements, physical plan, fingerprint, warnings, and any error diagnostics.
 The selected adapter owns immutable registries; a preflight result owns connection-specific capability evidence for one operation.
 `@teqfw/cfg` owns the immutable raw application snapshot. The database configuration service owns one lazily

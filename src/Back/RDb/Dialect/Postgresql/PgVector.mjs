@@ -285,7 +285,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
             const needsVector = requirements.some((item) => capabilities.includes(item));
             let installed = null;
             if (needsVector && diagnostics.length === 0) {
-                const database = connection?.getKnex?.() ?? connection?.getKnexTrx?.();
+                const database = connection?.getClient?.() ?? connection?.getKnexTrx?.();
                 try {
                     const row = await database('pg_extension').select('extversion').where({extname: 'vector'}).first();
                     installed = row?.extversion ?? null;

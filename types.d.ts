@@ -1,9 +1,6 @@
 import type {Knex} from 'knex';
 
-export type DbScalar = string | number | boolean | bigint | Date | Buffer | null;
 export type DbRow = Readonly<Record<string, unknown>>;
-export type DbMutableRow = Record<string, unknown>;
-export type DbKey = DbScalar | ReadonlyArray<DbScalar> | Readonly<Record<string, DbScalar>>;
 export interface DbDtoFactory<T = Readonly<Record<string, unknown>>> { create(data?: unknown): T; }
 
 export interface DbConfig extends Readonly<Knex.Config> {}
@@ -26,7 +23,7 @@ export interface DbTransaction {
 export interface DbConnection {
     disconnect(): Promise<void>;
     getDialectAdapter(): DbDialectAdapter;
-    getKnex(): Knex;
+    getClient(): Knex;
     getSchemaBuilder(): Knex.SchemaBuilder;
     startTransaction(options?: unknown): Promise<DbTransaction>;
 }
@@ -39,23 +36,6 @@ export interface DbEntitySchema {
     getId(): string | readonly string[];
     getTableName(): string;
 }
-
-export interface DbCrudCreateInput { readonly schema: DbEntitySchema; readonly trx?: DbTransaction; readonly dto: DbRow; }
-export interface DbCrudReadInput { readonly schema: DbEntitySchema; readonly trx?: DbTransaction; readonly key: DbKey; readonly select?: readonly string[]; }
-export interface DbCrudListInput { readonly schema: DbEntitySchema; readonly trx?: DbTransaction; readonly selection?: DbSelectionV2; readonly conditions?: DbRow; readonly sorting?: Readonly<Record<string, DbDirection>>; readonly pagination?: DbPagination; }
-export interface DbCrudUpdateInput { readonly schema: DbEntitySchema; readonly trx?: DbTransaction; readonly key: DbKey; readonly updates: DbRow; }
-export interface DbCrudDeleteInput { readonly schema: DbEntitySchema; readonly trx?: DbTransaction; readonly key: DbKey; }
-export interface DbCrudListResult<T extends DbRow = DbRow> { readonly items: readonly T[]; readonly count?: number; }
-export interface DbCrud {
-    createOne(input: DbCrudCreateInput): Promise<{readonly primaryKey: Readonly<Record<string, DbScalar>>}>;
-    readOne(input: DbCrudReadInput): Promise<{readonly record: DbRow | null}>;
-    readMany(input: DbCrudListInput): Promise<{readonly records: readonly DbRow[]; readonly count?: number}>;
-    updateOne(input: DbCrudUpdateInput): Promise<{readonly updatedCount: number}>;
-    updateMany(input: {readonly schema: DbEntitySchema; readonly trx?: DbTransaction; readonly conditions: DbRow; readonly updates: DbRow}): Promise<{readonly updatedCount: number}>;
-    deleteOne(input: DbCrudDeleteInput): Promise<{readonly deletedCount: number}>;
-    deleteMany(input: {readonly schema: DbEntitySchema; readonly trx?: DbTransaction; readonly conditions: DbRow}): Promise<{readonly deletedCount: number}>;
-}
-export interface DbTransactionWrapper { execute<T>(outer: DbTransaction | undefined, operation: (trx: DbTransaction) => Promise<T>, onCommit?: (value: T) => void, onRollback?: (error: Error) => void): Promise<T>; }
 
 export type DbDirection = 'asc' | 'desc';
 export interface DbLogicalType { readonly id: string; readonly params?: Readonly<Record<string, unknown>>; }
@@ -73,8 +53,6 @@ export interface DbSelectionV2 extends DbPagination {
     readonly orderBy?: readonly DbOrdering[];
     readonly execution?: Readonly<Record<string, unknown>>;
 }
-export interface DbCountResult { readonly count: number; }
-
 export interface DemSource { readonly fragmentId: string; readonly filename: string; readonly sourcePointer: string; readonly packageName?: string; }
 export interface DemFragmentEnvelope { readonly fragmentId: string; readonly filename: string; readonly packageName: string; readonly declaration: unknown; }
 export interface DemMapEnvelope { readonly filename?: string; readonly declaration: unknown; }
@@ -167,8 +145,6 @@ declare global {
     type TeqFw_Db_Back_Act_Dem_Tables__Class = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Back_Api_Import_Transform = TeqFw_Db_InternalComponent;
     type TeqFw_Db_Back_Api_Import_Transform__Class = TeqFw_Db_ComponentClass;
-    type TeqFw_Db_Back_Api_RDb_CrudEngine = TeqFw_Db_InternalComponent;
-    type TeqFw_Db_Back_Api_RDb_CrudEngine__Class = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Back_Api_RDb_Query_List = TeqFw_Db_InternalComponent;
     type TeqFw_Db_Back_Api_RDb_Query_List__Class = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Back_Api_RDb_QueryBuilder = TeqFw_Db_InternalComponent;
@@ -179,12 +155,8 @@ declare global {
     type TeqFw_Db_Back_Api_RDb_Schema__Class = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Back_Api_RDb_Schema_Object = TeqFw_Db_InternalComponent;
     type TeqFw_Db_Back_Api_RDb_Schema_Object__Class = TeqFw_Db_ComponentClass;
-    type TeqFw_Db_Back_App_Crud = DbCrud;
-    type TeqFw_Db_Back_App_Crud__Class = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Back_App_Shutdown = TeqFw_Db_InternalComponent;
     type TeqFw_Db_Back_App_Shutdown__Class = TeqFw_Db_ComponentClass;
-    type TeqFw_Db_Back_App_TrxWrapper = DbTransactionWrapper;
-    type TeqFw_Db_Back_App_TrxWrapper__Class = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Back_Cli_Drop = TeqFw_Db_InternalComponent;
     type TeqFw_Db_Back_Cli_Drop__Class = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Back_Cli_Dto_Command = Readonly<Record<string, unknown>>;
@@ -207,16 +179,12 @@ declare global {
     type TeqFw_Db_Back_Defaults__Class = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Back_Dem_Compile_A_Compose = TeqFw_Db_InternalComponent;
     type TeqFw_Db_Back_Dem_Compile_A_Compose__Class = TeqFw_Db_ComponentClass;
-    type TeqFw_Db_Back_Dem_Compile_A_DecodeV1 = TeqFw_Db_InternalComponent;
-    type TeqFw_Db_Back_Dem_Compile_A_DecodeV1__Class = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Back_Dem_Compile_A_DecodeV2 = TeqFw_Db_InternalComponent;
     type TeqFw_Db_Back_Dem_Compile_A_DecodeV2__Class = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Back_Dem_Compile_A_Fingerprint = TeqFw_Db_InternalComponent;
     type TeqFw_Db_Back_Dem_Compile_A_Fingerprint__Class = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Back_Dem_Compile_A_Graph = TeqFw_Db_InternalComponent;
     type TeqFw_Db_Back_Dem_Compile_A_Graph__Class = TeqFw_Db_ComponentClass;
-    type TeqFw_Db_Back_Dem_Compile_A_LegacyFacade = TeqFw_Db_InternalComponent;
-    type TeqFw_Db_Back_Dem_Compile_A_LegacyFacade__Class = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Back_Dem_Compile_A_MapRefs = TeqFw_Db_InternalComponent;
     type TeqFw_Db_Back_Dem_Compile_A_MapRefs__Class = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Back_Dem_Compile_A_Validate = TeqFw_Db_InternalComponent;
@@ -333,8 +301,6 @@ declare global {
     type TeqFw_Db_Back_Enum_Dem_Type_Attr__Class = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Back_Enum_Dem_Type_Index = TeqFw_Db_Enum;
     type TeqFw_Db_Back_Enum_Dem_Type_Index__Class = TeqFw_Db_ComponentClass;
-    type TeqFw_Db_Back_Logger = TeqFw_Db_InternalComponent;
-    type TeqFw_Db_Back_Logger__Class = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Back_Mod_Expression = TeqFw_Db_InternalComponent;
     type TeqFw_Db_Back_Mod_Expression__Class = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Back_Mod_Selection = TeqFw_Db_InternalComponent;
@@ -343,14 +309,10 @@ declare global {
     type TeqFw_Db_Back_Plugin_Init__Class = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Back_Plugin_Stop = TeqFw_Db_InternalComponent;
     type TeqFw_Db_Back_Plugin_Stop__Class = TeqFw_Db_ComponentClass;
-    type TeqFw_Db_Back_Process_CreateStruct = TeqFw_Db_InternalComponent;
-    type TeqFw_Db_Back_Process_CreateStruct__Class = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Back_RDb_Connect = TeqFw_Db_InternalComponent;
     type TeqFw_Db_Back_RDb_Connect__Class = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Back_RDb_Connect_Resolver = TeqFw_Db_InternalComponent;
     type TeqFw_Db_Back_RDb_Connect_Resolver__Class = TeqFw_Db_ComponentClass;
-    type TeqFw_Db_Back_RDb_CrudEngine = TeqFw_Db_InternalComponent;
-    type TeqFw_Db_Back_RDb_CrudEngine__Class = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Back_RDb_Dialect_Knex = TeqFw_Db_InternalComponent;
     type TeqFw_Db_Back_RDb_Dialect_Knex__Class = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Back_RDb_Dialect_Knex_Executor = TeqFw_Db_InternalComponent;
@@ -392,50 +354,14 @@ declare global {
     type TeqFw_Db_Back_Util_File__Class = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Back_Util_ListQuery = TeqFw_Db_InternalComponent;
     type TeqFw_Db_Back_Util_ListQuery__Class = TeqFw_Db_ComponentClass;
-    type TeqFw_Db_Shared_Dto_List_Event_Request = Readonly<Record<string, unknown>>;
-    type TeqFw_Db_Shared_Dto_List_Event_Request__Class = TeqFw_Db_ComponentClass;
-    namespace TeqFw_Db_Shared_Dto_List_Event_Request { type Factory = DbDtoFactory; type Dto = Readonly<Record<string, unknown>>; }
-    type TeqFw_Db_Shared_Dto_List_Event_Request__Factory = DbDtoFactory;
-    type TeqFw_Db_Shared_Dto_List_Event_Response = Readonly<Record<string, unknown>>;
-    type TeqFw_Db_Shared_Dto_List_Event_Response__Class = TeqFw_Db_ComponentClass;
-    namespace TeqFw_Db_Shared_Dto_List_Event_Response { type Factory = DbDtoFactory; type Dto = Readonly<Record<string, unknown>>; }
-    type TeqFw_Db_Shared_Dto_List_Event_Response__Factory = DbDtoFactory;
-    type TeqFw_Db_Shared_Dto_List_Selection = Readonly<Record<string, unknown>>;
-    type TeqFw_Db_Shared_Dto_List_Selection__Class = TeqFw_Db_ComponentClass;
-    namespace TeqFw_Db_Shared_Dto_List_Selection { type Factory = DbDtoFactory; type Dto = Readonly<Record<string, unknown>>; }
-    type TeqFw_Db_Shared_Dto_List_Selection__Factory = DbDtoFactory;
-    type TeqFw_Db_Shared_Dto_List_Selection_Filter_Alias = Readonly<Record<string, unknown>>;
-    type TeqFw_Db_Shared_Dto_List_Selection_Filter_Alias__Class = TeqFw_Db_ComponentClass;
-    namespace TeqFw_Db_Shared_Dto_List_Selection_Filter_Alias { type Factory = DbDtoFactory; type Dto = Readonly<Record<string, unknown>>; }
-    type TeqFw_Db_Shared_Dto_List_Selection_Filter_Alias__Factory = DbDtoFactory;
-    type TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond = Readonly<Record<string, unknown>>;
-    type TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond__Class = TeqFw_Db_ComponentClass;
-    namespace TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond { type Factory = DbDtoFactory; type Dto = Readonly<Record<string, unknown>>; }
-    type TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond__Factory = DbDtoFactory;
-    type TeqFw_Db_Shared_Dto_List_Selection_Filter_Func = Readonly<Record<string, unknown>>;
-    type TeqFw_Db_Shared_Dto_List_Selection_Filter_Func__Class = TeqFw_Db_ComponentClass;
-    namespace TeqFw_Db_Shared_Dto_List_Selection_Filter_Func { type Factory = DbDtoFactory; type Dto = Readonly<Record<string, unknown>>; }
-    type TeqFw_Db_Shared_Dto_List_Selection_Filter_Func__Factory = DbDtoFactory;
-    type TeqFw_Db_Shared_Dto_List_Selection_Filter_Value = Readonly<Record<string, unknown>>;
-    type TeqFw_Db_Shared_Dto_List_Selection_Filter_Value__Class = TeqFw_Db_ComponentClass;
-    namespace TeqFw_Db_Shared_Dto_List_Selection_Filter_Value { type Factory = DbDtoFactory; type Dto = Readonly<Record<string, unknown>>; }
-    type TeqFw_Db_Shared_Dto_List_Selection_Filter_Value__Factory = DbDtoFactory;
     type TeqFw_Db_Shared_Dto_Order = Readonly<Record<string, unknown>>;
     type TeqFw_Db_Shared_Dto_Order__Class = TeqFw_Db_ComponentClass;
     namespace TeqFw_Db_Shared_Dto_Order { type Factory = DbDtoFactory; type Dto = Readonly<Record<string, unknown>>; }
     type TeqFw_Db_Shared_Dto_Order__Factory = DbDtoFactory;
-    type TeqFw_Db_Shared_Enum_Filter_Cond = TeqFw_Db_Enum;
-    type TeqFw_Db_Shared_Enum_Filter_Cond__Class = TeqFw_Db_ComponentClass;
-    type TeqFw_Db_Shared_Enum_Filter_Func = TeqFw_Db_Enum;
-    type TeqFw_Db_Shared_Enum_Filter_Func__Class = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Shared_Util_Cast = TeqFw_Db_InternalComponent;
     type TeqFw_Db_Shared_Util_Cast__Class = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Shared_Util_Deep = TeqFw_Db_InternalComponent;
     type TeqFw_Db_Shared_Util_Deep__Class = TeqFw_Db_ComponentClass;
-    type TeqFw_Db_Shared_Util_List = TeqFw_Db_InternalComponent;
-    type TeqFw_Db_Shared_Util_List__Class = TeqFw_Db_ComponentClass;
-    type TeqFw_Db_Shared_Util_Select = TeqFw_Db_InternalComponent;
-    type TeqFw_Db_Shared_Util_Select__Class = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Back_Config = {get(name?: string | null): DbConfig; getPathToRoot(): string; getAppVersion(): string | null; init(root: string, appVersion?: string): void};
     type TeqFw_Db_Back_RDb_IConnect = DbConnection;
     type TeqFw_Db_Back_RDb_ITrans = DbTransaction;
@@ -464,8 +390,6 @@ declare global {
     type TeqFw_Db_Back_Enum_Dem_Type_Action__default = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Back_RDb_Trans__default = TeqFw_Db_ComponentClass;
     type TeqFw_Db_Shared_Enum_Direction__default = TeqFw_Db_ComponentClass;
-    type TeqFw_Db_Shared_Enum_Filter_Cond__default = TeqFw_Db_ComponentClass;
-    type TeqFw_Db_Shared_Enum_Filter_Func__default = TeqFw_Db_ComponentClass;
 }
 
 export {};

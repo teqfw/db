@@ -18,7 +18,7 @@ const NS = 'TeqFw_Db_Back_Cli_Drop';
  * Factory to create CLI command.
  * @param {object} deps
  * @param {TeqFw_Db_Back_Defaults} deps.DEF
- * @param {TeqFw_Db_Back_Logger} deps.logger
+ * @param {TeqFw_Log_Provider} deps.logger
  * @param {TeqFw_Db_Back_Cli_Dto_Command__Factory} deps.fCommand
  * @param {TeqFw_Db_Back_RDb_IConnect} deps.conn
  * @param {TeqFw_Db_Back_Config} deps.config
@@ -29,6 +29,7 @@ const NS = 'TeqFw_Db_Back_Cli_Drop';
  * @memberOf TeqFw_Db_Back_Cli_Drop
  */
 export default function Factory({DEF, logger, fCommand, conn, config, dbSchema, demLoad, app}) {
+    const log = logger.forSource('TeqFw_Db_Back_Cli_Drop');
 
     // FUNCS
     /**
@@ -43,7 +44,7 @@ export default function Factory({DEF, logger, fCommand, conn, config, dbSchema, 
         const {compilation} = await demLoad.exec({path, adapter});
         dbSchema.setCompilation({compilation});
         await dbSchema.dropAllTables({conn});
-        logger.info('All tables are dropped.');
+        log.info('All tables are dropped.');
         await app.stop();
     }
 
@@ -61,7 +62,7 @@ export default function Factory({DEF, logger, fCommand, conn, config, dbSchema, 
 export const __deps__ = Object.freeze({
     default: Object.freeze({
             DEF: 'TeqFw_Db_Back_Defaults$',
-            logger: 'TeqFw_Db_Back_Logger$',
+            logger: 'TeqFw_Log_Provider$',
             fCommand: 'TeqFw_Db_Back_Cli_Dto_Command__Factory$',
             conn: 'TeqFw_Db_Back_RDb_Connect$',
             config: 'TeqFw_Db_Back_Config$',

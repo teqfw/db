@@ -99,13 +99,7 @@ HNSW may use `afterRelations` or `afterData`.
 Rebuild declarations should select `afterData` because build cost is lower after
 bulk loading; the compiler does not infer a phase.
 
-DEM v1 ordinary indexes decode to method `legacy.defaultIndex` and phase
-`table` to preserve established lifecycle behavior.
-Each adapter resolves that compatibility-only marker to its previously tested
-Knex behavior.
-DEM v1 primary and unique indexes decode without a method and with phase
-`table`.
-DEM v2 declarations always choose a phase explicitly.
+Every index uses explicit v2 kind, keys, optional method, options, and phase fields.
 
 ## PostgreSQL pgvector Example
 

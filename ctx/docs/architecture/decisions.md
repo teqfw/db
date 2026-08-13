@@ -51,14 +51,13 @@ Decision: transformation behavior may be executed through an explicit contract, 
 
 Reason: the persistence package can execute data movement but cannot determine whether a rename, split, merge, or conversion preserves application meaning.
 
-## AD-008 Compile Versioned Inputs Into One Canonical DEM
+## AD-008 Require Explicit DEM v2 Inputs
 
-Decision: unversioned declarations remain DEM v1 compatibility input; explicit `version: 2` selects the new declaration contract.
-Both decode into one canonical model before composition, validation, dialect projection, schema planning, or queries.
+Decision: every declaration and application map explicitly declares `version: 2`; omitted and unsupported versions fail before composition.
 
-Rejected: evolving the unversioned DTO in place or maintaining independent v1 and v2 execution pipelines.
+Rejected: accepting unversioned input or retaining a v1 compatibility decoder in the evolving v2 line.
 
-Reason: one canonical source of truth preserves compatibility while preventing two validation and execution semantics from drifting.
+Reason: one explicit contract prevents dual validation and execution semantics from drifting. The retained `v1` branch remains the historical reference for consumers who need migration guidance.
 
 ## AD-009 Enforce Single Ownership And Provenance
 
@@ -90,7 +89,7 @@ Reason: provider indexes such as HNSW and IVFFlat have distinct compatibility, t
 ## AD-012 Use Typed Registered Query Expressions
 
 Decision: Selection v2 uses attribute, bound-value, and registered-call expression nodes.
-Core and dialect operator registries define type signatures, contexts, capabilities, and safe compilation; the legacy selection enum decodes to core calls.
+Core and dialect operator registries define type signatures, contexts, capabilities, and safe compilation.
 
 Rejected: raw SQL expression nodes and indefinite growth of one closed comparison enum.
 

@@ -12,7 +12,7 @@
     "types": ["node"]
   },
   "include": [
-    "test/types",
+    "test/package/types",
     "types.d.ts",
     "node_modules/@teqfw/*/types.d.ts"
   ],

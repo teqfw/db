@@ -132,12 +132,12 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
                 });
             }
             checkObject(raw, ['deprecated', 'identityProfile', 'namespace', 'ref', 'version'], '');
-            if (raw.version !== undefined && raw.version !== 2) {
+            if (raw.version !== 2) {
                 const evidence = makeSource('/version');
                 addDiagnostic({
                     code: 'DEM_DECLARATION_VERSION_UNSUPPORTED',
                     details: {input: 'map', version: raw.version},
-                    message: 'Map version must be unversioned compatibility input or integer 2.',
+                    message: 'Map version must be integer 2.',
                     path: '/version',
                     sources: evidence ? [evidence] : [],
                 });

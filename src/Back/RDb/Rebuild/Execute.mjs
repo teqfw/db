@@ -58,7 +58,7 @@ export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
             if (!knex || !knex.schema) throw new TypeError('Target transaction must expose getKnexTrx() with a schema builder.');
             return Object.freeze({
                 getDialectAdapter: () => adapter,
-                getKnex: () => knex,
+                getClient: () => knex,
                 getSchemaBuilder: () => knex.schema,
             });
         };
@@ -271,7 +271,7 @@ export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
                     }
                     evidence.strategy = await targetAdapter.prepareTransfer({cycleStrategy, transaction});
                     const sourceKnex = sourceTransaction?.getKnexTrx?.()
-                        ?? (source === target ? targetKnex : source.getKnex());
+                        ?? (source === target ? targetKnex : source.getClient());
                     for (const entity of targetEntities) {
                         activeEntity = entity;
                         const targetTable = targetByEntity[entity];

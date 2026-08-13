@@ -10,7 +10,7 @@
 - Knex remains the RDB abstraction.
 - The public namespace remains `TeqFw_Db_`.
 - JSON declarations remain usable without TypeScript, decorators, reflection, or transpilation.
-- New declarations use DEM v2; unversioned DEM v1 remains compatibility input decoded into one canonical model.
+- Declarations and application maps explicitly declare `version: 2`; omitted and unsupported versions are rejected before composition.
 - PostgreSQL, MySQL/MariaDB, and SQLite behavior covered by existing code must remain; other Knex-supported engines remain conditional on driver behavior.
 - The canonical DEM remains a target-state declaration and must not accumulate implicit migration history.
 - Rebuild migration remains separable from full incremental migration orchestration.

@@ -12,7 +12,7 @@ Components are linked by `TeqFw_Db_` dependency tokens through explicit `__deps_
 
 ## Major Areas
 
-- Declaration layer: DEM v1 compatibility input, DEM v2 logical declarations, maps including the host identity policy, selections, and physical descriptors.
+- Declaration layer: explicit DEM v2 logical declarations and maps, including the host identity policy, selections, and physical descriptors.
 - Compiler layer: trusted fragment envelopes, version decoding, single-owner composition, reference mapping, canonical validation, provenance, graph analysis, and deterministic fingerprinting.
 - Dialect layer: type/operator registries, capability derivation and preflight, physical projection, and safe database-specific execution.
 - Schema layer: phase-ordered tables, key constraints, relations, data, and late indexes.
@@ -25,7 +25,7 @@ Components are linked by `TeqFw_Db_` dependency tokens through explicit `__deps_
 
 ```text
 trusted package DEM fragments + application map + selected adapter
-  -> DEM v1/v2 decode
+  -> DEM v2 decode
   -> ownership-safe composition + provenance
   -> core.identity type + generation resolution and core.ref type derivation
   -> validated canonical DEM + dependency graph

@@ -7,7 +7,7 @@
 
 The scanner loads root and installed-package declarations into trusted source envelopes.
 Missing optional declaration or map files retain their documented empty-input behavior.
-The decoder expands parsed DEM v1 or v2 input, schema-aware composition rejects conflicting owners, reference mapping retains source/map provenance, and semantic validation aggregates independently detectable errors.
+The decoder validates explicit DEM v2 input, schema-aware composition rejects conflicting owners, reference mapping retains source/map provenance, and semantic validation aggregates independently detectable errors.
 The selected adapter projects a successful canonical model and derives capabilities.
 The result is the complete validated target state and physical plan for the selected package graph and dialect.
 
@@ -22,14 +22,14 @@ Deprecated tables participate in explicit pre-drop ordering.
 Schema lifecycle alone does not preserve rows.
 A caller selecting destructive recreation must separately select whether data is discarded, snapshotted, or transferred.
 
-## Transactional CRUD
+## Transactional Persistence
 
 When a caller supplies a transaction, the operation uses it and returns without finalizing it.
 Without one, the wrapper starts a transaction, commits on success, rolls back on failure, calls the applicable callback, and rethrows failures.
 
 ## Selection
 
-Legacy selection parsing decodes comparison functions to core typed expressions.
+Selection v2 validates typed expression nodes against the schema and selected dialect.
 Selection v2 maps only schema-approved attributes and registered expressions, validates logical types and adapter capabilities, binds values, and applies filters, derived projections, expression sorting, limit, and offset.
 Nearest-neighbour ordering is a registered dialect expression rather than a raw query escape.
 

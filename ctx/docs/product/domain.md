@@ -9,7 +9,7 @@
 
 A package owns a DEM fragment describing nested packages, entities, logical attributes, optional dialect storage, value defaults and generation, indexes, relations, capabilities, and unresolved external references.
 The application owns the map that binds external references to actual entity paths and optionally remaps attribute names.
-Unversioned declarations are DEM v1 compatibility input; new declarations use DEM v2.
+DEM declarations and application maps use the explicit v2 contract (`version: 2`).
 
 ### Model Composition
 

@@ -19,7 +19,7 @@ const OPT_FILE = 'file';
  * Factory to create CLI command.
  * @param {object} deps
  * @param {TeqFw_Db_Back_Defaults} deps.DEF
- * @param {TeqFw_Db_Back_Logger} deps.logger
+ * @param {TeqFw_Log_Provider} deps.logger
  * @param {TeqFw_Db_Back_Cli_Dto_Command__Factory} deps.fCommand
  * @param {TeqFw_Db_Back_Cli_Dto_Command_Option__Factory} deps.fOpt
  * @param {TeqFw_Db_Back_App_Shutdown} deps.app
@@ -33,6 +33,7 @@ const OPT_FILE = 'file';
  * @memberOf TeqFw_Db_Back_Cli_Export
  */
 export default function Factory({DEF, logger, fCommand, fOpt, app, conn, util, actTables, aExport, dtoExport, fs}) {
+    const log = logger.forSource('TeqFw_Db_Back_Cli_Export');
 
     // FUNCS
     /**
@@ -44,7 +45,7 @@ export default function Factory({DEF, logger, fCommand, fOpt, app, conn, util, a
     async function action(opts) {
         const filename = opts[OPT_FILE];
         if (filename) {
-            logger.info(`Exporting data from the RDB into '${filename}'...`);
+            log.info(`Exporting data from the RDB into '${filename}'...`);
             const trx = await conn.startTransaction();
             try {
                 // load DEM and get list of tables in dependency order
@@ -57,9 +58,9 @@ export default function Factory({DEF, logger, fCommand, fOpt, app, conn, util, a
                         const name = table.name;
                         const count = items.length;
                         exp.tables[name] = items;
-                        logger.info(`Total '${count}' rows are exported for table '${name}'.`);
+                        log.info(`Total '${count}' rows are exported for table '${name}'.`);
                     } catch (e) {
-                        logger.exception(e);
+                        log.error('Table export failed.', {err: e, table: table.name});
                     }
                 }
                 // serials for Postgres
@@ -69,13 +70,13 @@ export default function Factory({DEF, logger, fCommand, fOpt, app, conn, util, a
                 // write out JSON to the specified file
                 const json = JSON.stringify(exp);
                 fs.writeFileSync(filename, json);
-                logger.info(`All RDB data is exported into '${filename}'.`);
+                log.info(`All RDB data is exported into '${filename}'.`);
             } catch (error) {
                 await trx.rollback();
-                logger.error(error);
+                log.error('RDB export failed.', {err: error});
             }
         } else {
-            logger.error(`You need to provide a file name for the JSON output where you want to export data from the RDB.`);
+            log.error('A JSON output filename is required for RDB export.');
         }
         await app.stop();
     }
@@ -99,7 +100,7 @@ export default function Factory({DEF, logger, fCommand, fOpt, app, conn, util, a
 export const __deps__ = Object.freeze({
     default: Object.freeze({
             DEF: 'TeqFw_Db_Back_Defaults$',
-            logger: 'TeqFw_Db_Back_Logger$',
+            logger: 'TeqFw_Log_Provider$',
             fCommand: 'TeqFw_Db_Back_Cli_Dto_Command__Factory$',
             fOpt: 'TeqFw_Db_Back_Cli_Dto_Command_Option__Factory$',
             app: 'TeqFw_Db_Back_App_Shutdown$',

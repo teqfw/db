@@ -12,11 +12,12 @@ export default class TeqFw_Db_Back_RDb_Schema {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_Dem_Compile} deps._compile
-     * @param {TeqFw_Db_Back_Logger} deps._logger
+     * @param {TeqFw_Log_Provider} deps.logger
      * @param {TeqFw_Db_Back_RDb_Schema_A_Builder} deps._builder
      * @param {TeqFw_Db_Back_RDb_Schema_A_Plan} deps._plan
      */
-    constructor({_compile, _logger, _builder, _plan}) {
+    constructor({_compile, logger, _builder, _plan}) {
+        const log = logger.forSource('TeqFw_Db_Back_RDb_Schema');
         /** @type {object} */
         let _compilation;
 
@@ -50,7 +51,7 @@ export default class TeqFw_Db_Back_RDb_Schema {
             const compilation = getCompilation();
             const adapter = await getAdapter(conn, compilation);
             const plan = _plan.exec({compilation, operation: 'create'});
-            _logger.info(`Creating ${plan.phases.tables.length} compiled DEM tables.`);
+            log.info(`Creating ${plan.phases.tables.length} compiled DEM tables.`);
             return _builder.exec({adapter, connection: conn, plan});
         };
 
@@ -63,7 +64,7 @@ export default class TeqFw_Db_Back_RDb_Schema {
             const compilation = getCompilation();
             const adapter = await getAdapter(conn, compilation);
             const plan = _plan.exec({compilation, operation: 'drop'});
-            _logger.info(`Dropping ${plan.phases.tables.length} compiled DEM tables.`);
+            log.info(`Dropping ${plan.phases.tables.length} compiled DEM tables.`);
             return _builder.exec({adapter, connection: conn, plan});
         };
 
@@ -96,7 +97,7 @@ export default class TeqFw_Db_Back_RDb_Schema {
 export const __deps__ = Object.freeze({
     default: Object.freeze({
         _compile: 'TeqFw_Db_Back_Dem_Compile$',
-        _logger: 'TeqFw_Db_Back_Logger$',
+        logger: 'TeqFw_Log_Provider$',
         _builder: 'TeqFw_Db_Back_RDb_Schema_A_Builder$',
         _plan: 'TeqFw_Db_Back_RDb_Schema_A_Plan$',
     }),

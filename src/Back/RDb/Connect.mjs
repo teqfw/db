@@ -18,12 +18,13 @@ export default class TeqFw_Db_Back_RDb_Connect {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_RDb_Dialect_Registry} deps._dialects
-     * @param {TeqFw_Db_Back_Logger} deps._logger
+     * @param {TeqFw_Log_Provider} deps.logger
      * @param {TeqFw_Db_Back_RDb_Connect_Resolver} deps._resolver
      * @param {typeof TeqFw_Db_Back_RDb_Trans} deps.Trans
      * @param {any} deps.knexFactory
      */
-    constructor({_dialects, _logger, _resolver, Trans, knexFactory}) {
+    constructor({_dialects, logger, _resolver, Trans, knexFactory}) {
+        const log = logger.forSource('TeqFw_Db_Back_RDb_Connect');
         // VARS
         /** @type {Knex} */
         let _knex;
@@ -54,9 +55,9 @@ export default class TeqFw_Db_Back_RDb_Connect {
             try {
                 _knex = await knexFactory(clone);
                 _adapter = adapter;
-                _logger.info(`Setup connection to DB ${_info}.`);
+                log.info(`Setup connection to DB ${_info}.`);
             } catch (e) {
-                _logger.error(`Cannot setup connection to DB ${_info}. Error: ${e}`);
+                log.error(`Cannot setup connection to DB ${_info}.`, {err: e});
                 throw e;
             }
         };
@@ -86,11 +87,10 @@ export default class TeqFw_Db_Back_RDb_Connect {
             _resolver.setConfig(cfg);
         };
         /**
-         * Accessor for 'knex' object.
+         * Accessor for the underlying database client.
          * @returns {*}
-         * @deprecated this is hard binding to the lib, we should use more lib-independent naming
          */
-        this.getKnex = function () {
+        this.getClient = function () {
             return _knex;
         };
 
@@ -127,11 +127,11 @@ export default class TeqFw_Db_Back_RDb_Connect {
                             // close all connections
                             _knex.destroy()
                                 .then(() => {
-                                    _logger.info(`Connections to ${_info} are closed.`);
+                                    log.info(`Connections to ${_info} are closed.`);
                                     resolve();
                                 })
                                 .catch((e) => {
-                                    _logger.exception(e);
+                                    log.error('Cannot close database connections.', {err: e});
                                     resolve();
                                 });
                         }
@@ -147,7 +147,7 @@ export default class TeqFw_Db_Back_RDb_Connect {
 export const __deps__ = Object.freeze({
     default: Object.freeze({
             _dialects: 'TeqFw_Db_Back_RDb_Dialect_Registry$',
-            _logger: 'TeqFw_Db_Back_Logger$',
+            logger: 'TeqFw_Log_Provider$',
             _resolver: 'TeqFw_Db_Back_RDb_Connect_Resolver$$',
             Trans: 'TeqFw_Db_Back_RDb_Trans__default',
             knexFactory: 'npm:knex__default',

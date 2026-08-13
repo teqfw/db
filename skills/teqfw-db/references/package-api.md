@@ -15,7 +15,6 @@ The namespace metadata maps `TeqFw_Db_` to `./src` with `.mjs`. This addressing 
 | `TeqFw_Db_Back_Config$` | Return immutable default or named Knex configuration with `get(name?)` | Documented consumer configuration token |
 | `TeqFw_Db_Back_RDb_Connect$` | Default singleton connection | Documented default connection token |
 | `TeqFw_Db_Back_RDb_Connect$$` | Create an independent transient connection | Documented named-connection composition token |
-| `TeqFw_Db_Back_App_Crud$` | Schema-aware CRUD and typed selection facade | Current logical namespace component; verify before new public integration |
 | `TeqFw_Db_Back_Dem_Compile$` | Compile trusted DEM envelopes with one adapter | Current implementation token; not automatically a stable public API |
 | `TeqFw_Db_Back_RDb_Rebuild$` | Execute bounded evidence-producing rebuild | Current implementation token; not yet a documented stable public token |
 
@@ -46,20 +45,6 @@ Compiler:
 const compilation = await compile.exec({adapter, fragments, mapEnvelope});
 compile.assertResult({value: compilation});
 ```
-
-CRUD methods accept one object and return promises:
-
-```text
-createOne({schema, trx?, dto})
-readOne({schema, trx?, key, select?})
-readMany({schema, trx?, selection?, conditions?, sorting?, pagination?})
-updateOne({schema, trx?, key, updates})
-updateMany({schema, trx?, conditions, updates})
-deleteOne({schema, trx?, key})
-deleteMany({schema, trx?, conditions})
-```
-
-`createOne()` returns `{primaryKey}`. Read methods return `{record}` or `{records}`; update and delete methods return `{updatedCount}` or `{deletedCount}`.
 
 The current rebuild callable shape is:
 

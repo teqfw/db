@@ -24,45 +24,9 @@ Handle `DemCompilationError` through its structured `diagnostics` and `warnings`
 
 The loader can scan application and installed-package declarations before compilation. Do not present test-only inputs such as `testDems` or `testMapRoot` as production integration patterns.
 
-## CRUD And Selection
+## Selection
 
-Provide an entity schema implementing DTO creation, attribute mapping, logical types, entity name, and primary-key metadata. Use the CRUD service for `createOne`, `readOne`, `readMany`, `updateOne`, `updateMany`, `deleteOne`, and `deleteMany`.
-
-Legacy condition objects support equality only. Use Selection v2 for registered typed expressions, derived projections, expression ordering, limit, offset, and matching count behavior. The following named-connection flow keeps two writes and a bound-value query in one caller-owned transaction:
-
-```js
-const trx = await reporting.startTransaction();
-try {
-    const {primaryKey} = await crud.createOne({schema: reportSchema, trx, dto: report});
-    await crud.createOne({
-        schema: itemSchema,
-        trx,
-        dto: {...item, reportId: primaryKey.id},
-    });
-    const {records} = await crud.readMany({
-        schema: reportSchema,
-        trx,
-        selection: {
-            version: 2,
-            select: [{as: 'display_name', expression: {kind: 'attr', name: 'name'}}],
-            where: {
-                kind: 'call',
-                operator: 'core.eq',
-                args: [
-                    {kind: 'attr', name: 'name'},
-                    {kind: 'value', value: userProvidedName},
-                ],
-            },
-        },
-    });
-    await trx.commit();
-} catch (error) {
-    await trx.rollback();
-    throw error;
-}
-```
-
-Keep user input in value nodes; never concatenate it into SQL. Pass a transaction created by the named connection to every standard CRUD call targeting it, including reads. Otherwise the package-default transaction wrapper uses the default connection. Nested CRUD calls return without finalizing the supplied transaction; the owning boundary commits or rolls it back.
+Selection v2 accepts registered typed expressions, derived projections, expression ordering, limit, offset, and matching count behavior. Keep user input in value nodes; never concatenate it into SQL. The owning transaction boundary commits or rolls back its own work.
 
 ## Schema Lifecycle
 

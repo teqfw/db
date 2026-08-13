@@ -7,7 +7,6 @@
 
 The common query contract must express operations supported by logical and dialect types without expanding one closed comparison enum.
 The target contract uses a typed expression tree plus registered namespaced operators.
-Legacy `EQ`, `GT`, `LT`, and related selection DTOs remain supported through a compatibility decoder.
 
 ## Expression Nodes
 
@@ -136,7 +135,7 @@ The adapter emits allow-listed `SET LOCAL` operations only inside the transactio
 
 ## Validation And Execution Flow
 
-1. Decode legacy selection or accept Selection v2.
+1. Validate Selection v2.
 2. Resolve every attribute through the schema/query mapping contract.
 3. Infer or validate every value and expression logical type.
 4. Resolve operators through core and selected-adapter registries.
@@ -147,15 +146,3 @@ The adapter emits allow-listed `SET LOCAL` operations only inside the transactio
 
 Failure before step 8 has no query side effect.
 An unsupported operator never falls back to a plain comparison or raw Knex escape hatch.
-
-## Legacy Selection Compatibility
-
-The existing selection function enum decodes as follows:
-
-- `EQ`, `NOT_EQ`, `GT`, `GTE`, `LT`, and `LTE` map to corresponding `core.` comparison calls;
-- `NULL` and `NOT_NULL` map to core null-test calls;
-- nested `AND`, `OR`, and `NOT` map to core boolean calls;
-- aliases remain subject to the schema query-builder mapping.
-
-The decoder must fix invalid fall-through behavior rather than reproduce malformed SQL.
-Legacy callers cannot express provider operators until they adopt Selection v2.

@@ -21,7 +21,7 @@ const OPT_FILE = 'file';
  * Factory to create CLI command.
  * @param {object} deps
  * @param {TeqFw_Db_Back_Defaults} deps.DEF
- * @param {TeqFw_Db_Back_Logger} deps.logger
+ * @param {TeqFw_Log_Provider} deps.logger
  * @param {TeqFw_Db_Back_Cli_Dto_Command__Factory} deps.fCommand
  * @param {TeqFw_Db_Back_Cli_Dto_Command_Option__Factory} deps.fOpt
  * @param {TeqFw_Db_Back_App_Shutdown} deps.app
@@ -34,6 +34,7 @@ const OPT_FILE = 'file';
  * @memberOf TeqFw_Db_Back_Cli_Import
  */
 export default function Factory({DEF, logger, fCommand, fOpt, app, conn, util, utilFile, transform, aDemTables}) {
+    const log = logger.forSource('TeqFw_Db_Back_Cli_Import');
 
     // FUNCS
     /**
@@ -45,7 +46,7 @@ export default function Factory({DEF, logger, fCommand, fOpt, app, conn, util, u
     async function action(opts) {
         const filename = opts[OPT_FILE];
         if (filename) {
-            logger.info(`Importing data from the '${filename}'...`);
+            log.info(`Importing data from the '${filename}'...`);
             const trx = await conn.startTransaction();
             try {
                 // prepare RDBMS engine
@@ -62,7 +63,7 @@ export default function Factory({DEF, logger, fCommand, fOpt, app, conn, util, u
                 for (const name of demTables) {
                     // prepare the imported data to be inserted into rdb
                     const tableRows = transform.prepareTables(trx, dump.tables, name);
-                    logger.info(`Inserting '${tableRows.length}' rows for '${name}' table...`);
+                    log.info(`Inserting '${tableRows.length}' rows for '${name}' table...`);
                     await util.itemsInsert(trx, name, tableRows);
                 }
                 // update serials
@@ -72,13 +73,13 @@ export default function Factory({DEF, logger, fCommand, fOpt, app, conn, util, u
                     await util.pgSerialsSet(schema, norm);
                 }
                 await trx.commit();
-                logger.info(`All RDB data from '${filename}' is imported.`);
+                log.info(`All RDB data from '${filename}' is imported.`);
             } catch (error) {
                 await trx.rollback();
-                logger.error(error);
+                log.error('RDB import failed.', {err: error});
             }
         } else {
-            logger.error(`You need to provide a file name with the dump to be imported into RDB.`);
+            log.error('A dump filename is required for RDB import.');
         }
         await app.stop();
     }
@@ -102,7 +103,7 @@ export default function Factory({DEF, logger, fCommand, fOpt, app, conn, util, u
 export const __deps__ = Object.freeze({
     default: Object.freeze({
             DEF: 'TeqFw_Db_Back_Defaults$',
-            logger: 'TeqFw_Db_Back_Logger$',
+            logger: 'TeqFw_Log_Provider$',
             fCommand: 'TeqFw_Db_Back_Cli_Dto_Command__Factory$',
             fOpt: 'TeqFw_Db_Back_Cli_Dto_Command_Option__Factory$',
             app: 'TeqFw_Db_Back_App_Shutdown$',

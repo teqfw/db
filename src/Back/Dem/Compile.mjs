@@ -8,7 +8,6 @@
 export default class TeqFw_Db_Back_Dem_Compile {
     /**
      * @param {object} deps
-     * @param {TeqFw_Db_Back_Dem_Compile_A_DecodeV1} deps.decodeV1
      * @param {TeqFw_Db_Back_Dem_Compile_A_DecodeV2} deps.decodeV2
      * @param {TeqFw_Db_Back_Dem_Compile_A_Compose} deps.compose
      * @param {TeqFw_Db_Back_Dem_Compile_A_MapRefs} deps.mapRefs
@@ -19,7 +18,7 @@ export default class TeqFw_Db_Back_Dem_Compile {
      * @param {TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic.Factory} deps.diagnostic
      * @param {TeqFw_Db_Back_Dto_Dem_Compile_Result.Factory} deps.resultFactory
      */
-    constructor({decodeV1, decodeV2, compose, mapRefs, validate, validateNames, graph, fingerprint, diagnostic, resultFactory}) {
+    constructor({decodeV2, compose, mapRefs, validate, validateNames, graph, fingerprint, diagnostic, resultFactory}) {
         const successful = new WeakSet();
 
         /**
@@ -84,10 +83,7 @@ export default class TeqFw_Db_Back_Dem_Compile {
                 return fragment || String(a.filename ?? '').localeCompare(String(b.filename ?? ''));
             });
             const nameDiagnostics = validateNames.exec({fragments: sorted, mapEnvelope});
-            const decoded = sorted.map((envelope) => {
-                return envelope.declaration?.version === undefined
-                    ? decodeV1.exec({envelope}) : decodeV2.exec({envelope});
-            });
+            const decoded = sorted.map((envelope) => decodeV2.exec({envelope}));
             const composed = compose.exec({decoded});
             const mapped = mapRefs.exec({composed, mapEnvelope});
             const validated = validate.exec({mapped});
@@ -201,12 +197,7 @@ export default class TeqFw_Db_Back_Dem_Compile {
                             const attr = info.entity.attr[attrName];
                             const path = `${info.pointer}/attr/${attrName.replaceAll('~', '~0').replaceAll('/', '~1')}`;
                             const storage = attr.storage?.[description.id];
-                            const resolved = await adapter.resolveType({
-                                compatibility: attr.compatibility,
-                                location: path,
-                                logicalType: attr.type,
-                                storage,
-                            });
+                            const resolved = await adapter.resolveType({location: path, logicalType: attr.type, storage});
                             ingestDiagnostics(resolved?.diagnostics, path, 'dialect');
                             for (const item of resolved?.requirements ?? []) addRequirement(item, path);
                             if (!resolved?.physicalType) {
@@ -219,7 +210,6 @@ export default class TeqFw_Db_Back_Dem_Compile {
                             }
                             const column = {
                                 comment: attr.comment,
-                                compatibility: attr.compatibility,
                                 logicalType: attr.type,
                                 name: attrName,
                                 nullable: attr.nullable,
@@ -364,7 +354,6 @@ export default class TeqFw_Db_Back_Dem_Compile {
 
 export const __deps__ = Object.freeze({
     default: Object.freeze({
-        decodeV1: 'TeqFw_Db_Back_Dem_Compile_A_DecodeV1$',
         decodeV2: 'TeqFw_Db_Back_Dem_Compile_A_DecodeV2$',
         compose: 'TeqFw_Db_Back_Dem_Compile_A_Compose$',
         mapRefs: 'TeqFw_Db_Back_Dem_Compile_A_MapRefs$',

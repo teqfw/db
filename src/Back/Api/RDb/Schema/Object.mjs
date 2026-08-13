@@ -34,7 +34,7 @@ export default class TeqFw_Db_Back_Api_RDb_Schema_Object {
     getAttributes() {}
     /**
      * Return registered logical type descriptors keyed by persistent attribute name or attribute codifier key.
-     * Selection v2 requires this metadata; legacy selections may use the compatibility decoder without it.
+     * Selection v2 requires this metadata.
      * @returns {Object<string, object>}
      */
     getLogicalTypes() {}

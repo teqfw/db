@@ -7,7 +7,7 @@
  */
 
 /**
- * Interface for RDBMS connection based on 'knex' library.
+ * Interface for RDBMS connection.
  * @interface
  * TODO: move to _Api_ namespace
  */
@@ -19,9 +19,9 @@ export default class TeqFw_Db_Back_RDb_IConnect {
     async disconnect() {}
 
     /**
-     * This is hard binding to the lib, we should use more lib-independent naming (but I cannot do it yet)
+     * Access the underlying database client for dialect-specific execution.
      */
-    getKnex() {}
+    getClient() {}
 
     /**
      * Initialize the component.

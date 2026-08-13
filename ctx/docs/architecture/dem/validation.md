@@ -20,7 +20,7 @@ Later stages may be skipped only when an earlier failure makes their evidence un
 - Declaration version is supported.
 - Required maps and arrays have the documented shape.
 - Names, paths, registry identifiers, and enums are valid.
-- DEM v1 syntax expands without changing its legacy meaning.
+- Every declaration and map has explicit `version: 2` before semantic validation.
 
 ### 2. Composition
 
@@ -129,7 +129,7 @@ Messages are not used for program branching.
 
 | Code | Condition |
 | --- | --- |
-| `DEM_DECLARATION_VERSION_UNSUPPORTED` | Version is neither unversioned v1 nor integer `2` |
+| `DEM_DECLARATION_VERSION_UNSUPPORTED` | Version is omitted or is not integer `2` |
 | `DEM_DECLARATION_SHAPE_INVALID` | A declaration node has the wrong structural shape |
 | `DEM_COMPOSITION_OWNER_CONFLICT` | More than one fragment owns one semantic identity |
 | `DEM_PROVENANCE_MISSING` | A canonical semantic node lacks source evidence |
@@ -151,8 +151,6 @@ Messages are not used for program branching.
 | `DEM_EXPRESSION_INVALID` | Expression operator, type, arity, or context is invalid |
 | `DEM_DEPENDENCY_CYCLE_UNPLANNED` | Selected operation cannot execute a detected cycle |
 | `DEM_PHYSICAL_NAME_COLLISION` | Distinct logical objects map to the same physical name |
-| `DEM_V1_AMBIGUOUS_NUMBER` | Legacy `number` omits precision and scale and retains integer behavior |
-| `DEM_V1_PARTIAL_DECIMAL` | Legacy `number` supplies only precision or only scale and retains legacy decimal builder behavior |
 
 Additional codes may refine a condition without changing these parent meanings.
 
@@ -163,6 +161,3 @@ It does not expose a usable `model` or `physical` property.
 Preflight and operation-plan errors use the same diagnostic shape and preserve the compilation fingerprint.
 
 Warnings never authorize silent fallback.
-The legacy warnings accepted with execution are `DEM_V1_AMBIGUOUS_NUMBER` and
-`DEM_V1_PARTIAL_DECIMAL`, because the v1 decoder preserves the documented
-legacy behavior in both cases.

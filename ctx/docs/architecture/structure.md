@@ -5,7 +5,7 @@
 
 ## Declaration Block
 
-DEM v1 DTOs represent compatibility input.
+Explicit DEM v2 DTOs are the only declaration input.
 DEM v2 declaration values represent packages, entities, logical attributes, dialect storage, defaults, generation, full indexes, relations, capabilities, and references.
 Map DTOs represent table namespace and external-reference remapping.
 Compilation-result DTOs represent canonical model, provenance, diagnostics, dependency graph, requirements, fingerprint, and physical plan.
@@ -15,7 +15,7 @@ Selection v2 DTOs represent typed expressions, projections, filters, ordering, p
 ## Composition Block
 
 The scanner locates declaration files and creates trusted immutable source envelopes.
-The decoder translates DEM v1 or v2 into canonical input values.
+The decoder validates and canonicalizes DEM v2 input values.
 Schema-aware composition enforces one owner per semantic node and resolves mapped references while retaining provenance.
 Logical validation checks declarations and builds a graph with strongly connected components.
 
@@ -33,14 +33,13 @@ Builders execute only resolved descriptors through adapter allow-lists and param
 
 The expression registry defines core and provider operators with arity, input/output types, allowed contexts, capabilities, and compiler identity.
 The query compiler resolves schema attributes, validates values and dimensions, and compiles identifiers and values through Knex.
-The legacy selection decoder maps the closed comparison contract into core expression nodes.
+The selection component accepts typed Selection v2 expression nodes.
 
 ## Access Block
 
 The connection owns the Knex client and creates transactions.
 Transactions expose engine predicates, query/schema builders, table-name resolution, and commit/rollback.
-The legacy CRUD engine provides positional APIs.
-The application CRUD service and repository contract provide parameter-object APIs.
+Persistence workflows use compiled schemas, typed selections, and rebuild components; the package does not retain a legacy CRUD facade.
 The selection model populates safe Knex clauses through the typed expression and query-builder mapping contracts.
 
 ## Rebuild Block

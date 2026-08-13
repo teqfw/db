@@ -6,15 +6,8 @@
 
 ## Version Rule
 
-An unversioned `etc/teqfw.schema.json` is DEM v1.
-An explicit integer `version: 2` selects DEM v2.
-No other version is accepted.
-The compiler decodes both inputs into the same canonical model before composition.
-
-New declarations must use DEM v2.
-The v1 decoder is a compatibility boundary, not a second canonical model.
-
-The root map follows the same rule: an unversioned map uses legacy syntax and `version: 2` selects the v2 contract below.
+Every `etc/teqfw.schema.json` declaration and root map explicitly contains integer `version: 2`.
+Omitted and unsupported versions are rejected before composition.
 
 All declaration and map objects are closed.
 An unknown field is `DEM_DECLARATION_SHAPE_INVALID`.
@@ -346,32 +339,6 @@ Mapping changes reference identity only; it does not transfer ownership of the t
 
 `deprecated` supplies explicit drop dependencies for legacy structure cleanup.
 It does not authorize deletion, identify a rename, or add migration history to the DEM.
-
-## DEM v1 Compatibility Decoder
-
-The v1 decoder must preserve the current 2.x declaration meaning and emit canonical v2 nodes before composition.
-
-| DEM v1 syntax | Canonical meaning |
-| --- | --- |
-| `id` | `core.integer` with 32-bit signed logical signature plus `generation.kind: "core.identity"`; the adapter preserves legacy increments storage |
-| `ref` | The same 32-bit signed logical signature; a legacy physical hint preserves unsigned storage where the current adapter applies it |
-| `integer` | `core.integer`; `isTiny` and `unsigned` become explicit type parameters |
-| `number` with both precision and scale | `core.decimal` with the supplied values |
-| `number` with only precision or scale | Legacy decimal physical behavior, plus warning `DEM_V1_PARTIAL_DECIMAL` |
-| `number` with neither precision nor scale | Legacy integer physical behavior, plus warning `DEM_V1_AMBIGUOUS_NUMBER` |
-| `datetime` with `dateOnly` | `core.date` |
-| `datetime` without `dateOnly` | `core.datetime` |
-| `json` | Legacy adapter storage preserving the current JSONB-oriented physical behavior |
-| `string` with `length` | `core.string` with the declared length |
-| scalar `default: "current"` | `core.currentDate` or `core.currentTimestamp` according to logical type |
-| legacy ordinary `index` plus `attrs` | v2 `kind: "index"`, attribute keys, method `legacy.defaultIndex`, and phase `table` |
-| legacy `primary` or `unique` plus `attrs` | corresponding v2 `kind`, attribute keys, no method, and phase `table` |
-
-The compatibility decoder may warn about ambiguous legacy semantics but must not reinterpret them as new v2 defaults.
-The compatibility-only `legacy.defaultIndex` identity is rejected in DEM v2
-input and resolved by each adapter to its regression-tested previous behavior.
-The shared logical signature keeps legacy `id` and `ref` relation-compatible; the selected adapter must then prove that their preserved physical forms are compatible on that dialect.
-New v2 declarations must use `core.integer` or `core.decimal` explicitly and must select PostgreSQL `json` or `jsonb` storage explicitly when application behavior depends on that distinction.
 
 ## Migration Meaning
 

@@ -2,7 +2,7 @@
 
 /**
  * @namespace TeqFw_Db_Back_Mod_Selection
- * @description Decodes legacy selections and applies Selection v2 through one typed expression compiler.
+ * @description Applies Selection v2 through one typed expression compiler.
  */
 
 export default class TeqFw_Db_Back_Mod_Selection {
@@ -10,102 +10,35 @@ export default class TeqFw_Db_Back_Mod_Selection {
      * @param {object} deps
      * @param {TeqFw_Db_Back_Mod_Expression} deps.expression
      * @param {TeqFw_Db_Shared_Dto_Query_Selection.Factory} deps.selectionFactory
-     * @param {TeqFw_Db_Shared_Dto_List_Selection} deps.legacySelection
-     * @param {TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond} deps.legacyCondition
-     * @param {typeof TeqFw_Db_Shared_Enum_Filter_Cond} deps.COND
-     * @param {typeof TeqFw_Db_Shared_Enum_Filter_Func} deps.FUNC
      */
-    constructor({expression, selectionFactory, legacySelection, legacyCondition, COND, FUNC}) {
-        const functions = Object.freeze({
-            [FUNC.EQ]: 'core.eq',
-            [FUNC.GT]: 'core.gt',
-            [FUNC.GTE]: 'core.gte',
-            [FUNC.LT]: 'core.lt',
-            [FUNC.LTE]: 'core.lte',
-            [FUNC.NOT_EQ]: 'core.notEq',
-            [FUNC.NULL]: 'core.isNull',
-            [FUNC.NOT_NULL]: 'core.notNull',
-        });
-        const conditions = Object.freeze({
-            [COND.AND]: 'core.and',
-            [COND.NOT]: 'core.not',
-            [COND.OR]: 'core.or',
-        });
-
-        /**
-         * @param {any} node
-         * @returns {object}
-         */
-        const decodeLegacyExpression = function (node) {
-            if (!node || typeof node !== 'object') throw new TypeError('Legacy selection expression must be an object.');
-            if (typeof node.with === 'string') {
-                const operator = conditions[node.with];
-                if (!operator || !Array.isArray(node.items)) throw new TypeError(`Unsupported legacy condition '${node.with}'.`);
-                return {kind: 'call', operator, args: node.items.map(decodeLegacyExpression)};
-            }
-            const operator = functions[node.name];
-            if (!operator || !Array.isArray(node.params)) throw new TypeError(`Unsupported legacy filter function '${node.name}'.`);
-            const args = node.params.map((param) => {
-                if (param && Object.prototype.hasOwnProperty.call(param, 'alias')) {
-                    return {kind: 'attr', name: param.alias};
-                }
-                if (param && Object.prototype.hasOwnProperty.call(param, 'value')) {
-                    return {kind: 'value', value: param.value};
-                }
-                return decodeLegacyExpression(param);
-            });
-            return {kind: 'call', operator, args};
-        };
-
-        /**
-         * @param {any} selection
-         * @returns {object}
-         */
-        const decode = function (selection) {
-            if (selection?.version === 2) return selectionFactory.create(selection);
-            const value = {
-                version: 2,
-                execution: {},
-                limit: Number.isInteger(selection?.rowsLimit) && selection.rowsLimit > 0 ? selection.rowsLimit : 0,
-                offset: Number.isInteger(selection?.rowsOffset) && selection.rowsOffset > 0 ? selection.rowsOffset : 0,
-                orderBy: Array.isArray(selection?.orderBy) ? selection.orderBy.map((item) => ({
-                    direction: item.dir,
-                    expression: {kind: 'attr', name: item.alias},
-                })) : [],
-                select: [],
-            };
-            if (selection?.filter) value.where = decodeLegacyExpression(selection.filter);
-            return selectionFactory.create(value);
-        };
+    constructor({expression, selectionFactory}) {
 
         /**
          * @param {any} meta
-         * @param {boolean} allowUntyped
          * @returns {object}
          */
-        const adaptEntitySchema = function (meta, allowUntyped) {
+        const adaptEntitySchema = function (meta) {
             if (meta?.attr || meta?.columns) {
                 const values = meta.attr ? Object.values(meta.attr) : meta.columns;
-                if (!allowUntyped && values.some((item) => !(item?.type ?? item?.logicalType))) {
+                if (values.some((item) => !(item?.type ?? item?.logicalType))) {
                     throw new TypeError('Selection v2 requires registered logical types for every schema attribute.');
                 }
-                return {...meta, compatibilityUntyped: allowUntyped === true};
+                return meta;
             }
             const attributes = typeof meta?.getAttributes === 'function' ? meta.getAttributes() : {};
             const logicalTypes = typeof meta?.getLogicalTypes === 'function' ? meta.getLogicalTypes() : null;
-            if (!allowUntyped && (!logicalTypes || typeof logicalTypes !== 'object' || Array.isArray(logicalTypes))) {
+            if (!logicalTypes || typeof logicalTypes !== 'object' || Array.isArray(logicalTypes)) {
                 throw new TypeError('Selection v2 requires schema.getLogicalTypes().');
             }
             const attr = {};
             for (const [key, name] of Object.entries(attributes ?? {})) {
                 const type = logicalTypes?.[name] ?? logicalTypes?.[key]
-                    ?? (allowUntyped ? {id: 'core.any', params: {}} : undefined);
+                    ?? undefined;
                 if (!type) throw new TypeError("Selection v2 has no logical type for attribute '" + name + "'.");
                 attr[name] = {name, type};
             }
             return {
                 attr,
-                compatibilityUntyped: allowUntyped === true,
                 mapColumn: (name) => typeof meta?.mapColumn === 'function' ? meta.mapColumn(name) : (attr[name] ? name : undefined),
             };
         };
@@ -119,11 +52,10 @@ export default class TeqFw_Db_Back_Mod_Selection {
          * @returns {Promise<object>}
          */
         const populate = async function (trx, meta, query, selection, count) {
-            const legacy = selection?.version !== 2;
-            const decoded = decode(selection);
+            const decoded = selectionFactory.create(selection);
             const adapter = trx.getDialectAdapter();
             const knex = trx.getKnexTrx();
-            const entitySchema = adaptEntitySchema(meta, legacy);
+            const entitySchema = adaptEntitySchema(meta);
             const requirements = new Set();
             let where;
             if (decoded.where) {
@@ -204,19 +136,6 @@ export default class TeqFw_Db_Back_Mod_Selection {
             return populate(trx, meta, query, selection, true);
         };
 
-        /**
-         * @param {any} selection
-         * @returns {any}
-         */
-        this.wrapSelectionAnd = function (selection) {
-            if (selection?.version === 2) return structuredClone(selection);
-            const result = legacySelection.createDto(selection);
-            const wrapper = legacyCondition.createDto();
-            wrapper.with = COND.AND;
-            wrapper.items = [selection.filter];
-            result.filter = wrapper;
-            return result;
-        };
     }
 }
 
@@ -224,9 +143,5 @@ export const __deps__ = Object.freeze({
     default: Object.freeze({
         expression: 'TeqFw_Db_Back_Mod_Expression$',
         selectionFactory: 'TeqFw_Db_Shared_Dto_Query_Selection__Factory$',
-        legacySelection: 'TeqFw_Db_Shared_Dto_List_Selection$',
-        legacyCondition: 'TeqFw_Db_Shared_Dto_List_Selection_Filter_Cond$',
-        COND: 'TeqFw_Db_Shared_Enum_Filter_Cond__default',
-        FUNC: 'TeqFw_Db_Shared_Enum_Filter_Func__default',
     }),
 });

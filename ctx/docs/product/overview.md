@@ -47,7 +47,7 @@ For a rebuild migration, an authorized caller captures or retains source data, c
 
 - PostgreSQL, MySQL/MariaDB, SQLite, MS SQL, and Oracle connectivity supported through Knex and installed drivers.
 - Versioned JSON declarations for entities, logical attributes, physical storage bindings, value defaults and generation, full indexes, relations, capabilities, package nesting, references, table namespaces, and deprecated entities.
-- Compatibility decoding of unversioned DEM v1 declarations into the canonical model.
+- Explicit DEM v2 declaration and application-map compilation into the canonical model.
 - Dialect adapters and capability preflight for database-specific types, indexes, and query operators.
 - PostgreSQL vector storage and nearest-neighbour behavior when the PostgreSQL adapter and pgvector runtime capability are selected.
 - Explicit transaction participation and automatic transaction wrapping.
@@ -67,8 +67,7 @@ For a rebuild migration, an authorized caller captures or retains source data, c
 
 ## Current Version Boundary
 
-The 2.x line preserves the functional surface of the legacy package while replacing constructor-key DI declarations with explicit `__deps__` contracts compatible with `@teqfw/di` 2.x.
-The legacy implementation remains available on branch `v1`.
+The evolving 2.x line uses explicit `__deps__` contracts compatible with `@teqfw/di` 2.x and may make incompatible minor changes. The preserved `v1` branch is the historical reference for consumers preparing their own migration guidance; this package does not publish a generic migration guide.
 
 ## Product Invariants
 

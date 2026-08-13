@@ -52,7 +52,7 @@ It does not orchestrate application releases or switch production traffic.
 
 ## Current Delivery Boundary
 
-The current worktree implements DEM v2 compilation, provenance, enforced semantic validation, dialect registries and capabilities, full index phases, typed expressions, PostgreSQL pgvector behavior, unified rebuild, and structured transfer evidence while decoding legacy v1 inputs through the same execution truth.
+The current worktree implements explicit DEM v2 compilation, provenance, enforced semantic validation, dialect registries and capabilities, full index phases, typed expressions, PostgreSQL pgvector behavior, unified rebuild, and structured transfer evidence.
 These implementation tokens are not automatically a new documented public API.
 The external conformance gate now passes against PostgreSQL with pgvector `0.8.6` and MariaDB 10.11 in the provisioned test environment.
 

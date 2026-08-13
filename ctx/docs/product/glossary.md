@@ -7,7 +7,7 @@
 
 - DEM — Domain Entities Model; a JSON-declarable logical target persistence model.
 - DEM fragment — the part of the DEM owned by one package.
-- DEM v1 — the unversioned legacy declaration accepted through compatibility decoding.
+- DEM v2 — the current explicit declaration and application-map contract; every input declares `version: 2`.
 - DEM v2 — the explicit versioned declaration separating logical types, storage, generation, capabilities, indexes, and expressions.
 - canonical DEM — the application-wide model produced after decoding, ownership-safe composition, explicit reference mapping, canonicalization, and logical validation.
 - compilation result — the canonical DEM plus provenance, dependency graph, capabilities, physical plan, deterministic fingerprint, and warnings.

@@ -1,7 +1,7 @@
 {
   "name": "@teqfw/db",
   "version": "2.1.1",
-  "description": "Relational database schema, transaction, and CRUD package for TeqFW applications using DI 2.x.",
+  "description": "Relational database schema, transaction, typed-query, and rebuild package for TeqFW applications using DI 2.x.",
   "type": "module",
   "files": [
     ".env.example",
@@ -16,18 +16,18 @@
     "RELEASE.md"
   ],
   "scripts": {
-    "test": "npm run test:module && npm run test:integration && npm run test:acceptance && npm run test:publish",
-    "test:module": "node --test test/mod/Back/Dem/Compile/*.test.mjs test/mod/Back/Mod/*.test.mjs test/mod/Back/RDb/Dialect/*.test.mjs test/mod/Back/RDb/Dialect/Postgresql/*.test.mjs test/mod/Back/RDb/Schema/*.test.mjs test/mod/Back/RDb/*.test.mjs test/mod/Back/Dem/Load/Load.test.mjs test/mod/Back/Dem/Load/A/Scan.test.mjs test/mod/Back/Dem/Load/A/Scan/A/Map.test.mjs test/mod/Back/Dem/Load/A/Scan/A/Dem.test.mjs",
+    "test": "npm run test:unit && npm run test:integration && npm run test:acceptance && npm run test:package",
+    "test:unit": "find test/unit -name '*.test.mjs' -print0 | xargs -0 node --test",
     "test:integration": "node --test test/integration/Di2.test.mjs",
-    "test:acceptance": "node --test test/accept/Back/App/*.test.mjs",
-    "test:publish": "node --test test/publish/*.test.mjs",
+    "test:acceptance": "find test/acceptance -name '*.test.mjs' -print0 | xargs -0 node --test",
+    "test:package": "find test/package -name '*.test.mjs' -print0 | xargs -0 node --test",
     "typecheck": "tsc -p jsconfig.json",
     "lint:md": "markdownlint-cli2 \"skills/**/*.md\" \"*.md\"",
     "test:optin": "npm run test:optin:preflight && npm run test:optin:postgresql && npm run test:optin:mariadb",
-    "test:optin:preflight": "node --test test/opt/Preflight.test.mjs",
-    "test:optin:postgresql": "node --test test/opt/Postgresql.test.mjs",
-    "test:optin:mariadb": "node --test test/opt/Mysql.test.mjs",
-    "test:manual": "node --test test/man/Schema.test.mjs test/man/CrudEngine/Simple.test.mjs test/man/CrudEngine/Complex.test.mjs"
+    "test:optin:preflight": "node --test test/optin/Preflight.test.mjs",
+    "test:optin:postgresql": "node --test test/optin/Postgresql.test.mjs",
+    "test:optin:mariadb": "node --test test/optin/Mysql.test.mjs",
+    "test:manual": "find test/manual -name '*.test.mjs' -print0 | xargs -r -0 node --test"
   },
   "repository": {
     "type": "git",
@@ -38,7 +38,6 @@
     "teqfw",
     "knex",
     "rdbms",
-    "crud",
     "tequila framework",
     "es6",
     "node.js",

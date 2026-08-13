@@ -11,8 +11,7 @@
  * Designed with focus on code mutability and compositional objects.
  * @interface
  *
- * You can use the `selection` (high privilege) or `conditions` parameters to filter results.
- * The good idea is to create a utility to convert conditions to selection.
+ * Use Selection v2 to filter result sets.
  *
  */
 export default class TeqFw_Db_Back_Api_RDb_Repository {
@@ -51,13 +50,11 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
      * Delete records matching the provided conditions.
      * @param {object} deps
      * @param {TeqFw_Db_Back_RDb_ITrans} deps.trx
-     * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} deps.selection
-     * @param {Object} deps.conditions
-     * @deprecated The `conditions` parameter is deprecated. Use `selection` instead.
+     * @param {TeqFw_Db_Shared_Dto_Query_Selection.Dto} deps.selection
      * @throws {Error} - Throws an error if the operation fails.
      * @returns {Promise<any>}
      */
-    deleteMany({trx, selection, conditions}) {}
+    deleteMany({trx, selection}) {}
 
     /**
      * Get a schema object related to the repo.
@@ -82,14 +79,11 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
      * Supports filtering, sorting, and pagination.
      * @param {object} deps
      * @param {TeqFw_Db_Back_RDb_ITrans} deps.trx
-     * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} deps.selection
-     * @param {Object} deps.conditions
-     * @param {Object<string, 'asc'|'desc'>} deps.sorting
-     * @param {any} deps.pagination
+     * @param {TeqFw_Db_Shared_Dto_Query_Selection.Dto} deps.selection
      * @throws {Error} - Throws an error if the operation fails.
      * @returns {Promise<any>}
      */
-    readMany({trx, selection, conditions, sorting, pagination}) {}
+    readMany({trx, selection}) {}
 
     /**
      * Update a single record matching the provided key.
@@ -106,11 +100,10 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
      * Update existing records matching the provided conditions.
      * @param {object} deps
      * @param {TeqFw_Db_Back_RDb_ITrans} deps.trx
-     * @param {TeqFw_Db_Shared_Dto_List_Selection.Dto} deps.selection
-     * @param {Object} deps.conditions
+     * @param {TeqFw_Db_Shared_Dto_Query_Selection.Dto} deps.selection
      * @param {Object} deps.updates
      * @throws {Error} - Throws an error if the operation fails or if parameters are invalid.
      * @returns {Promise<any>}
      */
-    updateMany({trx, selection, conditions, updates}) {}
+    updateMany({trx, selection, updates}) {}
 }

@@ -2,7 +2,7 @@
 
 ## Package Role
 
-`@teqfw/db` composes distributed Domain Entity Model (DEM) fragments into one validated target model, projects that model through an explicit relational dialect, and supplies schema, transaction, CRUD, query, and rebuild primitives.
+`@teqfw/db` composes distributed Domain Entity Model (DEM) fragments into one validated target model, projects that model through an explicit relational dialect, and supplies schema, transaction, typed-query, and rebuild primitives.
 
 Knex is the database execution boundary. `@teqfw/di` performs runtime linking, and `@teqfw/cfg` supplies an immutable configuration snapshot. Database client packages remain host-selected runtime dependencies.
 
@@ -10,13 +10,13 @@ Knex is the database execution boundary. `@teqfw/di` performs runtime linking, a
 
 Each application or package owns its DEM fragment. Compilation decodes supported declaration versions, applies the application map, rejects conflicting semantic ownership, preserves trusted source provenance, validates the logical model, analyzes dependency cycles, derives dialect requirements, and produces a deterministic physical plan and fingerprint.
 
-Compilation is all-or-nothing. Do not execute a partial model after diagnostics. Treat unversioned declarations as legacy DEM v1 input and explicit version `2` as DEM v2; do not extend unversioned semantics.
+Compilation is all-or-nothing. Do not execute a partial model after diagnostics. Every declaration and application map must explicitly declare `version: 2`; omitted and unsupported versions are rejected.
 
 ## Relational Access
 
 The selected connection determines one dialect adapter. Logical types, physical storage, defaults, generation, indexes, expressions, and runtime capabilities stay separate. Capability preflight must finish before dependent schema or query mutations.
 
-CRUD accepts only schema-declared attributes and supports simple or composite keys. Creation normalizes input through `schema.createDto()`, while keys, legacy conditions, and updates reject unknown attributes. Operations can use either an owned or caller-provided transaction. Selection v2 uses schema-approved attributes and registered typed operators with bound values; raw SQL strings are not declaration or selection operators.
+Typed Selection v2 uses schema-approved attributes and registered operators with bound values; raw SQL strings are not declaration or selection operators. Schema and rebuild operations preserve explicit transaction ownership.
 
 ## Rebuild Boundary
 

@@ -338,15 +338,6 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
                     res.keys.push(value);
                 });
                 if (raw.predicate !== undefined) res.predicate = decodeExpression(raw.predicate, `${rawPointer}/predicate`);
-                if (res.method === 'legacy.defaultIndex') {
-                    addDiagnostic({
-                        code: 'DEM_INDEX_INVALID',
-                        details: {method: res.method},
-                        message: 'The legacy index method marker is not valid DEM v2 input.',
-                        path: `${rawPointer}/method`,
-                        stage: 'logical',
-                    });
-                }
                 record(canonicalPointer, rawPointer);
                 return res;
             };

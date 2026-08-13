@@ -11,7 +11,7 @@ Define the complete target contract for declaring, composing, validating, projec
 ## Reading Order
 
 1. `overview.md` — model layers and compiler boundary.
-2. `declaration.md` — DEM v2 and map JSON contracts plus DEM v1 compatibility.
+2. `declaration.md` — explicit DEM v2 and map JSON contracts.
 3. `composition.md` — ownership, conflict, determinism, and provenance rules.
 4. `validation.md` — staged validation, diagnostics, and cycle handling.
 5. `dialects.md` — capability and adapter contracts.

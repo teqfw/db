@@ -18,7 +18,7 @@ const NS = 'TeqFw_Db_Back_Cli_Init';
  * Factory to create CLI command.
  * @param {object} deps
  * @param {TeqFw_Db_Back_Defaults} deps.DEF
- * @param {TeqFw_Db_Back_Logger} deps.logger
+ * @param {TeqFw_Log_Provider} deps.logger
  * @param {TeqFw_Db_Back_Cli_Dto_Command__Factory} deps.fCommand
  * @param {TeqFw_Db_Back_RDb_IConnect} deps.conn
  * @param {TeqFw_Db_Back_Config} deps.config
@@ -29,6 +29,7 @@ const NS = 'TeqFw_Db_Back_Cli_Init';
  * @memberOf TeqFw_Db_Back_Cli_Init
  */
 export default function Factory({DEF, logger, fCommand, conn, config, dbSchema, demLoad, app}) {
+    const log = logger.forSource('TeqFw_Db_Back_Cli_Init');
 
     // FUNCS
     /**
@@ -44,7 +45,7 @@ export default function Factory({DEF, logger, fCommand, conn, config, dbSchema, 
         dbSchema.setCompilation({compilation});
         await dbSchema.dropAllTables({conn});
         await dbSchema.createAllTables({conn});
-        logger.info('Database structure is recreated.');
+        log.info('Database structure is recreated.');
         await app.stop();
     }
 
@@ -62,7 +63,7 @@ export default function Factory({DEF, logger, fCommand, conn, config, dbSchema, 
 export const __deps__ = Object.freeze({
     default: Object.freeze({
             DEF: 'TeqFw_Db_Back_Defaults$',
-            logger: 'TeqFw_Db_Back_Logger$',
+            logger: 'TeqFw_Log_Provider$',
             fCommand: 'TeqFw_Db_Back_Cli_Dto_Command__Factory$',
             conn: 'TeqFw_Db_Back_RDb_Connect$',
             config: 'TeqFw_Db_Back_Config$',
