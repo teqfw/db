@@ -2,6 +2,25 @@
 
 All notable changes to this package are documented in this file.
 
+## 2.2.0 - 2026-08-13
+
+### Changed
+
+- Require explicit `version: 2` for every DEM declaration and application map.
+- Reorganized automated verification into unit, integration, acceptance, opt-in, and package layers.
+- Replaced the connection `getKnex()` accessor with `getClient()`.
+
+### Removed
+
+- Removed DEM v1 decoding, compatibility facades, and legacy physical projections.
+- Removed legacy CRUD, selection DTO, logger facade, and related DI tokens and type aliases.
+
+### Breaking changes
+
+- Unversioned DEM declarations and maps are no longer accepted.
+- Legacy CRUD and selection APIs are no longer available; use the typed v2 query, schema, and rebuild contracts.
+- Consumers that need historical behavior can compare the retained `v1` branch with current v2 and prepare their own migration guidance.
+
 ## 2.1.1 - 2026-08-10
 
 ### Changed

@@ -1,5 +1,11 @@
 # @teqfw/db: releases
 
+## 2.2.0 - v2-only contracts and test taxonomy
+
+- Require explicit DEM v2 declarations and maps; remove DEM v1 decoding and compatibility projections.
+- Remove legacy CRUD, selection, logger, and deprecated connection APIs.
+- Reorganize verification into unit, integration, acceptance, opt-in, package, manual, and fixture layers.
+
 ## 2.1.1 - README refresh
 
 - Reworked the README with the current package overview, boundaries, installation guidance, and agent-skill usage.
