@@ -38,6 +38,13 @@ describe('npm publication', () => {
         }
     });
 
+    it('keeps the publication allowlist free of stale paths', () => {
+        const manifest = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
+        for (const path of manifest.files) {
+            assert(existsSync(join(root, path)), `Stale publication allowlist entry: ${path}`);
+        }
+    });
+
     it('publishes the type-only root contract and required artifact files', () => {
         const manifest = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
         assert.equal(manifest.types, 'types.d.ts');

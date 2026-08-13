@@ -4,7 +4,7 @@ All notable changes to this package are documented in this file.
 
 ## 2.2.0 - 2026-08-13
 
-### Changed
+### Changed in 2.2.0
 
 - Require explicit `version: 2` for every DEM declaration and application map.
 - Reorganized automated verification into unit, integration, acceptance, opt-in, and package layers.
@@ -15,7 +15,7 @@ All notable changes to this package are documented in this file.
 - Removed DEM v1 decoding, compatibility facades, and legacy physical projections.
 - Removed legacy CRUD, selection DTO, logger facade, and related DI tokens and type aliases.
 
-### Breaking changes
+### Breaking changes in 2.2.0
 
 - Unversioned DEM declarations and maps are no longer accepted.
 - Legacy CRUD and selection APIs are no longer available; use the typed v2 query, schema, and rebuild contracts.
@@ -23,20 +23,20 @@ All notable changes to this package are documented in this file.
 
 ## 2.1.1 - 2026-08-10
 
-### Changed
+### Changed in 2.1.1
 
 - Reworked the README with the current package overview, boundaries, installation guidance, and agent-skill usage.
 
 ## 2.1.0 - 2026-08-10
 
-### Added
+### Added in 2.1.0
 
 - Validated DEM compilation with provenance-aware diagnostics, graph construction, and schema planning.
 - Rebuild execution for relational schemas, including deterministic dependency ordering and failure handling.
 - PostgreSQL, MySQL, SQLite, and PostgreSQL pgvector dialect adapters.
 - Public type declarations and package-owned consumer guidance.
 
-### Changed
+### Changed in 2.1.0
 
 - Migrated runtime composition to `@teqfw/di` 2.x export-scoped dependency declarations.
 - Replaced the legacy `@teqfw/core` runtime coupling with `@teqfw/cfg` and current TeqFW package contracts.
@@ -46,7 +46,7 @@ All notable changes to this package are documented in this file.
 
 - Hardened external database conformance and updated the SQLite dependency security baseline.
 
-### Breaking changes
+### Breaking changes in 2.1.0
 
 - Consumers must use the DI 2.x composition model and the current configuration contract.
 - The previous legacy implementation remains available only on the `v1` branch.

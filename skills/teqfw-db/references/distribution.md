@@ -1,5 +1,7 @@
 # Distribution
 
+The published package contains the consumer skill, source namespace, type declarations, and usage artifacts. Historical project-only documentation is not part of the npm package; use the repository context for product and architecture decisions.
+
 ## Installed Location
 
 The package publishes the version-matched skill at `node_modules/@teqfw/db/skills/teqfw-db/`. Load `SKILL.md` as its entry point. Every required reference is below that directory and describes the installed package version.
