@@ -1,30 +1,30 @@
 # Product Roles
 
 - Path: `ctx/docs/product/roles.md`
-- Changed: `20260808`
+- Changed: `20260813`
 
 ## Roles
 
 ### Application Developer
 
-Configures connections, owns the root schema map, selects the dialect adapter, resolves the DI graph, and invokes persistence and rebuild services.
+Owns the application composition: selects the teq-plugins and fragments that form the target schema, maps cross-package dependencies, configures the current target database, and invokes persistence and rebuild services.
 It decides whether a deployment uses in-place recreation or a separately provisioned target.
-It treats compile and preflight errors as blocking and does not bypass them with raw Knex schema work while claiming DEM conformance.
+It treats model validation errors as blocking and does not bypass the assembled schema while claiming conformance.
 
 ### Package Developer
 
-Declares a package-local DEM fragment and its required capabilities and uses schema/repository contracts without controlling another package's model nodes or physical storage.
-When its model changes incompatibly, it supplies explicit transformation semantics to an external migration workflow rather than expecting `@teqfw/db` to infer them.
+Is an npm package with a teqfw node in `package.json`. It declares a package-local DEM fragment and its required capabilities and uses the assembled application schema without controlling another package's model nodes or physical storage.
+When its model changes incompatibly, it supplies explicit transformation semantics to the host or future migration capability rather than expecting `@teqfw/db` to infer them.
 
 ### Operator
 
 Runs capability provisioning, structure initialization, drop, export, import, rebuild, connection shutdown, and database-specific operational preparation.
 The operator authorizes destructive steps and confirms that required preservation and verification conditions have been met.
 
-### Migration Orchestrator
+### Possible Migration Orchestrator
 
-Coordinates application-level incremental or multi-step migrations outside `@teqfw/db`.
-It owns version history, ordering across releases, transformation selection, cutover, retry, and rollback policy while using database primitives exposed by this package.
+If introduced, coordinates application-level incremental or multi-step migrations using database primitives exposed by this package.
+Its placement is undecided: it may belong to the db plugin or to a separate plugin. It would own version history, ordering across releases, transformation selection, cutover, retry, and rollback policy.
 
 ### Maintainer
 

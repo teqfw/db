@@ -7,43 +7,31 @@
 
 - DEM — Domain Entities Model; a JSON-declarable logical target persistence model.
 - DEM fragment — the part of the DEM owned by one package.
-- DEM v2 — the current explicit declaration and application-map contract; every input declares `version: 2`.
-- DEM v2 — the explicit versioned declaration separating logical types, storage, generation, capabilities, indexes, and expressions.
+- DEM v2 — the current explicit declaration and application-map contract; every input declares `version: 2`. It separates logical types, storage, generation, capabilities, indexes, and expressions.
+- distributed schema — reusable package-owned fragments that a host application composes into one target schema for related data.
+- application schema — the coherent target schema assembled by a host application from its own and selected teq-plugin fragments.
+- teq-plugin — an npm package with a teqfw node in `package.json` that can contribute a fragment to an application schema.
 - canonical DEM — the application-wide model produced after decoding, ownership-safe composition, explicit reference mapping, canonicalization, and logical validation.
 - compilation result — the canonical DEM plus provenance, dependency graph, capabilities, physical plan, deterministic fingerprint, and warnings.
 - provenance — trusted fragment filename, identity, and source pointer attached to canonical nodes and diagnostics.
-- target model — the canonical DEM selected for the next physical structure; it contains desired state, not change history.
+- target model — the canonical DEM selected by the host application for its application schema; it contains desired state, not change history.
 - map — root-application declaration resolving external references and defining the table namespace.
 - entity path — slash-delimited logical identifier such as `/app/user`.
 - schema object — runtime contract exposing an entity name, attributes, primary key, and DTO creation.
-- logical type — database-independent value meaning and parameters.
-- storage binding — adapter-owned physical realization of a logical type for one dialect.
-- generation — database-side policy for creating an omitted attribute value, distinct from type and default.
-- capability — namespaced feature that an adapter supports and an actual connection may or may not provide.
-
-- `core.identity` — special logical DEM type for the system-addressable identity of its entity. The current materialization creates a generated single-column primary key through the host-selected profile.
-- `core.ref` — special logical DEM type for a local representation derived from exactly one relation-resolved `core.identity`. It does not name the target, declare a foreign key by itself, or receive a generation policy.
-- relation — the semantic declaration that identifies a reference target and its attribute positions; application mapping resolves package-external paths without changing target ownership.
-- identity profile — the host-owned policy defining how logical entity identities and their references are represented in one target application model. The current DEM v2 profile structure contains the concrete type and generation policy used to materialize `core.identity`; `core.ref` derives only the compatible concrete type from its resolved identity target.
-- dialect adapter — registry and execution boundary for physical types, indexes, query operators, and capability preflight.
-- RDB object — validated physical table, column, index, or relation descriptor used for schema operations.
-- typed expression — schema-checked attribute, bound value, or registered operator call.
-- selection — structured filter, derived projection, expression sorting, limit, offset, and execution-option request.
-- outer transaction — transaction supplied by a caller and therefore not committed or rolled back by nested code.
-- internal transaction — transaction created and finalized by the called operation.
-- deprecated entity — obsolete entity whose physical table is explicitly scheduled for removal.
+- relation — a declared connection between attributes of entities; application mapping resolves package-external paths without changing target ownership.
+- identity and reference policy — host-owned rules for representing system identities and references in the application schema.
 - dump — durable transferable database contents.
 - source structure — the database or schema whose data is preserved during rebuild.
 - target structure — the physical structure created from the target model.
 - rebuild migration — recreation of a schema or database followed by explicit restoration or transfer of compatible data.
-- transformation — caller-supplied logic that maps source rows or engine state to the target representation.
+- transformation — caller-supplied logic that maps source data to the target representation.
 - incremental migration — a versioned sequence of in-place structural or data changes; full support is outside `@teqfw/db`.
-- migration orchestrator — an external component or host policy that owns versions, sequencing, cutover, and rollback.
+- migration orchestrator — a possible host or plugin component that would own versions, sequencing, cutover, and rollback; its placement is undecided.
 
 ## Naming Principles
 
 Use “DEM” for the logical declaration and “RDB schema” for its physical database projection.
 Use “compile” for decode, compose, resolve, validate, and project; do not call generic deep merge composition.
 Use “map” only for cross-package reference mapping and table namespace configuration, not for arbitrary JavaScript objects.
-Use “rebuild” for the package-owned recreate-and-transfer capability.
+Use “rebuild” for the recreate-and-transfer capability currently provided by `@teqfw/db`; do not imply that its higher-level orchestration owner has been decided.
 Do not call rebuild “incremental migration,” even when only part of the data changes.

@@ -1,7 +1,7 @@
 # Architecture Integrations
 
 - Path: `ctx/docs/architecture/integration.md`
-- Changed: `20260810`
+- Changed: `20260813`
 
 ## @teqfw/di 2.x
 
@@ -55,10 +55,10 @@ in the `TEQFW_DB` cfg namespace; named parameter keys use `<NAME>_` after the `_
 never resolves or registers a runtime dependency. This keeps connection selection explicit and avoids unrestricted
 Container access inside persistence components.
 
-## External Migration Orchestrator
+## Migration Orchestration Boundary
 
-An optional external migrator integrates through explicit source, target, transformation, and evidence contracts.
-It may use `@teqfw/db` structure and transfer primitives, but it owns version history, transition ordering, application quiescence, cutover, and rollback policy.
+The current db package exposes source, target, transformation, and evidence primitives for rebuild.
+The host application or a future migration plugin may use them to coordinate version history, transition ordering, application quiescence, cutover, and rollback policy. Whether that coordinator belongs to this db plugin or a separate plugin is undecided.
 Teq-plugins may contribute transformations for data they own; contribution discovery and ordering belong to the external migration contract, not to implicit scanning by the persistence core.
 
 ## Rebuild Contract Shapes

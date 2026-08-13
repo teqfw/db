@@ -2,7 +2,6 @@
 
 - Path: `ctx/docs/architecture/dem/declaration.md`
 - Changed: `20260813`
-- Legacy Sources: `doc/schema.md`, `doc/map.md`
 
 ## Version Rule
 
@@ -344,4 +343,4 @@ It does not authorize deletion, identify a rename, or add migration history to t
 
 Changing either declaration format changes desired state only.
 Deletion plus addition is not a rename, a changed type is not a conversion, and a new non-nullable attribute does not define a value for existing rows.
-Those transition meanings remain explicit inputs to the rebuild or external migration workflow.
+Those transition meanings remain explicit inputs to rebuild or host/future migration orchestration; the packaging boundary is undecided.

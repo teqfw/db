@@ -1,15 +1,16 @@
 # Rebuild Migration Capability
 
 - Path: `ctx/docs/product/migration.md`
-- Changed: `20260808`
+- Changed: `20260813`
 
 ## Purpose
 
-Define the migration outcome owned by `@teqfw/db` and the point at which responsibility passes to an application-level migration capability.
+Define the rebuild capability currently provided by `@teqfw/db` and record the still-open boundary for product-level structure-change orchestration.
 
 ## Supported Migration Model
 
-The package supports migration by rebuilding a complete declared structure.
+The current package provides primitives for rebuilding a complete declared structure, preserving compatible data, and returning transfer evidence.
+Whether product-level rebuild orchestration belongs to the db plugin itself or to a separate plugin remains undecided.
 A rebuild has four product-level obligations:
 
 1. Preserve source data through a durable dump or an independently readable source.
@@ -25,12 +26,12 @@ The package does not own deployment switching between source and target.
 The core package may transfer a value when the source table and field can be mapped explicitly to the target representation.
 It must not guess that two differently named objects are the same, choose a conversion that can lose meaning, invent a value for a newly required field, or discard source data merely because a fragment disappeared.
 
-Incompatible changes require a transformation supplied by the package that owns the affected model or by an external migration orchestrator.
+Incompatible changes require a transformation supplied by the package that owns the affected model or by the host/future migration orchestration capability.
 The transformation is explicit input to the rebuild; it is not derived from database drift.
 
 ## Outside The Package
 
-The following belong to a separate migration capability or the host application:
+The following do not belong to the current rebuild primitives and require the host application or a future migration capability:
 
 - schema introspection intended to synthesize arbitrary incremental changes;
 - version graphs and ordered migration history;

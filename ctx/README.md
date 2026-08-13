@@ -6,7 +6,7 @@
 
 `ctx/` contains the durable product, architecture, environment, and code context for `@teqfw/db`.
 
-The central product model is distributed DEM compilation into one validated target with provenance, dialect-aware relational access, and rebuild migration.
+The central product model is a distributed application schema compiled from teq-plugin fragments into one validated target with provenance, schema-bound access, and rebuild capability. The current implementation targets one database; multiple database targets remain future work.
 Full incremental migration remains outside the package boundary.
 
 Start with `AGENTS.md` and `docs/ai-intro.md`.

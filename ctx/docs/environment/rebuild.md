@@ -1,9 +1,11 @@
 # Rebuild Runtime Requirements
 
 - Path: `ctx/docs/environment/rebuild.md`
-- Changed: `20260808`
+- Changed: `20260813`
 
 ## In-Place Rebuild
+
+Product-level rebuild obligations and the open orchestration boundary are defined in [product migration](../product/migration.md). This document defines runtime prerequisites and engine limits only.
 
 An in-place rebuild uses one physical database identity before and after recreation.
 Before destructive DDL begins, the caller must provide either:
@@ -20,8 +22,8 @@ A parallel rebuild requires independently addressable source and target storage.
 The process needs read access to the source and structure/data write access to the target.
 The source remains authoritative until the host application accepts the evidence and performs cutover.
 
-The package does not require a particular deployment topology.
-Separate databases, isolated schemas, or another engine-supported separation mechanism are acceptable only when table naming, connection resolution, and foreign-key behavior remain unambiguous.
+The package does not require a particular parallel-rebuild topology.
+Separate databases, isolated schemas, or another engine-supported separation mechanism are acceptable for source/target isolation only; this does not imply current support for several application database targets.
 
 ## Consistency Window
 

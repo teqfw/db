@@ -7,33 +7,30 @@ This document is paired with `overview.skin.ru.md` and preserves its architectur
 
 ## Architecture Role
 
-The architecture separates logical model compilation, dialect-specific relational projection, typed query compilation, database access, rebuild execution, and external migration orchestration.
+The architecture turns distributed teq-plugin declarations into one host-application schema, then separates logical model compilation, dialect-specific relational projection, typed query compilation, database access, rebuild execution, and migration orchestration. The current implementation realizes the schema in one database; several explicitly selected database targets remain a future extension and are not part of the current contract.
 Components are linked by `TeqFw_Db_` dependency tokens through explicit `__deps__` metadata.
 
-## Major Areas
+## Architectural Shape
 
-- Declaration layer: explicit DEM v2 logical declarations and maps, including the host identity policy, selections, and physical descriptors.
-- Compiler layer: trusted fragment envelopes, version decoding, single-owner composition, reference mapping, canonical validation, provenance, graph analysis, and deterministic fingerprinting.
-- Dialect layer: type/operator registries, capability derivation and preflight, physical projection, and safe database-specific execution.
-- Schema layer: phase-ordered tables, key constraints, relations, data, and late indexes.
-- Query layer: typed core and dialect expression operators compiled with bound values.
-- Access layer: owns connection, transaction wrappers, CRUD engines, repositories, and query selection.
-- Rebuild layer: source preservation, target creation, dependency-ordered transfer, explicit transformation, and result evidence.
-- Operations layer: structure lifecycle, import/export, CLI descriptors, and plugin lifecycle adapters.
+- Declaration and composition layers collect trusted plugin fragments and the host application's dependency map.
+- Compiler layers validate ownership, references, relations, and logical compatibility, producing the canonical application schema.
+- Projection and access layers materialize and use that schema through the selected database boundary.
+- Rebuild layers preserve source data, create a target, transfer explicitly compatible data, and produce evidence.
+- Host or future migration-plugin orchestration remains a separate ownership decision.
 
 ## Main Flow
 
 ```text
-trusted package DEM fragments + application map + selected adapter
+host-selected teq-plugin DEM fragments + application map + selected adapter
   -> DEM v2 decode
   -> ownership-safe composition + provenance
-  -> core.identity type + generation resolution and core.ref type derivation
+  -> reference resolution and logical validation
   -> validated canonical DEM + dependency graph
   -> capability-aware physical schema plan
   -> runtime preflight
-  -> authorized Knex structure, data, and typed query operations
+  -> authorized database structure, data, and schema-bound access operations
 
-source data or durable dump + target descriptors + explicit transformations
+canonical application schema + source data or durable dump + explicit transformations
   -> rebuild transfer
   -> result evidence
   -> caller-owned acceptance and cutover
@@ -44,37 +41,27 @@ It is not compared with arbitrary production state to infer an incremental migra
 
 ## Integration Boundaries
 
-`@teqfw/di` resolves component graphs.
-Knex provides query and schema builders.
-Database client packages provide physical connectivity.
-Filesystem JSON files provide declarations, maps, and dumps. Explicitly selected `@teqfw/cfg` Sources provide the
-immutable raw application configuration snapshot before database runtime starts.
-Dialect adapters provide registered physical type, index, expression, and capability behavior without turning declaration strings into Knex method names.
-An external migrator or host application supplies migration sequencing, transformation selection, source/target topology, and cutover policy when those concerns are required.
+`@teqfw/di`, `@teqfw/cfg`, Knex, database drivers, and filesystem declarations are implementation boundaries for the architecture.
+Dialect adapters own database-specific projection and capability behavior without turning declaration values into unchecked database operations.
+The host application or a future migration plugin may supply migration sequencing, transformation selection, source/target topology, and cutover policy when those concerns are required; ownership of that orchestration is not yet decided.
 
 ## Architectural Invariants
 
-- DI declarations are source-attached and export-scoped.
-- Logical declarations do not depend on Knex objects.
-- A semantic declaration node has one fragment owner and retains trusted provenance.
-- Compilation aggregates structured diagnostics and never exposes an executable partial model.
-- Connection-specific behavior is behind transaction, connection, and selected-adapter services.
-- Dependency graph and cycles are computed before structure or transfer operations.
-- Schema cycles use separated creation phases; transfer cycles require an explicit supported strategy.
-- Capability preflight succeeds before the first database mutation or dialect query.
-- Logical type, physical storage, default, and generation remain separately inspectable.
-- Package `core.identity`/`core.ref` types express relational addressing intent; the host map materializes identities into type plus generation, relations derive each ref from exactly one identity into type only, and canonical DEM contains only explicit results.
-- Full indexes and typed expressions use registered identities and contain no declaration-provided raw SQL.
-- In-place rebuild requires a durable source snapshot before destructive replacement.
-- Parallel rebuild keeps source and target identities distinct until caller-owned acceptance.
-- Transfer logic uses explicit mappings or transformations and never infers semantic changes from names alone.
-- The rebuild result records failures and processed scope; it does not authorize cutover or source deletion.
-- DTO factories create new values and never retain caller-owned mutable input.
+- Every semantic declaration node has one fragment owner and trusted provenance.
+- The canonical application schema is the source of truth for projection and schema-bound access.
+- Logical declarations remain independent of a particular database implementation.
+- Compilation fails before side effects when ownership, relation, capability, or compatibility rules fail.
+- Physical projection and access use validated adapter and schema contracts.
+- Rebuild requires explicit preservation and transformation decisions, reports evidence, and does not authorize cutover.
+- The canonical model describes target state, not inferred migration history.
 
 ## Implementation Boundary
 
-The current worktree implements the compiler, provenance, semantic validation, dialect registries and preflight, full index phases, typed expressions, PostgreSQL pgvector adapter behavior, and unified rebuild evidence described here. Identity/reference declarations use the accepted `core.identity`/`core.ref` type model; the host-owned `identityProfile` resolves identities and references before canonical validation.
-Default SQLite-backed tests, static validation, MariaDB 10.11 conformance, and PostgreSQL/pgvector conformance pass.
+Current implementation status and verification are maintained in `../code/overview.md` and `../code/testing.md`; this overview defines the architecture rather than repeating delivery reports.
+
+## Terminology
+
+The canonical application schema is the logical canonical DEM. Physical schema plans, runtime schemas, query plans, and DTOs are derived representations of it.
 
 ## Reading Map
 

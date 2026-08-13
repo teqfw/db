@@ -1,7 +1,9 @@
 # Architecture Behavior
 
 - Path: `ctx/docs/architecture/behavior.md`
-- Changed: `20260808`
+- Changed: `20260813`
+
+Product-level rebuild obligations are defined in [product migration](../product/migration.md); this document describes execution behavior and failure handling.
 
 ## Model Composition
 
@@ -58,7 +60,7 @@ Recovery therefore depends on the preserved snapshot and caller-owned retry or r
 3. Read source tables and write target tables in dependency order.
 4. Apply explicit transformations and collect evidence.
 5. Build `afterData` indexes and verify them.
-6. Leave both source retirement and application cutover to the external orchestrator.
+6. Leave both source retirement and application cutover to the caller; a future migration plugin may coordinate these steps.
 
 Failure leaves the source authoritative and the incomplete target unaccepted.
 The caller decides whether the target is cleaned, inspected, or retried.
@@ -72,7 +74,7 @@ Transformation failures are migration failures, not silently skipped compatibili
 ## Incremental Migration Boundary
 
 The package does not compare catalog state with the target DEM to synthesize ordered `ALTER` operations.
-Version discovery, multi-step migration history, online dual-write protocols, application cutover, and cross-release rollback belong to an external migration capability.
+Version discovery, multi-step migration history, online dual-write protocols, application cutover, and cross-release rollback require a host-owned or future plugin capability. Its placement is undecided.
 
 ## Failure And Recovery
 

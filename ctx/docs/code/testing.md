@@ -1,5 +1,7 @@
 # Testing Overview
 
+Product-level rebuild obligations are defined in [product migration](../product/migration.md); these checks verify their current implementation and runtime evidence.
+
 ## Test Structure
 
 - `test/unit/` — deterministic compiler, DTO, query, adapter, plan, and registry behavior without a database.

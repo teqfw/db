@@ -24,12 +24,13 @@ Decision: DEM/map DTOs remain independent of Knex; conversion produces separate 
 
 Reason: declarations must remain portable and composable before a connection exists.
 
-## AD-004 Own Rebuild, Not Full Incremental Migration
+## AD-004 Provide Rebuild Primitives, Not Full Incremental Migration
 
-Decision: `@teqfw/db` owns complete target-structure recreation and bounded data preservation/transfer primitives.
+Decision: the current `@teqfw/db` implementation provides complete target-structure recreation and bounded data preservation/transfer primitives.
 It does not own arbitrary catalog diff, inferred `ALTER` planning, application version history, or deployment cutover.
+The product-level owner of rebuild orchestration remains undecided: it may be the db plugin or a separate plugin.
 
-Reason: relational execution is shared infrastructure, while transition meaning and release policy belong to model owners and the host application.
+Reason: relational execution is shared infrastructure, while transition meaning and release policy belong to model owners and the host application. The packaging boundary for higher-level orchestration requires further experience.
 
 ## AD-005 Treat The DEM As Target State
 
@@ -47,7 +48,7 @@ Reason: execution success and operational acceptance are different authority dec
 
 ## AD-007 Keep Incompatible Transformations External
 
-Decision: transformation behavior may be executed through an explicit contract, but its meaning is supplied by the owning teq-plugin or an external migration orchestrator.
+Decision: transformation behavior may be executed through an explicit contract, but its meaning is supplied by the owning teq-plugin or by the host/future migration orchestration capability.
 
 Reason: the persistence package can execute data movement but cannot determine whether a rename, split, merge, or conversion preserves application meaning.
 

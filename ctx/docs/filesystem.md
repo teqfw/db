@@ -1,7 +1,7 @@
 # Filesystem Structure
 
 - Path: `ctx/docs/filesystem.md`
-- Changed: `20260726`
+- Changed: `20260813`
 
 ## Purpose
 
@@ -11,7 +11,6 @@ Define root-level repository navigation.
 
 - `bin/` — development and release shell helpers.
 - `ctx/` — authoritative cognitive context.
-- `doc/` — legacy public documentation retained during the 2.x migration.
 - `skills/` — version-matched package-owned consumer guidance published with the npm artifact.
 - `src/` — package implementation.
 - `test/` — automated and manual verification assets.

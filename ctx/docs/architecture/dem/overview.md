@@ -9,7 +9,8 @@ This document defines the accepted DEM v2 target architecture.
 The current worktree implements the explicit DEM v2 compiler path. The compiler represents identity/reference declarations through `core.identity` and `core.ref`, resolves them through the host-owned `identityProfile`, and enforces that every `core.ref` targets a `core.identity`.
 `../../code/dem.md` maps the target to implementation work and distinguishes current facts from required behavior.
 
-The DEM describes one desired relational state.
+The current DEM path describes one desired relational state for one database target.
+Support for several database targets is a future extension and would require explicit target-specific compilation and projection contracts.
 It does not describe database history, infer application migrations, or authorize DDL.
 
 ## Four Model Layers

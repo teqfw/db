@@ -1,7 +1,7 @@
 # AI Introduction
 
 - Path: `ctx/docs/ai-intro.md`
-- Changed: `20260809`
+- Changed: `20260813`
 
 ## Purpose
 
@@ -9,22 +9,22 @@ Orient agents to `@teqfw/db` before implementation work.
 
 ## Project Type
 
-`@teqfw/db` is a pure JavaScript ESM infrastructure library for relational persistence in TeqFW applications.
+`@teqfw/db` is a pure JavaScript ESM infrastructure library for assembling and using distributed application schemas in TeqFW applications.
 
 ## Problem Space
 
-The package compiles Domain Entity Model fragments distributed across teq-plugins into one validated application target model with provenance, projects that model through a selected relational-dialect adapter, and provides transaction-aware access and rebuild-oriented data transfer.
+The package compiles Domain Entity Model fragments distributed across teq-plugins into one validated application schema with provenance, projects that schema into the host application's selected database structure, and provides schema-bound access and rebuild-oriented data transfer.
 
 ## Product Role
 
-The package is the common relational persistence layer and owns target-model compilation, dialect/capability-aware projection, typed relational queries, plus basic recreate-and-transfer migration mechanisms.
+The package owns distributed schema compilation, dialect/capability-aware realization, schema-bound data access, and bounded recreate-and-transfer migration mechanisms.
 Knex supplies database-driver abstraction.
 `@teqfw/di` 2.x supplies token-based runtime composition.
 Full incremental migration planning and application cutover remain external responsibilities.
 
 ## Primary Audience
 
-TeqFW application developers, teq-plugin developers declaring persistent entities, operators rebuilding database state, external migration-orchestrator developers, and maintainers supervising database compatibility.
+TeqFW application developers, teq-plugin developers declaring persistent entities, operators rebuilding database state, possible future migration-plugin developers, and maintainers supervising database compatibility.
 
 ## Technology Base
 
@@ -32,7 +32,7 @@ Node.js ESM, JSDoc, Knex, versioned JSON schema declarations, dialect adapters, 
 
 ## Distinguishing Characteristics
 
-- Database structure is composed from per-package declarations.
+- Application database structure is composed from reusable per-package declarations.
 - Semantic node ownership conflicts and invalid cross-fragment contracts fail with aggregated source provenance.
 - Logical types, physical storage, defaults, generation, capabilities, and index lifecycle are separate.
 - Logical entity paths are separated from physical table names.

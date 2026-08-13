@@ -2,7 +2,6 @@
 
 - Path: `ctx/docs/environment/configuration.md`
 - Changed: `20260810`
-- Legacy Sources: `README.md`, `doc/config.md`
 
 ## cfg Namespace
 
@@ -89,7 +88,7 @@ snapshot retention, cutover, or incremental migration settings.
 
 The accepted unified rebuild service must receive source identity, target identity, snapshot location, and optional transformation selection through explicit call or DI contracts.
 This document does not invent configuration keys before those public contracts exist.
-An external migration orchestrator may maintain its own version and deployment configuration outside the `@teqfw/db` node.
+The host application or a future migration plugin may maintain version and deployment configuration outside the `@teqfw/db` node; the packaging boundary remains undecided.
 
 ## Security Boundary
 

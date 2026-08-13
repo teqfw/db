@@ -1,60 +1,49 @@
 # Product Use Cases
 
 - Path: `ctx/docs/product/use-cases.md`
-- Changed: `20260810`
+- Changed: `20260813`
 
 ## UC-1 Configure And Connect
 
-The application bootstraps configuration Sources and supplies common or specialized Knex settings for one default
-connection and, when needed, named connections. The package exposes the default connection through its DI token; the
-host exposes each additional connection through an application-owned DI token and lifecycle. Every resulting
-connection service can create transactions, queries, and schema builders and identify its active RDBMS family.
+The host application configures the one target database supported by the current implementation. It supplies the connection and lifecycle context required to create, access, and rebuild the assembled application schema.
 
 ## UC-2 Compose The Application Model
 
-The application loads its own DEM plus installed-package fragments, applies the root map, selects a dialect adapter, and requests compilation.
-It receives either one immutable canonical model with provenance, graph, requirements, physical plan, fingerprint, and warnings or one aggregated diagnostic failure with no executable partial model.
+The host application loads its own DEM plus the fragments supplied by selected teq-plugins, applies the application-owned map for cross-package dependencies, and requests compilation for its one current database target.
+It receives either one immutable canonical model with provenance or one aggregated diagnostic failure with no executable partial model.
 
 ## UC-3 Create, Recreate, Or Drop Structure
 
-An authorized caller runs runtime capability preflight and executes a phase-ordered physical plan.
-Tables and key constraints precede relations; late indexes follow relations or transferred data; explicitly deprecated tables participate in safe removal.
+An authorized caller creates, recreates, or removes the selected database structure from the assembled application schema. Database-specific ordering and capability checks are handled by the architecture.
 
 ## UC-4 Execute CRUD
 
-A developer creates, reads, updates, or deletes one or many records through a schema-aware API.
-The operation filters unknown attributes, supports simple or composite keys, and either joins a supplied transaction or manages an internal one.
+A developer creates, reads, updates, or deletes records through a schema-aware API backed by the assembled application model, so relations between package-owned data remain visible to the access layer.
 
 ## UC-5 Select Record Sets
 
-A developer describes filters, derived projections, registered operator calls, expression ordering, limit, offset, and allow-listed execution options through a selection DTO.
-The package validates logical types and dialect capabilities, maps only schema-approved attributes, binds values, and may produce a matching count query.
-PostgreSQL consumers can express exact or index-assisted nearest-neighbour ordering through registered pgvector distance operators.
+A developer describes filters, projections, ordering, and pagination through a schema-bound selection API.
+The package maps only schema-approved attributes and operations, preserving the relations and boundaries of the assembled application schema.
 
 ## UC-6 Export Data
 
-An operator reads all modeled tables in dependency order into a JSON dump.
-Date-only values and PostgreSQL sequences are represented in a form import can restore.
+An operator exports the modeled application data into a durable JSON dump that can be restored by the package.
 
 ## UC-7 Import Data
 
-An operator reads a dump, transforms rows for the active RDBMS, inserts modeled tables in dependency order, and restores PostgreSQL sequences when present.
+An operator imports a dump into the modeled application structure and receives the result of the operation.
 
-## UC-8 Shutdown
+## UC-8 Rebuild With Data Preservation
 
-The application disconnects the Knex client after work or plugin shutdown.
-
-## UC-9 Rebuild With Data Preservation
-
-An authorized caller captures data from the source structure, creates the target structure from the current canonical DEM, transfers compatible rows in dependency order, restores engine-specific state, and receives enough evidence to verify the result before retiring the source.
+An authorized caller captures source data, creates the target structure from the current canonical DEM, transfers compatible data, and receives evidence for deciding whether the target is acceptable.
 The source may be an earlier schema, another database, or a durable dump created before recreation.
 
-## UC-10 Delegate Incompatible Transformation
+## UC-9 Delegate Incompatible Transformation
 
-When source and target representations are not structurally compatible, the caller supplies explicit transformation behavior owned by the relevant package or migration orchestrator.
+When source and target representations are not structurally compatible, the caller supplies explicit transformation behavior owned by the relevant package or host/future migration capability.
 `@teqfw/db` executes the bounded transfer contract but does not infer renames, conversions, or application release policy.
 
-## UC-11 Diagnose An Invalid Distributed Model
+## UC-10 Diagnose An Invalid Distributed Model
 
 A developer compiles all fragments and, when needed, plans a selected operation without mutating a database.
 It receives deterministic diagnostics for every independently detectable ownership conflict, unknown type, unresolved endpoint, invalid key, incompatible relation, unsupported capability, or operation cycle without a supported strategy.

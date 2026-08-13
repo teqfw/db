@@ -1,7 +1,7 @@
 # Architecture Structure
 
 - Path: `ctx/docs/architecture/structure.md`
-- Changed: `20260809`
+- Changed: `20260813`
 
 ## Declaration Block
 
@@ -58,7 +58,7 @@ A parallel rebuild uses distinct source and target connections or independently 
 
 ## External Migration Boundary
 
-An external migrator or host composition root chooses source and target providers, supplies transformations, orders application versions, authorizes destructive steps, evaluates evidence, and performs cutover.
+The host composition root or a future migration plugin may choose source and target providers, supply transformations, order application versions, authorize destructive steps, evaluate evidence, and perform cutover. The ownership of this orchestration is not yet decided.
 These decisions are injected through explicit contracts; the rebuild block does not resolve the DI container dynamically as a service locator.
 
 ## Operations Block
@@ -69,4 +69,4 @@ Lifecycle actions connect and disconnect.
 CLI modules expose command descriptors while leaving process hosting outside the persistence core.
 
 The current operation layer exposes compiler-backed schema actions and one unified rebuild facade over explicit planning, transfer, transformation, transaction, and evidence roles.
-External deployment orchestration and cutover remain outside the package.
+The current low-level rebuild primitives remain in the db package; product-level deployment orchestration and cutover ownership remain undecided.
