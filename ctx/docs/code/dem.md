@@ -12,11 +12,11 @@ The real PostgreSQL/pgvector and MariaDB opt-in suites pass in the provisioned t
 
 Implement in the delivery order below.
 
-## Identity And Reference Type Implementation Gap
+## Identity And Reference Type Implementation
 
 The accepted cognitive model declares `type.id: "core.identity"` and `type.id: "core.ref"`. `identityProfile` resolves `core.identity` to a concrete type plus generation policy; each `core.ref` derives only a compatible concrete type from exactly one relation-resolved `core.identity` target. Both unresolved types are removed before canonical validation and physical projection. Relations and external map entries remain target authority.
 
-Current implementation mismatch: `DecodeV2.mjs` and `MapRefs.mjs` still accept and resolve the obsolete `attr.role` representation, including reference derivation from general relation targets. This documentation-only correction does not change source, schemas, validators, or tests. A separately authorized implementation change must migrate decoding, validation, provenance, canonicalization, and conformance from roles to special logical types, enforce `core.ref` to `core.identity`, and preserve the current generated single-column primary-key materialization and external mapping behavior.
+`DecodeV2.mjs` accepts only type-based v2 declarations. `MapRefs.mjs` resolves `core.identity` through the single host `identityProfile` and derives `core.ref` only from exactly one relation-resolved identity target, retaining generation only on the identity and removing special types before canonical validation.
 
 Do not begin PostgreSQL vector DDL by adding `vector` to `src/Back/Enum/Dem/Type/Attr.mjs`; that would bypass the compiler, capability, storage, index, codec, and query contracts.
 

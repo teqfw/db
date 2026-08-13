@@ -295,12 +295,16 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
                 for (const [entityName, entity] of Object.entries(container.entity ?? {})) {
                     const entityPointer = `${pointer}/entity/${escapePointer(entityName)}`;
                     for (const [attrName, attr] of Object.entries(entity.attr ?? {})) {
-                        if (attr.role !== 'identity') continue;
+                        if (attr.type?.id !== 'core.identity') continue;
                         const attrPointer = `${entityPointer}/attr/${escapePointer(attrName)}`;
                         if (!isObject(profile) || !isObject(profile.type) || !isObject(profile.generation)) continue;
+                        if (Object.keys(attr.type.params ?? {}).length > 0) {
+                            addDiagnostic({code: 'DEM_TYPE_PARAMS_INVALID', details: {type: 'core.identity'}, message: 'core.identity does not accept type parameters.', path: attrPointer + '/type/params', sources: provenance[attrPointer] ?? [], stage: 'logical'});
+                            continue;
+                        }
                         attr.type = structuredClone(profile.type);
                         attr.generation = structuredClone(profile.generation);
-                        delete attr.role;
+                        attr.__demSpecial = 'identity';
                         const generationSource = raw.identityProfile === undefined
                             ? provenance[attrPointer] ?? []
                             : [makeSource('/identityProfile/generation')].filter(Boolean);
@@ -326,27 +330,41 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
                 for (const [entityName, entity] of Object.entries(container.entity ?? {})) {
                     const entityPointer = `${pointer}/entity/${escapePointer(entityName)}`;
                     for (const [attrName, attr] of Object.entries(entity.attr ?? {})) {
-                        if (attr.role !== 'ref') continue;
+                        if (attr.type?.id !== 'core.ref') continue;
                         const attrPointer = `${entityPointer}/attr/${escapePointer(attrName)}`;
                         const matches = Object.values(entity.relation ?? {}).filter((relation) => relation.attrs?.filter((item) => item === attrName).length === 1);
                         if (matches.length !== 1) {
-                            addDiagnostic({code: 'DEM_RELATION_CARDINALITY', details: {attribute: attrName, relations: matches.length}, message: 'A reference role must belong to exactly one relation.', path: attrPointer, sources: provenance[attrPointer] ?? [], stage: 'logical'});
+                            addDiagnostic({code: 'DEM_RELATION_CARDINALITY', details: {attribute: attrName, relations: matches.length}, message: 'A core.ref attribute must belong to exactly one relation.', path: attrPointer, sources: provenance[attrPointer] ?? [], stage: 'logical'});
                             continue;
                         }
                         const relation = matches[0];
                         const offset = relation.attrs.indexOf(attrName);
                         const target = entities[relation.ref.path]?.attr?.[relation.ref.attrs?.[offset]];
-                        if (!target?.type || target.role === 'ref') {
-                            addDiagnostic({code: 'DEM_RELATION_TYPE_MISMATCH', details: {attribute: attrName}, message: 'A reference role target must resolve to one typed attribute.', path: attrPointer, sources: provenance[attrPointer] ?? [], stage: 'logical'});
+                        if (Object.keys(attr.type.params ?? {}).length > 0) {
+                            addDiagnostic({code: 'DEM_TYPE_PARAMS_INVALID', details: {type: 'core.ref'}, message: 'core.ref does not accept type parameters.', path: attrPointer + '/type/params', sources: provenance[attrPointer] ?? [], stage: 'logical'});
+                            continue;
+                        }
+                        if (!target?.type || target.__demSpecial !== 'identity') {
+                            addDiagnostic({code: 'DEM_REF_TARGET_NOT_IDENTITY', details: {attribute: attrName}, message: 'core.ref must resolve to core.identity.', path: attrPointer, sources: provenance[attrPointer] ?? [], stage: 'logical'});
                             continue;
                         }
                         attr.type = structuredClone(target.type);
-                        delete attr.role;
+                        attr.__demSpecial = 'ref';
                     }
                 }
                 for (const [name, child] of Object.entries(container.package ?? {})) resolveReferences(child, `${pointer}/package/${escapePointer(name)}`);
             };
             resolveReferences(model, '');
+            /**
+             * @param {object} container
+             */
+            const clearSpecialMarkers = function (container) {
+                for (const entity of Object.values(container.entity ?? {})) {
+                    for (const attr of Object.values(entity.attr ?? {})) delete attr.__demSpecial;
+                }
+                for (const child of Object.values(container.package ?? {})) clearSpecialMarkers(child);
+            };
+            clearSpecialMarkers(model);
             return {...composed, diagnostics, model, provenance};
         };
     }

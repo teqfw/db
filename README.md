@@ -15,10 +15,28 @@ It supports PostgreSQL, MySQL/MariaDB, and SQLite through [Knex](https://knexjs.
 ## What It Provides
 
 - Composition and validation of distributed Domain Entity Model (DEM) fragments.
-- Host-resolved `identity` and `ref` roles, so reusable fragments do not choose an application's key width or signedness.
+- Logical `core.identity` and `core.ref` types, materialized by the host's `identityProfile` without package-specific key-width choices.
 - Dialect-aware schema projection, relational queries, and CRUD operations.
 - Explicit transaction ownership: operations can use a caller transaction or manage their own.
 - Rebuild-oriented structure recreation and compatible data transfer with evidence.
+
+## DEM Identity And References
+
+Package fragments declare logical identity and reference types; the host selects one `identityProfile` for the target model. For example:
+
+```json
+{
+  "attr": {
+    "id": {"type": {"id": "core.identity"}},
+    "ownerId": {"type": {"id": "core.ref"}}
+  },
+  "relation": {
+    "owner": {"attrs": ["ownerId"], "ref": {"path": "/user", "attrs": ["id"]}}
+  }
+}
+```
+
+`core.ref` always points through a relation to a `core.identity`; it receives the identity representation, is never generated, and does not select a SQL type. The host profile lets the same package model use the target database representation. See the packaged [consumer skill](skills/teqfw-db/SKILL.md) for integration details.
 
 ## Install
 

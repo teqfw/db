@@ -23,7 +23,7 @@ afterEach(async () => {
 
 async function compilation() {
     const integer = () => ({type: {id: 'core.integer', params: {bits: 32, unsigned: false}}});
-    const identity = () => ({role: 'identity'});
+    const identity = () => ({type: {id: 'core.identity'}});
     const relation = (path) => ({
         action: {delete: 'cascade'}, attrs: ['other_id'], deferrable: 'notDeferrable', ref: {attrs: ['id'], path},
     });

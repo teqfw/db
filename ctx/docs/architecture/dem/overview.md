@@ -6,7 +6,7 @@
 ## Status And Scope
 
 This document defines the accepted DEM v2 target architecture.
-The current worktree implements the compiler through one v1/v2 canonical execution path, and external PostgreSQL/pgvector and MariaDB conformance passes in the provisioned test environment. It still represents identity/reference declarations through the obsolete role mechanism; the accepted `core.identity`/`core.ref` type model remains an implementation gap documented in `../../code/dem.md`.
+The current worktree implements the compiler through one v1/v2 canonical execution path, and external PostgreSQL/pgvector and MariaDB conformance passes in the provisioned test environment. The compiler represents identity/reference declarations through `core.identity` and `core.ref`, resolves them through the host-owned `identityProfile`, and enforces that every `core.ref` targets a `core.identity`.
 `../../code/dem.md` maps the target to implementation work and distinguishes current facts from required behavior.
 
 The DEM describes one desired relational state.

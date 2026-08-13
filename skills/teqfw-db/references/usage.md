@@ -12,6 +12,8 @@ Resolve a separate transient connection (`TeqFw_Db_Back_RDb_Connect$$`) for ever
 
 ## DEM Composition
 
+Package attributes use `type.id: "core.identity"` for system identities and `type.id: "core.ref"` for stored references. The host application map owns the single `identityProfile`; packages do not choose its storage representation. A `core.ref` must participate in exactly one relation whose target is the corresponding `core.identity`, receives only that concrete type, and is never generated. Ordinary explicitly typed relations to compatible primary or unique keys remain separate.
+
 For direct compiler use, supply:
 
 - trusted fragment envelopes containing `declaration`, `filename`, `fragmentId`, and `packageName`;

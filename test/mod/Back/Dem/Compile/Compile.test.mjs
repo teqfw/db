@@ -278,16 +278,16 @@ describe('TeqFw_Db_Back_Dem_Compile', () => {
         );
     });
 
-    it('resolves identity and reference roles into portable primary and foreign keys for SQLite and PostgreSQL', async () => {
+    it('resolves core.identity and core.ref into portable primary and foreign keys for SQLite and PostgreSQL', async () => {
         const identity = fragment('identity', {
             version: 2, requires: [], package: {}, refs: {},
-            entity: {user: {attr: {id: {role: 'identity'}}, index: {}, relation: {}}},
+            entity: {user: {attr: {id: {type: {id: 'core.identity'}}}, index: {}, relation: {}}},
         });
         const content = fragment('content', {
             version: 2, requires: [], package: {}, refs: {'/identity/user': ['id']},
             entity: {
                 post: {
-                    attr: {id: {role: 'identity'}, owner_id: {role: 'ref'}},
+                    attr: {id: {type: {id: 'core.identity'}}, owner_id: {type: {id: 'core.ref'}}},
                     index: {},
                     relation: {
                         owner: {
@@ -325,13 +325,13 @@ describe('TeqFw_Db_Back_Dem_Compile', () => {
         }
     });
 
-    it('rejects conflicting role declarations, invalid profiles, and ambiguous reference roles deterministically', async () => {
+    it('rejects obsolete role declarations, invalid profiles, and ambiguous core.ref derivations deterministically', async () => {
         const declaration = {
             version: 2, requires: [], package: {}, refs: {},
             entity: {
                 user: {attr: {id: {role: 'identity', type: {id: 'core.integer', params: {}}}}, index: {}, relation: {}},
                 post: {
-                    attr: {owner_id: {role: 'ref'}}, index: {},
+                    attr: {owner_id: {type: {id: 'core.ref'}}}, index: {},
                     relation: {
                         first: {action: {}, attrs: ['owner_id'], deferrable: 'notDeferrable', ref: {attrs: ['id'], path: '/user'}},
                         second: {action: {}, attrs: ['owner_id'], deferrable: 'notDeferrable', ref: {attrs: ['id'], path: '/user'}},
@@ -346,7 +346,7 @@ describe('TeqFw_Db_Back_Dem_Compile', () => {
             }),
             (error) => {
                 const diagnostics = new Map(error.diagnostics.map((item) => [`${item.code}:${item.path}`, item]));
-                assert.ok(diagnostics.has('DEM_DECLARATION_SHAPE_INVALID:/entity/user/attr/id'));
+                assert.ok(diagnostics.has('DEM_DECLARATION_SHAPE_INVALID:/entity/user/attr/id/role'));
                 assert.ok(diagnostics.has('DEM_DECLARATION_SHAPE_INVALID:/identityProfile'));
                 assert.ok(diagnostics.has('DEM_RELATION_CARDINALITY:/entity/post/attr/owner_id'));
                 return true;

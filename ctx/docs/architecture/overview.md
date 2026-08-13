@@ -73,7 +73,7 @@ An external migrator or host application supplies migration sequencing, transfor
 
 ## Implementation Boundary
 
-The current worktree implements the compiler, provenance, semantic validation, dialect registries and preflight, full index phases, typed expressions, PostgreSQL pgvector adapter behavior, and unified rebuild evidence described here. Identity/reference declarations still use the obsolete role representation; implementation of the accepted `core.identity`/`core.ref` type model remains a documented gap in `../code/dem.md`.
+The current worktree implements the compiler, provenance, semantic validation, dialect registries and preflight, full index phases, typed expressions, PostgreSQL pgvector adapter behavior, and unified rebuild evidence described here. Identity/reference declarations use the accepted `core.identity`/`core.ref` type model; the host-owned `identityProfile` resolves identities and references before canonical validation.
 Default SQLite-backed tests, static validation, MariaDB 10.11 conformance, and PostgreSQL/pgvector conformance pass.
 
 ## Reading Map

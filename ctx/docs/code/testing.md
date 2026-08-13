@@ -79,7 +79,7 @@ One aggregate fixture contains several independent failures and proves that all 
 ## Identity And Reference Type Matrix
 
 The accepted conformance matrix requires that the same package fragment compile under a host-selected identity representation policy; `core.identity` resolves to a concrete type plus generation, and every `core.ref` derives only the mapped `core.identity` target type, never generation or an arbitrary PRIMARY/UNIQUE target. Generated identity primary keys retain provenance, and special-type resolution leaves no unresolved `core.identity` or `core.ref` type in the canonical or physical model. It also requires invalid profiles, ambiguous `core.ref` derivations, and non-identity `core.ref` targets to produce deterministic diagnostics.
-Current implementation tests exercise the obsolete role representation; this documentation-only correction does not change them. A separately authorized implementation change must add type-form declarations and update conformance. The SQLite execution suite must verify generated identity primary-key DDL; module conformance must project the same canonical keys and relations through both SQLite and PostgreSQL adapters.
+Compiler and execution tests use type-form declarations, reject obsolete v2 role fields, preserve DEM v1 `id`/`ref` decoding, and verify the same resolved identity/reference model through SQLite and PostgreSQL adapters.
 
 ## Legacy Conversion Regression Matrix
 

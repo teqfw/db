@@ -227,23 +227,14 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
              * @returns {object}
              */
             const decodeAttr = function (raw, rawPointer, canonicalPointer, name) {
-                if (!checkObject(raw, ['comment', 'default', 'generation', 'nullable', 'role', 'storage', 'type'], rawPointer)) raw = {};
+                if (!checkObject(raw, ['comment', 'default', 'generation', 'nullable', 'storage', 'type'], rawPointer)) raw = {};
                 const res = {
                     name,
                     comment: typeof raw.comment === 'string' ? raw.comment : '',
-                    type: raw.role === undefined ? decodeType(raw.type, `${rawPointer}/type`) : undefined,
+                    type: decodeType(raw.type, rawPointer + '/type'),
                     storage: {},
                     nullable: raw.nullable === true,
                 };
-                if (raw.role === 'identity' || raw.role === 'ref') {
-                    delete res.type;
-                    res.role = raw.role;
-                } else if (raw.role !== undefined) {
-                    addDiagnostic({code: 'DEM_DECLARATION_SHAPE_INVALID', details: {field: 'role'}, message: 'Attribute role must be identity or ref.', path: `${rawPointer}/role`});
-                }
-                if (raw.role !== undefined && (raw.type !== undefined || raw.default !== undefined || raw.generation !== undefined)) {
-                    addDiagnostic({code: 'DEM_DECLARATION_SHAPE_INVALID', details: {field: 'role'}, message: 'A role attribute cannot declare type, default, or generation.', path: rawPointer});
-                }
                 if (raw.nullable !== undefined && typeof raw.nullable !== 'boolean') {
                     addDiagnostic({
                         code: 'DEM_DECLARATION_SHAPE_INVALID',

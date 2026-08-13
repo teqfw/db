@@ -32,11 +32,13 @@ export default class TeqFw_Db_Back_Dem_Registry_Core {
             'core.decimal': {params: {allowed: ['precision', 'scale', 'unsigned'], defaults: {unsigned: false}}},
             'core.enum': {params: {allowed: ['values']}},
             'core.integer': {params: {allowed: ['bits', 'unsigned'], defaults: {bits: 32, unsigned: false}}},
+            'core.identity': {params: noParams},
             'core.json': {params: noParams},
             'core.string': {params: {allowed: ['length']}},
             'core.text': {params: noParams},
             'core.uuid': {params: noParams},
             'core.vector': {params: {allowed: ['dimensions', 'element', 'sparse']}},
+            'core.ref': {params: noParams},
         });
         this.defaults = freeze({
             'core.currentDate': {types: ['core.date']},
