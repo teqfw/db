@@ -1,9 +1,6 @@
-/**/local.json
-/.env
-/.idea/
-/.nyc_output/
-/dev/cfg/local.json
-/jsdoc/
+/.vscode/
+/**/.env 
+/**/output*.md
+/**/output*.zip
+/**/tmp/
 /node_modules/
-/own_modules/
-/tmp/
