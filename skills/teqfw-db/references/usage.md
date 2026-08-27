@@ -14,7 +14,9 @@ Resolve a separate transient connection (`TeqFw_Db_Back_RDb_Connect$$`) for ever
 
 Package attributes use `type.id: "core.identity"` for system identities and `type.id: "core.ref"` for stored references. The host application map owns the single `identityProfile`; packages do not choose its storage representation. A `core.ref` must participate in exactly one relation whose target is the corresponding `core.identity`, receives only that concrete type, and is never generated. Ordinary explicitly typed relations to compatible primary or unique keys remain separate.
 
-Name each DEM `package` and `entity` key with `^[a-z][a-z0-9]*$`; `_`, camelCase, uppercase, whitespace, and hyphens are rejected. Use nested packages for logical grouping: `package.pde.package.runtime.package.owner.entity.session` projects to `pde_runtime_owner_session`. The optional application-map `namespace` is a separate physical prefix, not a replacement for path segments. Attribute names have independent rules, so `owner_id` remains valid.
+Before writing or changing a DEM path, validate every `package` and `entity` key against `^[a-z][a-z0-9]*$`. These keys are lowercase alphanumeric words only: `_`, camelCase, uppercase, whitespace, and hyphens are rejected. This rule is intentionally stricter than the attribute-name rule, so `owner_id` may be an attribute but must not be a package or entity key.
+
+Build a readable physical table name through nested logical packages, rather than encoding separators in a key. For example, `package.pde.package.runtime.package.owner.entity.session` projects to `pde_runtime_owner_session`; it is not valid to write a single `pde_runtime_owner` package. The optional application-map `namespace` is a separate physical prefix, not a replacement for required logical path segments. When a compiler reports an invalid name, correct the declaration at its reported canonical path; do not work around the validation with a physical-name override or by changing an unrelated map setting.
 
 For direct compiler use, supply:
 
