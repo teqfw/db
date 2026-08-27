@@ -20,6 +20,7 @@ Later stages may be skipped only when an earlier failure makes their evidence un
 - Declaration version is supported.
 - Required maps and arrays have the documented shape.
 - Names, paths, registry identifiers, and enums are valid.
+- Raw package and entity keys match `^[a-z][a-z0-9]*$` before canonicalization; `_` and camelCase are invalid for those keys.
 - Every declaration and map has explicit `version: 2` before semantic validation.
 
 ### 2. Composition
@@ -131,6 +132,7 @@ Messages are not used for program branching.
 | --- | --- |
 | `DEM_DECLARATION_VERSION_UNSUPPORTED` | Version is omitted or is not integer `2` |
 | `DEM_DECLARATION_SHAPE_INVALID` | A declaration node has the wrong structural shape |
+| `DEM_DECLARATION_IDENTIFIER_INVALID` | A raw package or entity key does not match `^[a-z][a-z0-9]*$` |
 | `DEM_COMPOSITION_OWNER_CONFLICT` | More than one fragment owns one semantic identity |
 | `DEM_PROVENANCE_MISSING` | A canonical semantic node lacks source evidence |
 | `DEM_REFERENCE_MAP_MISSING` | An external reference has no owner-scoped map entry |

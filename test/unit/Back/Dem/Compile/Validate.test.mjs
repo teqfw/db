@@ -205,23 +205,40 @@ describe('TeqFw_Db_Back_Dem_Compile_A_Validate', () => {
         assert.ok(notUniqueDiagnostics.some((item) => item.code === 'DEM_RELATION_TARGET_NOT_UNIQUE'));
     });
 
-    it('detects physical-name collisions after namespace conversion', async () => {
+    it('rejects package and entity identifiers outside the lowercase alphanumeric contract', async () => {
         const declaration = {
             version: 2, requires: [], entity: {}, refs: {},
             package: {
-                a: {
-                    entity: {b_c: {attr: {id: attr()}, index: {pk: key('primary', ['id'])}, relation: {}}},
+                Runtime: {
+                    entity: {session: {attr: {id: attr()}, index: {pk: key('primary', ['id'])}, relation: {}}},
                     package: {},
                 },
-                a_b: {
-                    entity: {c: {attr: {id: attr()}, index: {pk: key('primary', ['id'])}, relation: {}}},
+                runtimeOwner: {
+                    entity: {session: {attr: {id: attr()}, index: {pk: key('primary', ['id'])}, relation: {}}},
+                    package: {},
+                },
+                runtime_owner: {
+                    entity: {item: {attr: {id: attr()}, index: {pk: key('primary', ['id'])}, relation: {}}},
+                    package: {},
+                },
+                runtime: {
+                    entity: {
+                        ownerSession: {attr: {id: attr()}, index: {pk: key('primary', ['id'])}, relation: {}},
+                        owner_session: {attr: {id: attr()}, index: {pk: key('primary', ['id'])}, relation: {}},
+                    },
                     package: {},
                 },
             },
         };
         const diagnostics = await getDiagnostics(declaration);
-        assert.equal(diagnostics[0].code, 'DEM_PHYSICAL_NAME_COLLISION');
-        assert.deepEqual(diagnostics[0].details.entities, ['/a/b_c', '/a_b/c']);
+        assert.deepEqual(diagnostics.filter((item) => item.code === 'DEM_DECLARATION_IDENTIFIER_INVALID')
+            .map((item) => [item.code, item.details]), [
+            ['DEM_DECLARATION_IDENTIFIER_INVALID', {kind: 'package', name: 'Runtime', pattern: '^[a-z][a-z0-9]*$'}],
+            ['DEM_DECLARATION_IDENTIFIER_INVALID', {kind: 'package', name: 'runtime_owner', pattern: '^[a-z][a-z0-9]*$'}],
+            ['DEM_DECLARATION_IDENTIFIER_INVALID', {kind: 'entity', name: 'owner_session', pattern: '^[a-z][a-z0-9]*$'}],
+            ['DEM_DECLARATION_IDENTIFIER_INVALID', {kind: 'entity', name: 'ownerSession', pattern: '^[a-z][a-z0-9]*$'}],
+            ['DEM_DECLARATION_IDENTIFIER_INVALID', {kind: 'package', name: 'runtimeOwner', pattern: '^[a-z][a-z0-9]*$'}],
+        ]);
     });
 
     it('deduplicates capability union with all provenance and rejects unsupported adapters', async () => {

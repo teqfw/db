@@ -20,6 +20,8 @@ export default class TeqFw_Db_Back_Dem_Compile_A_ValidateNames {
         const normalizeName = (value) => value.toLowerCase().trim();
         /** @param {string} value @returns {string} */
         const normalizePath = (value) => `/${value.split('/').map(normalizeName).filter(Boolean).join('/')}`;
+        const localIdentifierPattern = '^[a-z][a-z0-9]*$';
+        const localIdentifier = new RegExp(localIdentifierPattern);
 
         /**
          * @param {object} deps
@@ -55,10 +57,23 @@ export default class TeqFw_Db_Back_Dem_Compile_A_ValidateNames {
              * @param {string} deps.rawName
              * @param {string} deps.sourcePointer
              * @param {boolean} deps.pathName
+             * @param {'entity'|'package'|undefined} deps.identifierKind
              * @param {object} deps.seen
              * @returns {string|null}
              */
-            const claim = function ({canonicalPath, envelope, rawName, sourcePointer, pathName = false, seen}) {
+            const claim = function ({canonicalPath, envelope, rawName, sourcePointer, pathName = false, identifierKind, seen}) {
+                if (identifierKind && !localIdentifier.test(rawName)) {
+                    const item = evidence(envelope, sourcePointer);
+                    diagnostics.push(diagnostic.create({
+                        code: 'DEM_DECLARATION_IDENTIFIER_INVALID',
+                        details: {kind: identifierKind, name: rawName, pattern: localIdentifierPattern},
+                        message: 'Package and entity names must use lowercase ASCII letters and digits and start with a letter.',
+                        path: sourcePointer,
+                        sources: item ? [item] : [],
+                        stage: 'decode',
+                    }));
+                    return null;
+                }
                 const normalized = pathName ? normalizePath(rawName) : normalizeName(rawName);
                 const valid = pathName ? normalized !== '/' : normalized.length > 0 && !normalized.includes('/');
                 if (!valid) {
@@ -111,6 +126,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_ValidateNames {
                         const entity = claim({
                             canonicalPath: `${canonicalPointer}/entity`,
                             envelope,
+                            identifierKind: 'entity',
                             rawName: rawEntity,
                             seen,
                             sourcePointer: entitySource,
@@ -151,6 +167,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_ValidateNames {
                         const name = claim({
                             canonicalPath: `${canonicalPointer}/package`,
                             envelope,
+                            identifierKind: 'package',
                             rawName: rawPackage,
                             seen,
                             sourcePointer: packageSource,

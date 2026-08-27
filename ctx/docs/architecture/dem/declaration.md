@@ -58,8 +58,8 @@ Every other array is a complete value owned by its containing semantic node.
 ```
 
 Entity, attribute, index, and relation keys are their local names.
-Canonical entity identity is the normalized slash-delimited package path plus entity name.
-Names are normalized once during decoding; two source names that normalize to the same identity conflict.
+Package and entity local names must match `^[a-z][a-z0-9]*$`: lowercase ASCII letters and digits, beginning with a letter. The compiler checks the raw key before canonicalization; uppercase, camelCase, whitespace, hyphens, and `_` are invalid for these two kinds. Attribute, index, and relation local-name rules remain independent, so an attribute such as `owner_id` is valid.
+Canonical entity identity is the slash-delimited package path plus entity name. For permitted package and entity names the source form is already canonical; no case or whitespace normalization is a compatibility feature.
 
 Package containers may be co-declared only as structural path segments.
 A non-empty package metadata field such as `comment` is a semantic node and has one owner.
@@ -326,7 +326,13 @@ Default location: `etc/teqfw.schema.map.json`.
 }
 ```
 
-`namespace` is the physical table prefix.
+`namespace` is an optional physical table prefix. The compiler derives one physical table name from every segment of the logical entity path:
+
+```text
+table = [namespace + "_"] + entity.path.segments.join("_")
+```
+
+For example, `package.pde.package.runtime.entity.delegation` projects to `pde_runtime_delegation`, while `package.pde.package.runtime.package.owner.entity.session` projects to `pde_runtime_owner_session`. The `pde_runtime_` part in those examples comes from the nested logical packages, not from `namespace`. A map with `namespace: "pde_runtime"` and logical path `/owner/session` also produces `pde_runtime_owner_session`, but represents a different logical model and must not substitute package grouping.
 `identityProfile` is the host-owned policy that defines how logical entity identities and their references are represented in the target application model. It is one application-wide policy, not package-owned metadata or a package-selected SQL mechanism.
 
 The current DEM v2 profile structure is optional and contains `type` plus `generation`. When absent, it is signed 32-bit `core.integer` with `generation.kind: "core.identity"` in `byDefault` mode. When present, its type and generation must be accepted by the selected adapter. This current structure materializes `core.identity`; `core.ref` derives only the compatible concrete type from the resolved identity target.

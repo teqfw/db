@@ -43,19 +43,16 @@ function entity(name = 'item') {
 }
 
 describe('DEM compiler hardening boundaries', () => {
-    it('rejects two raw declaration keys that normalize to one semantic owner and retains both sources', async () => {
+    it('rejects an invalid entity identifier before canonicalization and retains its source', async () => {
         const declaration = entity('User');
-        declaration.entity[' user '] = {attr: {id: integer()}, index: {pk: primary()}, relation: {}};
 
         await assert.rejects(
             compiler.exec({adapter: createFakeAdapter(), fragments: [fragment(declaration)], mapEnvelope: mapEnvelope()}),
             (error) => {
-                const item = error.diagnostics.find((value) => value.code === 'DEM_COMPOSITION_OWNER_CONFLICT');
+                const item = error.diagnostics.find((value) => value.code === 'DEM_DECLARATION_IDENTIFIER_INVALID');
                 assert(item);
-                assert.deepEqual(item.details.names, [' user ', 'User']);
-                assert.deepEqual(item.sources.map((value) => value.sourcePointer), [
-                    '/entity/ user ', '/entity/User',
-                ]);
+                assert.deepEqual(item.details, {kind: 'entity', name: 'User', pattern: '^[a-z][a-z0-9]*$'});
+                assert.deepEqual(item.sources.map((value) => value.sourcePointer), ['/entity/User']);
                 assert.equal('model' in error, false);
                 return true;
             },
@@ -156,7 +153,9 @@ describe('DEM compiler hardening boundaries', () => {
         declaration.entity.alpha.index.beta = {
             include: [], keys: [{attr: 'id'}], kind: 'index', method: 'core.btree', options: {}, phase: 'afterRelations',
         };
-        declaration.entity.alpha_beta = {attr: {id: integer()}, index: {pk: primary()}, relation: {}};
+        declaration.package.alpha = {
+            entity: {beta: {attr: {id: integer()}, index: {pk: primary()}, relation: {}}}, package: {},
+        };
         const base = createFakeAdapter();
         const adapter = Object.freeze({
             ...base,

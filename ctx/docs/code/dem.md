@@ -8,6 +8,8 @@ The evolving 2.x line accepts only explicit DEM v2 declarations and application 
 
 `src/Back/Dem/Compile/` validates and canonicalizes v2 DTOs, composes owned fragments, maps external references, resolves identity/reference policy, validates the logical graph, and projects through the selected adapter. The successful immutable result is the only input accepted by schema, rebuild, and query execution.
 
+`src/Back/Dem/Compile/A/ValidateNames.mjs` rejects raw package and entity keys outside `^[a-z][a-z0-9]*$` before decoding can treat them as canonical identities. The physical table projection keeps every logical entity-path segment and joins them with `_`; an optional map namespace is a separate prefix.
+
 `src/Back/Mod/Selection.mjs` accepts Selection v2 typed expressions. It does not decode legacy condition objects. Schema, rebuild, and dialect modules consume the same canonical model and retain transaction ownership boundaries.
 
 ## Required Verification

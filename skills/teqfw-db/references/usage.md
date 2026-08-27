@@ -14,6 +14,8 @@ Resolve a separate transient connection (`TeqFw_Db_Back_RDb_Connect$$`) for ever
 
 Package attributes use `type.id: "core.identity"` for system identities and `type.id: "core.ref"` for stored references. The host application map owns the single `identityProfile`; packages do not choose its storage representation. A `core.ref` must participate in exactly one relation whose target is the corresponding `core.identity`, receives only that concrete type, and is never generated. Ordinary explicitly typed relations to compatible primary or unique keys remain separate.
 
+Name each DEM `package` and `entity` key with `^[a-z][a-z0-9]*$`; `_`, camelCase, uppercase, whitespace, and hyphens are rejected. Use nested packages for logical grouping: `package.pde.package.runtime.package.owner.entity.session` projects to `pde_runtime_owner_session`. The optional application-map `namespace` is a separate physical prefix, not a replacement for path segments. Attribute names have independent rules, so `owner_id` remains valid.
+
 For direct compiler use, supply:
 
 - trusted fragment envelopes containing `declaration`, `filename`, `fragmentId`, and `packageName`;
