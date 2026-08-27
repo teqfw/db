@@ -28,6 +28,27 @@ Handle `DemCompilationError` through its structured `diagnostics` and `warnings`
 
 The loader can scan application and installed-package declarations before compilation. Do not present test-only inputs such as `testDems` or `testMapRoot` as production integration patterns.
 
+## Entity-to-table access
+
+Keep database access in logical DEM terms: consumer code must use an entity's logical name and must never hardcode a physical table name. The complete host-owned flow is `DEM map` → `compilation.physical.namespace` → connection resolver configuration → transaction `getTableName(entity metadata)` → physical table name.
+
+Loading and compiling DEM declarations does not configure a connection resolver. After a successful load and before any database access through that connection, the host must apply the compiled map namespace explicitly:
+
+```js
+const loaded = await demLoad.exec({path: projectRoot, adapter});
+connection.setSchemaConfig({prefix: loaded.compilation.physical.namespace});
+```
+
+Resolve the table only inside the transaction that will use it, through entity metadata rather than a constructed string:
+
+```js
+const table = trx.getTableName({
+    getEntityName: () => '@vendor/package/domain/entity',
+});
+```
+
+The map namespace is a physical prefix, but it is not applied to runtime queries automatically. Configure every connection before creating queries from it; repeat the configuration when the host creates an independent connection. The caller owns a transaction it opens and must commit it on success or roll it back on failure; `getTableName()` neither starts nor finalizes that transaction.
+
 ## Selection
 
 Selection v2 accepts registered typed expressions, derived projections, expression ordering, limit, offset, and matching count behavior. Keep user input in value nodes; never concatenate it into SQL. The owning transaction boundary commits or rolls back its own work.
