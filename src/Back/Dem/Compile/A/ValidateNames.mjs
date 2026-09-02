@@ -46,6 +46,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_ValidateNames {
                     filename: envelope.filename,
                     fragmentId,
                     packageName: envelope.packageName,
+                    revision: envelope.revision,
                     sourcePointer,
                 });
             };

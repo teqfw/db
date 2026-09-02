@@ -8,10 +8,12 @@
 - `src/Back/Api/` — abstract public contracts.
 - `src/Back/RDb/` — connection, transaction, schema, and rebuild execution.
 - `src/Back/Dem/` — trusted declaration scanning and compiler-backed loading.
+- `src/Back/Dem/Service.mjs` — package-owned logical service entities projected with every successful compilation.
 - `src/Back/Dem/Compile/` — explicit DEM v2 decoding, ownership-safe composition, validation, graph, provenance, and fingerprinting.
 - `src/Back/Dem/Registry/` — frozen core logical/default/generation/operator registries.
 - `src/Back/Dto/` — backend DTOs and factories.
 - `src/Back/RDb/Dialect/` — per-dialect physical projection, capability preflight, value codecs, and execution adapters.
+- `src/Back/RDb/History.mjs` — immutable effective-DEM snapshots, application trace records, and catalog validation.
 - `src/Back/Api/Import/` — replaceable import transformation contract.
 - `src/Back/Act/`, `App/`, `Cli/`, and `Plugin/` — operational entry modules.
 - `src/Shared/Dto/`, `Enum/`, and `Util/` — cross-runtime selection contracts.
@@ -71,6 +73,7 @@ JSON; optional `EXTRA` objects carry specialized Knex or driver-specific setting
 - parallel and guarded in-place rebuild with transformation and failure evidence;
 - verified-snapshot restore, transaction ownership, and PostgreSQL generated-state restoration;
 - JSON export and import of modeled tables.
+- package-owned effective-DEM snapshot and schema-application history with SQLite catalog validation.
 
 ### Verification Status
 
@@ -81,7 +84,7 @@ JSON; optional `EXTRA` objects carry specialized Knex or driver-specific setting
 ### Intentionally External
 
 - catalog diff and automatic incremental DDL planning;
-- application migration versions and history;
+- application migration versions, sequencing, and policy;
 - semantic transformation discovery and ordering;
 - application quiescence, cutover, online dual write, and release rollback.
 

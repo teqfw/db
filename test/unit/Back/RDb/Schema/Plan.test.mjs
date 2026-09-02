@@ -57,8 +57,8 @@ describe('TeqFw_Db_Back_RDb_Schema_A_Plan', () => {
             },
         });
         const value = plan.exec({compilation, operation: 'create'});
-        assert.deepEqual(value.phases.tables.map((item) => item.table.entity), ['/parent', '/child']);
-        assert.equal(value.phases.relations.length, 1);
+        assert.deepEqual(value.phases.tables.map((item) => item.table.entity), ['/parent', '/schema/snapshot', '/child', '/schema/application']);
+        assert.equal(value.phases.relations.length, 3);
         assert.equal(value.phases.afterData.length, 1);
         assert.equal(value.phases.afterData[0].phase, 'afterData');
         assert(Object.isFrozen(value));
@@ -81,8 +81,8 @@ describe('TeqFw_Db_Back_RDb_Schema_A_Plan', () => {
             entity: {alpha: entity('/beta'), beta: entity('/alpha')},
         }, sqlite);
         const schema = plan.exec({compilation, operation: 'create'});
-        assert.equal(schema.phases.tables.length, 2);
-        assert.equal(schema.phases.relations.length, 2);
+        assert.equal(schema.phases.tables.length, 4);
+        assert.equal(schema.phases.relations.length, 4);
         assert.throws(
             () => plan.exec({compilation, operation: 'transfer', includeData: true}),
             (error) => error.name === 'DemPlanError'

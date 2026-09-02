@@ -18,6 +18,8 @@ export default class TeqFw_Db_Back_Dto_Dem_Compile_Source {
     /** @type {string} */
     packageName;
     /** @type {string} */
+    revision;
+    /** @type {string} */
     sourcePointer;
 }
 
@@ -37,9 +39,10 @@ export class Factory {
          * @param {string} deps.fragmentId
          * @param {string} deps.packageName
          * @param {string} deps.sourcePointer
+         * @param {string} [deps.revision]
          * @returns {Readonly<TeqFw_Db_Back_Dto_Dem_Compile_Source>}
          */
-        this.create = function ({filename, fragmentId, packageName, sourcePointer}) {
+        this.create = function ({filename, fragmentId, packageName, revision = '', sourcePointer}) {
             const required = {filename, fragmentId, packageName};
             for (const [key, value] of Object.entries(required)) {
                 if (typeof value !== 'string' || value.length === 0) {
@@ -53,6 +56,7 @@ export class Factory {
             res.filename = filename;
             res.fragmentId = fragmentId;
             res.packageName = packageName;
+            res.revision = revision;
             res.sourcePointer = sourcePointer;
             return Object.freeze(res);
         };

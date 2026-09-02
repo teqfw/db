@@ -27,6 +27,7 @@ The package owns:
 - making the validated target model available for database projection and schema operations;
 - providing data access against the assembled application schema;
 - snapshot export, import, and source-to-target data transfer primitives for rebuild migration.
+- retaining immutable effective-DEM snapshots and append-only schema-application traces for controlled migration planning and recovery.
 
 ## Core Lifecycle
 
@@ -54,7 +55,7 @@ For a rebuild migration, an authorized caller captures or retains source data, c
 - Treating an arbitrary database feature as part of the assembled schema without validation and host selection.
 - Discovering arbitrary production drift and automatically generating an incremental `ALTER` plan.
 - Inferring renames, splits, merges, type conversions, or values for newly required fields.
-- Owning application release sequencing, online cutover, migration history, or rollback policy.
+- Owning application release sequencing, online cutover, migration policy, or rollback policy.
 
 ## Product Invariants
 
@@ -68,6 +69,7 @@ For a rebuild migration, an authorized caller captures or retains source data, c
 - Invalid references, attributes, relation cardinality, type compatibility, target uniqueness, indexes, and unsupported capabilities fail before execution.
 - Logical type, physical storage, value default, and value generation remain separate contracts.
 - The canonical DEM describes the target state; it does not encode the history required to infer semantic migrations.
+- A package-owned history records which immutable effective DEM was successfully applied; it is audit evidence, not release sequencing, migration planning, cutover, or rollback policy.
 - Destructive replacement of durable state requires application or operator authorization and an explicit preservation decision.
 
 ## Contract Status

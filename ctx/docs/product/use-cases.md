@@ -49,6 +49,11 @@ A developer compiles all fragments and, when needed, plans a selected operation 
 It receives deterministic diagnostics for every independently detectable ownership conflict, unknown type, unresolved endpoint, invalid key, incompatible relation, unsupported capability, or operation cycle without a supported strategy.
 Each diagnostic identifies canonical location and trusted source provenance so the owning package or application map can be corrected.
 
+## UC-11 Retain And Verify Schema History
+
+A migration agent records a successfully compiled effective DEM, starts an application attempt from the last applied snapshot to a target snapshot, and marks it applied only after the active catalog matches the target projection.
+It can resolve the last applied snapshot for planning and diagnose a mismatch without requesting an inferred migration.
+
 ## Explicitly Unsupported Use Case
 
 The package does not inspect arbitrary schema drift and synthesize a complete incremental migration plan.

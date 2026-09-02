@@ -17,7 +17,7 @@
   "scripts": {
     "test": "npm run test:unit && npm run test:integration && npm run test:acceptance && npm run test:package",
     "test:unit": "find test/unit -name '*.test.mjs' -print0 | xargs -0 node --test",
-    "test:integration": "node --test test/integration/Di2.test.mjs",
+    "test:integration": "find test/integration -name '*.test.mjs' -print0 | xargs -0 node --test",
     "test:acceptance": "find test/acceptance -name '*.test.mjs' -print0 | xargs -0 node --test",
     "test:package": "find test/package -name '*.test.mjs' -print0 | xargs -0 node --test",
     "typecheck": "tsc -p jsconfig.json",

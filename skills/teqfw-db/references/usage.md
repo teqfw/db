@@ -79,3 +79,18 @@ The rebuild executor authenticates both compilation results, derives its schema 
 Treat returned evidence as unaccepted until the caller verifies it. A failed required row or late index makes the rebuild unsuccessful. Preserve an independently readable source or durable snapshot until the host completes acceptance and cutover.
 
 The unified rebuild implementation does not infer incremental migrations, accept the target, perform cutover, or delete the source.
+
+## Effective DEM History
+
+After creating the target structure, record the authentic successful compilation and retain the returned local snapshot ID. Start an application record from the last applied snapshot (or `null` only for first-time creation), then mark it applied only with the same target compilation after catalog validation succeeds:
+
+```js
+const history = await container.get('TeqFw_Db_Back_RDb_History$');
+const target = await history.recordSnapshot({compilation, connection});
+const attempt = await history.startApplication({
+    compilation, connection, sourceSnapshotId: previousSnapshotId ?? null, targetSnapshotId: target.id,
+});
+await history.completeApplication({applicationId: attempt.id, compilation, connection});
+```
+
+Use `failApplication()` for an interrupted or rejected started attempt; retry by creating a new application record. `resolveLastApplied()` returns the last successful application and its immutable snapshot for migration planning. A `DemCatalogMismatchError` exposes explicit diagnostics; do not turn it into inferred DDL or transformations. Pass a caller-owned transaction when the history event must share an atomic boundary, and do not finalize that transaction in the history service.

@@ -58,6 +58,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Compose {
                     filename: item.envelope.filename,
                     fragmentId: item.envelope.fragmentId,
                     packageName: item.envelope.packageName,
+                    revision: item.envelope.revision,
                     sourcePointer: item.pointers[canonicalPath] ?? canonicalPath,
                 });
             };

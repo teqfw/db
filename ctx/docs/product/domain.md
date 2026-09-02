@@ -41,6 +41,13 @@ A rebuild migration replaces one physical realization of the application model w
 It preserves data through an explicit snapshot or through a source-to-target copy, rather than by mutating every existing object in place.
 The core package can move structurally compatible data and invoke explicitly supplied transformation behavior; it cannot infer the business meaning of incompatible changes.
 
+### Effective DEM History
+
+The package owns an immutable effective-DEM snapshot identified locally by `id` and globally comparable by a logical content fingerprint.
+Each snapshot retains the canonical dialect-independent model and trusted provenance with package identifiers and immutable content revisions.
+An append-only schema-application record links the last known applied source snapshot to a requested target snapshot and moves only from `started` to terminal `applied` or `failed`.
+Only an `applied` record establishes the database's last applied logical model.
+
 ## Core Entities
 
 - DEM fragment — one package-owned model declaration.
@@ -54,6 +61,8 @@ The core package can move structurally compatible data and invoke explicitly sup
 - Attribute — a logical typed entity value with separate storage, default, and generation contracts.
 - Relation — a foreign-key relation between entity attributes.
 - Diagnostic — structured error or warning connected to a model location and its fragment provenance.
+- effective-DEM snapshot — an immutable, deduplicated canonical logical model retained in the target database.
+- schema application — an append-only record of one request to make a snapshot the applied database state.
 
 ## Ownership Principles
 
@@ -73,3 +82,4 @@ The host application owns release sequencing, migration policy, cutover, and fin
 - Unsupported model requirements fail before execution.
 - A rebuild never treats a guessed rename or conversion as accepted migration intent.
 - Removing a fragment does not by itself authorize destruction of its durable data.
+- Completed snapshots and schema applications are never rewritten; recovery and retry create another application record.

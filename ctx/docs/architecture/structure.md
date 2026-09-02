@@ -22,6 +22,9 @@ Logical validation checks declarations and builds a graph with strongly connecte
 The compilation result is immutable desired-state input to later blocks.
 Compilation does not inspect a live database, infer transitions from an earlier DEM, or select a winner for conflicting owners.
 
+The compiler also contributes the package-owned `schema.snapshot` and `schema.application` entities to every successful target.
+It preserves the existing physical-plan fingerprint for execution binding and derives a separate logical effective-DEM fingerprint from the canonical model only.
+
 ## Schema Block
 
 The selected dialect adapter resolves logical types, defaults, generation, indexes, relations, and expressions into physical descriptors and derived capabilities.
@@ -60,6 +63,12 @@ A parallel rebuild uses distinct source and target connections or independently 
 
 The host composition root or a future migration plugin may choose source and target providers, supply transformations, order application versions, authorize destructive steps, evaluate evidence, and perform cutover. The ownership of this orchestration is not yet decided.
 These decisions are injected through explicit contracts; the rebuild block does not resolve the DI container dynamically as a service locator.
+
+## Schema History Block
+
+The history service records the logical effective model and provenance as immutable JSON, deduplicated by its logical fingerprint.
+It owns append-only application records and validates a claim of `applied` against the selected connection's projected tables and columns before making that record authoritative.
+It never produces an ALTER plan, transformation, cutover decision, or rollback action from a mismatch.
 
 ## Operations Block
 

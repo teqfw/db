@@ -17,6 +17,7 @@ The namespace metadata maps `TeqFw_Db_` to `./src` with `.mjs`. This addressing 
 | `TeqFw_Db_Back_RDb_Connect$$` | Create an independent transient connection | Documented named-connection composition token |
 | `TeqFw_Db_Back_Dem_Compile$` | Compile trusted DEM envelopes with one adapter | Current implementation token; not automatically a stable public API |
 | `TeqFw_Db_Back_RDb_Rebuild$` | Execute bounded evidence-producing rebuild | Current implementation token; not yet a documented stable public token |
+| `TeqFw_Db_Back_RDb_History$` | Record and verify effective-DEM history | Documented schema-history token |
 
 The suffix `$` requests the normal DI lifecycle; `$$` requests a transient instance. Configure `@teqfw/di` namespace roots before the first resolution.
 
@@ -57,6 +58,8 @@ exec({
 ```
 
 `sourceCompilation` may default to the target only when both describe the same physical model; supply an authentic successful source compilation when the source model, namespace, or layout differs. The rebuild token is not yet a documented stable public token.
+
+Schema history uses the documented `TeqFw_Db_Back_RDb_History$` token. Its principal calls are `recordSnapshot({compilation, connection, transaction?})`, `startApplication({compilation, connection, sourceSnapshotId?, targetSnapshotId, transaction?})`, `completeApplication({applicationId, compilation, connection, transaction?})`, `failApplication(...)`, `resolveLastApplied(...)`, and read-only `validateCatalog({compilation, connection})`.
 
 ## Verification Rule
 

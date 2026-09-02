@@ -6,6 +6,9 @@
 ## Runtime Model
 
 The package runs as Node.js ESM.
+
+The selected database must grant the package-owned schema-history tables the same create, read, insert, and update privileges required by normal schema lifecycle operations.
+Catalog validation is read-only and verifies projected table and column presence before a history record can become `applied`.
 The 2.x line targets Node.js 20 or newer to align with `@teqfw/di` 2.x.
 
 ## External Dependencies

@@ -15,10 +15,11 @@ export default class TeqFw_Db_Back_Dem_Compile {
      * @param {TeqFw_Db_Back_Dem_Compile_A_ValidateNames} deps.validateNames
      * @param {TeqFw_Db_Back_Dem_Compile_A_Graph} deps.graph
      * @param {TeqFw_Db_Back_Dem_Compile_A_Fingerprint} deps.fingerprint
+     * @param {TeqFw_Db_Back_Dem_Service} deps.serviceDem
      * @param {TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic.Factory} deps.diagnostic
      * @param {TeqFw_Db_Back_Dto_Dem_Compile_Result.Factory} deps.resultFactory
      */
-    constructor({decodeV2, compose, mapRefs, validate, validateNames, graph, fingerprint, diagnostic, resultFactory}) {
+    constructor({decodeV2, compose, mapRefs, validate, validateNames, graph, fingerprint, serviceDem, diagnostic, resultFactory}) {
         const successful = new WeakSet();
 
         /**
@@ -72,20 +73,25 @@ export default class TeqFw_Db_Back_Dem_Compile {
          * @throws {Error}
          */
         this.exec = async function ({fragments, mapEnvelope, adapter}) {
-            const input = Array.isArray(fragments) ? fragments : [];
+            const input = [...(Array.isArray(fragments) ? fragments : []), serviceDem.getFragment()];
             const sorted = input.map((item) => ({
                 declaration: item?.declaration,
                 filename: item?.filename,
                 fragmentId: item?.fragmentId,
                 packageName: item?.packageName,
+                revision: fingerprint.exec({value: item?.declaration}),
             })).sort((a, b) => {
                 const fragment = String(a.fragmentId ?? '').localeCompare(String(b.fragmentId ?? ''));
                 return fragment || String(a.filename ?? '').localeCompare(String(b.filename ?? ''));
             });
-            const nameDiagnostics = validateNames.exec({fragments: sorted, mapEnvelope});
+            const trustedMap = mapEnvelope && typeof mapEnvelope === 'object' ? {
+                ...mapEnvelope,
+                revision: fingerprint.exec({value: mapEnvelope.declaration}),
+            } : mapEnvelope;
+            const nameDiagnostics = validateNames.exec({fragments: sorted, mapEnvelope: trustedMap});
             const decoded = sorted.map((envelope) => decodeV2.exec({envelope}));
             const composed = compose.exec({decoded});
-            const mapped = mapRefs.exec({composed, mapEnvelope});
+            const mapped = mapRefs.exec({composed, mapEnvelope: trustedMap});
             const validated = validate.exec({mapped});
             const analyzed = graph.exec({validated});
             const allDiagnostics = [...nameDiagnostics, ...analyzed.diagnostics];
@@ -336,8 +342,14 @@ export default class TeqFw_Db_Back_Dem_Compile {
             const errors = ordered.filter((item) => item.severity === 'error');
             const warnings = diagnostic.sort(ordered.filter((item) => item.severity === 'warning'));
             if (errors.length > 0 || !physical) throw createError(errors, warnings);
+            const effective = {
+                fingerprint: fingerprint.exec({value: analyzed.model}),
+                model: analyzed.model,
+                provenance: analyzed.provenance,
+            };
             const fingerprintValue = fingerprint.exec({value: {model: analyzed.model, physical}});
             const result = resultFactory.create({
+                effective,
                 fingerprint: fingerprintValue,
                 graph: analyzed.graph,
                 model: analyzed.model,
@@ -361,6 +373,7 @@ export const __deps__ = Object.freeze({
         validateNames: 'TeqFw_Db_Back_Dem_Compile_A_ValidateNames$',
         graph: 'TeqFw_Db_Back_Dem_Compile_A_Graph$',
         fingerprint: 'TeqFw_Db_Back_Dem_Compile_A_Fingerprint$',
+        serviceDem: 'TeqFw_Db_Back_Dem_Service$',
         diagnostic: 'TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic__Factory$',
         resultFactory: 'TeqFw_Db_Back_Dto_Dem_Compile_Result__Factory$',
     }),

@@ -53,7 +53,7 @@ export interface DbSelectionV2 extends DbPagination {
     readonly orderBy?: readonly DbOrdering[];
     readonly execution?: Readonly<Record<string, unknown>>;
 }
-export interface DemSource { readonly fragmentId: string; readonly filename: string; readonly sourcePointer: string; readonly packageName?: string; }
+export interface DemSource { readonly fragmentId: string; readonly filename: string; readonly sourcePointer: string; readonly packageName?: string; readonly revision?: string; }
 export interface DemFragmentEnvelope { readonly fragmentId: string; readonly filename: string; readonly packageName: string; readonly declaration: unknown; }
 export interface DemMapEnvelope { readonly filename?: string; readonly declaration: unknown; }
 export type DemDiagnosticSeverity = 'error' | 'warning';
@@ -64,7 +64,8 @@ export interface DemPhysicalPlan { readonly adapter: string; readonly namespace?
 export interface DemPhysicalTable { readonly entity: string; readonly name: string; readonly comment?: string; readonly columns: readonly DemPhysicalColumn[]; }
 export interface DemPhysicalColumn { readonly name: string; readonly logicalType: DbLogicalType; readonly physicalType: unknown; readonly nullable: boolean; readonly defaultValue?: unknown; readonly generation?: unknown; readonly requirements: readonly string[]; }
 export type DemProvenance = Readonly<Record<string, readonly DemSource[]>>;
-export interface DemCompilationResult { readonly fingerprint: string; readonly graph: DemGraph; readonly model: Readonly<Record<string, unknown>>; readonly physical: DemPhysicalPlan; readonly provenance: DemProvenance; readonly requirements: readonly string[]; readonly warnings: readonly DemDiagnostic[]; }
+export interface DemEffectiveModel { readonly fingerprint: string; readonly model: Readonly<Record<string, unknown>>; readonly provenance: DemProvenance; }
+export interface DemCompilationResult { readonly effective: DemEffectiveModel; readonly fingerprint: string; readonly graph: DemGraph; readonly model: Readonly<Record<string, unknown>>; readonly physical: DemPhysicalPlan; readonly provenance: DemProvenance; readonly requirements: readonly string[]; readonly warnings: readonly DemDiagnostic[]; }
 export interface DemCompiler { exec(input: {readonly fragments: readonly DemFragmentEnvelope[]; readonly mapEnvelope: DemMapEnvelope; readonly adapter: DbDialectAdapter}): Promise<DemCompilationResult>; assertResult(input: {readonly value: unknown}): DemCompilationResult; }
 
 export interface DbDialectDescription { readonly id: string; readonly family?: string; readonly capabilities?: readonly string[]; readonly [key: string]: unknown; }
@@ -130,6 +131,20 @@ export interface DbRebuildEvidence {
     readonly transformations: readonly Readonly<{entity: string; id: string}>[];
 }
 export interface DbRebuild { exec(input: DbRebuildInput): Promise<DbRebuildEvidence>; }
+
+export type DbSchemaApplicationStatus = 'started' | 'applied' | 'failed';
+export interface DbEffectiveSnapshot { readonly id: number; readonly fingerprint: string; readonly dem: Readonly<Record<string, unknown>>; readonly provenance: DemProvenance; readonly createdAt: string; }
+export interface DbSchemaApplication { readonly id: number; readonly sourceSnapshotId: number | null; readonly targetSnapshotId: number; readonly status: DbSchemaApplicationStatus; readonly startedAt: string; readonly completedAt: string | null; }
+export interface DbCatalogDiagnostic { readonly code: string; readonly details: Readonly<Record<string, unknown>>; }
+export interface DbCatalogValidation { readonly matches: boolean; readonly diagnostics: readonly DbCatalogDiagnostic[]; }
+export interface DbHistory {
+    recordSnapshot(input: {readonly compilation: DemCompilationResult; readonly connection: DbConnection; readonly transaction?: DbTransaction}): Promise<DbEffectiveSnapshot>;
+    startApplication(input: {readonly compilation: DemCompilationResult; readonly connection: DbConnection; readonly sourceSnapshotId?: number | null; readonly targetSnapshotId: number; readonly transaction?: DbTransaction}): Promise<DbSchemaApplication>;
+    validateCatalog(input: {readonly compilation: DemCompilationResult; readonly connection: DbConnection}): Promise<DbCatalogValidation>;
+    completeApplication(input: {readonly applicationId: number; readonly compilation: DemCompilationResult; readonly connection: DbConnection; readonly transaction?: DbTransaction}): Promise<DbSchemaApplication>;
+    failApplication(input: {readonly applicationId: number; readonly compilation: DemCompilationResult; readonly connection: DbConnection; readonly transaction?: DbTransaction}): Promise<DbSchemaApplication>;
+    resolveLastApplied(input: {readonly compilation: DemCompilationResult; readonly connection: DbConnection; readonly transaction?: DbTransaction}): Promise<Readonly<{application: DbSchemaApplication; snapshot: DbEffectiveSnapshot}> | null>;
+}
 
 declare global {
     type TeqFw_Db_InternalComponent = Readonly<Record<string, unknown>>;
@@ -375,6 +390,8 @@ declare global {
     namespace TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic { type Factory = DbDtoFactory<DemDiagnostic>; }
     type TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic__Factory = DbDtoFactory<DemDiagnostic>;
     type TeqFw_Db_Back_RDb_Rebuild = DbRebuild;
+    type TeqFw_Db_Back_RDb_History = DbHistory;
+    type TeqFw_Db_Back_Api_RDb_History = DbHistory;
     type TeqFw_Db_Back_Api_RDb_Rebuild = DbRebuild;
     type TeqFw_Db_Shared_Dto_Query_Expression = DbExpression;
     namespace TeqFw_Db_Shared_Dto_Query_Expression { type Factory = DbDtoFactory<DbExpression>; }

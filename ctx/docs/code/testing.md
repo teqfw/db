@@ -22,6 +22,7 @@ Tests use `node:test`. `npm test` runs unit, integration, acceptance, and packag
 - Package tests install the packed layout, type-check named and ambient consumer contracts, and prove that the export map exposes neither a runtime root nor `src/**` subpaths.
 - Every constructor that consumes injected values has an export-scoped `__deps__` declaration, and DI integration resolves representative default and named-factory tokens through `@teqfw/di` 2.x.
 - SQLite integration covers configuration, connection lifecycle, compiled schema execution, typed Selection v2, transaction ownership, and rebuild evidence.
+- SQLite integration covers immutable effective-DEM snapshot deduplication, application state transitions, last-applied resolution, and catalog-mismatch diagnostics.
 - The opt-in suite loads named PostgreSQL and MariaDB connections from an ignored project-root `.env`; tracked fixtures never contain credentials.
 
 ## DEM v2 Compiler Verification

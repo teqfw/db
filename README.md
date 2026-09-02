@@ -19,6 +19,7 @@ It supports PostgreSQL, MySQL/MariaDB, and SQLite through [Knex](https://knexjs.
 - Dialect-aware schema projection, typed relational queries, and rebuild operations.
 - Explicit transaction ownership: operations can use a caller transaction or manage their own.
 - Rebuild-oriented structure recreation and compatible data transfer with evidence.
+- Immutable effective-DEM snapshots and append-only schema-application history for migration agents; catalog mismatches are diagnostic evidence, never inferred migrations.
 
 ## DEM Identity And References
 

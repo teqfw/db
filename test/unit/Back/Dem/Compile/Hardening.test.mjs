@@ -101,7 +101,7 @@ describe('DEM compiler hardening boundaries', () => {
 
         assert.deepEqual(result.requirements, ['test.storage.integer']);
         assert.deepEqual(
-            result.provenance['/requires/test.storage.integer'].map((value) => value.sourcePointer),
+            result.provenance['/requires/test.storage.integer'].filter((value) => value.packageName !== '@teqfw/db').map((value) => value.sourcePointer),
             ['/entity/item/attr/id'],
         );
     });

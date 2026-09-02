@@ -70,6 +70,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
                     filename: mapEnvelope.filename,
                     fragmentId: mapId,
                     packageName: mapEnvelope.packageName,
+                    revision: mapEnvelope.revision,
                     sourcePointer,
                 });
             };

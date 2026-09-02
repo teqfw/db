@@ -12,6 +12,14 @@ Each application or package owns its DEM fragment. Compilation decodes supported
 
 Compilation is all-or-nothing. Do not execute a partial model after diagnostics. Every declaration and application map must explicitly declare `version: 2`; omitted and unsupported versions are rejected.
 
+## Effective DEM History
+
+Every successful compilation includes package-owned `schema.snapshot` and `schema.application` service entities. `compilation.effective.fingerprint` identifies the canonical dialect-independent effective DEM; `compilation.fingerprint` remains the physical-plan identity and is not interchangeable with it.
+
+The history service deduplicates immutable snapshots by the effective fingerprint and preserves canonical model provenance with content-derived source revisions. A schema application is append-only: `started` becomes either `applied` or `failed`, and a completed record is never rewritten. Only `applied` establishes the last applied snapshot.
+
+Before marking an attempt applied, the service checks the active connection catalog against the supplied target compilation and returns explicit table/column diagnostics on mismatch. It does not derive DDL, transformations, cutover, or recovery actions.
+
 ## Relational Access
 
 The selected connection determines one dialect adapter. Logical types, physical storage, defaults, generation, indexes, expressions, and runtime capabilities stay separate. Capability preflight must finish before dependent schema or query mutations.

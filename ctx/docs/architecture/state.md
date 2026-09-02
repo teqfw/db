@@ -10,6 +10,7 @@
 - Trusted fragment envelopes own source identity for one compilation input.
 - The target RDBMS owns the newly projected structure and transferred rows.
 - Dump JSON owns a portable snapshot only when explicitly exported and durably stored.
+- The package-owned `schema_snapshot` and `schema_application` tables own immutable logical-model evidence and append-only application attempts for the selected database.
 
 ## Runtime State
 
@@ -38,6 +39,7 @@ Only transaction commit makes row changes durable.
 Only schema lifecycle operations create or drop structure.
 Only an application/operator-authorized provisioning operation may install an extension or alter server capabilities.
 Only explicitly invoked transfer actions copy or restore transferable database contents.
+Only a successful catalog validation may change a started schema-application record to `applied`.
 Only the host application or operator accepts the target, performs cutover, or authorizes source retirement.
 
 ## Invariants
@@ -49,3 +51,4 @@ Failed compilation exposes diagnostics but no executable canonical model or phys
 A runtime preflight result applies only to the connection, fingerprint, and operation it checked.
 A source snapshot remains required for recovery from destructive in-place recreation.
 An unaccepted parallel target never silently replaces the source as authoritative state.
+An application record with `started` or `failed` status never establishes an applied schema state.

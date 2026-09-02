@@ -91,6 +91,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
                     filename: envelope.filename,
                     fragmentId: envelope.fragmentId,
                     packageName: envelope.packageName,
+                    revision: envelope.revision,
                     sourcePointer,
                 });
             };

@@ -52,22 +52,25 @@ async function compile(entityMap) {
 }
 
 describe('TeqFw_Db_Back_Dem_Compile_A_Graph', () => {
-    it('represents an empty graph without invented nodes or cycles', async () => {
+    it('retains package-owned history nodes for an otherwise empty application graph', async () => {
         const result = await compile({});
-        assert.deepEqual(result.graph.entities, []);
-        assert.deepEqual(result.graph.edges, []);
-        assert.deepEqual(result.graph.topological, []);
+        assert.deepEqual(result.graph.entities, ['/schema/application', '/schema/snapshot']);
+        assert.deepEqual(result.graph.edges.map((item) => [item.from, item.to]), [
+            ['/schema/application', '/schema/snapshot'],
+            ['/schema/application', '/schema/snapshot'],
+        ]);
+        assert.deepEqual(result.graph.topological, ['/schema/snapshot', '/schema/application']);
         assert.deepEqual(result.graph.cycles, []);
     });
 
     it('orders a DAG dependency-first and retains relation provenance', async () => {
         const result = await compile({child: entity({parent: 'parent'}), parent: entity()});
 
-        assert.deepEqual(result.graph.topological, ['/parent', '/child']);
-        assert.deepEqual(result.graph.edges.map((item) => [item.from, item.to, item.relation]), [
+        assert.deepEqual(result.graph.topological, ['/parent', '/schema/snapshot', '/child', '/schema/application']);
+        assert.deepEqual(result.graph.edges.filter((item) => item.from === '/child').map((item) => [item.from, item.to, item.relation]), [
             ['/child', '/parent', 'parent'],
         ]);
-        assert.equal(result.graph.edges[0].sources[0].sourcePointer, '/entity/child/relation/parent');
+        assert.equal(result.graph.edges.find((item) => item.from === '/child').sources[0].sourcePointer, '/entity/child/relation/parent');
         assert.deepEqual(result.graph.cycles, []);
     });
 

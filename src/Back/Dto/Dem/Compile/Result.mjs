@@ -11,6 +11,8 @@ const NS = 'TeqFw_Db_Back_Dto_Dem_Compile_Result';
  * Successful compilation value. Authenticity is held privately by the compiler.
  */
 export default class TeqFw_Db_Back_Dto_Dem_Compile_Result {
+    /** @type {{fingerprint: string, model: object, provenance: object}} */
+    effective;
     /** @type {string} */
     fingerprint;
     /** @type {object} */
@@ -49,6 +51,7 @@ export class Factory {
 
         /**
          * @param {object} deps
+         * @param {object} deps.effective
          * @param {string} deps.fingerprint
          * @param {object} deps.graph
          * @param {object} deps.model
@@ -58,8 +61,9 @@ export class Factory {
          * @param {ReadonlyArray<object>} deps.warnings
          * @returns {Readonly<TeqFw_Db_Back_Dto_Dem_Compile_Result>}
          */
-        this.create = function ({fingerprint, graph, model, physical, provenance, requirements, warnings}) {
+        this.create = function ({effective, fingerprint, graph, model, physical, provenance, requirements, warnings}) {
             const res = new TeqFw_Db_Back_Dto_Dem_Compile_Result();
+            res.effective = effective;
             res.fingerprint = fingerprint;
             res.graph = graph;
             res.model = model;

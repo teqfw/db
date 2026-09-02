@@ -12,6 +12,9 @@ The evolving 2.x line accepts only explicit DEM v2 declarations and application 
 
 `src/Back/Mod/Selection.mjs` accepts Selection v2 typed expressions. It does not decode legacy condition objects. Schema, rebuild, and dialect modules consume the same canonical model and retain transaction ownership boundaries.
 
+`src/Back/Dem/Service.mjs` supplies the non-overridable package-owned `schema.snapshot` and `schema.application` declaration. The compiler adds it to each target, derives `result.effective` from the dialect-independent canonical model and provenance, and keeps `result.fingerprint` as the existing physical-plan identity.
+Every trusted source in effective provenance carries a content-derived immutable `revision`; direct compiler callers do not supply it.
+
 ## Required Verification
 
 - Unit tests reject a declaration or map without `version: 2` and cover deterministic composition, diagnostics, provenance, graph analysis, logical validation, and physical planning.
