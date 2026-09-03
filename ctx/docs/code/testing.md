@@ -7,7 +7,7 @@ Product-level rebuild obligations are defined in [product migration](../product/
 
 ## Test Structure
 
-- `test/unit/` — isolated component tests with source-relative paths required by `teqfw-platform`; modules without an isolated unit boundary are explicitly excluded in `package.json`.
+- `test/unit/` — isolated component tests. Every `src/**/*.mjs` module has exactly one source-relative counterpart at `test/unit/**/*.test.mjs`, with `.test` inserted before the extension; every unit-test module maps back to exactly one source module. There are no exclusions from this bidirectional mapping.
 - `test/integration/` — DI-composed behavior, cross-component compiler and dialect scenarios, and SQLite/Knex execution.
 - `test/acceptance/` — complete v2 persistence workflows: compile, create a target, transfer data, and inspect rebuild evidence.
 - `test/optin/` — destructive PostgreSQL/pgvector and MariaDB/MySQL conformance against explicitly provisioned disposable databases.
@@ -20,7 +20,7 @@ Tests use `node:test`. `npm test` runs unit, integration, acceptance, and packag
 
 ## Required Verification
 
-- `teqfw-platform .` validates the bidirectional `src/**/*.mjs` ↔ `test/unit/**/*.test.mjs` mapping. Every source module without an isolated unit-test boundary has an exact, reasoned entry in `teqfw.platform.unitTests.exclusions`; grouped behavior tests belong under `test/integration/`.
+- `teqfw-platform .` validates the complete bidirectional `src/**/*.mjs` ↔ `test/unit/**/*.test.mjs` mapping; it must pass with no declared exclusions.
 - Every source file parses with `node --check`.
 - `npm run typecheck` checks the published declaration contract and its representative consumer.
 - Package tests install the packed layout, type-check named and ambient consumer contracts, and prove that the export map exposes neither a runtime root nor `src/**` subpaths.
