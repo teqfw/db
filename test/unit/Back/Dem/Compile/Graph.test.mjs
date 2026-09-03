@@ -66,13 +66,13 @@ describe('TeqFw_Db_Back_Dem_Compile_A_Graph', () => {
 
     it('composes package-owned history nodes from an ordinary fragment', async () => {
         const result = await compile({}, true);
-        assert.deepEqual(result.graph.entities, ['/schema/application', '/schema/snapshot']);
+        assert.deepEqual(result.graph.entities, ['/teqfw/db/schema/application', '/teqfw/db/schema/snapshot']);
         assert.deepEqual(result.graph.edges.map((item) => [item.from, item.to]), [
-            ['/schema/application', '/schema/snapshot'],
-            ['/schema/application', '/schema/snapshot'],
+            ['/teqfw/db/schema/application', '/teqfw/db/schema/snapshot'],
+            ['/teqfw/db/schema/application', '/teqfw/db/schema/snapshot'],
         ]);
-        assert.deepEqual(result.graph.topological, ['/schema/snapshot', '/schema/application']);
-        assert.equal(result.provenance['/package/schema/entity/snapshot'][0].fragmentId, '@teqfw/db');
+        assert.deepEqual(result.graph.topological, ['/teqfw/db/schema/snapshot', '/teqfw/db/schema/application']);
+        assert.equal(result.provenance['/package/teqfw/package/db/package/schema/entity/snapshot'][0].fragmentId, '@teqfw/db');
     });
 
     it('orders a DAG dependency-first and retains relation provenance', async () => {

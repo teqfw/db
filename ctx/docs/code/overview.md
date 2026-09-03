@@ -77,10 +77,8 @@ JSON; optional `EXTRA` objects carry specialized Knex or driver-specific setting
 
 ### Delivery Gaps Against The Accepted Architecture
 
-There is no known delivery gap for the package-owned schema-history fragment: the declaration is published, discovered, composed, and projected through the ordinary DEM pipeline.
-
-The accepted fragment-root namespace contract is not yet delivered: the current v2 decoder rejects a declaration-level
-`namespace` field, so packages cannot yet shorten nested `package` paths through the new logical root mechanism.
+There is no known delivery gap for the package-owned schema-history fragment or the concise fragment-root namespace:
+both are published/decoded, composed, projected, and verified through the ordinary DEM pipeline.
 
 ### Verification Status
 

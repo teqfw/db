@@ -8,7 +8,7 @@ Knex is the database execution boundary. `@teqfw/di` performs runtime linking, a
 
 ## Model And Provenance
 
-Each application or package owns its DEM fragment. The host selects the fragments and owns their application map, including physical namespace configuration. Compilation decodes supported declaration versions, applies that map, rejects conflicting semantic ownership, preserves trusted source provenance, validates the logical model, analyzes dependency cycles, derives dialect requirements, and produces a deterministic physical plan and fingerprint. It processes only the selected fragments and map; it does not add semantic entities after composition.
+Each application or package owns its DEM fragment. A fragment may declare a concise lowercase dot-delimited logical root in its top-level `namespace`; the compiler expands it over local entities and nested packages before composition. The host selects the fragments and owns their application map, including physical namespace configuration. Compilation decodes supported declaration versions, applies that map, rejects conflicting semantic ownership, preserves trusted source provenance, validates the logical model, analyzes dependency cycles, derives dialect requirements, and produces a deterministic physical plan and fingerprint. It processes only the selected fragments and map; it does not add semantic entities after composition.
 
 Compilation is all-or-nothing. Do not execute a partial model after diagnostics. Every declaration and application map must explicitly declare `version: 2`; omitted and unsupported versions are rejected.
 

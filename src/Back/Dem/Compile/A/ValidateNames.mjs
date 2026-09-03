@@ -58,7 +58,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_ValidateNames {
              * @param {string} deps.rawName
              * @param {string} deps.sourcePointer
              * @param {boolean} deps.pathName
-             * @param {'entity'|'package'|undefined} deps.identifierKind
+             * @param {'entity'|'package'|'namespace'|undefined} deps.identifierKind
              * @param {object} deps.seen
              * @returns {string|null}
              */
@@ -188,6 +188,20 @@ export default class TeqFw_Db_Back_Dem_Compile_A_ValidateNames {
             for (const envelope of fragments ?? []) {
                 const seen = {};
                 const declaration = envelope?.declaration;
+                if (typeof declaration?.namespace === 'string') {
+                    const pattern = '^[a-z][a-z0-9]*(\\.[a-z][a-z0-9]*)*$';
+                    if (!new RegExp(pattern).test(declaration.namespace)) {
+                        const item = evidence(envelope, '/namespace');
+                        diagnostics.push(diagnostic.create({
+                            code: 'DEM_DECLARATION_IDENTIFIER_INVALID',
+                            details: {kind: 'namespace', name: declaration.namespace, pattern},
+                            message: 'Fragment root namespace segments must use lowercase ASCII letters and digits and start with a letter.',
+                            path: '/namespace',
+                            sources: item ? [item] : [],
+                            stage: 'decode',
+                        }));
+                    }
+                }
                 walkContainer(declaration, envelope, '', '', seen);
                 if (isObject(declaration?.refs)) {
                     for (const rawPath of Object.keys(declaration.refs).sort()) {

@@ -16,7 +16,20 @@ Package attributes use `type.id: "core.identity"` for system identities and `typ
 
 Before writing or changing a DEM path, validate every `package` and `entity` key against `^[a-z][a-z0-9]*$`. These keys are lowercase alphanumeric words only: `_`, camelCase, uppercase, whitespace, and hyphens are rejected. This rule is intentionally stricter than the attribute-name rule, so `owner_id` may be an attribute but must not be a package or entity key.
 
-Build a readable physical table name through nested logical packages, rather than encoding separators in a key. For example, `package.pde.package.runtime.package.owner.entity.session` projects to `pde_runtime_owner_session`; it is not valid to write a single `pde_runtime_owner` package. The optional application-map `namespace` is a separate physical prefix, not a replacement for required logical path segments. When a compiler reports an invalid name, correct the declaration at its reported canonical path; do not work around the validation with a physical-name override or by changing an unrelated map setting.
+Build a readable logical path through lowercase package segments. A fragment may set a concise declaration-level root, for example:
+
+```json
+{
+  "version": 2,
+  "namespace": "vendor.sales",
+  "entity": {"order": {"attr": {}, "index": {}, "relation": {}}},
+  "package": {},
+  "refs": {},
+  "requires": []
+}
+```
+
+This declares `/vendor/sales/order`; nested `package` entries extend that root. Local relation paths such as `/order` are resolved against the expanded root. External aliases listed in `refs` remain fragment-local and are mapped by the host without root rewriting. The root is logical DEM content and is expanded before composition. It is not inferred from the package name, and it does not reserve a namespace or grant composition privileges. The optional application-map `namespace` is a separate physical table prefix. Physical projection joins all logical path segments with `_`, so the example becomes `vendor_sales_order` without a map prefix. When a compiler reports an invalid name, correct the declaration at its reported canonical path; do not work around validation with a physical-name override or an unrelated map setting.
 
 For direct compiler use, supply:
 

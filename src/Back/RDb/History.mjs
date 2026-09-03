@@ -9,8 +9,8 @@
 export default class TeqFw_Db_Back_RDb_History {
     /** @param {object} deps @param {TeqFw_Db_Back_Dem_Compile} deps.compile */
     constructor({compile}) {
-        const snapshotEntity = '/schema/snapshot';
-        const applicationEntity = '/schema/application';
+        const snapshotEntity = '/teqfw/db/schema/snapshot';
+        const applicationEntity = '/teqfw/db/schema/application';
 
         /** @param {any} value @returns {any} */
         const freeze = function (value) {

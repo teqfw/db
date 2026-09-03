@@ -26,8 +26,9 @@ describe('DEM fragment scanner', () => {
             assert(platform);
             assert.equal(platform.fragmentId, '@teqfw/db');
             assert.equal(platform.filename, join(root, 'node_modules/@teqfw/db/etc/teqfw.schema.json'));
-            assert.equal(platform.declaration.package.schema.entity.snapshot !== undefined, true);
-            assert.equal(platform.declaration.package.schema.entity.application !== undefined, true);
+            assert.equal(platform.declaration.namespace, 'teqfw.db.schema');
+            assert.equal(platform.declaration.entity.snapshot !== undefined, true);
+            assert.equal(platform.declaration.entity.application !== undefined, true);
         } finally {
             rmSync(root, {recursive: true, force: true});
         }

@@ -44,6 +44,8 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
             return `/${value.split('/').map(normalizeName).filter(Boolean).join('/')}`;
         };
 
+        const localIdentifier = /^[a-z][a-z0-9]*$/;
+
         /**
          * @param {any} value
          * @returns {any}
@@ -398,7 +400,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
              */
             const decodeContainer = function (raw, rawPointer, canonicalPointer, logicalPath, root) {
                 const allowed = root
-                    ? ['entity', 'package', 'refs', 'requires', 'version']
+                    ? ['entity', 'namespace', 'package', 'refs', 'requires', 'version']
                     : ['comment', 'entity', 'package'];
                 if (!checkObject(raw, allowed, rawPointer)) raw = {};
                 const res = {entity: {}, package: {}};
@@ -479,6 +481,70 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
                 return res;
             };
 
+            /**
+             * @param {object} container
+             * @param {ReadonlyArray<string>} segments
+             * @returns {object}
+             */
+            const applyRoot = function (container, segments) {
+                if (segments.length === 0) return container;
+                const result = {entity: {}, package: {}};
+                let cursor = result;
+                for (const segment of segments) {
+                    const child = {entity: {}, package: {}};
+                    cursor.package[segment] = child;
+                    cursor = child;
+                }
+                cursor.entity = container.entity;
+                cursor.package = container.package;
+                return result;
+            };
+
+            /**
+             * @param {object} values
+             * @param {ReadonlyArray<string>} segments
+             * @returns {object}
+             */
+            const applyRootPointers = function (values, segments) {
+                if (segments.length === 0) return values;
+                const prefix = segments.map((item) => `/package/${escapePointer(item)}`).join('');
+                const result = {};
+                for (const [pointer, sourcePointer] of Object.entries(values)) {
+                    const target = pointer === '/entity' || pointer.startsWith('/entity/') || pointer === '/package' || pointer.startsWith('/package/')
+                        ? `${prefix}${pointer}`
+                        : pointer;
+                    result[target] = sourcePointer;
+                }
+                return result;
+            };
+
+            /**
+             * @param {object} container
+             * @param {Set<string>} paths
+             */
+            const collectEntityPaths = function (container, paths) {
+                for (const entity of Object.values(container.entity ?? {})) paths.add(entity.path);
+                for (const child of Object.values(container.package ?? {})) collectEntityPaths(child, paths);
+            };
+
+            /**
+             * @param {object} container
+             * @param {Set<string>} paths
+             * @param {Readonly<Record<string, string[]>>} refs
+             * @param {string} rootPath
+             */
+            const resolveLocalRelations = function (container, paths, refs, rootPath) {
+                for (const entity of Object.values(container.entity ?? {})) {
+                    for (const relation of Object.values(entity.relation ?? {})) {
+                        const path = relation.ref?.path;
+                        if (!rootPath || !path || Object.prototype.hasOwnProperty.call(refs, path)) continue;
+                        const rooted = normalizePath(`${rootPath}${path}`);
+                        if (paths.has(rooted)) relation.ref.path = rooted;
+                    }
+                }
+                for (const child of Object.values(container.package ?? {})) resolveLocalRelations(child, paths, refs, rootPath);
+            };
+
             const raw = envelope.declaration;
             if (!isObject(raw)) {
                 addDiagnostic({
@@ -496,7 +562,21 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
                     path: '/version',
                 });
             }
-            const declaration = decodeContainer(isObject(raw) ? raw : {}, '', '', '', true);
+            if (raw?.namespace !== undefined && typeof raw.namespace !== 'string') {
+                addDiagnostic({
+                    code: 'DEM_DECLARATION_SHAPE_INVALID',
+                    details: {field: 'namespace'},
+                    message: 'Fragment root namespace must be a string.',
+                    path: '/namespace',
+                });
+            }
+            const rawNamespace = typeof raw?.namespace === 'string' ? raw.namespace : '';
+            const namespaceSegments = rawNamespace.length > 0 && rawNamespace.split('.').every((item) => localIdentifier.test(item))
+                ? rawNamespace.split('.')
+                : [];
+            const rootPath = namespaceSegments.length > 0 ? normalizePath(namespaceSegments.join('/')) : '';
+            const decoded = decodeContainer(isObject(raw) ? raw : {}, '', '', rootPath, true);
+            const declaration = applyRoot(decoded, namespaceSegments);
             declaration.version = 2;
             declaration.requires = [];
             if (raw?.requires !== undefined && !Array.isArray(raw.requires)) {
@@ -542,7 +622,10 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
                     }
                 }
             }
-            return {declaration, diagnostics, envelope, pointers};
+            const entityPaths = new Set();
+            collectEntityPaths(declaration, entityPaths);
+            resolveLocalRelations(declaration, entityPaths, declaration.refs, rootPath);
+            return {declaration, diagnostics, envelope, pointers: applyRootPointers(pointers, namespaceSegments)};
         };
     }
 }

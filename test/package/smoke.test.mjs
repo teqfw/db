@@ -18,6 +18,7 @@ describe('npm publication', () => {
         }
 
         const required = [
+            'etc/teqfw.schema.json',
             'skills/teqfw-db/SKILL.md',
             'skills/teqfw-db/agents/openai.yaml',
             'skills/teqfw-db/references/concepts.md',

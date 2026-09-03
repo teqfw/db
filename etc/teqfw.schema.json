@@ -1,27 +1,21 @@
 {
   "version": 2,
-  "requires": [],
-  "refs": {},
-  "package": {
-    "schema": {
-      "entity": {
+  "namespace": "teqfw.db.schema",
+  "entity": {
         "snapshot": {
           "attr": {
             "created_at": {
               "default": {
                 "kind": "function",
-                "name": "core.currentTimestamp",
-                "params": {}
+                "name": "core.currentTimestamp"
               },
               "type": {
-                "id": "core.datetime",
-                "params": {}
+                "id": "core.datetime"
               }
             },
             "dem": {
               "type": {
-                "id": "core.text",
-                "params": {}
+                "id": "core.text"
               }
             },
             "fingerprint": {
@@ -34,63 +28,53 @@
             },
             "id": {
               "type": {
-                "id": "core.identity",
-                "params": {}
+                "id": "core.identity"
               }
             },
             "provenance": {
               "type": {
-                "id": "core.text",
-                "params": {}
+                "id": "core.text"
               }
             }
           },
           "index": {
             "fingerprint": {
-              "include": [],
               "keys": [
                 {
                   "attr": "fingerprint"
                 }
               ],
               "kind": "unique",
-              "options": {},
               "phase": "table"
             }
-          },
-          "relation": {}
+          }
         },
         "application": {
           "attr": {
             "completed_at": {
               "nullable": true,
               "type": {
-                "id": "core.datetime",
-                "params": {}
+                "id": "core.datetime"
               }
             },
             "id": {
               "type": {
-                "id": "core.identity",
-                "params": {}
+                "id": "core.identity"
               }
             },
             "source_snapshot_id": {
               "nullable": true,
               "type": {
-                "id": "core.ref",
-                "params": {}
+                "id": "core.ref"
               }
             },
             "started_at": {
               "default": {
                 "kind": "function",
-                "name": "core.currentTimestamp",
-                "params": {}
+                "name": "core.currentTimestamp"
               },
               "type": {
-                "id": "core.datetime",
-                "params": {}
+                "id": "core.datetime"
               }
             },
             "status": {
@@ -107,12 +91,10 @@
             },
             "target_snapshot_id": {
               "type": {
-                "id": "core.ref",
-                "params": {}
+                "id": "core.ref"
               }
             }
           },
-          "index": {},
           "relation": {
             "source": {
               "action": {
@@ -127,7 +109,7 @@
                 "attrs": [
                   "id"
                 ],
-                "path": "/schema/snapshot"
+                "path": "/snapshot"
               }
             },
             "target": {
@@ -143,14 +125,10 @@
                 "attrs": [
                   "id"
                 ],
-                "path": "/schema/snapshot"
+                "path": "/snapshot"
               }
             }
           }
         }
-      },
-      "package": {}
-    }
-  },
-  "entity": {}
+  }
 }

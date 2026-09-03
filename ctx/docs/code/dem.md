@@ -5,16 +5,13 @@
 
 ## Current Contract
 
-The evolving 2.x line accepts only explicit DEM v2 declarations and application maps. Every input has `version: 2`; omitted or unsupported versions fail with deterministic diagnostics before composition. The branch `v1` is retained as historical reference, not as a runtime compatibility boundary. Agents comparing that branch with current v2 may prepare migration guidance for a specific consumer; this package does not publish a generic migration guide.
+The evolving 2.x line accepts only explicit DEM v2 declarations and application maps. Every input has `version: 2`; omitted or unsupported versions fail with deterministic diagnostics before composition. Fragment declarations may use a lowercase dot-delimited `namespace` root; the decoder expands it into the ordinary package structure and resolves local relation paths against the expanded root. The branch `v1` is retained as historical reference, not as a runtime compatibility boundary. Agents comparing that branch with current v2 may prepare migration guidance for a specific consumer; this package does not publish a generic migration guide.
 
 ## Implementation Boundary
 
 `src/Back/Dem/Compile/` validates and canonicalizes v2 DTOs, composes owned fragments, maps external references, resolves identity/reference policy, validates the logical graph, and projects through the selected adapter. The successful immutable result is the only input accepted by schema, rebuild, and query execution.
 
-`src/Back/Dem/Compile/A/ValidateNames.mjs` rejects raw package and entity keys outside `^[a-z][a-z0-9]*$` before decoding can treat them as canonical identities. The target contract also permits a declaration-level
-fragment root namespace such as `teqfw.db.schema`; its dot-separated segments use the same lowercase package-name
-rule and are expanded before composition. The physical table projection keeps every logical entity-path segment and
-joins them with `_`; the optional map namespace is a separate physical prefix.
+`src/Back/Dem/Compile/A/ValidateNames.mjs` rejects raw package and entity keys outside `^[a-z][a-z0-9]*$` before decoding can treat them as canonical identities. It applies the same rule to every dot-separated segment of an optional declaration-level fragment root such as `teqfw.db.schema`. `src/Back/Dem/Compile/A/DecodeV2.mjs` expands valid roots into ordinary package containers before composition and resolves local relation paths against the expanded root. The physical table projection keeps every logical entity-path segment and joins them with `_`; the optional map namespace is a separate physical prefix.
 
 `src/Back/Mod/Selection.mjs` accepts Selection v2 typed expressions. It does not decode legacy condition objects. Schema, rebuild, and dialect modules consume the same canonical model and retain transaction ownership boundaries.
 
@@ -23,11 +20,8 @@ Every trusted source in effective provenance carries a content-derived immutable
 
 ## Delivery Gaps Against The Accepted Architecture
 
-There is no known delivery gap for the package-owned schema-history fragment: the declaration is published, discovered, composed, and projected through the ordinary DEM pipeline.
-
-Fragment root namespaces are an accepted DEM v2 target capability but are not implemented in the current worktree.
-The decoder currently accepts only the existing top-level declaration fields and therefore reports a declaration shape
-diagnostic for `namespace`; current callers must still express the complete logical package nesting explicitly.
+There is no known delivery gap for the package-owned schema-history fragment or the concise fragment-root namespace:
+both are published/decoded, composed, projected, and verified through the ordinary DEM pipeline.
 
 ## Required Verification
 

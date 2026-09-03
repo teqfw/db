@@ -4,11 +4,11 @@
 
 > **Human-governed. Agent-built. Agent-ready.**
 
-`@teqfw/db` turns explicit DEM v2 declarations contributed by an application and its packages into one validated relational model, then provides schema, transaction, typed-query, and rebuild tools around it. It is a foundational package of the [Tequila Framework (TeqFW)](https://teqfw.com/): created and evolved by coding agents under the architectural direction and final responsibility of [Alex Gusev](https://github.com/flancer64), and shipped with a version-matched Agent Skill so other agents can understand, integrate, and use it correctly.
+`@teqfw/db` is the relational persistence foundation for the [Tequila Framework (TeqFW)](https://teqfw.com/). It turns explicit DEM v2 declarations contributed by an application and its packages into one validated relational model, then provides schema, transaction, typed-query, and rebuild tools around it.
 
 ## Why It Matters
 
-Applications can keep relational declarations close to the packages that own them while still building one explicit database target. `@teqfw/db` validates how those fragments fit together before database work begins and preserves the source of every composed element and diagnostic.
+Applications can keep relational declarations close to the packages that own them while still building one explicit database target. `@teqfw/db` validates how those fragments fit together before database work begins, preserves the source of every composed element and diagnostic, and gives the host application control over the final database lifecycle.
 
 It supports PostgreSQL, MySQL/MariaDB, and SQLite through [Knex](https://knexjs.org/), with dialect-aware capabilities for other supported configurations.
 
@@ -22,6 +22,18 @@ It supports PostgreSQL, MySQL/MariaDB, and SQLite through [Knex](https://knexjs.
 - Immutable effective-DEM snapshots and append-only schema-application history for migration agents; catalog mismatches are diagnostic evidence, never inferred migrations.
 
 Every target-schema entity comes from a selected DEM fragment. `@teqfw/db` publishes the ordinary `teqfw.db.schema` fragment in `etc/teqfw.schema.json` for its `snapshot` and `application` history entities; the standard loader discovers it with other installed-package fragments, and the compiler does not add hidden semantic entities after composition.
+
+DEM fragments may shorten repeated package nesting with a lowercase dot-delimited root:
+
+```json
+{
+  "version": 2,
+  "namespace": "vendor.sales",
+  "entity": {"order": {}}
+}
+```
+
+The logical path is `/vendor/sales/order`; the root is expanded before composition and omitted optional nodes are handled by the compiler. The application-map `namespace` remains a separate physical table prefix.
 
 ## DEM Identity And References
 
@@ -60,7 +72,7 @@ npm test
 
 ## Best Fit And Boundaries
 
-Use `@teqfw/db` when a TeqFW application needs a shared relational persistence layer with declarations distributed across its packages.
+Use `@teqfw/db` when a TeqFW application needs a shared relational persistence layer with declarations distributed across its packages and a predictable, validated database target.
 
 It is not an ORM, does not own application entities, authorization, or business rules, and does not infer incremental migrations from database drift. A rebuild preserves data only through an explicit snapshot or source-to-target transfer; release sequencing, cutover, and rollback policy stay with the application.
 

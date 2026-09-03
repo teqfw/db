@@ -104,7 +104,7 @@ describe('TeqFw_Db_Back_RDb_Rebuild', () => {
 
         assert.equal(evidence.status, 'complete');
         assert.equal(evidence.accepted, false);
-        assert.deepEqual(evidence.tables.map((item) => item.entity), ['/parent', '/schema/snapshot', '/child', '/schema/application']);
+        assert.deepEqual(evidence.tables.map((item) => item.entity), ['/parent', '/teqfw/db/schema/snapshot', '/child', '/teqfw/db/schema/application']);
         assert.deepEqual(evidence.tables.map((item) => [item.sourceRows, item.targetRows]), [[2, 2], [0, 0], [2, 2], [0, 0]]);
         assert.deepEqual(evidence.transformations, [{entity: '/parent', id: 'uppercase-parent-v1'}]);
         assert.equal(evidence.transaction.outcome, 'committed');
@@ -180,8 +180,8 @@ describe('TeqFw_Db_Back_RDb_Rebuild', () => {
         const rows = {
             '/parent': await connection.getClient()('teq_parent').select(),
             '/child': await connection.getClient()('teq_child').select(),
-            '/schema/snapshot': await connection.getClient()('teq_schema_snapshot').select(),
-            '/schema/application': await connection.getClient()('teq_schema_application').select(),
+            '/teqfw/db/schema/snapshot': await connection.getClient()('teq_teqfw_db_schema_snapshot').select(),
+            '/teqfw/db/schema/application': await connection.getClient()('teq_teqfw_db_schema_application').select(),
         };
         const evidence = await rebuild.exec({
             compilation,

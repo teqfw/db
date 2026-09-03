@@ -51,8 +51,8 @@ describe('TeqFw_Db_Back_RDb_History', () => {
         assert.equal(first.fingerprint, target.effective.fingerprint);
         assert.notEqual(first.fingerprint, target.fingerprint);
         assert.equal(first.provenance['/entity/alpha'][0].revision.startsWith('sha256-v1:'), true);
-        assert.equal(target.physical.tables.some((table) => table.entity === '/schema/snapshot'), true);
-        assert.equal(target.physical.tables.some((table) => table.entity === '/schema/application'), true);
+        assert.equal(target.physical.tables.some((table) => table.entity === '/teqfw/db/schema/snapshot'), true);
+        assert.equal(target.physical.tables.some((table) => table.entity === '/teqfw/db/schema/application'), true);
 
         const attempt = await history.startApplication({compilation: target, connection, targetSnapshotId: first.id});
         assert.equal(attempt.status, 'started');

@@ -97,7 +97,7 @@ describe('schema plan and execution hardening', () => {
         });
         const plan = planner.exec({compilation: result, operation: 'drop'});
         assert.deepEqual(plan.phases.tables.map((item) => item.entity), [
-            '/old_child', '/schema/application', '/old_parent', '/child', '/schema/snapshot', '/parent',
+            '/old_child', '/teqfw/db/schema/application', '/old_parent', '/child', '/teqfw/db/schema/snapshot', '/parent',
         ]);
         assert.deepEqual(plan.phases.verification.map((item) => item.kind), [
             'tableAbsent', 'tableAbsent', 'tableAbsent', 'tableAbsent', 'tableAbsent', 'tableAbsent',
@@ -124,8 +124,8 @@ describe('schema plan and execution hardening', () => {
             adapter: sqlite, connection, plan: planner.exec({compilation: result, operation: 'create'}),
         });
         assert.deepEqual(create.phases.at(-1), {
-            evidence: {actual: true, expected: true, kind: 'tableExists', name: 'teq_schema_application'},
-            identity: 'teq_schema_application', phase: 'verification', status: 'complete',
+            evidence: {actual: true, expected: true, kind: 'tableExists', name: 'teq_teqfw_db_schema_application'},
+            identity: 'teq_teqfw_db_schema_application', phase: 'verification', status: 'complete',
         });
 
         const drop = await execute.exec({

@@ -120,6 +120,73 @@ describe('TeqFw_Db_Back_Dem_Compile', () => {
         }
     });
 
+    it('expands a concise fragment root and resolves local relations against it', async () => {
+        const declaration = {
+            version: 2,
+            namespace: 'teqfw.db.schema',
+            requires: [],
+            refs: {},
+            entity: {
+                parent: {
+                    attr: {id: {type: {id: 'core.integer', params: {}}}},
+                    index: {pk: primary()},
+                    relation: {},
+                },
+                child: {
+                    attr: {
+                        id: {type: {id: 'core.integer', params: {}}},
+                        parent_id: {type: {id: 'core.integer', params: {}}},
+                    },
+                    index: {pk: primary()},
+                    relation: {
+                        parent: {
+                            action: {},
+                            attrs: ['parent_id'],
+                            deferrable: 'notDeferrable',
+                            ref: {attrs: ['id'], path: '/parent'},
+                        },
+                    },
+                },
+            },
+            package: {},
+        };
+        const result = await compiler.exec({
+            adapter: createFakeAdapter(),
+            fragments: [fragment('rooted', declaration)],
+            mapEnvelope: mapEnvelope({version: 2}),
+        });
+
+        assert.equal(result.model.package.teqfw.package.db.package.schema.entity.child.path, '/teqfw/db/schema/child');
+        assert.equal(result.model.package.teqfw.package.db.package.schema.entity.child.relation.parent.ref.path, '/teqfw/db/schema/parent');
+        assert.deepEqual(result.graph.entities, ['/teqfw/db/schema/child', '/teqfw/db/schema/parent']);
+        assert.equal(
+            result.physical.tables.find((item) => item.entity === '/teqfw/db/schema/child').name,
+            'teqfw_db_schema_child',
+        );
+        assert.equal(result.provenance['/package/teqfw/package/db/package/schema/entity/child'][0].sourcePointer, '/entity/child');
+    });
+
+    it('rejects invalid fragment root namespace identifiers', async () => {
+        await assert.rejects(
+            compiler.exec({
+                adapter: createFakeAdapter(),
+                fragments: [fragment('invalid-root', {
+                    version: 2,
+                    namespace: 'teqfw.db_schema',
+                    requires: [],
+                    refs: {},
+                    entity: {},
+                    package: {},
+                })],
+                mapEnvelope: mapEnvelope({version: 2}),
+            }),
+            (error) => {
+                assert.ok(error.diagnostics.some((item) => item.code === 'DEM_DECLARATION_IDENTIFIER_INVALID' && item.path === '/namespace'));
+                return true;
+            },
+        );
+    });
+
     it('aggregates ownership and independent logical failures with no conflict winner', async () => {
         const conflictA = fragment('a', {
             version: 2, requires: [], package: {}, refs: {},
