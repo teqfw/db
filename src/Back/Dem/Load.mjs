@@ -20,7 +20,7 @@ export default class TeqFw_Db_Back_Dem_Load {
          * Compile trusted DEM v2 sources.
          * @param {object} deps
          * @param {string} deps.path Application root containing `etc/teqfw.schema.map.json`.
-         * @param {Object<string, string>} [deps.testDems] Test-only additional DEM roots.
+         * @param {any} [deps.testDems] Test-only additional DEM roots.
          * @param {string} [deps.testMapRoot] Test-only map root override.
          * @param {TeqFw_Db_Back_Api_RDb_Dialect} deps.adapter
          * @returns {Promise<any>}

@@ -16,13 +16,13 @@ export default class TeqFw_Db_Back_RDb_Meta_IEntity {
     /**
      * Create entity DTO from given data.
      * @param {any} data
-     * @returns {*}
+     * @returns {any}
      */
     createDto(data) {}
 
     /**
      * Get codifier for entity attributes.
-     * @returns {Object}
+     * @returns {any}
      */
     getAttributes() {}
 
@@ -34,7 +34,7 @@ export default class TeqFw_Db_Back_RDb_Meta_IEntity {
 
     /**
      * Return array with primary keys for the entity.
-     * @returns {string[]}
+     * @returns {any}
      */
     getPrimaryKey() {}
 }

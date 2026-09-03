@@ -47,14 +47,14 @@ export class Factory {
 
     /**
      * @param {object} deps
-     * @param {typeof TeqFw_Db_Back_Dto_Dem_Entity} deps.TEntity
-     * @param {TeqFw_Db_Back_Dto_Dem_Entity.Factory} deps.fEntity
-     * @param {TeqFw_Db_Back_Dto_Dem_Package.Factory} deps.fPkg
+     * @param {TeqFw_Db_Back_Dto_Dem_Entity__Class} deps.TEntity
+     * @param {TeqFw_Db_Back_Dto_Dem_Entity__Factory} deps.fEntity
+     * @param {TeqFw_Db_Back_Dto_Dem_Package__Factory} deps.fPkg
      */
 
     constructor({TEntity, fEntity, fPkg}) {
         /**
-         * @param {TeqFw_Db_Back_Dto_Dem|null} data
+         * @param {TeqFw_Db_ObjectOrNull} data
          * @returns {TeqFw_Db_Back_Dto_Dem}
          */
         this.create = function (data = null) {
@@ -62,10 +62,10 @@ export class Factory {
             /**
              * Create object node from ${data} using factory ${fnCreate} to create node entries.
              * Use ${key} attribute to save node key as 'name' attribute in created entry.
-             * @param {Function} fnCreate
-             * @param {Object} data
-             * @param {string|null} key
-             * @returns {Object<string, *>}
+             * @param {any} fnCreate
+             * @param {any} data
+             * @param {any} key
+             * @returns {any}
              */
             function parse(fnCreate, data, key = null) {
                 const res = {};

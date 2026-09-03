@@ -9,13 +9,13 @@ export default class TeqFw_Db_Back_Mod_Selection {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_Mod_Expression} deps.expression
-     * @param {TeqFw_Db_Shared_Dto_Query_Selection.Factory} deps.selectionFactory
+     * @param {TeqFw_Db_Shared_Dto_Query_Selection__Factory} deps.selectionFactory
      */
     constructor({expression, selectionFactory}) {
 
         /**
          * @param {any} meta
-         * @returns {object}
+         * @returns {any}
          */
         const adaptEntitySchema = function (meta) {
             if (meta?.attr || meta?.columns) {
@@ -46,10 +46,10 @@ export default class TeqFw_Db_Back_Mod_Selection {
         /**
          * @param {TeqFw_Db_Back_RDb_ITrans} trx
          * @param {any} meta
-         * @param {Knex.QueryBuilder} query
+         * @param {any} query
          * @param {any} selection
          * @param {boolean} count
-         * @returns {Promise<object>}
+         * @returns {Promise<any>}
          */
         const populate = async function (trx, meta, query, selection, count) {
             const decoded = selectionFactory.create(selection);
@@ -117,9 +117,9 @@ export default class TeqFw_Db_Back_Mod_Selection {
         /**
          * @param {TeqFw_Db_Back_RDb_ITrans} trx
          * @param {any} meta
-         * @param {Knex.QueryBuilder} query
+         * @param {any} query
          * @param {any} selection
-         * @returns {Promise<object>}
+         * @returns {Promise<any>}
          */
         this.populate = function (trx, meta, query, selection) {
             return populate(trx, meta, query, selection, false);
@@ -128,9 +128,9 @@ export default class TeqFw_Db_Back_Mod_Selection {
         /**
          * @param {TeqFw_Db_Back_RDb_ITrans} trx
          * @param {any} meta
-         * @param {Knex.QueryBuilder} query
+         * @param {any} query
          * @param {any} selection
-         * @returns {Promise<object>}
+         * @returns {Promise<any>}
          */
         this.populateCount = function (trx, meta, query, selection) {
             return populate(trx, meta, query, selection, true);

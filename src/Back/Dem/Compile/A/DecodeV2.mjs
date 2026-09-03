@@ -8,8 +8,8 @@
 export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
     /**
      * @param {object} deps
-     * @param {TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic.Factory} deps.diagnostic
-     * @param {TeqFw_Db_Back_Dto_Dem_Compile_Source.Factory} deps.source
+     * @param {TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic__Factory} deps.diagnostic
+     * @param {TeqFw_Db_Back_Dto_Dem_Compile_Source__Factory} deps.source
      */
     constructor({diagnostic, source}) {
         /**
@@ -63,7 +63,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
         /**
          * @param {object} deps
          * @param {object} deps.envelope
-         * @returns {object}
+         * @returns {any}
          */
         this.exec = function ({envelope}) {
             const diagnostics = [];
@@ -86,7 +86,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
 
             /**
              * @param {string} sourcePointer
-             * @returns {object}
+             * @returns {any}
              */
             const makeSource = function (sourcePointer) {
                 return source.create({
@@ -104,7 +104,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
              * @param {object} deps.details
              * @param {string} deps.message
              * @param {string} deps.path
-             * @param {'error'|'warning'} deps.severity
+             * @param {object} deps.severity
              * @param {string} deps.stage
              */
             const addDiagnostic = function ({code, details = {}, message, path, severity = 'error', stage = 'decode'}) {
@@ -121,7 +121,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
 
             /**
              * @param {any} value
-             * @param {ReadonlyArray<string>} allowed
+             * @param {any} allowed
              * @param {string} path
              * @returns {boolean}
              */
@@ -159,7 +159,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
             /**
              * @param {any} raw
              * @param {string} path
-             * @returns {object}
+             * @returns {any}
              */
             const decodeType = function (raw, path) {
                 if (!checkObject(raw, ['id', 'params'], path)) raw = {};
@@ -178,7 +178,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
             /**
              * @param {any} raw
              * @param {string} path
-             * @returns {object}
+             * @returns {any}
              */
             const decodeExpression = function (raw, path) {
                 if (!isObject(raw)) {
@@ -227,7 +227,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
              * @param {string} rawPointer
              * @param {string} canonicalPointer
              * @param {string} name
-             * @returns {object}
+             * @returns {any}
              */
             const decodeAttr = function (raw, rawPointer, canonicalPointer, name) {
                 if (!checkObject(raw, ['comment', 'default', 'generation', 'nullable', 'storage', 'type'], rawPointer)) raw = {};
@@ -297,7 +297,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
              * @param {string} rawPointer
              * @param {string} canonicalPointer
              * @param {string} name
-             * @returns {object}
+             * @returns {any}
              */
             const decodeIndex = function (raw, rawPointer, canonicalPointer, name) {
                 if (!checkObject(raw, ['include', 'keys', 'kind', 'method', 'options', 'phase', 'predicate'], rawPointer)) raw = {};
@@ -350,7 +350,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
              * @param {string} rawPointer
              * @param {string} canonicalPointer
              * @param {string} name
-             * @returns {object}
+             * @returns {any}
              */
             const decodeRelation = function (raw, rawPointer, canonicalPointer, name) {
                 if (!checkObject(raw, ['action', 'attrs', 'deferrable', 'ref'], rawPointer)) raw = {};
@@ -396,7 +396,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
              * @param {string} canonicalPointer
              * @param {string} logicalPath
              * @param {boolean} root
-             * @returns {object}
+             * @returns {any}
              */
             const decodeContainer = function (raw, rawPointer, canonicalPointer, logicalPath, root) {
                 const allowed = root
@@ -482,9 +482,9 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
             };
 
             /**
-             * @param {object} container
-             * @param {ReadonlyArray<string>} segments
-             * @returns {object}
+             * @param {any} container
+             * @param {any} segments
+             * @returns {any}
              */
             const applyRoot = function (container, segments) {
                 if (segments.length === 0) return container;
@@ -501,9 +501,9 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
             };
 
             /**
-             * @param {object} values
-             * @param {ReadonlyArray<string>} segments
-             * @returns {object}
+             * @param {any} values
+             * @param {any} segments
+             * @returns {any}
              */
             const applyRootPointers = function (values, segments) {
                 if (segments.length === 0) return values;
@@ -519,8 +519,8 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
             };
 
             /**
-             * @param {object} container
-             * @param {Set<string>} paths
+             * @param {any} container
+             * @param {any} paths
              */
             const collectEntityPaths = function (container, paths) {
                 for (const entity of Object.values(container.entity ?? {})) paths.add(entity.path);
@@ -528,9 +528,9 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
             };
 
             /**
-             * @param {object} container
-             * @param {Set<string>} paths
-             * @param {Readonly<Record<string, string[]>>} refs
+             * @param {any} container
+             * @param {any} paths
+             * @param {any} refs
              * @param {string} rootPath
              */
             const resolveLocalRelations = function (container, paths, refs, rootPath) {

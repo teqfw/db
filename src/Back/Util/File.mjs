@@ -8,27 +8,29 @@
 export default class File {
     /**
      * @param {object} deps
-     * @param {any} deps.fs
-     * @param {any} deps.path
+     * @param {object} deps.fs
+     * @param {object} deps.path
      */
     constructor({fs, path}) {
         /**
-         * @param {any} filename
-         * @returns {any}
+         * @param {string} filename
+         * @returns {unknown}
          */
         this.readJson = function (filename) {
             try {
                 if (!fs.statSync(filename).isFile()) return null;
                 return JSON.parse(fs.readFileSync(filename, 'utf8'));
             } catch (error) {
-                if (error?.code === 'ENOENT' || error?.code === 'ENOTDIR') return null;
-                error.message = `${error.message} (file: ${filename})`;
-                throw error;
+                /** @type {TeqFw_Db_FileError} */
+                const issue = error;
+                if (issue.code === 'ENOENT' || issue.code === 'ENOTDIR') return null;
+                issue.message = `${issue.message} (file: ${filename})`;
+                throw issue;
             }
         };
         /**
-         * @param {any} root
-         * @returns {any}
+         * @param {string} root
+         * @returns {string}
          */
         this.readPackageName = function (root) {
             const declared = this.readJson(path.join(root, "package.json"))?.name;
@@ -41,9 +43,9 @@ export default class File {
                 : parts[nodeModules + 1];
         };
         /**
-         * @param {any} root
-         * @param {any} filename
-         * @returns {any}
+         * @param {string} root
+         * @param {string} filename
+         * @returns {TeqFw_Db_StringArray}
          */
         this.scanNodeModules = function (root, filename) {
             const result = [];

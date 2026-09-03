@@ -53,7 +53,7 @@ export class Factory {
      */
     constructor({cast}) {
         /**
-         * @param {TeqFw_Db_Back_Dto_Config_Local_Connection|null} data
+         * @param {TeqFw_Db_ObjectOrNull} data
          * @returns {TeqFw_Db_Back_Dto_Config_Local_Connection}
          */
         this.create = function (data = null) {

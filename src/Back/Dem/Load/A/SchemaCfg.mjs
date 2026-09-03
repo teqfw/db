@@ -12,7 +12,7 @@
 export default class TeqFw_Db_Back_Dem_Load_A_SchemaCfg {
     /**
      * @param {object} deps
-     * @param {TeqFw_Db_Back_Dto_Config_Schema.Factory} deps.factory
+     * @param {TeqFw_Db_Back_Dto_Config_Schema__Factory} deps.factory
      */
     constructor({factory}) {
         // noinspection JSCheckFunctionSignatures

@@ -28,12 +28,12 @@ export class Factory {
 
     /**
      * @param {object} deps
-     * @param {TeqFw_Db_Back_Dto_Dem_Entity.Factory} deps.fEntity
+     * @param {TeqFw_Db_Back_Dto_Dem_Entity__Factory} deps.fEntity
      */
 
     constructor({fEntity}) {
         /**
-         * @param {TeqFw_Db_Back_Dto_Dem_Package|null} data
+         * @param {TeqFw_Db_ObjectOrNull} data
          * @returns {TeqFw_Db_Back_Dto_Dem_Package}
          */
         this.create = function create(data = null) {

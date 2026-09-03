@@ -11,7 +11,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_DropOrder {
         /**
          * @param {object} deps
          * @param {object} deps.compilation
-         * @returns {ReadonlyArray<object>}
+         * @returns {any}
          */
         this.exec = function ({compilation}) {
             const physical = compilation.physical;

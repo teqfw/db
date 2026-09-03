@@ -44,11 +44,11 @@ export class Factory {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Shared_Util_Cast} deps.cast
-     * @param {TeqFw_Db_Back_Dto_Map_Ref.Factory} deps.fRef
+     * @param {TeqFw_Db_Back_Dto_Map_Ref__Factory} deps.fRef
      */
     constructor({cast, fRef}) {
         /**
-         * @param {TeqFw_Db_Back_Dto_Map|null} data
+         * @param {TeqFw_Db_ObjectOrNull} data
          * @returns {TeqFw_Db_Back_Dto_Map}
          */
         this.create = function create(data = null) {

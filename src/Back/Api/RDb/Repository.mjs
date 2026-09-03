@@ -19,8 +19,8 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
      * Create a new record in the table.
      * @param {object} deps
      * @param {TeqFw_Db_Back_RDb_ITrans} deps.trx
-     * @param {*} deps.dto
-     * @throws {Error} - Throws an error if the operation fails.
+     * @param {object} deps.dto
+     * @throws {any} - Throws an error if the operation fails.
      * @returns {Promise<any>}
      */
     createOne({trx, dto}) {}
@@ -31,8 +31,8 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
      * based on the entity schema, removing extra attributes. If no data is provided,
      * an empty DTO is returned, where attributes are initialized to default values
      * or `undefined`.
-     * @param {*} data
-     * @returns {Object}
+     * @param {any} data
+     * @returns {any}
      */
     createDto(data) {}
 
@@ -40,8 +40,8 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
      * Delete a single record matching the provided key.
      * @param {object} deps
      * @param {TeqFw_Db_Back_RDb_ITrans} deps.trx
-     * @param {Object} deps.key
-     * @throws {Error} - Throws an error if the operation fails.
+     * @param {object} deps.key
+     * @throws {any} - Throws an error if the operation fails.
      * @returns {Promise<any>}
      */
     deleteOne({trx, key}) {}
@@ -50,8 +50,8 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
      * Delete records matching the provided conditions.
      * @param {object} deps
      * @param {TeqFw_Db_Back_RDb_ITrans} deps.trx
-     * @param {TeqFw_Db_Shared_Dto_Query_Selection.Dto} deps.selection
-     * @throws {Error} - Throws an error if the operation fails.
+     * @param {object} deps.selection
+     * @throws {any} - Throws an error if the operation fails.
      * @returns {Promise<any>}
      */
     deleteMany({trx, selection}) {}
@@ -67,9 +67,9 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
      * Optionally filters the selected columns to reduce the size of the result.
      * @param {object} deps
      * @param {TeqFw_Db_Back_RDb_ITrans} deps.trx
-     * @param {Object} deps.key
-     * @param {Array<string>} deps.select
-     * @throws {Error} - Throws an error if the operation fails.
+     * @param {object} deps.key
+     * @param {object} deps.select
+     * @throws {any} - Throws an error if the operation fails.
      * @returns {Promise<any>}
      */
     readOne({trx, key, select}) {}
@@ -79,8 +79,8 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
      * Supports filtering, sorting, and pagination.
      * @param {object} deps
      * @param {TeqFw_Db_Back_RDb_ITrans} deps.trx
-     * @param {TeqFw_Db_Shared_Dto_Query_Selection.Dto} deps.selection
-     * @throws {Error} - Throws an error if the operation fails.
+     * @param {object} deps.selection
+     * @throws {any} - Throws an error if the operation fails.
      * @returns {Promise<any>}
      */
     readMany({trx, selection}) {}
@@ -89,9 +89,9 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
      * Update a single record matching the provided key.
      * @param {object} deps
      * @param {TeqFw_Db_Back_RDb_ITrans} deps.trx
-     * @param {Object} deps.key
-     * @param {Object} deps.updates
-     * @throws {Error} - Throws an error if the operation fails or if parameters are invalid.
+     * @param {object} deps.key
+     * @param {object} deps.updates
+     * @throws {any} - Throws an error if the operation fails or if parameters are invalid.
      * @returns {Promise<any>}
      */
     updateOne({trx, key, updates}) {}
@@ -100,9 +100,9 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
      * Update existing records matching the provided conditions.
      * @param {object} deps
      * @param {TeqFw_Db_Back_RDb_ITrans} deps.trx
-     * @param {TeqFw_Db_Shared_Dto_Query_Selection.Dto} deps.selection
-     * @param {Object} deps.updates
-     * @throws {Error} - Throws an error if the operation fails or if parameters are invalid.
+     * @param {object} deps.selection
+     * @param {object} deps.updates
+     * @throws {any} - Throws an error if the operation fails or if parameters are invalid.
      * @returns {Promise<any>}
      */
     updateMany({trx, selection, updates}) {}

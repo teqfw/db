@@ -8,7 +8,7 @@
 export default class TeqFw_Db_Back_Dem_Compile_A_Validate {
     /**
      * @param {object} deps
-     * @param {TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic.Factory} deps.diagnostic
+     * @param {TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic__Factory} deps.diagnostic
      * @param {TeqFw_Db_Back_Dem_Registry_Core} deps.core
      */
     constructor({diagnostic, core}) {
@@ -21,14 +21,16 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Validate {
         };
 
         /**
-         * @param {any} value
-         * @returns {any}
+         * @param {unknown} value
+         * @returns {unknown}
          */
         const normalize = function (value) {
             if (Array.isArray(value)) return value.map(normalize);
             if (value && typeof value === 'object') {
+                const object = /** @type {TeqFw_Db_Object} */ (value);
+                /** @type {TeqFw_Db_Object} */
                 const res = {};
-                for (const key of Object.keys(value).sort()) res[key] = normalize(value[key]);
+                for (const key of Object.keys(object).sort()) res[key] = normalize(object[key]);
                 return res;
             }
             return value;
@@ -37,7 +39,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Validate {
         /**
          * @param {object} deps
          * @param {object} deps.mapped
-         * @returns {object}
+         * @returns {any}
          */
         this.exec = function ({mapped}) {
             const diagnostics = [...mapped.diagnostics];
@@ -81,7 +83,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Validate {
             };
 
             /**
-             * @param {object} type
+             * @param {any} type
              * @returns {string}
              */
             const typeSignature = function (type) {
@@ -90,7 +92,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Validate {
 
             /**
              * @param {any} value
-             * @param {object} type
+             * @param {any} type
              * @param {boolean} nullable
              * @returns {boolean}
              */
@@ -170,9 +172,9 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Validate {
             };
 
             /**
-             * @param {object} attr
+             * @param {any} attr
              * @param {string} path
-             * @returns {string|null}
+             * @returns {any}
              */
             const validateType = function (attr, path) {
                 const value = attr.type;
@@ -239,7 +241,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Validate {
             };
 
             /**
-             * @param {object} attr
+             * @param {any} attr
              * @param {string} path
              */
             const validateDefaultAndGeneration = function (attr, path) {
@@ -292,7 +294,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Validate {
 
             /**
              * @param {any} value
-             * @returns {object|null}
+             * @returns {any}
              */
             const inferValueType = function (value) {
                 if (typeof value === 'boolean') return {id: 'core.boolean', params: {}};
@@ -303,11 +305,11 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Validate {
             };
 
             /**
-             * @param {object} expression
-             * @param {object} entityInfo
+             * @param {any} expression
+             * @param {any} entityInfo
              * @param {string} context
              * @param {string} path
-             * @returns {object|null}
+             * @returns {any}
              */
             const validateExpression = function (expression, entityInfo, context, path) {
                 if (expression?.kind === 'attr') {
@@ -367,7 +369,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Validate {
                 }
                 return operator.result === 'same' ? types[0] : {id: operator.result, params: {}};
             };
-            /** @param {object} expression @param {Set<string>} values @returns {Set<string>} */
+            /** @param {any} expression @param {any} values @returns {any} */
             const collectExpressionAttrs = function (expression, values = new Set()) {
                 if (expression?.kind === 'attr' && typeof expression.name === 'string') values.add(expression.name);
                 for (const arg of expression?.args ?? []) collectExpressionAttrs(arg, values);
@@ -376,7 +378,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Validate {
 
 
             /**
-             * @param {object} container
+             * @param {any} container
              * @param {string} pointer
              */
             const collect = function (container, pointer) {

@@ -21,9 +21,9 @@ export default class TeqFw_Db_Back_RDb_Schema_EntityBase {
          * Add methods for empty object according to 'TeqFw_Db_Back_RDb_Meta_IEntity' interface.
          * @param {TeqFw_Db_Back_RDb_Meta_IEntity} inst
          * @param {string} name
-         * @param {Object} attrs
-         * @param {Array} pkey
-         * @param {Function} Dto
+         * @param {any} attrs
+         * @param {any} pkey
+         * @param {any} Dto
          * @returns {TeqFw_Db_Back_RDb_Meta_IEntity}
          */
         this.create = function (inst, name, attrs, pkey, Dto) {

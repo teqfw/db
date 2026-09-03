@@ -10,7 +10,7 @@ export default class TeqFw_Db_Back_Mod_Expression {
      * @param {object} deps
      * @param {TeqFw_Db_Back_Dem_Registry_Core} deps.core
      * @param {TeqFw_Db_Back_Dem_Registry_CoreValue} deps.coreValue
-     * @param {TeqFw_Db_Shared_Dto_Query_Expression.Factory} deps.expressionFactory
+     * @param {TeqFw_Db_Shared_Dto_Query_Expression__Factory} deps.expressionFactory
      */
     constructor({core, coreValue, expressionFactory}) {
         /** @param {any} value @returns {any} */
@@ -23,16 +23,16 @@ export default class TeqFw_Db_Back_Mod_Expression {
             }
             return value;
         };
-        /** @param {object} type @returns {string} */
+        /** @param {any} type @returns {string} */
         const signature = (type) => JSON.stringify(normalize({id: type.id, params: type.params ?? {}}));
 
 
         /**
          * @param {string} code
          * @param {string} message
-         * @param {object} details
+         * @param {any} details
          * @param {string} path
-         * @returns {Error}
+         * @returns {any}
          */
         const failure = function (code, message, details, path) {
             const diagnostic = Object.freeze({code, details: Object.freeze({...details}), message, path, severity: 'error', stage: 'query'});
@@ -47,16 +47,16 @@ export default class TeqFw_Db_Back_Mod_Expression {
          * @param {object} deps.expression
          * @param {object} deps.entitySchema
          * @param {TeqFw_Db_Back_Api_RDb_Dialect} deps.adapter
-         * @param {'filter'|'projection'|'ordering'|'index'|'predicate'} deps.context
-         * @param {Knex} deps.knex
-         * @returns {Promise<object>}
+         * @param {object} deps.context
+         * @param {object} deps.knex
+         * @returns {Promise<any>}
          */
         this.exec = async function ({expression, entitySchema, adapter, context, knex}) {
             const root = expressionFactory.create(expression);
             const requirements = new Set();
             const allowAny = entitySchema?.compatibilityUntyped === true;
 
-            /** @param {string} name @returns {object|null} */
+            /** @param {string} name @returns {any} */
             const findAttr = function (name) {
                 const raw = entitySchema?.attr?.[name] ?? entitySchema?.columns?.find?.((item) => item.name === name);
                 if (!raw) return null;
@@ -66,7 +66,7 @@ export default class TeqFw_Db_Back_Mod_Expression {
                 return {column: mapped, type};
             };
 
-            /** @param {object} node @returns {object|null} */
+            /** @param {any} node @returns {any} */
             const infer = function (node) {
                 if (node.kind === 'attr') return findAttr(node.name)?.type ?? null;
                 if (node.kind === 'value' && node.type) return coreValue.normalizeType({allowAny: false, type: node.type});
@@ -74,10 +74,10 @@ export default class TeqFw_Db_Back_Mod_Expression {
             };
 
             /**
-             * @param {object} node
+             * @param {any} node
              * @param {string} path
-             * @param {object|null} expected
-             * @returns {Promise<object>}
+             * @param {any} expected
+             * @returns {Promise<any>}
              */
             const compileNode = async function (node, path, expected = null) {
                 if (node.kind === 'attr') {

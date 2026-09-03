@@ -13,7 +13,7 @@ const NS = 'TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic';
 export default class TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic {
     /** @type {string} */
     code;
-    /** @type {object} */
+    /** @type {any} */
     details;
     /** @type {string} */
     message;
@@ -64,7 +64,7 @@ export class Factory {
         };
 
         /**
-         * @param {object} source
+         * @param {any} source
          * @returns {string}
          */
         const sourceKey = function (source) {
@@ -77,10 +77,10 @@ export class Factory {
          * @param {object} deps.details
          * @param {string} deps.message
          * @param {string} deps.path
-         * @param {'error'|'warning'} deps.severity
-         * @param {ReadonlyArray<object>} deps.sources
+         * @param {object} deps.severity
+         * @param {object} deps.sources
          * @param {string} deps.stage
-         * @returns {Readonly<TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic>}
+         * @returns {TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic}
          */
         this.create = function ({code, details = {}, message, path = '', severity = 'error', sources = [], stage}) {
             if (typeof code !== 'string' || code.length === 0) throw new TypeError('Diagnostic code is required.');
@@ -99,8 +99,8 @@ export class Factory {
         };
 
         /**
-         * @param {ReadonlyArray<object>} values
-         * @returns {ReadonlyArray<object>}
+         * @param {TeqFw_Db_DiagnosticArray} values
+         * @returns {TeqFw_Db_DiagnosticArray}
          */
         this.sort = function (values) {
             const res = [...values];

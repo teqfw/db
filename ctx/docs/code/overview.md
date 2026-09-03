@@ -82,7 +82,7 @@ both are published/decoded, composed, projected, and verified through the ordina
 
 ### Verification Status
 
-- The module, DI integration, acceptance, syntax, and ESM-validator gates pass locally.
+- The module, DI integration, acceptance, syntax, and ESM-validator gates pass locally. `npm run typecheck` currently exposes unresolved source-contract debt from the exact published aliases; it is a blocking delivery gap and must not be concealed with `any`.
 - The real MariaDB opt-in suite passes against MariaDB 10.11, including DDL, rebuild, generated values, late indexes, and cyclic schema creation.
 - The real PostgreSQL opt-in suite passes with pgvector `0.8.6`, including storage, codecs, distances, approximate indexes, rebuild, sequence restoration, transaction-local options, and cyclic transfer.
 

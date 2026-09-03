@@ -13,14 +13,14 @@ export default class TeqFw_Db_Back_Api_RDb_Schema {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_RDb_IConnect} deps.conn
-     * @returns {Promise<object>}
+     * @returns {Promise<any>}
      */
     async createAllTables({conn}) {}
 
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_RDb_IConnect} deps.conn
-     * @returns {Promise<object>}
+     * @returns {Promise<any>}
      */
     async dropAllTables({conn}) {}
 

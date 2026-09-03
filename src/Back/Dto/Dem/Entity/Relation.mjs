@@ -33,13 +33,13 @@ export class Factory {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Shared_Util_Cast} deps.cast
-     * @param {TeqFw_Db_Back_Dto_Dem_Entity_Relation_Ref.Factory} deps.fRef
-     * @param {TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action.Factory} deps.fAction
+     * @param {TeqFw_Db_Back_Dto_Dem_Entity_Relation_Ref__Factory} deps.fRef
+     * @param {TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action__Factory} deps.fAction
      */
     constructor({cast, fRef, fAction}) {
 
         /**
-         * @param {TeqFw_Db_Back_Dto_Dem_Entity_Relation|null} data
+         * @param {TeqFw_Db_ObjectOrNull} data
          * @returns {TeqFw_Db_Back_Dto_Dem_Entity_Relation}
          */
         this.create = function (data = null) {

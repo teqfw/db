@@ -39,7 +39,7 @@ export class Factory {
      */
     constructor({cast}) {
         /**
-         * @param {TeqFw_Db_Back_RDb_Schema_A_Dto_Ref|null} data
+         * @param {any} data
          * @returns {TeqFw_Db_Back_RDb_Schema_A_Dto_Ref}
          */
         this.create = function (data = null) {

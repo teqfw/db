@@ -15,8 +15,8 @@ export default class TeqFw_Db_Back_Api_Import_Transform {
 
     /**
      * Filter or modify serials for PostgreSQL.
-     * @param {Object<string, number|string>} serials
-     * @returns {Object<string, number|string>}
+     * @param {any} serials
+     * @returns {any}
      */
     prepareSerials(serials) {
         return serials;
@@ -25,9 +25,9 @@ export default class TeqFw_Db_Back_Api_Import_Transform {
     /**
      * Extract data for a given table from a dump and prepare it for insertion into RDB.
      * @param {TeqFw_Db_Back_RDb_ITrans} trx
-     * @param {Object<string, Object[]>} dump
+     * @param {any} dump
      * @param {string} table
-     * @returns {Object[]}
+     * @returns {any}
      */
     prepareTables(trx, dump, table) {
         return dump[table] ?? [];

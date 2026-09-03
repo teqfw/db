@@ -35,6 +35,14 @@ Every declaration and map fixture has `version: 2`. Unit and integration tests r
 Compiler tests cover deterministic composition and diagnostics, ownership conflicts, deep immutability and result branding, logical types and defaults, identity/reference resolution, mapping provenance, physical-name collisions, graph cycles, index phases, and capability validation. They also prove that every entity in the physical target plan has ordinary fragment provenance, including `snapshot` and `application` from `teqfw.db.schema`, with no compiler-side entity injection.
 Fixture assertions use diagnostic codes, canonical paths, and structured details rather than complete English messages.
 
+## JSDoc Type-Drift Gate
+
+JSDoc is checked source contract, not descriptive decoration. `npm run typecheck` is a blocking check: a failure must be fixed at the actual contract or reported as a delivery gap, never hidden by changing a parameter, return value, or published alias to `any`.
+
+The repository must maintain a deterministic no-new-`any` gate for `src/**/*.mjs` JSDoc. The gate compares the current count and locations with a reviewed baseline, fails on an unapproved increase, and ratchets the baseline downward. Existing exceptions are listed by exact file and boundary with a reason and normalization path; an exception is not valid for package-owned DEM data or a successful public API result. New or changed exceptions require review.
+
+When repairing a type, use the narrowest truthful contract: primitive, bounded union/optional type, a named `TeqFw_Db_*` alias for a known/reused/domain/DEM-stage shape, `object` for a known opaque object, or `unknown` for untrusted ingress followed by narrowing. If a validator rejects a useful inline shape, add or reuse a named structural alias or fix the validator; do not erase the shape with `any`. DEM stage boundaries must not share one broad escape-hatch type.
+
 ## Database And Rebuild Verification
 
 SQLite is the deterministic default database. PostgreSQL and MariaDB/MySQL-specific behavior belongs to the opt-in conformance gate.

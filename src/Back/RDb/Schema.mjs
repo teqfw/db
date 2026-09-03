@@ -18,11 +18,11 @@ export default class TeqFw_Db_Back_RDb_Schema {
      */
     constructor({_compile, logger, _builder, _plan}) {
         const log = logger.forSource('TeqFw_Db_Back_RDb_Schema');
-        /** @type {object} */
+        /** @type {any} */
         let _compilation;
 
         /**
-         * @returns {object}
+         * @returns {any}
          */
         const getCompilation = function () {
             return _compile.assertResult({value: _compilation});
@@ -30,7 +30,7 @@ export default class TeqFw_Db_Back_RDb_Schema {
 
         /**
          * @param {TeqFw_Db_Back_RDb_IConnect} conn
-         * @param {object} compilation
+         * @param {any} compilation
          * @returns {Promise<TeqFw_Db_Back_Api_RDb_Dialect>}
          */
         const getAdapter = async function (conn, compilation) {
@@ -45,7 +45,7 @@ export default class TeqFw_Db_Back_RDb_Schema {
         /**
          * @param {object} deps
          * @param {TeqFw_Db_Back_RDb_IConnect} deps.conn
-         * @returns {Promise<object>}
+         * @returns {Promise<any>}
          */
         this.createAllTables = async function ({conn}) {
             const compilation = getCompilation();
@@ -58,7 +58,7 @@ export default class TeqFw_Db_Back_RDb_Schema {
         /**
          * @param {object} deps
          * @param {TeqFw_Db_Back_RDb_IConnect} deps.conn
-         * @returns {Promise<object>}
+         * @returns {Promise<any>}
          */
         this.dropAllTables = async function ({conn}) {
             const compilation = getCompilation();

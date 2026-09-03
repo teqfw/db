@@ -46,11 +46,11 @@ export class Factory {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Shared_Util_Cast} deps.cast
-     * @param {TeqFw_Db_Back_Dto_Config_Local_Connection.Factory} deps.fConn
+     * @param {TeqFw_Db_Back_Dto_Config_Local_Connection__Factory} deps.fConn
      */
     constructor({cast, fConn}) {
         /**
-         * @param {TeqFw_Db_Back_Dto_Config_Local|null} data
+         * @param {TeqFw_Db_ObjectOrNull} data
          * @returns {TeqFw_Db_Back_Dto_Config_Local}
          */
         this.create = function (data = null) {

@@ -1,7 +1,7 @@
 # Architecture Constraints
 
 - Path: `ctx/docs/architecture/constraints.md`
-- Changed: `20260808`
+- Changed: `20260903`
 
 ## Core Constraints
 
@@ -15,6 +15,25 @@
 - The canonical DEM remains a target-state declaration and must not accumulate implicit migration history.
 - Rebuild migration remains separable from full incremental migration orchestration.
 - Dialect-specific growth occurs through registries and adapters, not an unchecked global enum.
+
+## JSDoc Type Information
+
+JSDoc is the structural type layer of the checked JavaScript codebase and is part of each module's executable contract. Type annotations must describe the values that the module actually accepts and returns; they must not be weakened merely to satisfy TypeScript, `teqfw-esm-validator`, or an incomplete intermediate implementation.
+
+For every new or changed annotation, choose the narrowest honest type in this order:
+
+1. a literal or primitive type such as `string`, `number`, or `boolean`;
+2. an explicit union or optional form when the value has a bounded set of alternatives;
+3. a package-owned named structural alias in `types.d.ts` when a shape is known, reused, crosses a module boundary, or represents a domain/DEM stage contract;
+4. `object` when the value is intentionally opaque but is known to be an object and no fields are inspected;
+5. `unknown` at an untrusted or genuinely dynamic ingress, followed immediately by runtime validation and narrowing;
+6. `any` only as a documented, smallest-scope exception for an irreducibly dynamic external boundary or compatibility shim.
+
+The preferred destination is a named `TeqFw_Db_*` structural alias. `any` is not a default, a placeholder, a shortcut for an unfinished shape, or a validator workaround. It is forbidden for package-owned domain data, DEM declarations, compiler results, physical descriptors, query contracts, and successful public API results. `@returns {any}` must not be used to hide an unknown result shape, and a failing type check must not be repaired by broadening a type to `any`.
+
+When a value changes shape across a pipeline, define separate named aliases for the stages instead of allowing one broad value to flow through them. In particular, decoded fragments, composed canonical DEM, mapped/resolved DEM, validated model, and physical plan are different contracts. Open JSON maps should use an explicit map shape and remain validated before field access. Third-party or Knex values may be adapted at the smallest boundary and must be normalized into a package-owned type immediately.
+
+Every new or changed `any` requires an inline reason in the change review and an entry in the repository's exception allowlist. The allowlist is temporary and ratcheted down; it must identify the exact boundary, why a narrower primitive, named alias, `object`, or `unknown` is impossible, and where normalization occurs. `@ts-nocheck`, generic aliases used to conceal source contracts, and validator-driven type erasure are not acceptable substitutes for a real contract.
 
 ## Boundary Constraints
 

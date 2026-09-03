@@ -10,42 +10,42 @@
  * @interface
  */
 export default class TeqFw_Db_Back_Api_RDb_Dialect {
-    /** @returns {object} */
+    /** @returns {any} */
     describe() {}
-    /** @param {object} input @returns {object} */
+    /** @param {any} input @returns {any} */
     resolveType(input) {}
-    /** @param {object} input @returns {object} */
+    /** @param {any} input @returns {any} */
     resolveDefault(input) {}
-    /** @param {object} input @returns {object} */
+    /** @param {any} input @returns {any} */
     resolveGeneration(input) {}
-    /** @param {object} input @returns {object} */
+    /** @param {any} input @returns {any} */
     resolveIndex(input) {}
-    /** @param {object} input @returns {object} */
+    /** @param {any} input @returns {any} */
     resolveRelation(input) {}
-    /** @param {object} input @returns {object} */
+    /** @param {any} input @returns {any} */
     resolveOperator(input) {}
-    /** @param {object} input @returns {Promise<object>} */
+    /** @param {any} input @returns {Promise<any>} */
     async preflight(input) {}
-    /** @param {object} input @returns {any} */
+    /** @param {any} input @returns {any} */
     addColumn(input) {}
-    /** @param {object} input @returns {any} */
+    /** @param {any} input @returns {any} */
     addConstraint(input) {}
-    /** @param {object} input @returns {any} */
+    /** @param {any} input @returns {any} */
     addRelation(input) {}
-    /** @param {object} input @returns {Promise<void>} */
+    /** @param {any} input @returns {Promise<void>} */
     async addIndex(input) {}
-    /** @param {object} input @returns {any} */
+    /** @param {any} input @returns {any} */
     dropRelation(input) {}
-    /** @param {object} input @returns {any} */
+    /** @param {any} input @returns {any} */
     compileExpression(input) {}
-    /** @param {object} input @returns {Promise<void>} */
+    /** @param {any} input @returns {Promise<void>} */
     async applyExecutionOptions(input) {}
-    /** @param {object} input @returns {Promise<object>} */
+    /** @param {any} input @returns {Promise<any>} */
     async prepareTransfer(input) {}
-    /** @param {object} input @returns {Promise<any>} */
+    /** @param {any} input @returns {Promise<any>} */
     async restoreGeneratedState(input) {}
-    /** @param {object} input @returns {any} */
+    /** @param {any} input @returns {any} */
     encodeValue(input) {}
-    /** @param {object} input @returns {any} */
+    /** @param {any} input @returns {any} */
     decodeValue(input) {}
 }

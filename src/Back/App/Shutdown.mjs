@@ -8,7 +8,7 @@
 export default class Shutdown {
     /**
      * @param {object} deps
-     * @param {any} deps.connection
+     * @param {object} deps.connection
      */
     constructor({connection}) {
         /**

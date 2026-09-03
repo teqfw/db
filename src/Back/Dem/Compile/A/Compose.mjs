@@ -8,8 +8,8 @@
 export default class TeqFw_Db_Back_Dem_Compile_A_Compose {
     /**
      * @param {object} deps
-     * @param {TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic.Factory} deps.diagnostic
-     * @param {TeqFw_Db_Back_Dto_Dem_Compile_Source.Factory} deps.source
+     * @param {TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic__Factory} deps.diagnostic
+     * @param {TeqFw_Db_Back_Dto_Dem_Compile_Source__Factory} deps.source
      */
     constructor({diagnostic, source}) {
         /**
@@ -21,14 +21,16 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Compose {
         };
 
         /**
-         * @param {any} value
-         * @returns {any}
+         * @param {unknown} value
+         * @returns {unknown}
          */
         const copy = function (value) {
             if (Array.isArray(value)) return value.map(copy);
             if (value && typeof value === 'object') {
+                const object = /** @type {TeqFw_Db_Object} */ (value);
+                /** @type {TeqFw_Db_Object} */
                 const res = {};
-                for (const key of Object.keys(value).sort()) res[key] = copy(value[key]);
+                for (const key of Object.keys(object).sort()) res[key] = copy(object[key]);
                 return res;
             }
             return value;
@@ -36,8 +38,8 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Compose {
 
         /**
          * @param {object} deps
-         * @param {ReadonlyArray<object>} deps.decoded
-         * @returns {object}
+         * @param {object} deps.decoded
+         * @returns {any}
          */
         this.exec = function ({decoded}) {
             const diagnostics = [];
@@ -49,9 +51,9 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Compose {
             const conflictSources = {};
 
             /**
-             * @param {object} item
+             * @param {any} item
              * @param {string} canonicalPath
-             * @returns {object}
+             * @returns {any}
              */
             const makeSource = function (item, canonicalPath) {
                 return source.create({
@@ -65,7 +67,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Compose {
 
             /**
              * @param {string} path
-             * @param {object} evidence
+             * @param {any} evidence
              */
             const appendProvenance = function (path, evidence) {
                 const values = provenance[path] ?? [];
@@ -83,7 +85,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Compose {
 
             /**
              * @param {string} path
-             * @param {object} item
+             * @param {any} item
              */
             const conflict = function (path, item) {
                 invalid.add(path);
@@ -98,9 +100,9 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Compose {
             };
 
             /**
-             * @param {object} entity
+             * @param {any} entity
              * @param {string} path
-             * @param {object} item
+             * @param {any} item
              * @param {boolean} claim
              */
             const semanticEntity = function (entity, path, item, claim) {
@@ -128,10 +130,10 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Compose {
             };
 
             /**
-             * @param {object} target
-             * @param {object} incoming
+             * @param {any} target
+             * @param {any} incoming
              * @param {string} path
-             * @param {object} item
+             * @param {any} item
              */
             const mergeContainer = function (target, incoming, path, item) {
                 if (Object.prototype.hasOwnProperty.call(incoming, 'comment')) {

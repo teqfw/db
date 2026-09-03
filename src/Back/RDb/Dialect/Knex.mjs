@@ -30,7 +30,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex {
          * @param {object} deps.indexes
          * @param {object} deps.defaults
          * @param {object} deps.generations
-         * @returns {object}
+         * @returns {any}
          */
         this.createAdapter = function ({description, types, storage, indexes, defaults, generations}) {
             const frozenDescription = freeze(structuredClone(description));

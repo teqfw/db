@@ -13,7 +13,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql {
      */
     constructor({knex, vector}) {
         const capability = 'postgresql.core';
-        /** @param {string|Function} type @param {Function} args @param {Function} unsigned @param {Function} validate @returns {object} */
+        /** @param {any} type @param {any} args @param {any} unsigned @param {any} validate @returns {any} */
         const entry = function (type, args = () => [], unsigned = () => false, validate = () => []) {
             return {
                 bindingParams: [],
@@ -30,7 +30,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql {
                 },
             };
         };
-        /** @param {object} type @returns {ReadonlyArray<object>} */
+        /** @param {any} type @returns {any} */
         const rejectUnsigned = (type) => type.params.unsigned ? [{
             code: 'DEM_STORAGE_UNSUPPORTED',
             details: {adapter: 'postgresql', type: type.id},
@@ -110,37 +110,37 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql {
         const baseEncodeValue = this.encodeValue;
         const basePreflight = this.preflight;
         const baseResolveOperator = this.resolveOperator;
-        /** @param {object} args @returns {any} */
+        /** @param {any} args @returns {any} */
         this.addColumn = function (args) {
             return vector.addColumn({...args, base: baseAddColumn});
         };
-        /** @param {object} args @returns {Promise<void>} */
+        /** @param {any} args @returns {Promise<void>} */
         this.addIndex = async function (args) {
             await vector.addIndex({...args, base: baseAddIndex});
         };
-        /** @param {object} args @returns {Promise<void>} */
+        /** @param {any} args @returns {Promise<void>} */
         this.applyExecutionOptions = async function (args) {
             await vector.applyExecutionOptions(args);
         };
-        /** @param {object} args @returns {any} */
+        /** @param {any} args @returns {any} */
         this.compileExpression = function (args) {
             return vector.compileExpression(args) ?? baseCompileExpression(args);
         };
-        /** @param {object} args @returns {any} */
+        /** @param {any} args @returns {any} */
         this.decodeValue = function (args) {
             return args.column?.logicalType?.id === 'core.vector'
                 ? vector.decodeValue(args) : baseDecodeValue(args);
         };
-        /** @param {object} args @returns {any} */
+        /** @param {any} args @returns {any} */
         this.encodeValue = function (args) {
             return args.column?.logicalType?.id === 'core.vector'
                 ? vector.encodeValue(args) : baseEncodeValue(args);
         };
-        /** @param {object} args @returns {Promise<object>} */
+        /** @param {any} args @returns {Promise<any>} */
         this.preflight = async function (args) {
             return vector.preflight({...args, base: basePreflight});
         };
-        /** @param {object} args @returns {Promise<object>} */
+        /** @param {any} args @returns {Promise<any>} */
         this.resolveOperator = async function (args) {
             return vector.resolveOperator(args) ?? baseResolveOperator(args);
         };
@@ -148,7 +148,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql {
          * @param {object} deps
          * @param {object} deps.cycleStrategy
          * @param {object} deps.transaction
-         * @returns {Promise<object>}
+         * @returns {Promise<any>}
          */
         this.prepareTransfer = async function ({cycleStrategy, transaction}) {
             if (!cycleStrategy) return Object.freeze({strategy: null});
@@ -160,7 +160,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql {
         };
         /**
          * @param {object} deps
-         * @param {ReadonlyArray<object>} deps.tables
+         * @param {object} deps.tables
          * @param {object} deps.transaction
          * @returns {Promise<any>}
          */
@@ -184,9 +184,9 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql {
         };
         /**
          * @param {object} deps
-         * @param {ReadonlyArray<object>} deps.cycles
+         * @param {object} deps.cycles
          * @param {object} deps.strategy
-         * @returns {object}
+         * @returns {any}
          */
         this.validateCycleStrategy = function ({cycles, strategy}) {
             const valid = strategy?.id === 'postgresql.deferredConstraints'

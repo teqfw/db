@@ -43,11 +43,11 @@ export class Factory {
 
         /**
          * @param {object} deps
-         * @param {ReadonlyArray<object>} deps.cycles
-         * @param {ReadonlyArray<object>} deps.edges
-         * @param {ReadonlyArray<string>} deps.entities
-         * @param {ReadonlyArray<string>} deps.topological
-         * @returns {Readonly<TeqFw_Db_Back_Dto_Dem_Compile_Graph>}
+         * @param {TeqFw_Db_ObjectArray} deps.cycles
+         * @param {TeqFw_Db_ObjectArray} deps.edges
+         * @param {TeqFw_Db_StringArray} deps.entities
+         * @param {TeqFw_Db_StringArray} deps.topological
+         * @returns {TeqFw_Db_Back_Dto_Dem_Compile_Graph}
          */
         this.create = function ({cycles, edges, entities, topological}) {
             const res = new TeqFw_Db_Back_Dto_Dem_Compile_Graph();

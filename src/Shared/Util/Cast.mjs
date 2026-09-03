@@ -13,31 +13,31 @@ export default class Cast {
      */
     constructor() {
         /**
-         * @param {any} data
-         * @returns {any}
+         * @param {unknown} data
+         * @returns {TeqFw_Db_ObjectArray}
          */
         this.array = function (data) {
             return Array.isArray(data) ? [...data] : [];
         };
         /**
-         * @param {any} data
+         * @param {unknown} data
          * @param {any} factory
-         * @returns {any}
+         * @returns {TeqFw_Db_ObjectArray}
          */
         this.arrayOfObj = function (data, factory) {
             const normalize = typeof factory === 'function' ? factory : (value) => value ?? {};
             return Array.isArray(data) ? data.map((item) => normalize(item)) : [];
         };
         /**
-         * @param {any} data
-         * @returns {any}
+         * @param {unknown} data
+         * @returns {TeqFw_Db_StringArray}
          */
         this.arrayOfStr = function (data) {
             return Array.isArray(data) ? data.map((item) => this.string(item)) : [];
         };
         /**
-         * @param {any} data
-         * @returns {any}
+         * @param {unknown} data
+         * @returns {unknown}
          */
         this.bin = function (data) {
             if (typeof data === 'string') return ENCODER.encode(data);
@@ -45,8 +45,8 @@ export default class Cast {
             return data;
         };
         /**
-         * @param {any} data
-         * @returns {any}
+         * @param {unknown} data
+         * @returns {boolean}
          */
         this.boolean = function (data) {
             return data === true
@@ -54,15 +54,15 @@ export default class Cast {
                 || (typeof data === 'number' && data !== 0);
         };
         /**
-         * @param {any} data
-         * @returns {any}
+         * @param {unknown} data
+         * @returns {TeqFw_Db_BooleanNullable}
          */
         this.booleanIfExists = function (data) {
             return data === undefined || data === null ? data : this.boolean(data);
         };
         /**
-         * @param {any} data
-         * @returns {any}
+         * @param {unknown} data
+         * @returns {TeqFw_Db_ObjectOptional}
          */
         this.date = function (data) {
             if (data instanceof Date) return new Date(data);
@@ -70,33 +70,33 @@ export default class Cast {
             return undefined;
         };
         /**
-         * @param {any} data
-         * @returns {any}
+         * @param {unknown} data
+         * @returns {TeqFw_Db_NumberOptional}
          */
         this.decimal = function (data) {
             const result = Number.parseFloat(data);
             return Number.isNaN(result) ? undefined : result;
         };
         /**
-         * @param {any} data
-         * @param {any} values
-         * @param {any} capitalize
-         * @returns {any}
+         * @param {unknown} data
+         * @param {object} values
+         * @param {boolean} capitalize
+         * @returns {unknown}
          */
         this.enum = function (data, values, capitalize = true) {
             const normalized = capitalize && typeof data === 'string' ? data.toUpperCase() : data;
             return Object.values(values).includes(normalized) ? normalized : undefined;
         };
         /**
-         * @param {any} data
-         * @returns {any}
+         * @param {unknown} data
+         * @returns {unknown}
          */
         this.function = function (data) {
             return typeof data === 'function' ? data : undefined;
         };
         /**
-         * @param {any} data
-         * @returns {any}
+         * @param {unknown} data
+         * @returns {TeqFw_Db_NumberOptional}
          */
         this.int = function (data) {
             const normalized = typeof data === 'string' ? data.trim() : data;
@@ -104,16 +104,16 @@ export default class Cast {
             return Number.isNaN(result) ? undefined : result;
         };
         /**
-         * @param {any} data
-         * @returns {any}
+         * @param {unknown} data
+         * @returns {TeqFw_Db_Object}
          */
         this.object = function (data) {
             return typeof data === 'object' && data !== null ? JSON.parse(JSON.stringify(data)) : {};
         };
         /**
-         * @param {any} data
+         * @param {unknown} data
          * @param {any} factory
-         * @returns {any}
+         * @returns {TeqFw_Db_Object}
          */
         this.objectsMap = function (data, factory) {
             const normalize = typeof factory === 'function' ? factory : (value) => value ?? {};
@@ -123,8 +123,8 @@ export default class Cast {
             return result;
         };
         /**
-         * @param {any} data
-         * @returns {any}
+         * @param {unknown} data
+         * @returns {unknown}
          */
         this.primitive = function (data) {
             return data === null || ['string', 'number', 'boolean', 'symbol', 'bigint'].includes(typeof data)
@@ -132,8 +132,8 @@ export default class Cast {
                 : undefined;
         };
         /**
-         * @param {any} data
-         * @returns {any}
+         * @param {unknown} data
+         * @returns {TeqFw_Db_StringOptional}
          */
         this.string = function (data) {
             return ['string', 'number', 'boolean'].includes(typeof data) ? String(data) : undefined;

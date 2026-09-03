@@ -10,10 +10,10 @@ const NS = 'TeqFw_Db_Shared_Dto_Query_Expression';
 export default class TeqFw_Db_Shared_Dto_Query_Expression {
     /** @type {'attr'|'value'|'call'} */ kind;
     /** @type {string} */ name;
-    /** @type {any} */ value;
-    /** @type {object} */ type;
+    /** @type {unknown} */ value;
+    /** @type {TeqFw_Db_LogicalType} */ type;
     /** @type {string} */ operator;
-    /** @type {ReadonlyArray<object>} */ args;
+    /** @type {TeqFw_Db_QueryExpressionArray} */ args;
 }
 
 export class Factory {
@@ -23,7 +23,7 @@ export class Factory {
     constructor() {
         /** @param {any} value @returns {boolean} */
         const isObject = (value) => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
-        /** @param {any} value @param {WeakSet<object>} visited @returns {any} */
+        /** @param {any} value @param {any} visited @returns {any} */
         const freeze = function (value, visited = new WeakSet()) {
             if (ArrayBuffer.isView(value)) return value;
             if (value && typeof value === 'object' && visited.has(value)) return value;
@@ -33,15 +33,15 @@ export class Factory {
             return Object.freeze(value);
         };
         /**
-         * @param {object} value
-         * @param {ReadonlyArray<string>} allowed
+         * @param {any} value
+         * @param {any} allowed
          */
         const closed = function (value, allowed) {
             const unknown = Object.keys(value).filter((key) => !allowed.includes(key));
             if (unknown.length) throw new TypeError(`Unknown expression field '${unknown.sort()[0]}'.`);
         };
 
-        /** @param {any} data @returns {Readonly<TeqFw_Db_Shared_Dto_Query_Expression>} */
+        /** @param {any} data @returns {any} */
         this.create = function (data) {
             if (data instanceof TeqFw_Db_Shared_Dto_Query_Expression) {
                 data = Object.fromEntries(Object.entries(data).filter(([, value]) => value !== undefined));

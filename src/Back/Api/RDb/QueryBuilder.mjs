@@ -15,18 +15,18 @@ export default class TeqFw_Db_Back_Api_RDb_QueryBuilder {
     /**
      * Build and return a query.
      * @param {TeqFw_Db_Back_RDb_ITrans} trx
-     * @param {object} opts
+     * @param {any} opts
      * @abstract
-     * @returns {Knex.QueryBuilder}
+     * @returns {any}
      */
     build(trx, opts = {}) {}
 
     /**
      * Build and return query to get total count of items for a given selection.
      * @param {TeqFw_Db_Back_RDb_ITrans} trx
-     * @param {object} opts
+     * @param {any} opts
      * @abstract
-     * @returns {Knex.QueryBuilder}
+     * @returns {any}
      */
     buildCount(trx, opts = {}) {}
 
@@ -34,14 +34,14 @@ export default class TeqFw_Db_Back_Api_RDb_QueryBuilder {
     /**
      * Retrieve the aliases for the selected columns in the query.
      * @abstract
-     * @returns {Object<string, *>|*}
+     * @returns {any}
      */
     getColumns() {}
 
     /**
      * * Retrieve a mapping of table aliases used in this query.
      * @abstract
-     * @returns {Object<string, string>|*}
+     * @returns {any}
      */
     getTables() {}
 
@@ -49,7 +49,7 @@ export default class TeqFw_Db_Back_Api_RDb_QueryBuilder {
      * Map query's column name (`userId`) to `alias.column` pair (`u.id`).
      * @param {string} col
      * @abstract
-     * @returns {string|undefined}
+     * @returns {any}
      */
     mapColumn(col) { }
 

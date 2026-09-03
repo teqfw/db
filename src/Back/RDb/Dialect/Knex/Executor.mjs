@@ -12,10 +12,10 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex_Executor {
     constructor() {
         /**
          * @param {object} deps
-         * @param {Knex.CreateTableBuilder} deps.tableBuilder
+         * @param {object} deps.tableBuilder
          * @param {object} deps.column
-         * @param {Knex} deps.knex
-         * @returns {Knex.ColumnBuilder}
+         * @param {object} deps.knex
+         * @returns {any}
          */
         this.addColumn = function ({tableBuilder, column, knex}) {
             const type = column.physicalType;
@@ -101,7 +101,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex_Executor {
 
         /**
          * @param {object} deps
-         * @param {Knex.CreateTableBuilder} deps.tableBuilder
+         * @param {object} deps.tableBuilder
          * @param {object} deps.constraint
          */
         this.addConstraint = function ({tableBuilder, constraint}) {
@@ -124,7 +124,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex_Executor {
 
         /**
          * @param {object} deps
-         * @param {Knex.CreateTableBuilder} deps.tableBuilder
+         * @param {object} deps.tableBuilder
          * @param {object} deps.relation
          */
         this.addRelation = function ({tableBuilder, relation}) {
@@ -140,7 +140,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex_Executor {
 
         /**
          * @param {object} deps
-         * @param {Knex.CreateTableBuilder} deps.tableBuilder
+         * @param {object} deps.tableBuilder
          * @param {object} deps.index
          */
         this.addIndex = function ({tableBuilder, index}) {
@@ -149,14 +149,14 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex_Executor {
 
         /**
          * @param {object} deps
-         * @param {Knex.CreateTableBuilder} deps.tableBuilder
+         * @param {object} deps.tableBuilder
          * @param {object} deps.relation
          */
         this.dropRelation = function ({tableBuilder, relation}) {
             tableBuilder.dropForeign(relation.columns, relation.name);
         };
 
-        /** @param {object} deps @param {object[]} deps.args @param {object} deps.descriptor @param {Knex} deps.knex @returns {any} */
+        /** @param {object} deps @param {object} deps.args @param {object} deps.descriptor @param {object} deps.knex @returns {any} */
         this.compileExpression = function ({args, descriptor, knex}) {
             switch (descriptor.implementation) {
                 case 'and': return args.slice(1).reduce((left, right) => knex.raw('(? and ?)', [left, right]), args[0]);

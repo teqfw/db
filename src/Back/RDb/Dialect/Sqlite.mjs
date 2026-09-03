@@ -14,10 +14,10 @@ export default class TeqFw_Db_Back_RDb_Dialect_Sqlite {
         const capability = 'sqlite.core';
         /**
          * @param {string} type
-         * @param {Function} args
-         * @param {Function} unsigned
-         * @param {Function} validate
-         * @returns {object}
+         * @param {any} args
+         * @param {any} unsigned
+         * @param {any} validate
+         * @returns {any}
          */
         const entry = function (type, args = () => [], unsigned = () => false, validate = () => []) {
             return {
@@ -35,7 +35,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Sqlite {
                 },
             };
         };
-        /** @param {object} type @returns {ReadonlyArray<object>} */
+        /** @param {any} type @returns {any} */
         const rejectUnsigned = (type) => type.params.unsigned ? [{
             code: 'DEM_STORAGE_UNSUPPORTED',
             details: {adapter: 'sqlite', type: type.id},

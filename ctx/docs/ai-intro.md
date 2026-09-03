@@ -1,7 +1,7 @@
 # AI Introduction
 
 - Path: `ctx/docs/ai-intro.md`
-- Changed: `20260813`
+- Changed: `20260903`
 
 ## Purpose
 
@@ -29,6 +29,8 @@ TeqFW application developers, teq-plugin developers declaring persistent entitie
 ## Technology Base
 
 Node.js ESM, JSDoc, Knex, versioned JSON schema declarations, dialect adapters, and the TeqFW namespace `TeqFw_Db_`.
+
+JSDoc is the checked structural contract of this JavaScript package. Before changing an annotation, inspect the actual value flow and the matching aliases in `types.d.ts`. Prefer a primitive or bounded union, then a named `TeqFw_Db_*` alias for a known, reused, domain, or DEM-stage shape; use `object` only for a known opaque object and `unknown` only at a dynamic ingress followed by validation. Do not introduce `any` to make `tsc` or `teqfw-esm-validator` pass, and do not weaken an exact namespace alias to a generic placeholder. A validator limitation is handled with a named structural alias or a validator fix. Any unavoidable `any` must be smallest-scope, documented, allowlisted, and normalized immediately at the external boundary.
 
 ## Distinguishing Characteristics
 

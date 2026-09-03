@@ -19,7 +19,7 @@ export default class TeqFw_Db_Back_Dem_Registry_CoreValue {
          * @param {object} deps
          * @param {object} deps.type
          * @param {boolean} deps.allowAny
-         * @returns {object|null}
+         * @returns {any}
          */
         this.normalizeType = function ({type, allowAny = false}) {
             if (!type || typeof type !== 'object' || Array.isArray(type)
@@ -70,7 +70,7 @@ export default class TeqFw_Db_Back_Dem_Registry_CoreValue {
         /**
          * @param {object} deps
          * @param {object} deps.type
-         * @param {any} deps.value
+         * @param {object} deps.value
          * @param {boolean} deps.allowAny
          * @returns {boolean}
          */

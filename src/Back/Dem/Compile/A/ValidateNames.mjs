@@ -8,8 +8,8 @@
 export default class TeqFw_Db_Back_Dem_Compile_A_ValidateNames {
     /**
      * @param {object} deps
-     * @param {TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic.Factory} deps.diagnostic
-     * @param {TeqFw_Db_Back_Dto_Dem_Compile_Source.Factory} deps.source
+     * @param {TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic__Factory} deps.diagnostic
+     * @param {TeqFw_Db_Back_Dto_Dem_Compile_Source__Factory} deps.source
      */
     constructor({diagnostic, source}) {
         /** @param {any} value @returns {boolean} */
@@ -25,17 +25,17 @@ export default class TeqFw_Db_Back_Dem_Compile_A_ValidateNames {
 
         /**
          * @param {object} deps
-         * @param {ReadonlyArray<object>} deps.fragments
+         * @param {object} deps.fragments
          * @param {object} deps.mapEnvelope
-         * @returns {ReadonlyArray<object>}
+         * @returns {any}
          */
         this.exec = function ({fragments, mapEnvelope}) {
             const diagnostics = [];
 
             /**
-             * @param {object} envelope
+             * @param {any} envelope
              * @param {string} sourcePointer
-             * @returns {object|null}
+             * @returns {any}
              */
             const evidence = function (envelope, sourcePointer) {
                 const fragmentId = envelope?.fragmentId ?? envelope?.mapId;
@@ -58,9 +58,9 @@ export default class TeqFw_Db_Back_Dem_Compile_A_ValidateNames {
              * @param {string} deps.rawName
              * @param {string} deps.sourcePointer
              * @param {boolean} deps.pathName
-             * @param {'entity'|'package'|'namespace'|undefined} deps.identifierKind
+             * @param {object} deps.identifierKind
              * @param {object} deps.seen
-             * @returns {string|null}
+             * @returns {any}
              */
             const claim = function ({canonicalPath, envelope, rawName, sourcePointer, pathName = false, identifierKind, seen}) {
                 if (identifierKind && !localIdentifier.test(rawName)) {
@@ -113,11 +113,11 @@ export default class TeqFw_Db_Back_Dem_Compile_A_ValidateNames {
             };
 
             /**
-             * @param {object} container
-             * @param {object} envelope
+             * @param {any} container
+             * @param {any} envelope
              * @param {string} canonicalPointer
              * @param {string} sourcePointer
-             * @param {object} seen
+             * @param {any} seen
              */
             const walkContainer = function (container, envelope, canonicalPointer, sourcePointer, seen) {
                 if (!isObject(container)) return;

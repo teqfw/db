@@ -8,8 +8,8 @@
 export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
     /**
      * @param {object} deps
-     * @param {TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic.Factory} deps.diagnostic
-     * @param {TeqFw_Db_Back_Dto_Dem_Compile_Source.Factory} deps.source
+     * @param {TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic__Factory} deps.diagnostic
+     * @param {TeqFw_Db_Back_Dto_Dem_Compile_Source__Factory} deps.source
      */
     constructor({diagnostic, source}) {
         /**
@@ -48,7 +48,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
          * @param {object} deps
          * @param {object} deps.composed
          * @param {object} deps.mapEnvelope
-         * @returns {object}
+         * @returns {any}
          */
         this.exec = function ({composed, mapEnvelope}) {
             const diagnostics = [...composed.diagnostics];
@@ -62,7 +62,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
 
             /**
              * @param {string} sourcePointer
-             * @returns {object|null}
+             * @returns {any}
              */
             const makeSource = function (sourcePointer) {
                 if (!trusted) return null;
@@ -81,7 +81,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
              * @param {object} deps.details
              * @param {string} deps.message
              * @param {string} deps.path
-             * @param {ReadonlyArray<object>} deps.sources
+             * @param {object} deps.sources
              * @param {string} deps.stage
              */
             const addDiagnostic = function ({code, details = {}, message, path, sources = [], stage = 'decode'}) {
@@ -90,7 +90,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
 
             /**
              * @param {any} value
-             * @param {ReadonlyArray<string>} allowed
+             * @param {any} allowed
              * @param {string} path
              * @returns {boolean}
              */
@@ -217,7 +217,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
             }
 
             /**
-             * @param {object} container
+             * @param {any} container
              * @param {string} pointer
              */
             const walk = function (container, pointer) {
@@ -281,7 +281,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
             }
             const entities = {};
             /**
-             * @param {object} container
+             * @param {any} container
              */
             const collectEntities = function (container) {
                 for (const entity of Object.values(container.entity ?? {})) entities[entity.path] = entity;
@@ -289,7 +289,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
             };
             collectEntities(model);
             /**
-             * @param {object} container
+             * @param {any} container
              * @param {string} pointer
              */
             const resolveIdentities = function (container, pointer) {
@@ -324,7 +324,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
             };
             resolveIdentities(model, '');
             /**
-             * @param {object} container
+             * @param {any} container
              * @param {string} pointer
              */
             const resolveReferences = function (container, pointer) {
@@ -357,7 +357,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
             };
             resolveReferences(model, '');
             /**
-             * @param {object} container
+             * @param {any} container
              */
             const clearSpecialMarkers = function (container) {
                 for (const entity of Object.values(container.entity ?? {})) {

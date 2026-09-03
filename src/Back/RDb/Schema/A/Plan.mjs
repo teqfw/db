@@ -23,14 +23,14 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Plan {
             return Object.freeze(value);
         };
         const authentic = new WeakSet();
-        /** @param {object} value @returns {object} */
+        /** @param {any} value @returns {any} */
         const finalize = function (value) {
             const result = freeze(value);
             authentic.add(result);
             return result;
         };
 
-        /** @param {object} deps @param {any} deps.value @returns {object} */
+        /** @param {object} deps @param {object} deps.value @returns {any} */
         this.assertPlan = function ({value}) {
             if (!value || typeof value !== 'object' || !authentic.has(value)) {
                 throw new TypeError('An authentic schema plan is required.');
@@ -42,10 +42,10 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Plan {
         /**
          * @param {object} deps
          * @param {object} deps.compilation
-         * @param {'create'|'drop'|'rebuild'|'transfer'} deps.operation
+         * @param {object} deps.operation
          * @param {boolean} deps.includeData
-         * @param {object|null} deps.cycleStrategy
-         * @returns {object}
+         * @param {object} deps.cycleStrategy
+         * @returns {any}
          */
         this.exec = function ({compilation, operation = 'create', includeData = false, cycleStrategy = null}) {
             compile.assertResult({value: compilation});
@@ -57,7 +57,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Plan {
             const order = compilation.graph.topological;
             const orderedTables = order.map((entity) => tableByEntity[entity]).filter(Boolean);
             const tableRank = Object.fromEntries(order.map((entity, index) => [entity, index]));
-            /** @param {object} left @param {object} right @returns {number} */
+            /** @param {any} left @param {any} right @returns {number} */
             const sortOperations = function (left, right) {
                 return (tableRank[left.entity] ?? Number.MAX_SAFE_INTEGER) - (tableRank[right.entity] ?? Number.MAX_SAFE_INTEGER)
                     || String(left.name).localeCompare(String(right.name));

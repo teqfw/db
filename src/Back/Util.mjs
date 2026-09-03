@@ -15,11 +15,11 @@
 
 /**
  * Format UTC date-time as ISO 8601 string.
- * @param {Date|string|null} dateIn
+ * @param {TeqFw_Db_DateInput} dateIn
  * @returns {string}
  * @memberOf TeqFw_Db_Back_Util
  */
-function dateUtc(dateIn) {
+export function dateUtc(dateIn) {
     /** @type {Date} */
     const date = (dateIn) ?
         (dateIn instanceof Date) ? dateIn : new Date(dateIn)
@@ -35,12 +35,12 @@ function dateUtc(dateIn) {
 
 /**
  * Format input data to be used as MySQL datetime compatible string (UTC).
- * @param {Date|string|null} dateIn
+ * @param {TeqFw_Db_DateInput} dateIn
  * @returns {string}
  * @memberOf TeqFw_Db_Back_Util
  * @deprecated use TeqFw_Db_Back_Util.dateUtc
  */
-function formatAsDateTime(dateIn) {
+export function formatAsDateTime(dateIn) {
     /** @type {Date} */
     const date = (dateIn) ?
         (dateIn instanceof Date) ? dateIn : new Date(dateIn)
@@ -57,73 +57,75 @@ function formatAsDateTime(dateIn) {
 /**
  * Get list of available tables.
  * @param {TeqFw_Db_Back_RDb_ITrans} trx
- * @returns {Promise<*[]>}
+ * @returns {Promise<TeqFw_Db_StringArray>}
  * @memberOf TeqFw_Db_Back_Util
  */
-async function getTables(trx) {
-    const result = [];
-    const knex = trx.getKnexTrx();
-    const dialect = knex.client.config.client;
-    if (['mysql', 'mysql2'].includes(dialect)) {
-        const rs = await knex.raw('show tables');
-        if (Array.isArray(rs)) {
-            const column = rs[1][0]['name'];
-            rs[0].map(one => result.push(one[column]));
+export function getTables(trx) {
+    return (async () => {
+        const result = [];
+        const knex = trx.getKnexTrx();
+        const dialect = knex.client.config.client;
+        if (['mysql', 'mysql2'].includes(dialect)) {
+            const rs = await knex.raw('show tables');
+            if (Array.isArray(rs)) {
+                const column = rs[1][0]['name'];
+                rs[0].map(one => result.push(one[column]));
+            }
+        } else if (['pg'].includes(dialect)) {
+            const rs = await knex.raw('SELECT * FROM information_schema.tables  WHERE table_schema = \'public\'');
+            if (Array.isArray(rs?.rows)) {
+                rs.rows.map(one => result.push(one['table_name']));
+            }
+        } else {
+            throw new Error(`This dialect (${dialect}) is not supported.`);
         }
-    } else if (['pg'].includes(dialect)) {
-        const rs = await knex.raw('SELECT * FROM information_schema.tables  WHERE table_schema = \'public\'');
-        if (Array.isArray(rs?.rows)) {
-            rs.rows.map(one => result.push(one['table_name']));
-        }
-    } else {
-        throw new Error(`This dialect (${dialect}) is not supported.`);
-    }
-    return result;
+        return result;
+    })();
 }
 
 /**
  * Return 'true' if knex client is connected to Postgres DB.
- * @param {any} client
+ * @param {TeqFw_Db_ClientLike} client
  * @returns {boolean}
  * @memberOf TeqFw_Db_Back_Util
  */
-function isPostgres(client) {
+export function isPostgres(client) {
     return client.constructor.name === 'Client_PG';
 }
 
 /**
- * @param {any} trx
- * @param {any} table
- * @param {any} rows
- * @returns {Promise<any>}
+ * @param {TeqFw_Db_Back_RDb_ITrans} trx
+ * @param {string} table
+ * @param {TeqFw_Db_ObjectArray} rows
+ * @returns {Promise<void>}
  * @deprecated
  */
-async function itemsInsert(trx, table, rows) {
-    return me.itemsInsert(trx, table, rows);
+export function itemsInsert(trx, table, rows) {
+    return (async () => me.itemsInsert(trx, table, rows))();
 }
 
 /**
- * @param {any} trx
- * @param {any} tables
- * @param {any} entity
- * @param {any} cols
- * @returns {Promise<any>}
+ * @param {TeqFw_Db_Back_RDb_ITrans} trx
+ * @param {TeqFw_Db_StringArray} tables
+ * @param {string} entity
+ * @param {TeqFw_Db_StringArrayOrNull} cols
+ * @returns {Promise<TeqFw_Db_ObjectArrayOrNull>}
  * @deprecated
  */
-async function itemsSelect(trx, tables, entity, cols = null) {
-    return me.itemsSelect(trx, tables, entity, cols);
+export function itemsSelect(trx, tables, entity, cols = null) {
+    return (async () => me.itemsSelect(trx, tables, entity, cols))();
 }
 
 /**
  * Create name for foreign key constraint.
- * @param {String} tblSrc
- * @param {String|String[]} fldSrc
- * @param {String} tblTrg
- * @param {String|String[]} fldTrg
- * @returns {String}
+ * @param {string} tblSrc
+ * @param {TeqFw_Db_Identifier} fldSrc
+ * @param {string} tblTrg
+ * @param {TeqFw_Db_Identifier} fldTrg
+ * @returns {string}
  * @memberOf TeqFw_Db_Back_Util
  */
-function nameFK(tblSrc, fldSrc, tblTrg, fldTrg) {
+export function nameFK(tblSrc, fldSrc, tblTrg, fldTrg) {
     let result = `FK_${tblSrc}_`;
     // type of fldSrc should correspond to type of fldTrg
     if (typeof fldSrc === 'string') {
@@ -138,12 +140,12 @@ function nameFK(tblSrc, fldSrc, tblTrg, fldTrg) {
 
 /**
  * Create name for index key constraint.
- * @param {String} tbl
- * @param {String|String[]} fld
- * @returns {String}
+ * @param {string} tbl
+ * @param {TeqFw_Db_Identifier} fld
+ * @returns {string}
  * @memberOf TeqFw_Db_Back_Util
  */
-function nameNX(tbl, fld) {
+export function nameNX(tbl, fld) {
     let result = `IK_${tbl}_`;
     if (typeof fld === 'string') {
         result += `_${fld.toLowerCase()}`;
@@ -155,12 +157,12 @@ function nameNX(tbl, fld) {
 
 /**
  * Create name for unique key constraint.
- * @param {String} tbl
- * @param {String|String[]} fld
- * @returns {String}
+ * @param {string} tbl
+ * @param {TeqFw_Db_Identifier} fld
+ * @returns {string}
  * @memberOf TeqFw_Db_Back_Util
  */
-function nameUQ(tbl, fld) {
+export function nameUQ(tbl, fld) {
     let result = `UK_${tbl}_`;
     if (typeof fld === 'string') {
         result += `_${fld.toLowerCase()}`;
@@ -171,60 +173,64 @@ function nameUQ(tbl, fld) {
 }
 
 /**
- * @param {any} trx
- * @returns {Promise<any>}
+ * @param {TeqFw_Db_Back_RDb_ITrans} trx
+ * @returns {Promise<TeqFw_Db_StringNumberMap>}
  * @deprecated
  */
-async function pgSerialsGet(trx) {
-    return me.pgSerialsGet(trx);
+export function pgSerialsGet(trx) {
+    return (async () => me.pgSerialsGet(trx))();
 }
 
 /**
  * Get 'nextval' for Postgres serials.
- * @param {any} schema
- * @param {String[]} serials
- * @returns {Promise<Object>}
+ * @param {object} schema
+ * @param {TeqFw_Db_StringArray} serials
+ * @returns {Promise<TeqFw_Db_StringNumberMap>}
  * @memberOf TeqFw_Db_Back_Util
  */
-async function serialsGet(schema, serials) {
-    const result = {};
-    for (const one of serials) {
-        schema.raw(`SELECT nextval('${one}')`);
-    }
-    const rs = await schema;
-    for (const i in rs.rows) {
-        const key = serials[i];
-        result[key] = rs.rows[0].nextval;
-    }
-    return result;
+export function serialsGet(schema, serials) {
+    return (async () => {
+        const result = {};
+        for (const one of serials) {
+            schema.raw(`SELECT nextval('${one}')`);
+        }
+        const rs = await schema;
+        for (const i in rs.rows) {
+            const key = serials[i];
+            result[key] = rs.rows[0].nextval;
+        }
+        return result;
+    })();
 }
 
 /**
  * Get 'nextval' for one Postgres serial.
- * @param {any} schema
+ * @param {object} schema
  * @param {string} serial
- * @returns {Promise<string|null>}
+ * @returns {Promise<TeqFw_Db_SerialValue>}
  * @memberOf TeqFw_Db_Back_Util
  */
-async function serialsGetOne(schema, serial) {
-    try {
-        schema.raw(`SELECT nextval('${serial}')`);
-        const rs = await schema;
-        const [first] = rs.rows;
-        return first.nextval;
-    } catch (e) {
-        return null;
-    }
+export function serialsGetOne(schema, serial) {
+    return (async () => {
+        try {
+            schema.raw(`SELECT nextval('${serial}')`);
+            const rs = await schema;
+            const [first] = rs.rows;
+            return first.nextval;
+        } catch (e) {
+            return null;
+        }
+    })();
 }
 
 /**
- * @param {any} schema
- * @param {any} serials
+ * @param {object} schema
+ * @param {TeqFw_Db_StringNumberMap} serials
  * @returns {Promise<any>}
  * @deprecated
  */
-async function serialsSet(schema, serials) {
-    return me.pgSerialsSet(schema, serials);
+export function serialsSet(schema, serials) {
+    return (async () => me.pgSerialsSet(schema, serials))();
 }
 
 // MODULE'S CLASSES
@@ -237,7 +243,7 @@ export default class TeqFw_Db_Back_Util {
          * Insert table items selected by 'itemsSelect'.
          * @param {TeqFw_Db_Back_RDb_ITrans} trx
          * @param {string} table
-         * @param {array} rows
+         * @param {TeqFw_Db_ObjectArray} rows
          * @returns {Promise<void>}
          */
         this.itemsInsert = async function(trx, table, rows) {
@@ -250,10 +256,10 @@ export default class TeqFw_Db_Back_Util {
         /**
          * Select * from 'entity' if 'entity' exists in 'tables' or null otherwise.
          * @param {TeqFw_Db_Back_RDb_ITrans} trx
-         * @param {string[]} tables
+         * @param {TeqFw_Db_StringArray} tables
          * @param {string} entity
-         * @param {string[]|null} cols
-         * @returns {Promise<*|null>}
+         * @param {TeqFw_Db_StringArrayOrNull} cols
+         * @returns {Promise<TeqFw_Db_ObjectArrayOrNull>}
          * @memberOf TeqFw_Db_Back_Util
          */
         this.itemsSelect = async function(trx, tables, entity, cols = null) {
@@ -292,7 +298,7 @@ export default class TeqFw_Db_Back_Util {
         /**
          * Set nextval for Postgres serial.
          * @param {any} schema
-         * @param {Object} serials
+         * @param {TeqFw_Db_StringNumberMap} serials
          * @returns {Promise<void>}
          * @memberOf TeqFw_Db_Back_Util
          */
@@ -306,9 +312,9 @@ export default class TeqFw_Db_Back_Util {
 
         /**
          * Convert the query columns into the tables' fields to group by.
-         * @param {Object<string, string>} columns
-         * @param {Object<string, string>} map
-         * @returns {Object<string, string>[]}
+         * @param {TeqFw_Db_StringMap} columns
+         * @param {TeqFw_Db_StringMap} map
+         * @returns {TeqFw_Db_StringArray}
          * @deprecated
          * @see TeqFw_Db_Back_Util_ListQuery
          */
@@ -322,9 +328,9 @@ export default class TeqFw_Db_Back_Util {
 
         /**
          * Convert the query columns into the tables' fields to select.
-         * @param {Object<string, string>} columns
-         * @param {Object<string, string>} map
-         * @returns {Object<string, string>[]}
+         * @param {TeqFw_Db_StringMap} columns
+         * @param {TeqFw_Db_StringMap} map
+         * @returns {TeqFw_Db_ObjectArray}
          * @deprecated
          * @see TeqFw_Db_Back_Util_ListQuery
          */
@@ -344,18 +350,3 @@ export default class TeqFw_Db_Back_Util {
 
 // MAIN
 const me = new TeqFw_Db_Back_Util();
-export {
-    dateUtc,
-    formatAsDateTime,
-    getTables,
-    isPostgres,
-    itemsInsert,
-    itemsSelect,
-    nameFK,
-    nameNX,
-    nameUQ,
-    pgSerialsGet,
-    serialsGet,
-    serialsGetOne,
-    serialsSet,
-};

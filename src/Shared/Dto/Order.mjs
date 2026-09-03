@@ -45,13 +45,13 @@ export default class TeqFw_Db_Shared_Dto_Order {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Shared_Util_Cast} deps.cast
-     * @param {typeof TeqFw_Db_Shared_Enum_Direction} deps.DIR
+     * @param {TeqFw_Db_Shared_Enum_Direction} deps.DIR
      */
     constructor({cast, DIR}) {
         // INSTANCE METHODS
         /**
-         * @param {TeqFw_Db_Shared_Dto_Order.Dto} data
-         * @returns {TeqFw_Db_Shared_Dto_Order.Dto}
+         * @param {TeqFw_Db_OrderDto} data
+         * @returns {TeqFw_Db_OrderDto}
          */
         this.createDto = function (data) {
             // create new DTO and populate it with initialization data
@@ -63,7 +63,7 @@ export default class TeqFw_Db_Shared_Dto_Order {
         };
 
         /**
-         * @returns {any}
+         * @returns {object}
          */
         this.getAttributes = () => ATTR;
     }

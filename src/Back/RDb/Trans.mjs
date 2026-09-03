@@ -14,14 +14,14 @@ export default class TeqFw_Db_Back_RDb_Trans {
     #adapter;
     /** @type {TeqFw_Db_Back_RDb_Connect_Resolver} */
     #resolver;
-    /** @type {Knex} */
+    /** @type {any} */
     #trx;
 
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_Api_RDb_Dialect} deps.adapter
      * @param {TeqFw_Db_Back_RDb_Connect_Resolver} deps.resolver
-     * @param {Knex} deps.trx
+     * @param {object} deps.trx
      */
     constructor({adapter, resolver, trx}) {
         this.#adapter = adapter;
@@ -30,7 +30,7 @@ export default class TeqFw_Db_Back_RDb_Trans {
 
         /**
          * Return new knex based query builder.
-         * @returns {Knex.QueryBuilder}
+         * @returns {any}
          */
         this.createQuery = function() {
             return this.#trx.queryBuilder();
@@ -100,7 +100,7 @@ export default class TeqFw_Db_Back_RDb_Trans {
             return this.#adapter;
         };
 
-        /** @returns {Knex} */
+        /** @returns {any} */
         this.getKnexTrx = function() {
             return this.#trx;
         };

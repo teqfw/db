@@ -20,13 +20,13 @@ export default class TeqFw_Db_Back_RDb_Connect {
      * @param {TeqFw_Db_Back_RDb_Dialect_Registry} deps._dialects
      * @param {TeqFw_Log_Provider} deps.logger
      * @param {TeqFw_Db_Back_RDb_Connect_Resolver} deps._resolver
-     * @param {typeof TeqFw_Db_Back_RDb_Trans} deps.Trans
-     * @param {any} deps.knexFactory
+     * @param {TeqFw_Db_Back_RDb_Trans__Class} deps.Trans
+     * @param {object} deps.knexFactory
      */
     constructor({_dialects, logger, _resolver, Trans, knexFactory}) {
         const log = logger.forSource('TeqFw_Db_Back_RDb_Connect');
         // VARS
-        /** @type {Knex} */
+        /** @type {any} */
         let _knex;
         /** @type {string} */
         let _info;
@@ -36,7 +36,7 @@ export default class TeqFw_Db_Back_RDb_Connect {
         // INSTANCE METHODS
         /**
          * Initialize connection to database.
-         * @param {TeqFw_Db_Back_Dto_Config_Local|Knex.Config} cfg
+         * @param {any} cfg
          * @returns {Promise<void>}
          */
         this.init = async function (cfg) {
@@ -88,7 +88,7 @@ export default class TeqFw_Db_Back_RDb_Connect {
         };
         /**
          * Accessor for the underlying database client.
-         * @returns {*}
+         * @returns {any}
          */
         this.getClient = function () {
             return _knex;
@@ -97,7 +97,7 @@ export default class TeqFw_Db_Back_RDb_Connect {
         /**
          * Accessor for 'knex.schema' object.
          * (empty array is returned for async function)
-         * @returns {SchemaBuilder}
+         * @returns {any}
          */
         this.getSchemaBuilder = function () {
             return _knex?.schema;

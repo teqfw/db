@@ -40,14 +40,14 @@ export class Factory {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Shared_Util_Cast} deps.cast
-     * @param {TeqFw_Db_Back_Dto_Dem_Entity_Attr.Factory} deps.fAttr
-     * @param {TeqFw_Db_Back_Dto_Dem_Entity_Index.Factory} deps.fIndex
-     * @param {TeqFw_Db_Back_Dto_Dem_Entity_Relation.Factory} deps.fRelation
+     * @param {TeqFw_Db_Back_Dto_Dem_Entity_Attr__Factory} deps.fAttr
+     * @param {TeqFw_Db_Back_Dto_Dem_Entity_Index__Factory} deps.fIndex
+     * @param {TeqFw_Db_Back_Dto_Dem_Entity_Relation__Factory} deps.fRelation
      */
     constructor({cast, fAttr, fIndex, fRelation}) {
 
         /**
-         * @param {TeqFw_Db_Back_Dto_Dem_Entity|null} data
+         * @param {TeqFw_Db_ObjectOrNull} data
          * @returns {TeqFw_Db_Back_Dto_Dem_Entity}
          */
         this.create = function (data = null) {

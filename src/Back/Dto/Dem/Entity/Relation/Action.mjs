@@ -29,11 +29,11 @@ export class Factory {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Shared_Util_Cast} deps.cast
-     * @param {typeof TeqFw_Db_Back_Enum_Dem_Type_Action} deps.ACTION
+     * @param {TeqFw_Db_Back_Enum_Dem_Type_Action} deps.ACTION
      */
     constructor({cast, ACTION}) {
         /**
-         * @param {TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action|null} data
+         * @param {TeqFw_Db_ObjectOrNull} data
          * @returns {TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action}
          */
         this.create = function (data = null) {

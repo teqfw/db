@@ -15,13 +15,13 @@ export default class TeqFw_Db_Back_Dto_Dem_Compile_Result {
     effective;
     /** @type {string} */
     fingerprint;
-    /** @type {object} */
+    /** @type {any} */
     graph;
-    /** @type {object} */
+    /** @type {any} */
     model;
-    /** @type {object} */
+    /** @type {any} */
     physical;
-    /** @type {object} */
+    /** @type {any} */
     provenance;
     /** @type {ReadonlyArray<string>} */
     requirements;
@@ -57,9 +57,9 @@ export class Factory {
          * @param {object} deps.model
          * @param {object} deps.physical
          * @param {object} deps.provenance
-         * @param {ReadonlyArray<string>} deps.requirements
-         * @param {ReadonlyArray<object>} deps.warnings
-         * @returns {Readonly<TeqFw_Db_Back_Dto_Dem_Compile_Result>}
+         * @param {object} deps.requirements
+         * @param {object} deps.warnings
+         * @returns {TeqFw_Db_Back_Dto_Dem_Compile_Result}
          */
         this.create = function ({effective, fingerprint, graph, model, physical, provenance, requirements, warnings}) {
             const res = new TeqFw_Db_Back_Dto_Dem_Compile_Result();

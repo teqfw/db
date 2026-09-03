@@ -8,18 +8,20 @@
 export default class TeqFw_Db_Back_Dem_Compile_A_Fingerprint {
     /**
      * @param {object} deps
-     * @param {Function} deps.createHash
+     * @param {object} deps.createHash
      */
     constructor({createHash}) {
         /**
-         * @param {any} value
-         * @returns {any}
+         * @param {unknown} value
+         * @returns {unknown}
          */
         const normalize = function (value) {
             if (Array.isArray(value)) return value.map(normalize);
             if (value && typeof value === 'object') {
+                const object = /** @type {TeqFw_Db_Object} */ (value);
+                /** @type {TeqFw_Db_Object} */
                 const res = {};
-                for (const key of Object.keys(value).sort()) res[key] = normalize(value[key]);
+                for (const key of Object.keys(object).sort()) res[key] = normalize(object[key]);
                 return res;
             }
             return value;
@@ -27,7 +29,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Fingerprint {
 
         /**
          * @param {object} deps
-         * @param {any} deps.value
+         * @param {object} deps.value
          * @returns {string}
          */
         this.exec = function ({value}) {

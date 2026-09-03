@@ -34,7 +34,7 @@ export class Factory {
      */
     constructor({cast}) {
         /**
-         * @param {TeqFw_Db_Back_Dto_Dem_Entity_Index|null} data
+         * @param {TeqFw_Db_ObjectOrNull} data
          * @returns {TeqFw_Db_Back_Dto_Dem_Entity_Index}
          */
         this.create = function (data = null) {

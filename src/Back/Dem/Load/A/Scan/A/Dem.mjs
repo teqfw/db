@@ -19,7 +19,7 @@ export default class TeqFw_Db_Back_Dem_Load_A_Scan_A_Dem {
          * Load DEM data for a plugin and parse it.
          * @param {object} deps
          * @param {string} deps.filename
-         * @returns {Promise<object>}
+         * @returns {Promise<any>}
          */
         this.exec = async function ({filename}) {
             return file.readJson(filename) ?? {};

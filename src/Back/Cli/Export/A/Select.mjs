@@ -10,7 +10,7 @@
 export default class TeqFw_Db_Back_Cli_Export_A_Select {
     /**
      * @param {object} deps
-     * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Column} deps.COLUMN
+     * @param {TeqFw_Db_Back_Enum_Db_Type_Column} deps.COLUMN
      */
     constructor({COLUMN}) {
 

@@ -16,7 +16,7 @@ export default class Config {
      * @param {TeqFw_Cfg_Reader} deps.reader
      */
     constructor({deep, reader}) {
-        /** @type {Map<string, Readonly<Knex.Config>>} */
+        /** @type {Map<string, any>} */
         const configurations = new Map();
         let projectRoot;
         let version;
@@ -45,7 +45,7 @@ export default class Config {
         /**
          * @param {unknown} value
          * @param {string} key
-         * @returns {Record<string, any>}
+         * @returns {any}
          */
         function object(value, key) {
             let result = value;
@@ -64,7 +64,7 @@ export default class Config {
         /**
          * @param {unknown} value
          * @param {string} key
-         * @returns {boolean|undefined}
+         * @returns {any}
          */
         function boolean(value, key) {
             if (value === undefined) return undefined;
@@ -81,7 +81,7 @@ export default class Config {
         /**
          * @param {unknown} value
          * @param {string} key
-         * @returns {number|undefined}
+         * @returns {any}
          */
         function port(value, key) {
             if (value === undefined) return undefined;
@@ -94,7 +94,7 @@ export default class Config {
         /**
          * @param {unknown} value
          * @param {string} key
-         * @returns {string[]|undefined}
+         * @returns {any}
          */
         function searchPath(value, key) {
             if (value === undefined) return undefined;
@@ -106,7 +106,7 @@ export default class Config {
 
         /**
          * @param {string} name
-         * @returns {Readonly<Knex.Config>}
+         * @returns {any}
          */
         this.get = function (name = DEFAULT_CONNECTION) {
             name = normalizeName(name);
@@ -153,7 +153,7 @@ export default class Config {
 
         /**
          * Compatibility projection for legacy package consumers.
-         * @param {string|null} node
+         * @param {any} node
          * @returns {any}
          */
         this.getLocal = function (node = null) {

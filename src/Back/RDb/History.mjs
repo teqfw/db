@@ -19,14 +19,14 @@ export default class TeqFw_Db_Back_RDb_History {
             return Object.freeze(value);
         };
 
-        /** @param {object} compilation @param {string} entity @returns {object} */
+        /** @param {any} compilation @param {string} entity @returns {any} */
         const tableFor = function (compilation, entity) {
             const table = compilation.physical.tables.find((item) => item.entity === entity);
             if (!table) throw new Error(`The package-owned history entity '${entity}' is absent from the compilation.`);
             return table;
         };
 
-        /** @param {object} deps @param {object} deps.connection @param {object} [deps.transaction] @returns {any} */
+        /** @param {object} deps @param {object} deps.connection @param {any} [deps.transaction] @returns {any} */
         const query = function ({connection, transaction}) {
             const knex = transaction?.getKnexTrx?.() ?? connection?.getClient?.();
             if (!knex) throw new TypeError('A database connection or transaction is required.');
@@ -43,7 +43,7 @@ export default class TeqFw_Db_Back_RDb_History {
             }
         };
 
-        /** @param {object} row @returns {object} */
+        /** @param {any} row @returns {any} */
         const snapshot = function (row) {
             return freeze({
                 createdAt: row.created_at,
@@ -54,7 +54,7 @@ export default class TeqFw_Db_Back_RDb_History {
             });
         };
 
-        /** @param {object} row @returns {object} */
+        /** @param {any} row @returns {any} */
         const application = function (row) {
             return freeze({
                 completedAt: row.completed_at,
@@ -72,7 +72,7 @@ export default class TeqFw_Db_Back_RDb_History {
          * @param {object} deps.compilation
          * @param {TeqFw_Db_Back_RDb_IConnect} deps.connection
          * @param {TeqFw_Db_Back_RDb_ITrans} [deps.transaction]
-         * @returns {Promise<object>}
+         * @returns {Promise<any>}
          */
         this.recordSnapshot = async function ({compilation, connection, transaction}) {
             compile.assertResult({value: compilation});
@@ -97,10 +97,10 @@ export default class TeqFw_Db_Back_RDb_History {
          * @param {object} deps
          * @param {object} deps.compilation
          * @param {TeqFw_Db_Back_RDb_IConnect} deps.connection
-         * @param {number|null} deps.sourceSnapshotId
+         * @param {object} deps.sourceSnapshotId
          * @param {number} deps.targetSnapshotId
          * @param {TeqFw_Db_Back_RDb_ITrans} [deps.transaction]
-         * @returns {Promise<object>}
+         * @returns {Promise<any>}
          */
         this.startApplication = async function ({compilation, connection, sourceSnapshotId = null, targetSnapshotId, transaction}) {
             compile.assertResult({value: compilation});
@@ -133,7 +133,7 @@ export default class TeqFw_Db_Back_RDb_History {
          * @param {object} deps
          * @param {object} deps.compilation
          * @param {TeqFw_Db_Back_RDb_IConnect} deps.connection
-         * @returns {Promise<object>}
+         * @returns {Promise<any>}
          */
         this.validateCatalog = async function ({compilation, connection}) {
             compile.assertResult({value: compilation});
@@ -168,7 +168,7 @@ export default class TeqFw_Db_Back_RDb_History {
          * @param {object} deps.compilation
          * @param {TeqFw_Db_Back_RDb_IConnect} deps.connection
          * @param {TeqFw_Db_Back_RDb_ITrans} [deps.transaction]
-         * @returns {Promise<object>}
+         * @returns {Promise<any>}
          */
         this.completeApplication = async function ({applicationId, compilation, connection, transaction}) {
             compile.assertResult({value: compilation});
@@ -200,7 +200,7 @@ export default class TeqFw_Db_Back_RDb_History {
          * @param {object} deps.compilation
          * @param {TeqFw_Db_Back_RDb_IConnect} deps.connection
          * @param {TeqFw_Db_Back_RDb_ITrans} [deps.transaction]
-         * @returns {Promise<object>}
+         * @returns {Promise<any>}
          */
         this.failApplication = async function ({applicationId, compilation, connection, transaction}) {
             compile.assertResult({value: compilation});
@@ -219,7 +219,7 @@ export default class TeqFw_Db_Back_RDb_History {
          * @param {object} deps.compilation
          * @param {TeqFw_Db_Back_RDb_IConnect} deps.connection
          * @param {TeqFw_Db_Back_RDb_ITrans} [deps.transaction]
-         * @returns {Promise<object|null>}
+         * @returns {Promise<any>}
          */
         this.resolveLastApplied = async function ({compilation, connection, transaction}) {
             compile.assertResult({value: compilation});

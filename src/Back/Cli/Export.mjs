@@ -28,7 +28,7 @@ const OPT_FILE = 'file';
  * @param {TeqFw_Db_Back_Act_Dem_RdbTables} deps.actTables
  * @param {TeqFw_Db_Back_Cli_Export_A_Select} deps.aExport
  * @param {TeqFw_Db_Back_Dto_Export} deps.dtoExport
- * @param {any} deps.fs
+ * @param {object} deps.fs
  * @returns {TeqFw_Db_Back_Cli_Dto_Command}
  * @memberOf TeqFw_Db_Back_Cli_Export
  */
@@ -38,7 +38,7 @@ export default function Factory({DEF, logger, fCommand, fOpt, app, conn, util, a
     // FUNCS
     /**
      * Command action.
-     * @param {Object} opts
+     * @param {any} opts
      * @returns {Promise<void>}
      * @memberOf TeqFw_Db_Back_Cli_Export
      */

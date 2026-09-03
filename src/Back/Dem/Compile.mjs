@@ -15,30 +15,32 @@ export default class TeqFw_Db_Back_Dem_Compile {
      * @param {TeqFw_Db_Back_Dem_Compile_A_ValidateNames} deps.validateNames
      * @param {TeqFw_Db_Back_Dem_Compile_A_Graph} deps.graph
      * @param {TeqFw_Db_Back_Dem_Compile_A_Fingerprint} deps.fingerprint
-     * @param {TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic.Factory} deps.diagnostic
-     * @param {TeqFw_Db_Back_Dto_Dem_Compile_Result.Factory} deps.resultFactory
+     * @param {TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic__Factory} deps.diagnostic
+     * @param {TeqFw_Db_Back_Dto_Dem_Compile_Result__Factory} deps.resultFactory
      */
     constructor({decodeV2, compose, mapRefs, validate, validateNames, graph, fingerprint, diagnostic, resultFactory}) {
         const successful = new WeakSet();
 
         /**
-         * @param {any} value
-         * @returns {any}
+         * @param {unknown} value
+         * @returns {unknown}
          */
         const normalize = function (value) {
             if (Array.isArray(value)) return value.map(normalize);
             if (value && typeof value === 'object') {
+                const object = /** @type {TeqFw_Db_Object} */ (value);
+                /** @type {TeqFw_Db_Object} */
                 const res = {};
-                for (const key of Object.keys(value).sort()) res[key] = normalize(value[key]);
+                for (const key of Object.keys(object).sort()) res[key] = normalize(object[key]);
                 return res;
             }
             return value;
         };
 
         /**
-         * @param {ReadonlyArray<object>} diagnostics
-         * @param {ReadonlyArray<object>} warnings
-         * @returns {Error}
+         * @param {TeqFw_Db_ObjectArray} diagnostics
+         * @param {TeqFw_Db_ObjectArray} warnings
+         * @returns {TeqFw_Db_Error}
          */
         const createError = function (diagnostics, warnings) {
             const error = new Error(`DEM compilation failed with ${diagnostics.length} error(s).`);
@@ -53,7 +55,7 @@ export default class TeqFw_Db_Back_Dem_Compile {
         /**
          * Reject values that were not produced successfully by this compiler instance.
          * @param {object} deps
-         * @param {any} deps.value
+         * @param {object} deps.value
          * @returns {any}
          */
         this.assertResult = function ({value}) {
@@ -65,11 +67,11 @@ export default class TeqFw_Db_Back_Dem_Compile {
 
         /**
          * @param {object} deps
-         * @param {ReadonlyArray<object>} deps.fragments
-         * @param {object} deps.mapEnvelope
-         * @param {object} deps.adapter
-         * @returns {Promise<object>}
-         * @throws {Error}
+         * @param {TeqFw_Db_DemFragmentArray} deps.fragments
+         * @param {TeqFw_Db_DemEnvelope} deps.mapEnvelope
+         * @param {TeqFw_Db_Back_Api_RDb_Dialect} deps.adapter
+         * @returns {Promise<any>}
+         * @throws {TeqFw_Db_Error}
          */
         this.exec = async function ({fragments, mapEnvelope, adapter}) {
             const input = Array.isArray(fragments) ? fragments : [];
@@ -121,7 +123,7 @@ export default class TeqFw_Db_Back_Dem_Compile {
             };
 
             /**
-             * @param {ReadonlyArray<object>} values
+             * @param {TeqFw_Db_ObjectArray} values
              * @param {string} fallbackPath
              * @param {string} fallbackStage
              */

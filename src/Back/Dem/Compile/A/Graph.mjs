@@ -8,13 +8,13 @@
 export default class TeqFw_Db_Back_Dem_Compile_A_Graph {
     /**
      * @param {object} deps
-     * @param {TeqFw_Db_Back_Dto_Dem_Compile_Graph.Factory} deps.graphFactory
+     * @param {TeqFw_Db_Back_Dto_Dem_Compile_Graph__Factory} deps.graphFactory
      */
     constructor({graphFactory}) {
         /**
          * @param {object} deps
-         * @param {object} deps.validated
-         * @returns {object}
+         * @param {TeqFw_Db_ValidatedDem} deps.validated
+         * @returns {any}
          */
         this.exec = function ({validated}) {
             const entities = Object.keys(validated.entities).sort();

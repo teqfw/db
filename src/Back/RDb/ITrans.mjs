@@ -20,7 +20,7 @@ export default class TeqFw_Db_Back_RDb_ITrans {
 
     /**
      * Return knex based query builder.
-     * @returns {Knex.QueryBuilder}
+     * @returns {any}
      */
     createQuery() {}
 
@@ -31,7 +31,7 @@ export default class TeqFw_Db_Back_RDb_ITrans {
 
     /**
      * Convert entity name to table name ('@vnd/plugin/package/entity' => 'prefix_package_entity').
-     * @param {TeqFw_Db_Back_Api_RDb_Schema_Object|TeqFw_Db_Back_RDb_Meta_IEntity} meta
+     * @param {any} meta
      * @returns {string}
      */
     getTableName(meta) {}
@@ -57,7 +57,7 @@ export default class TeqFw_Db_Back_RDb_ITrans {
     /**
      * Return row expression for input data.
      * @param {string} exp
-     * @param {array} params
+     * @param {any} params
      */
     raw(exp, params) {}
 
@@ -69,6 +69,6 @@ export default class TeqFw_Db_Back_RDb_ITrans {
     /** @returns {TeqFw_Db_Back_Api_RDb_Dialect} */
     getDialectAdapter() {}
 
-    /** @returns {Knex} */
+    /** @returns {any} */
     getKnexTrx() {}
 }

@@ -172,6 +172,16 @@ Reason: distributed fragments need stable, readable logical package identities w
 Making the root explicit preserves host-visible composition and provenance, while the existing lowercase naming rule
 and underscore-based physical projection keep identifiers portable and predictable.
 
+## AD-019 Preserve JSDoc Type Information
+
+Decision: JSDoc annotations and the published `types.d.ts` vocabulary preserve the narrowest truthful structural contract. New or changed code moves from primitives and explicit unions to `object`/`unknown` at opaque or dynamic ingress points and then to named `TeqFw_Db_*` aliases for reused, domain, and DEM-stage shapes. `any` is an exceptional, documented, smallest-scope type only at an irreducibly dynamic external boundary or compatibility shim.
+
+DEM compiler stages use separate named contracts for decoded fragments, composed canonical data, resolved/mapped data, validated models, and physical plans. Exact namespace aliases in `types.d.ts` remain coupled to those source contracts and must not be weakened to generic placeholders.
+
+Rejected: using `any` as a placeholder, broadening types to silence `tsc` or `teqfw-esm-validator`, allowing one `any` value to cross DEM stages, and hiding an untyped public result behind `@returns {any}`.
+
+Reason: the package is checked JavaScript and its distributed DEM is a structural, staged contract. Type erasure hides shape mismatches, breaks the connection between exact published aliases and source modules, and allows invalid data to travel to schema, query, or rebuild boundaries. Named aliases make the contract reviewable and give the host application a stable vocabulary without requiring TypeScript at runtime.
+
 ## Deferred CLI Hosting Decision
 
 Status: deferred; it is not part of the accepted rebuild architecture.

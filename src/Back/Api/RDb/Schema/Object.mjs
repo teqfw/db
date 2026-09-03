@@ -18,8 +18,8 @@ export default class TeqFw_Db_Back_Api_RDb_Schema_Object {
      * based on the entity schema, removing extra attributes. If no data is provided,
      * an empty DTO is returned, where attributes are initialized to default values
      * or `undefined`.
-     * @param {Object} data
-     * @returns {Object}
+     * @param {any} data
+     * @returns {any}
      */
     createDto(data) {}
 
@@ -29,13 +29,13 @@ export default class TeqFw_Db_Back_Api_RDb_Schema_Object {
      * This method does not include information about relationships or foreign keys.
      *
      * Example: { ID: 'id', DATE_CREATED: 'date_created', ... }.
-     * @returns {Object<string, string>|*}
+     * @returns {any}
      */
     getAttributes() {}
     /**
      * Return registered logical type descriptors keyed by persistent attribute name or attribute codifier key.
      * Selection v2 requires this metadata.
-     * @returns {Object<string, object>}
+     * @returns {any}
      */
     getLogicalTypes() {}
 
@@ -51,7 +51,7 @@ export default class TeqFw_Db_Back_Api_RDb_Schema_Object {
      * Return array with primary keys for the entity.
      * In case of composite primary keys, the array includes all key attributes
      * in the order they are defined in the schema.
-     * @returns {string[]}
+     * @returns {any}
      */
     getPrimaryKey() {}
 }

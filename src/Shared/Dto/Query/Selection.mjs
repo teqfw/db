@@ -9,22 +9,22 @@ const NS = 'TeqFw_Db_Shared_Dto_Query_Selection';
 
 export default class TeqFw_Db_Shared_Dto_Query_Selection {
     /** @type {number} */ version;
-    /** @type {object} */ where;
-    /** @type {ReadonlyArray<object>} */ select;
-    /** @type {ReadonlyArray<object>} */ orderBy;
+    /** @type {TeqFw_Db_QueryExpression|undefined} */ where;
+    /** @type {TeqFw_Db_QueryProjectionArray} */ select;
+    /** @type {TeqFw_Db_QueryOrderingArray} */ orderBy;
     /** @type {number} */ limit;
     /** @type {number} */ offset;
-    /** @type {object} */ execution;
+    /** @type {TeqFw_Db_Object} */ execution;
 }
 
 export class Factory {
     static namespace = NS;
 
-    /** @param {object} deps @param {TeqFw_Db_Shared_Dto_Query_Expression.Factory} deps.expression */
+    /** @param {object} deps @param {TeqFw_Db_Shared_Dto_Query_Expression__Factory} deps.expression */
     constructor({expression}) {
         /** @param {any} value @returns {boolean} */
         const isObject = (value) => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
-        /** @param {any} value @param {WeakSet<object>} visited @returns {any} */
+        /** @param {any} value @param {any} visited @returns {any} */
         const freeze = function (value, visited = new WeakSet()) {
             if (ArrayBuffer.isView(value)) return value;
             if (value && typeof value === 'object' && visited.has(value)) return value;
@@ -34,7 +34,7 @@ export class Factory {
             return Object.freeze(value);
         };
 
-        /** @param {any} data @returns {Readonly<TeqFw_Db_Shared_Dto_Query_Selection>} */
+        /** @param {any} data @returns {any} */
         this.create = function (data) {
             if (!isObject(data) || data.version !== 2) throw new TypeError('Selection v2 requires version: 2.');
             const allowed = ['execution', 'limit', 'offset', 'orderBy', 'select', 'version', 'where'];

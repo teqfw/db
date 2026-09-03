@@ -12,9 +12,9 @@ export default class TeqFw_Db_Back_Util_ListQuery {
     constructor() {
         /**
          * Convert the query columns into the tables' fields to group by.
-         * @param {Object<string, string>} columns
-         * @param {Object<string, string>} map
-         * @returns {Object<string, string>[]}
+         * @param {any} columns
+         * @param {any} map
+         * @returns {any}
          */
         this.prepareGroupBy = function(columns, map) {
             const res = [];
@@ -26,9 +26,9 @@ export default class TeqFw_Db_Back_Util_ListQuery {
 
         /**
          * Convert the query columns into the tables' fields to select.
-         * @param {Object<string, string>} columns
-         * @param {Object<string, string>} map
-         * @returns {Object<string, string>[]}
+         * @param {any} columns
+         * @param {any} map
+         * @returns {any}
          */
         this.prepareSelect = function(columns, map) {
             const res = [];

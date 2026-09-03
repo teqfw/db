@@ -40,7 +40,7 @@ export class Factory {
          * @param {string} deps.packageName
          * @param {string} deps.sourcePointer
          * @param {string} [deps.revision]
-         * @returns {Readonly<TeqFw_Db_Back_Dto_Dem_Compile_Source>}
+         * @returns {TeqFw_Db_Back_Dto_Dem_Compile_Source}
          */
         this.create = function ({filename, fragmentId, packageName, revision = '', sourcePointer}) {
             const required = {filename, fragmentId, packageName};

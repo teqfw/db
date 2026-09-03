@@ -32,7 +32,7 @@ export default class TeqFw_Db_Back_Dem_Load_A_Scan {
          * Load DEM mapping data for the application and parse it.
          * @param {object} deps
          * @param {string} deps.path
-         * @param {Object<string, string>} deps.testDems
+         * @param {object} deps.testDems
          * @param {string} deps.testMapRoot
          * @returns {Promise<any>}
          */

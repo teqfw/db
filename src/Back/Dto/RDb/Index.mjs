@@ -35,12 +35,12 @@ export class Factory {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Shared_Util_Cast} deps.cast
-     * @param {typeof TeqFw_Db_Back_Enum_Db_Type_Index} deps.INDEX
+     * @param {TeqFw_Db_Back_Enum_Db_Type_Index} deps.INDEX
      */
     constructor({cast, INDEX}) {
 
         /**
-         * @param {TeqFw_Db_Back_Dto_RDb_Index|null} data
+         * @param {TeqFw_Db_ObjectOrNull} data
          * @returns {TeqFw_Db_Back_Dto_RDb_Index}
          */
         this.create = function (data = null) {

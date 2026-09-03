@@ -9,8 +9,8 @@
 /** @interface */
 export default class TeqFw_Db_Back_Api_RDb_Rebuild {
     /**
-     * @param {object} input
-     * @returns {Promise<object>}
+     * @param {any} input
+     * @returns {Promise<any>}
      */
     async exec(input) {}
 }

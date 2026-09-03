@@ -30,7 +30,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
             return Object.freeze(value);
         };
 
-        /** @param {string} code @param {string} message @param {object} details @returns {object} */
+        /** @param {string} code @param {string} message @param {any} details @returns {any} */
         const diagnostic = function (code, message, details = {}) {
             return {code, details, message};
         };
@@ -42,7 +42,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
 
         /** @param {string} installed @param {string} minimum @returns {boolean} */
         const versionAtLeast = function (installed, minimum) {
-            /** @param {string} value @returns {number[]} */
+            /** @param {string} value @returns {any} */
             const parse = (value) => String(value).split(/[.-]/).slice(0, 3).map((part) => Number.parseInt(part, 10) || 0);
             const left = parse(installed);
             const right = parse(minimum);
@@ -53,7 +53,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
             return true;
         };
 
-        /** @param {object} type @param {any} value @returns {boolean} */
+        /** @param {any} type @param {any} value @returns {boolean} */
         const validCanonical = function (type, value) {
             const params = type?.params ?? {};
             if (type?.id !== 'core.vector' || !integerInRange(params.dimensions, 1, 1_000_000_000)) return false;
@@ -81,7 +81,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
             vector: {capability: 'postgresql.type.vector', maxDimensions: 16_000, element: 'float', sparse: false},
         });
 
-        /** @param {string} physicalType @returns {object} */
+        /** @param {string} physicalType @returns {any} */
         const storageEntry = function (physicalType) {
             const rule = storageRules[physicalType];
             return {
@@ -140,7 +140,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
             return false;
         };
 
-        /** @param {'hnsw'|'ivfflat'} method @returns {object} */
+        /** @param {any} method @returns {any} */
         const indexEntry = function (method) {
             const requirement = `postgresql.index.${method}`;
             return {
@@ -223,17 +223,17 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
             'postgresql.pgvector.negativeInnerProduct': {implementation: 'negativeInnerProduct', physical: '<#>', storage: ['vector', 'halfvec', 'sparsevec']},
         });
 
-        /** @returns {object} */
+        /** @returns {any} */
         this.getStorageRegistry = function () {
             return storage;
         };
 
-        /** @returns {object} */
+        /** @returns {any} */
         this.getIndexRegistry = function () {
             return indexes;
         };
 
-        /** @returns {ReadonlyArray<string>} */
+        /** @returns {any} */
         this.getCapabilities = function () {
             return capabilities;
         };
@@ -241,8 +241,8 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
         /**
          * @param {object} deps
          * @param {string} deps.operator
-         * @param {ReadonlyArray<object>} deps.argumentTypes
-         * @returns {object|null}
+         * @param {object} deps.argumentTypes
+         * @returns {any}
          */
         this.resolveOperator = function ({operator, argumentTypes = []}) {
             const entry = operators[operator];
@@ -271,12 +271,12 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
 
         /**
          * @param {object} deps
-         * @param {Function} deps.base
+         * @param {object} deps.base
          * @param {object} deps.connection
-         * @param {string|null} deps.fingerprint
+         * @param {object} deps.fingerprint
          * @param {string} deps.operation
-         * @param {ReadonlyArray<string>} deps.requirements
-         * @returns {Promise<object>}
+         * @param {object} deps.requirements
+         * @returns {Promise<any>}
          */
         this.preflight = async function ({base, connection, fingerprint, operation, requirements}) {
             const baseline = await base({connection, fingerprint, operation, requirements});
@@ -311,7 +311,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
             });
         };
 
-        /** @param {object} deps @param {object} deps.column @param {any} deps.value @returns {any} */
+        /** @param {object} deps @param {object} deps.column @param {object} deps.value @returns {any} */
         this.encodeValue = function ({column, value}) {
             const type = column?.logicalType;
             if (type?.id !== 'core.vector') return value;
@@ -324,7 +324,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
             return `[${value.join(',')}]`;
         };
 
-        /** @param {object} deps @param {object} deps.column @param {any} deps.value @returns {any} */
+        /** @param {object} deps @param {object} deps.column @param {object} deps.value @returns {any} */
         this.decodeValue = function ({column, value}) {
             const type = column?.logicalType;
             if (type?.id !== 'core.vector' || value === null) return value;
@@ -352,10 +352,10 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
 
         /**
          * @param {object} deps
-         * @param {Function} deps.base
+         * @param {object} deps.base
          * @param {object} deps.column
-         * @param {Knex} deps.knex
-         * @param {Knex.CreateTableBuilder} deps.tableBuilder
+         * @param {object} deps.knex
+         * @param {object} deps.tableBuilder
          * @returns {any}
          */
         this.addColumn = function ({base, column, knex, tableBuilder}) {
@@ -374,7 +374,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
             return builder;
         };
 
-        /** @param {any} expression @param {Knex} knex @returns {any} */
+        /** @param {any} expression @param {any} knex @returns {any} */
         const compilePredicate = function (expression, knex) {
             if (expression.kind === 'attr') return knex.raw('??', [expression.name]);
             const args = expression.args.map((item) => compilePredicate(item, knex));
@@ -390,10 +390,10 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
 
         /**
          * @param {object} deps
-         * @param {Function} deps.base
+         * @param {object} deps.base
          * @param {object} deps.connection
          * @param {object} deps.index
-         * @param {Knex} deps.knex
+         * @param {object} deps.knex
          * @param {object} deps.table
          * @returns {Promise<void>}
          */
@@ -429,7 +429,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
             await knex.raw(sql, bindings);
         };
 
-        /** @param {object} deps @param {ReadonlyArray<any>} deps.args @param {object} deps.descriptor @param {Knex} deps.knex @returns {any} */
+        /** @param {object} deps @param {object} deps.args @param {object} deps.descriptor @param {object} deps.knex @returns {any} */
         this.compileExpression = function ({args, descriptor, knex}) {
             const entry = operators[descriptor.operator];
             if (!entry || entry.physical !== descriptor.physical) return null;
@@ -439,7 +439,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
         /**
          * @param {object} deps
          * @param {object} deps.execution
-         * @param {Knex} deps.knex
+         * @param {object} deps.knex
          * @returns {Promise<void>}
          */
         this.applyExecutionOptions = async function ({execution, knex}) {

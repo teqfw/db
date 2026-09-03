@@ -14,7 +14,7 @@ export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
      * @param {TeqFw_Db_Back_RDb_Schema_A_Plan} deps.planner
      */
     constructor({compile, coreValue, builder, planner}) {
-        /** @param {any} value @param {WeakSet<object>} seen @returns {any} */
+        /** @param {any} value @param {any} seen @returns {any} */
         const freeze = function (value, seen = new WeakSet()) {
             if (!value || typeof value !== 'object' || Object.isFrozen(value) || ArrayBuffer.isView(value)) return value;
             if (seen.has(value)) return value;
@@ -27,11 +27,11 @@ export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
         const normalizeIdentity = (value) => value.trim();
 
         /**
-         * @param {object} evidence
-         * @param {Error} cause
+         * @param {any} evidence
+         * @param {any} cause
          * @param {string} stage
-         * @param {string|null} entity
-         * @returns {Error}
+         * @param {any} entity
+         * @returns {any}
          */
         const fail = function (evidence, cause, stage, entity = null) {
             evidence.accepted = false;
@@ -49,9 +49,9 @@ export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
         };
 
         /**
-         * @param {object} transaction
+         * @param {any} transaction
          * @param {TeqFw_Db_Back_Api_RDb_Dialect} adapter
-         * @returns {object}
+         * @returns {any}
          */
         const transactionConnection = function (transaction, adapter) {
             const knex = transaction?.getKnexTrx?.();
@@ -65,7 +65,7 @@ export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
 
         /**
          * @param {object} deps
-         * @param {'inPlace'|'parallel'} deps.mode
+         * @param {object} deps.mode
          * @param {object} deps.compilation
          * @param {object} deps.sourceCompilation
          * @param {TeqFw_Db_Back_RDb_IConnect} deps.source
@@ -78,7 +78,7 @@ export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
          * @param {object} deps.sourceTransaction
          * @param {object} deps.targetTransaction
          * @param {object} deps.cycleStrategy
-         * @returns {Promise<object>}
+         * @returns {Promise<any>}
          */
         this.exec = async function ({
             mode,
@@ -258,7 +258,7 @@ export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
                     evidence.phases.push(...drop.phases.map((item) => ({identity: item.identity, phase: item.phase, status: item.status})));
                 }
 
-                /** @returns {Promise<object>} */
+                /** @returns {Promise<any>} */
                 const transfer = async function () {
                     activeStage = 'data';
                     if (mode === 'inPlace' && authorizeDiscard === true && !hasSnapshot) {
