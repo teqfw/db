@@ -13,7 +13,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
 describe('npm publication', () => {
     it('contains the complete package-owned consumer skill', () => {
         const manifest = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
-        for (const path of ['etc/', 'skills/', 'src/', 'LICENSE', 'CHANGELOG.md', 'README.md', 'RELEASE.md']) {
+        for (const path of ['etc/', 'skills/', 'src/', 'LICENSE', 'CHANGELOG.md', 'README.md']) {
             assert(manifest.files.includes(path), `Missing publication allowlist entry: ${path}`);
         }
 

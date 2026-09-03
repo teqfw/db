@@ -2,6 +2,23 @@
 
 All notable changes to this package are documented in this file.
 
+## 2.3.0 - 2026-09-03
+
+### Added in 2.3.0
+
+- Added optional lowercase dot-delimited root namespaces for concise DEM fragments.
+- Published `teqfw.db.schema` as an ordinary package-owned DEM fragment for immutable schema snapshots and application history.
+
+### Changed
+
+- Expanded fragment roots before composition, resolved local relation paths against the expanded root, and preserved source provenance.
+- Simplified the package-owned declaration by omitting empty optional nodes; the compiler handles omitted nodes as empty structures.
+- Ensured `etc/teqfw.schema.json` is included in the npm package and clarified the product positioning and integration boundaries in the README.
+
+### Removed in 2.3.0
+
+- Removed the duplicate `RELEASE.md`; `CHANGELOG.md` is now the single release history.
+
 ## 2.2.0 - 2026-08-13
 
 ### Changed in 2.2.0

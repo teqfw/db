@@ -1,7 +1,7 @@
 # Filesystem Structure
 
 - Path: `ctx/docs/filesystem.md`
-- Changed: `20260813`
+- Changed: `20260903`
 
 ## Purpose
 
@@ -22,7 +22,6 @@ Define root-level repository navigation.
 - `AGENTS.md` — root ADSM instructions.
 - `LICENSE` — Apache 2.0 license.
 - `README.md` — npm/GitHub entry documentation.
-- `RELEASE.md` — legacy release history.
 - `package.json` — npm metadata, dependencies, scripts, and TeqFW namespace registration.
 - `package-lock.json` — reproducible npm dependency graph for the 2.x line.
 - `jsconfig.json` — strict checked-JavaScript and declaration consumer compiler configuration.
