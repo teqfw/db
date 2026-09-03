@@ -1,7 +1,7 @@
 # DEM Composition And Provenance
 
 - Path: `ctx/docs/architecture/dem/composition.md`
-- Changed: `20260808`
+- Changed: `20260903`
 
 ## Input Envelope
 
@@ -19,6 +19,12 @@ The scanner produces one trusted envelope per declaration:
 `fragmentId`, `packageName`, and `filename` come from scanner/runtime evidence, not from fragment JSON.
 The envelope is immutable after scanning.
 Test callers may construct envelopes explicitly but must provide all identity fields.
+
+The declaration may contain an optional fragment root `namespace`. This is declaration content rather than envelope
+metadata: it is a dot-delimited logical package prefix such as `teqfw.db.schema`, validated with the same lowercase
+package-segment rule as nested package keys. The compiler applies that prefix to the fragment's declared local
+entity/package paths before ownership composition. It does not derive the prefix from `fragmentId` or `packageName`,
+and it does not rewrite external aliases in `refs`.
 
 The application map uses the same trusted-envelope pattern with stable map identity, filename, and parsed declaration so mapped-endpoint diagnostics can cite both relation and map sources.
 
@@ -45,6 +51,10 @@ Their child maps compose only when child keys are disjoint.
 The application map owns reference redirection and the physical namespace.
 It does not become owner of mapped entities or attributes.
 Package ownership carries no special composition privileges: a platform package follows the same declaration, composition, mapping, projection, and provenance rules as an application package.
+
+The canonical path after fragment-root expansion is the identity used for ownership. A concise fragment rooted at
+`teqfw.db.schema` and a verbose fragment that explicitly reaches the same logical path therefore participate in the
+same conflict checks. The root is not a namespace reservation, an ownership claim, or a special platform mode.
 
 ## Composition Operations
 

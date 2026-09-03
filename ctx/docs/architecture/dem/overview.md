@@ -1,7 +1,7 @@
 # DEM Target Architecture
 
 - Path: `ctx/docs/architecture/dem/overview.md`
-- Changed: `20260813`
+- Changed: `20260903`
 
 ## Status And Scope
 
@@ -17,7 +17,10 @@ It does not describe database history, infer application migrations, or authoriz
 
 ### Fragment Declaration
 
-A package-owned JSON document declares logical entities and optional dialect bindings.
+A package-owned JSON document declares logical entities and optional dialect bindings. An optional declaration-level
+`namespace` supplies a concise dot-delimited logical package root for the fragment; nested `package` declarations are
+relative to that root. The root is not the application's physical table namespace and is not inferred from package
+metadata.
 The scanner wraps the document in a trusted fragment envelope containing package identity, source filename, and fragment identity.
 Provenance is never accepted from JSON supplied by the fragment itself.
 
@@ -67,7 +70,8 @@ Callers that need diagnostics receive them from the thrown compilation error.
 ```text
 declaration files + application map file
   -> parse JSON and create trusted source envelopes
-  -> validate and decode explicit DEM v2
+  -> validate and decode explicit DEM v2, including fragment roots
+  -> expand each fragment's logical root namespace
   -> compose with single-owner semantics and provenance
   -> resolve core.identity to type + generation through identityProfile
   -> derive core.ref type from its mapped core.identity relation target

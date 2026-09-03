@@ -1,7 +1,7 @@
 # DEM And Map Declarations
 
 - Path: `ctx/docs/architecture/dem/declaration.md`
-- Changed: `20260813`
+- Changed: `20260903`
 
 ## Version Rule
 
@@ -19,6 +19,7 @@ during compilation.
 ```json
 {
   "version": 2,
+  "namespace": "teqfw.db.schema",
   "requires": [],
   "entity": {},
   "package": {},
@@ -27,6 +28,7 @@ during compilation.
 ```
 
 - `requires` is a set of namespaced capability identifiers.
+- `namespace` is an optional dot-delimited root for the logical package paths declared by this fragment.
 - `entity` contains entities at the current package level.
 - `package` contains recursively nested package declarations.
 - `refs` declares external paths used by the fragment before application mapping.
@@ -34,6 +36,43 @@ during compilation.
 The only array with cross-fragment union semantics is `requires`.
 The compiler deduplicates and sorts capability identifiers while retaining all contributing provenance.
 Every other array is a complete value owned by its containing semantic node.
+
+## Fragment Root Namespace
+
+`namespace` is a fragment-local logical root, not the physical table namespace from the application map.
+It is a dot-delimited sequence of package segments. Each segment must be a lowercase ASCII package name matching
+`^[a-z][a-z0-9]*$`; dots separate segments, while `_`, hyphens, whitespace, uppercase letters, and camelCase are
+invalid. An omitted `namespace` means that the declaration starts at the logical root for backward-compatible
+relative paths.
+
+The root is applied before composition. The declaration remains concise because its `entity` and nested `package`
+objects are written relative to the root:
+
+```json
+{
+  "version": 2,
+  "namespace": "teqfw.db.schema",
+  "requires": [],
+  "refs": {},
+  "entity": {
+    "snapshot": {"attr": {}, "index": {}, "relation": {}}
+  },
+  "package": {}
+}
+```
+
+This declares the canonical logical entity path `/teqfw/db/schema/snapshot`. A nested `package` adds segments after
+the root, so `package.audit.entity.event` becomes `/teqfw/db/schema/audit/event`. The root does not add a literal
+`package` segment and does not require the verbose JSON shape `package.teqfw.package.db.package.schema`.
+
+The root applies to paths of entities declared by the fragment and to relation paths that resolve to those local
+entities. Keys in `refs` remain fragment-local external aliases as written; their application-map entries continue to
+be selected by the trusted fragment identity. The root does not rewrite an external alias or transfer ownership of a
+mapped target.
+
+The final logical path, rather than the spelling of the JSON nesting, is authoritative for composition, reference
+resolution, provenance, and fingerprinting. Two fragments that resolve to the same entity path still produce the
+ordinary ownership conflict; a root namespace does not reserve a namespace or grant special composition privileges.
 
 ## Entity And Package
 
@@ -326,13 +365,21 @@ Default location: `etc/teqfw.schema.map.json`.
 }
 ```
 
-`namespace` is an optional physical table prefix. The compiler derives one physical table name from every segment of the logical entity path:
+`namespace` is an optional physical table prefix in the application map. The fragment-level `namespace` above is a
+logical path root and must not be confused with it. The compiler derives one physical table name from every segment
+of the final logical entity path:
 
 ```text
 table = [namespace + "_"] + entity.path.segments.join("_")
 ```
 
-For example, `package.pde.package.runtime.entity.delegation` projects to `pde_runtime_delegation`, while `package.pde.package.runtime.package.owner.entity.session` projects to `pde_runtime_owner_session`. The `pde_runtime_` part in those examples comes from the nested logical packages, not from `namespace`. A map with `namespace: "pde_runtime"` and logical path `/owner/session` also produces `pde_runtime_owner_session`, but represents a different logical model and must not substitute package grouping.
+For example, a fragment root `teqfw.db.schema` with entity `snapshot` projects to logical path
+`/teqfw/db/schema/snapshot` and, with an empty map namespace, to physical table `teqfw_db_schema_snapshot`.
+The legacy nested declaration `package.pde.package.runtime.entity.delegation` projects to
+`pde_runtime_delegation`, while `package.pde.package.runtime.package.owner.entity.session` projects to
+`pde_runtime_owner_session`. The `pde_runtime_` part in those examples comes from logical package segments, not
+from the map `namespace`. A map with `namespace: "pde_runtime"` and logical path `/owner/session` also produces
+`pde_runtime_owner_session`, but represents a different logical model and must not substitute package grouping.
 `identityProfile` is the host-owned policy that defines how logical entity identities and their references are represented in the target application model. It is one application-wide policy, not package-owned metadata or a package-selected SQL mechanism.
 
 The current DEM v2 profile structure is optional and contains `type` plus `generation`. When absent, it is signed 32-bit `core.integer` with `generation.kind: "core.identity"` in `byDefault` mode. When present, its type and generation must be accepted by the selected adapter. This current structure materializes `core.identity`; `core.ref` derives only the compatible concrete type from the resolved identity target.

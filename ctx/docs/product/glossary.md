@@ -1,12 +1,14 @@
 # Product Glossary
 
 - Path: `ctx/docs/product/glossary.md`
-- Changed: `20260813`
+- Changed: `20260903`
 
 ## Core Terms
 
 - DEM — Data Entity Model; a distributed, JSON-declarable logical target model for one application data schema.
 - DEM fragment — the part of the DEM owned by one package.
+- fragment root namespace — an optional dot-delimited logical package prefix declared by one DEM fragment; it shortens
+  the JSON nesting without being a physical table prefix or an ownership reservation.
 - `teqfw.db.schema` — an ordinary DEM fragment supplied by `@teqfw/db`; it declares the platform's `snapshot` and `application` entities.
 - DEM v2 — the current explicit declaration and application-map contract; every input declares `version: 2`. It separates logical types, storage, generation, capabilities, indexes, and expressions.
 - distributed schema — reusable package-owned fragments that a host application composes into one target schema for related data.
@@ -16,7 +18,7 @@
 - compilation result — the canonical DEM plus provenance, dependency graph, capabilities, physical plan, deterministic fingerprint, and warnings.
 - provenance — trusted fragment filename, identity, and source pointer attached to canonical nodes and diagnostics.
 - target model — the canonical DEM selected by the host application for its application schema; it contains desired state, not change history.
-- map — root-application declaration resolving external references and defining the table namespace.
+- map — root-application declaration resolving external references and defining the physical table namespace.
 - entity path — slash-delimited logical identifier such as `/app/user`.
 - schema object — runtime contract exposing an entity name, attributes, primary key, and DTO creation.
 - relation — a declared connection between attributes of entities; application mapping resolves package-external paths without changing target ownership.

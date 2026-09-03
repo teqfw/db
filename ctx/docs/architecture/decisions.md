@@ -1,7 +1,7 @@
 # Architecture Decisions
 
 - Path: `ctx/docs/architecture/decisions.md`
-- Changed: `20260813`
+- Changed: `20260903`
 
 ## AD-001 Preserve Legacy Line On Branch v1
 
@@ -146,6 +146,31 @@ The compiler writes these results into the canonical DEM before normal relation 
 Rejected: requiring independently reusable packages to coordinate concrete identifier storage conventions, making `ref` an alternative foreign-key declaration, allowing `core.ref` to target an arbitrary PRIMARY or UNIQUE attribute, or inferring a type from an undeclared or ambiguous relation.
 
 Reason: packages own reusable entity and relation semantics, whereas the host owns the target database model and therefore identity representation policy. References derive their representation from their actual resolved targets, preserving compatibility across independently developed packages. Keeping the selected policy in the map makes host authority visible, preserves deterministic compilation, and leaves dialect-specific storage and generation differences below the logical DEM layer. Integer width and signedness are current examples of policy choices, not the purpose of the indirection.
+
+## AD-018 Support Concise Fragment Root Namespaces
+
+Decision: DEM v2 declarations may provide an optional dot-delimited `namespace` containing lowercase package
+segments. The compiler expands that logical root over the fragment's local `entity` and nested `package` paths before
+composition. For example, `namespace: "teqfw.db.schema"` plus local entity `snapshot` produces
+`/teqfw/db/schema/snapshot` without requiring the verbose nested JSON path
+`package.teqfw.package.db.package.schema`.
+
+The fragment root is part of logical model identity and is distinct from the root application's map `namespace`,
+which remains the physical table prefix. Physical projection joins logical path segments with `_`, so the example
+becomes `teqfw_db_schema_snapshot` when the map has no physical prefix. The scanner does not infer a root from
+`fragmentId` or `packageName`, and a fragment root does not reserve a namespace or grant composition privileges.
+
+Local relation paths are resolved against the expanded fragment root. External aliases declared in `refs` remain
+fragment-local aliases and continue to use owner-scoped application-map entries. Ownership, provenance, reference
+mapping, validation, and fingerprinting use the expanded canonical paths.
+
+Rejected: deriving logical roots from npm package names, using the physical map namespace as a logical root, allowing
+camelCase or underscore-separated package segments, or retaining a package-specific shortcut outside the normal DEM
+pipeline.
+
+Reason: distributed fragments need stable, readable logical package identities without repeating structural JSON keys.
+Making the root explicit preserves host-visible composition and provenance, while the existing lowercase naming rule
+and underscore-based physical projection keep identifiers portable and predictable.
 
 ## Deferred CLI Hosting Decision
 

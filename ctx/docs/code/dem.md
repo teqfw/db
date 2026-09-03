@@ -1,5 +1,8 @@
 # DEM v2 Implementation Map
 
+- Path: `ctx/docs/code/dem.md`
+- Changed: `20260903`
+
 ## Current Contract
 
 The evolving 2.x line accepts only explicit DEM v2 declarations and application maps. Every input has `version: 2`; omitted or unsupported versions fail with deterministic diagnostics before composition. The branch `v1` is retained as historical reference, not as a runtime compatibility boundary. Agents comparing that branch with current v2 may prepare migration guidance for a specific consumer; this package does not publish a generic migration guide.
@@ -8,12 +11,23 @@ The evolving 2.x line accepts only explicit DEM v2 declarations and application 
 
 `src/Back/Dem/Compile/` validates and canonicalizes v2 DTOs, composes owned fragments, maps external references, resolves identity/reference policy, validates the logical graph, and projects through the selected adapter. The successful immutable result is the only input accepted by schema, rebuild, and query execution.
 
-`src/Back/Dem/Compile/A/ValidateNames.mjs` rejects raw package and entity keys outside `^[a-z][a-z0-9]*$` before decoding can treat them as canonical identities. The physical table projection keeps every logical entity-path segment and joins them with `_`; an optional map namespace is a separate prefix.
+`src/Back/Dem/Compile/A/ValidateNames.mjs` rejects raw package and entity keys outside `^[a-z][a-z0-9]*$` before decoding can treat them as canonical identities. The target contract also permits a declaration-level
+fragment root namespace such as `teqfw.db.schema`; its dot-separated segments use the same lowercase package-name
+rule and are expanded before composition. The physical table projection keeps every logical entity-path segment and
+joins them with `_`; the optional map namespace is a separate physical prefix.
 
 `src/Back/Mod/Selection.mjs` accepts Selection v2 typed expressions. It does not decode legacy condition objects. Schema, rebuild, and dialect modules consume the same canonical model and retain transaction ownership boundaries.
 
 `@teqfw/db` supplies an ordinary `teqfw.db.schema` declaration with `snapshot` and `application` in `etc/teqfw.schema.json`. The standard scanner discovers it with every other installed-package fragment, and the compiler composes it without a package-specific path. `result.effective` remains derived from the dialect-independent canonical model and provenance, while `result.fingerprint` remains the physical-plan identity.
 Every trusted source in effective provenance carries a content-derived immutable `revision`; direct compiler callers do not supply it.
+
+## Delivery Gaps Against The Accepted Architecture
+
+There is no known delivery gap for the package-owned schema-history fragment: the declaration is published, discovered, composed, and projected through the ordinary DEM pipeline.
+
+Fragment root namespaces are an accepted DEM v2 target capability but are not implemented in the current worktree.
+The decoder currently accepts only the existing top-level declaration fields and therefore reports a declaration shape
+diagnostic for `namespace`; current callers must still express the complete logical package nesting explicitly.
 
 ## Required Verification
 

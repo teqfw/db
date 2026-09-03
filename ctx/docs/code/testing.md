@@ -1,5 +1,8 @@
 # Testing Overview
 
+- Path: `ctx/docs/code/testing.md`
+- Changed: `20260903`
+
 Product-level rebuild obligations are defined in [product migration](../product/migration.md); these checks verify their current implementation and runtime evidence.
 
 ## Test Structure
