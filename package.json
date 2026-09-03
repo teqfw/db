@@ -7,6 +7,7 @@
     ".env.example",
     "jsconfig.json",
     "skills/",
+    "etc/",
     "src/",
     "types.d.ts",
     "LICENSE",

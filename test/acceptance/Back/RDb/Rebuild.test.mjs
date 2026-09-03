@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {afterEach, describe, it} from 'node:test';
 import {container} from '../../../TestEnv.mjs';
+import {platformFragment} from '../../../data/Dem.mjs';
 
 /** @type {TeqFw_Db_Back_Dem_Compile} */
 const compile = await container.get('TeqFw_Db_Back_Dem_Compile$');
@@ -68,7 +69,7 @@ async function targetCompilation() {
     };
     return compile.exec({
         adapter,
-        fragments: [{declaration, filename: '/fixtures/app/schema.json', fragmentId: 'app', packageName: 'app'}],
+        fragments: [platformFragment(), {declaration, filename: '/fixtures/app/schema.json', fragmentId: 'app', packageName: 'app'}],
         mapEnvelope: {
             declaration: {version: 2, namespace: 'teq'}, filename: '/fixtures/app/map.json', mapId: 'map', packageName: 'app',
         },

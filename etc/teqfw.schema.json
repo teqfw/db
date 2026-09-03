@@ -1,0 +1,156 @@
+{
+  "version": 2,
+  "requires": [],
+  "refs": {},
+  "package": {
+    "schema": {
+      "entity": {
+        "snapshot": {
+          "attr": {
+            "created_at": {
+              "default": {
+                "kind": "function",
+                "name": "core.currentTimestamp",
+                "params": {}
+              },
+              "type": {
+                "id": "core.datetime",
+                "params": {}
+              }
+            },
+            "dem": {
+              "type": {
+                "id": "core.text",
+                "params": {}
+              }
+            },
+            "fingerprint": {
+              "type": {
+                "id": "core.string",
+                "params": {
+                  "length": 96
+                }
+              }
+            },
+            "id": {
+              "type": {
+                "id": "core.identity",
+                "params": {}
+              }
+            },
+            "provenance": {
+              "type": {
+                "id": "core.text",
+                "params": {}
+              }
+            }
+          },
+          "index": {
+            "fingerprint": {
+              "include": [],
+              "keys": [
+                {
+                  "attr": "fingerprint"
+                }
+              ],
+              "kind": "unique",
+              "options": {},
+              "phase": "table"
+            }
+          },
+          "relation": {}
+        },
+        "application": {
+          "attr": {
+            "completed_at": {
+              "nullable": true,
+              "type": {
+                "id": "core.datetime",
+                "params": {}
+              }
+            },
+            "id": {
+              "type": {
+                "id": "core.identity",
+                "params": {}
+              }
+            },
+            "source_snapshot_id": {
+              "nullable": true,
+              "type": {
+                "id": "core.ref",
+                "params": {}
+              }
+            },
+            "started_at": {
+              "default": {
+                "kind": "function",
+                "name": "core.currentTimestamp",
+                "params": {}
+              },
+              "type": {
+                "id": "core.datetime",
+                "params": {}
+              }
+            },
+            "status": {
+              "type": {
+                "id": "core.enum",
+                "params": {
+                  "values": [
+                    "started",
+                    "applied",
+                    "failed"
+                  ]
+                }
+              }
+            },
+            "target_snapshot_id": {
+              "type": {
+                "id": "core.ref",
+                "params": {}
+              }
+            }
+          },
+          "index": {},
+          "relation": {
+            "source": {
+              "action": {
+                "delete": "restrict",
+                "update": "cascade"
+              },
+              "attrs": [
+                "source_snapshot_id"
+              ],
+              "deferrable": "notDeferrable",
+              "ref": {
+                "attrs": [
+                  "id"
+                ],
+                "path": "/schema/snapshot"
+              }
+            },
+            "target": {
+              "action": {
+                "delete": "restrict",
+                "update": "cascade"
+              },
+              "attrs": [
+                "target_snapshot_id"
+              ],
+              "deferrable": "notDeferrable",
+              "ref": {
+                "attrs": [
+                  "id"
+                ],
+                "path": "/schema/snapshot"
+              }
+            }
+          }
+        }
+      },
+      "package": {}
+    }
+  },
+  "entity": {}
+}

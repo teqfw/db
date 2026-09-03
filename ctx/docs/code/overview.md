@@ -8,7 +8,7 @@
 - `src/Back/Api/` — abstract public contracts.
 - `src/Back/RDb/` — connection, transaction, schema, and rebuild execution.
 - `src/Back/Dem/` — trusted declaration scanning and compiler-backed loading.
-- `src/Back/Dem/Service.mjs` — current compiler-side schema-history entity injection; a delivery gap to replace with the ordinary `teqfw.db.schema` DEM fragment.
+- `etc/teqfw.schema.json` — package-owned `teqfw.db.schema` DEM fragment declaring `snapshot` and `application` history entities; published and discovered through the standard package scanner.
 - `src/Back/Dem/Compile/` — explicit DEM v2 decoding, ownership-safe composition, validation, graph, provenance, and fingerprinting.
 - `src/Back/Dem/Registry/` — frozen core logical/default/generation/operator registries.
 - `src/Back/Dto/` — backend DTOs and factories.
@@ -77,7 +77,7 @@ JSON; optional `EXTRA` objects carry specialized Knex or driver-specific setting
 
 ### Delivery Gaps Against The Accepted Architecture
 
-- `schema.snapshot` and `schema.application` are currently injected by `src/Back/Dem/Service.mjs`; they must instead originate from the `teqfw.db.schema` declaration through ordinary fragment discovery and composition.
+There is no known delivery gap for the package-owned schema-history fragment: the declaration is published, discovered, composed, and projected through the ordinary DEM pipeline.
 
 ### Verification Status
 

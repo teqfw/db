@@ -47,6 +47,8 @@ const compilation = await compile.exec({adapter, fragments, mapEnvelope});
 compile.assertResult({value: compilation});
 ```
 
+The standard DEM loader discovers the package-owned `teqfw.db.schema` fragment from the installed package's `etc/teqfw.schema.json`. Direct compiler callers must provide that trusted fragment envelope themselves when they need the `snapshot` and `application` history entities; compilation never injects it.
+
 The current rebuild callable shape is:
 
 ```text

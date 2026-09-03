@@ -15,11 +15,10 @@ export default class TeqFw_Db_Back_Dem_Compile {
      * @param {TeqFw_Db_Back_Dem_Compile_A_ValidateNames} deps.validateNames
      * @param {TeqFw_Db_Back_Dem_Compile_A_Graph} deps.graph
      * @param {TeqFw_Db_Back_Dem_Compile_A_Fingerprint} deps.fingerprint
-     * @param {TeqFw_Db_Back_Dem_Service} deps.serviceDem
      * @param {TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic.Factory} deps.diagnostic
      * @param {TeqFw_Db_Back_Dto_Dem_Compile_Result.Factory} deps.resultFactory
      */
-    constructor({decodeV2, compose, mapRefs, validate, validateNames, graph, fingerprint, serviceDem, diagnostic, resultFactory}) {
+    constructor({decodeV2, compose, mapRefs, validate, validateNames, graph, fingerprint, diagnostic, resultFactory}) {
         const successful = new WeakSet();
 
         /**
@@ -73,7 +72,7 @@ export default class TeqFw_Db_Back_Dem_Compile {
          * @throws {Error}
          */
         this.exec = async function ({fragments, mapEnvelope, adapter}) {
-            const input = [...(Array.isArray(fragments) ? fragments : []), serviceDem.getFragment()];
+            const input = Array.isArray(fragments) ? fragments : [];
             const sorted = input.map((item) => ({
                 declaration: item?.declaration,
                 filename: item?.filename,
@@ -373,7 +372,6 @@ export const __deps__ = Object.freeze({
         validateNames: 'TeqFw_Db_Back_Dem_Compile_A_ValidateNames$',
         graph: 'TeqFw_Db_Back_Dem_Compile_A_Graph$',
         fingerprint: 'TeqFw_Db_Back_Dem_Compile_A_Fingerprint$',
-        serviceDem: 'TeqFw_Db_Back_Dem_Service$',
         diagnostic: 'TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic__Factory$',
         resultFactory: 'TeqFw_Db_Back_Dto_Dem_Compile_Result__Factory$',
     }),

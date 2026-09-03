@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {afterEach, describe, it} from 'node:test';
 import {container, dbConnect} from '../../../../TestEnv.mjs';
 import {createFakeAdapter} from '../../../../unit/Back/Dem/Compile/FakeAdapter.mjs';
+import {platformFragment} from '../../../../data/Dem.mjs';
 
 /** @type {TeqFw_Db_Back_Dem_Compile} */
 const compile = await container.get('TeqFw_Db_Back_Dem_Compile$');
@@ -47,7 +48,7 @@ function declaration(withChild = false) {
 async function compilation({adapter = sqlite, deprecated = {}, withChild = false} = {}) {
     return compile.exec({
         adapter,
-        fragments: [{
+        fragments: [platformFragment(), {
             declaration: declaration(withChild), filename: '/fixtures/schema.json', fragmentId: 'app', packageName: 'app',
         }],
         mapEnvelope: {

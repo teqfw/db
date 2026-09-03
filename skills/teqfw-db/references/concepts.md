@@ -16,7 +16,7 @@ Compilation is all-or-nothing. Do not execute a partial model after diagnostics.
 
 `@teqfw/db` supplies the ordinary `teqfw.db.schema` DEM fragment, which declares the `snapshot` and `application` entities used for schema history. These entities follow the same composition, mapping, projection, provenance, and transfer rules as all other entities. `compilation.effective.fingerprint` identifies the canonical dialect-independent effective DEM; `compilation.fingerprint` remains the physical-plan identity and is not interchangeable with it.
 
-The current worktree still provides these entities through compiler-side injection. This is a delivery gap against the accepted architecture, not a special DEM feature for consumers to reproduce or depend on.
+The package publishes this fragment at `etc/teqfw.schema.json`; the standard loader discovers it from the installed package alongside other selected fragments. Direct compiler callers must include the returned package envelope explicitly, because the compiler processes only the fragments passed to it.
 
 The history service deduplicates immutable snapshots by the effective fingerprint and preserves canonical model provenance with content-derived source revisions. A schema application is append-only: `started` becomes either `applied` or `failed`, and a completed record is never rewritten. Only `applied` establishes the last applied snapshot.
 

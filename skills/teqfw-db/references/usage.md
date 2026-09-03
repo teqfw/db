@@ -26,7 +26,7 @@ For direct compiler use, supply:
 
 Handle `DemCompilationError` through its structured `diagnostics` and `warnings`. Diagnose by stable code, canonical path, stage, severity, and provenance rather than matching complete English messages. Assert the successful compilation, derive the selected operation plan or query requirements, and let the operation executor run connection-specific preflight before mutation or query execution.
 
-The loader can scan application and installed-package declarations before compilation. Do not present test-only inputs such as `testDems` or `testMapRoot` as production integration patterns.
+The loader scans the application and installed-package declarations before compilation, including `@teqfw/db`'s published `etc/teqfw.schema.json` fragment. Do not present test-only inputs such as `testDems` or `testMapRoot` as production integration patterns. Direct compiler callers must pass every selected envelope, including the package-owned fragment when schema history is used.
 
 ## Entity-to-table access
 

@@ -12,7 +12,7 @@ The evolving 2.x line accepts only explicit DEM v2 declarations and application 
 
 `src/Back/Mod/Selection.mjs` accepts Selection v2 typed expressions. It does not decode legacy condition objects. Schema, rebuild, and dialect modules consume the same canonical model and retain transaction ownership boundaries.
 
-The accepted architecture requires `@teqfw/db` to supply an ordinary `teqfw.db.schema` declaration with `snapshot` and `application`, discovered and composed like every other DEM fragment. The current worktree instead has `src/Back/Dem/Service.mjs` supply those entities through compiler-side injection. This is a delivery gap: replace that injection with normal declaration discovery and composition without changing schema-history semantics. `result.effective` remains derived from the dialect-independent canonical model and provenance, while `result.fingerprint` remains the physical-plan identity.
+`@teqfw/db` supplies an ordinary `teqfw.db.schema` declaration with `snapshot` and `application` in `etc/teqfw.schema.json`. The standard scanner discovers it with every other installed-package fragment, and the compiler composes it without a package-specific path. `result.effective` remains derived from the dialect-independent canonical model and provenance, while `result.fingerprint` remains the physical-plan identity.
 Every trusted source in effective provenance carries a content-derived immutable `revision`; direct compiler callers do not supply it.
 
 ## Required Verification

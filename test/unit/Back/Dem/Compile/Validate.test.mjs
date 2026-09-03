@@ -84,8 +84,8 @@ describe('TeqFw_Db_Back_Dem_Compile_A_Validate', () => {
             fragments: [fragment('app', baseDeclaration())],
             mapEnvelope: mapEnvelope(),
         });
-        assert.equal(result.graph.edges.length, 3);
-        assert.deepEqual(result.graph.topological, ['/parent', '/schema/snapshot', '/child', '/schema/application']);
+        assert.equal(result.graph.edges.length, 1);
+        assert.deepEqual(result.graph.topological, ['/parent', '/child']);
     });
 
     it('aggregates unknown and invalid type parameters', async () => {

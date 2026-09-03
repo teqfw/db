@@ -46,8 +46,6 @@ describe('physical schema name registry', () => {
                 '/pde/runtime/audit/event': 'pde_runtime_audit_event',
                 '/pde/runtime/delegation': 'pde_runtime_delegation',
                 '/pde/runtime/owner/session': 'pde_runtime_owner_session',
-                '/schema/application': 'schema_application',
-                '/schema/snapshot': 'schema_snapshot',
             },
         );
         assert(result.model.package.pde.package.runtime.package.owner.entity.session.attr.owner_id);

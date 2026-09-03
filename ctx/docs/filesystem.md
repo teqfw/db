@@ -11,6 +11,7 @@ Define root-level repository navigation.
 
 - `bin/` — development and release shell helpers.
 - `ctx/` — authoritative cognitive context.
+- `etc/` — package-owned DEM and map assets published for host discovery.
 - `skills/` — version-matched package-owned consumer guidance published with the npm artifact.
 - `src/` — package implementation.
 - `test/` — automated and manual verification assets.

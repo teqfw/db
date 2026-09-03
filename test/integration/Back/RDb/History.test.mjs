@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {afterEach, describe, it} from 'node:test';
 import {container} from '../../../TestEnv.mjs';
+import {platformFragment} from '../../../data/Dem.mjs';
 
 const compile = await container.get('TeqFw_Db_Back_Dem_Compile$');
 const history = await container.get('TeqFw_Db_Back_RDb_History$');
@@ -28,7 +29,7 @@ async function compilation({withExtra = false} = {}) {
     });
     return compile.exec({
         adapter,
-        fragments: [{
+        fragments: [platformFragment(), {
             declaration: {version: 2, requires: [], refs: {}, package: {}, entity: {
                 alpha: entity('alpha'), ...(withExtra ? {beta: entity('beta')} : {}),
             }},

@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {describe, it} from 'node:test';
 import {container} from '../../../../TestEnv.mjs';
 import {createFakeAdapter} from './FakeAdapter.mjs';
+import {platformFragment} from '../../../../data/Dem.mjs';
 
 /** @type {TeqFw_Db_Back_Dem_Compile} */
 const compiler = await container.get('TeqFw_Db_Back_Dem_Compile$');
@@ -43,30 +44,41 @@ function entity(relations = {}) {
     };
 }
 
-async function compile(entityMap) {
+async function compile(entityMap, includePlatform = false) {
     return compiler.exec({
         adapter: createFakeAdapter(),
-        fragments: [fragment({version: 2, requires: [], entity: entityMap, package: {}, refs: {}})],
+        fragments: [
+            ...(includePlatform ? [platformFragment()] : []),
+            fragment({version: 2, requires: [], entity: entityMap, package: {}, refs: {}}),
+        ],
         mapEnvelope: mapEnvelope(),
     });
 }
 
 describe('TeqFw_Db_Back_Dem_Compile_A_Graph', () => {
-    it('retains package-owned history nodes for an otherwise empty application graph', async () => {
+    it('does not inject package-owned history nodes into an otherwise empty application graph', async () => {
         const result = await compile({});
+        assert.deepEqual(result.graph.entities, []);
+        assert.deepEqual(result.graph.edges, []);
+        assert.deepEqual(result.graph.topological, []);
+        assert.deepEqual(result.graph.cycles, []);
+    });
+
+    it('composes package-owned history nodes from an ordinary fragment', async () => {
+        const result = await compile({}, true);
         assert.deepEqual(result.graph.entities, ['/schema/application', '/schema/snapshot']);
         assert.deepEqual(result.graph.edges.map((item) => [item.from, item.to]), [
             ['/schema/application', '/schema/snapshot'],
             ['/schema/application', '/schema/snapshot'],
         ]);
         assert.deepEqual(result.graph.topological, ['/schema/snapshot', '/schema/application']);
-        assert.deepEqual(result.graph.cycles, []);
+        assert.equal(result.provenance['/package/schema/entity/snapshot'][0].fragmentId, '@teqfw/db');
     });
 
     it('orders a DAG dependency-first and retains relation provenance', async () => {
         const result = await compile({child: entity({parent: 'parent'}), parent: entity()});
 
-        assert.deepEqual(result.graph.topological, ['/parent', '/schema/snapshot', '/child', '/schema/application']);
+        assert.deepEqual(result.graph.topological, ['/parent', '/child']);
         assert.deepEqual(result.graph.edges.filter((item) => item.from === '/child').map((item) => [item.from, item.to, item.relation]), [
             ['/child', '/parent', 'parent'],
         ]);

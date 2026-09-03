@@ -21,7 +21,7 @@ It supports PostgreSQL, MySQL/MariaDB, and SQLite through [Knex](https://knexjs.
 - Rebuild-oriented structure recreation and compatible data transfer with evidence.
 - Immutable effective-DEM snapshots and append-only schema-application history for migration agents; catalog mismatches are diagnostic evidence, never inferred migrations.
 
-The accepted architecture requires every target-schema entity to come from a selected DEM fragment. `@teqfw/db` supplies the ordinary `teqfw.db.schema` fragment for its `snapshot` and `application` history entities; the compiler does not add hidden semantic entities after composition. The current worktree still injects those history entities internally while this architecture change is pending, and consumers must not treat that compatibility implementation as a special DEM mechanism.
+Every target-schema entity comes from a selected DEM fragment. `@teqfw/db` publishes the ordinary `teqfw.db.schema` fragment in `etc/teqfw.schema.json` for its `snapshot` and `application` history entities; the standard loader discovers it with other installed-package fragments, and the compiler does not add hidden semantic entities after composition.
 
 ## DEM Identity And References
 
