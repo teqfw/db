@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {afterEach, describe, it} from 'node:test';
 import {container, dbConnect} from '../../../../TestEnv.mjs';
-import {createFakeAdapter} from '../../../../unit/Back/Dem/Compile/FakeAdapter.mjs';
+import {createFakeAdapter} from '../../../../data/Dem/FakeAdapter.mjs';
 import {platformFragment} from '../../../../data/Dem.mjs';
 
 /** @type {TeqFw_Db_Back_Dem_Compile} */

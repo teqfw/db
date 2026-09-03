@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {describe, it} from 'node:test';
-import ExpressionDto from '../../../../src/Shared/Dto/Query/Expression.mjs';
-import {container} from '../../../TestEnv.mjs';
+import ExpressionDto from '../../../../../src/Shared/Dto/Query/Expression.mjs';
+import {container} from '../../../../TestEnv.mjs';
 
 const factory = await container.get('TeqFw_Db_Shared_Dto_Query_Expression__Factory$');
 

@@ -7,8 +7,8 @@ Product-level rebuild obligations are defined in [product migration](../product/
 
 ## Test Structure
 
-- `test/unit/` — deterministic compiler, DTO, query, adapter, plan, and registry behavior without a database.
-- `test/integration/` — DI resolution and SQLite/Knex execution.
+- `test/unit/` — isolated component tests with source-relative paths required by `teqfw-platform`; modules without an isolated unit boundary are explicitly excluded in `package.json`.
+- `test/integration/` — DI-composed behavior, cross-component compiler and dialect scenarios, and SQLite/Knex execution.
 - `test/acceptance/` — complete v2 persistence workflows: compile, create a target, transfer data, and inspect rebuild evidence.
 - `test/optin/` — destructive PostgreSQL/pgvector and MariaDB/MySQL conformance against explicitly provisioned disposable databases.
 - `test/package/` — packed npm artifact and published declaration-contract tests; its `types/` consumer is checked by `npm run typecheck`.
@@ -20,6 +20,7 @@ Tests use `node:test`. `npm test` runs unit, integration, acceptance, and packag
 
 ## Required Verification
 
+- `teqfw-platform .` validates the bidirectional `src/**/*.mjs` ↔ `test/unit/**/*.test.mjs` mapping. Every source module without an isolated unit-test boundary has an exact, reasoned entry in `teqfw.platform.unitTests.exclusions`; grouped behavior tests belong under `test/integration/`.
 - Every source file parses with `node --check`.
 - `npm run typecheck` checks the published declaration contract and its representative consumer.
 - Package tests install the packed layout, type-check named and ambient consumer contracts, and prove that the export map exposes neither a runtime root nor `src/**` subpaths.
@@ -30,7 +31,7 @@ Tests use `node:test`. `npm test` runs unit, integration, acceptance, and packag
 
 ## DEM v2 Compiler Verification
 
-Every declaration and map fixture has `version: 2`. Unit tests reject omitted or unsupported versions before compilation.
+Every declaration and map fixture has `version: 2`. Unit and integration tests reject omitted or unsupported versions before compilation.
 Compiler tests cover deterministic composition and diagnostics, ownership conflicts, deep immutability and result branding, logical types and defaults, identity/reference resolution, mapping provenance, physical-name collisions, graph cycles, index phases, and capability validation. They also prove that every entity in the physical target plan has ordinary fragment provenance, including `snapshot` and `application` from `teqfw.db.schema`, with no compiler-side entity injection.
 Fixture assertions use diagnostic codes, canonical paths, and structured details rather than complete English messages.
 

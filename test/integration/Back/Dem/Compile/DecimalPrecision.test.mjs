@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {describe, it} from 'node:test';
 import {container} from '../../../../TestEnv.mjs';
-import {createFakeAdapter} from './FakeAdapter.mjs';
+import {createFakeAdapter} from '../../../../data/Dem/FakeAdapter.mjs';
 
 const compile = await container.get('TeqFw_Db_Back_Dem_Compile$');
 const coreValue = await container.get('TeqFw_Db_Back_Dem_Registry_CoreValue$');

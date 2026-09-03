@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {describe, it} from 'node:test';
-import {container} from '../../../TestEnv.mjs';
+import {container} from '../../../../TestEnv.mjs';
 
 const compile = await container.get('TeqFw_Db_Back_Dem_Compile$');
 const rebuild = await container.get('TeqFw_Db_Back_RDb_Rebuild$');

@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import {describe, it} from 'node:test';
-import {container} from '../../../../TestEnv.mjs';
-import {createFakeAdapter} from './FakeAdapter.mjs';
-import {platformFragment} from '../../../../data/Dem.mjs';
+import {container} from '../../../../../TestEnv.mjs';
+import {createFakeAdapter} from '../../../../../data/Dem/FakeAdapter.mjs';
+import {platformFragment} from '../../../../../data/Dem.mjs';
 
 /** @type {TeqFw_Db_Back_Dem_Compile} */
 const compiler = await container.get('TeqFw_Db_Back_Dem_Compile$');
