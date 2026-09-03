@@ -7,13 +7,13 @@
 
 ### Model Declaration
 
-A teq-plugin is an npm package with a teqfw node in `package.json`. It owns a DEM fragment describing packages, entities, attributes, relations, and unresolved external references.
+A Data Entity Model (DEM) is a distributed declarative description of one target application data schema. A teq-plugin is an npm package with a teqfw node in `package.json`. It owns a DEM fragment describing packages, entities, attributes, relations, and unresolved external references.
 The host application selects its own and installed plugin fragments, then owns the map that binds cross-package references to actual entity paths and optionally remaps attribute names.
 DEM declarations and application maps use the explicit v2 contract (`version: 2`).
 
 ### Model Composition
 
-Compilation produces one normalized application schema from independently owned fragments; declaration details and database-specific projection are defined by the architecture.
+Compilation produces one normalized application schema from independently owned fragments; declaration details and database-specific projection are defined by the architecture. The compiler only processes the selected fragments and application map: it does not add entities or any other semantic nodes after composition.
 Semantic nodes have one owner, structural package containers may compose disjoint children, and generic deep merge is not part of the model.
 Trusted fragment provenance is retained separately from logical content.
 The target DEM is the desired state of the assembled application schema, not an ordered migration history and not a description of arbitrary physical database drift.
@@ -43,7 +43,7 @@ The core package can move structurally compatible data and invoke explicitly sup
 
 ### Effective DEM History
 
-The package owns an immutable effective-DEM snapshot identified locally by `id` and globally comparable by a logical content fingerprint.
+`@teqfw/db` supplies the ordinary DEM fragment `teqfw.db.schema`. Its `snapshot` entity owns an immutable effective-DEM snapshot identified locally by `id` and globally comparable by a logical content fingerprint; its `application` entity owns the application history records.
 Each snapshot retains the canonical dialect-independent model and trusted provenance with package identifiers and immutable content revisions.
 An append-only schema-application record links the last known applied source snapshot to a requested target snapshot and moves only from `started` to terminal `applied` or `failed`.
 Only an `applied` record establishes the database's last applied logical model.
@@ -51,6 +51,8 @@ Only an `applied` record establishes the database's last applied logical model.
 ## Core Entities
 
 - DEM fragment — one package-owned model declaration.
+- Data Entity Model (DEM) — the distributed declarative model of one target application data schema.
+- `teqfw.db.schema` — the DEM fragment supplied by `@teqfw/db`; it declares the `snapshot` and `application` entities used for schema history.
 - teq-plugin — an npm package with a teqfw node in `package.json` that contributes a DEM fragment.
 - Application schema — the coherent target schema assembled by the host application from its own and selected plugin fragments.
 - Canonical DEM — the decoded, composed, resolved, and logically validated model of the application schema.
@@ -77,6 +79,7 @@ The host application owns release sequencing, migration policy, cutover, and fin
 - Entity paths are logical and independent of physical names.
 - A semantic entity, attribute, relation, or index has one fragment owner.
 - Every canonical semantic node has provenance.
+- Every entity in a target RDB schema originates in one selected DEM fragment; the compiler never injects a semantic node.
 - Relation endpoints and attributes exist and are compatible.
 - A canonical model contains no unresolved external reference required by a relation.
 - Unsupported model requirements fail before execution.

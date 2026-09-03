@@ -24,6 +24,7 @@ The application map uses the same trusted-envelope pattern with stable map ident
 
 The compiler sorts envelopes by `fragmentId` and then `filename` before decoding.
 Sort order makes diagnostics deterministic; it never decides a conflict winner.
+No compiler stage creates a synthetic declaration envelope or injects a semantic node after reading the selected envelopes and application map.
 
 ## Ownership Rules
 
@@ -43,6 +44,7 @@ Their child maps compose only when child keys are disjoint.
 
 The application map owns reference redirection and the physical namespace.
 It does not become owner of mapped entities or attributes.
+Package ownership carries no special composition privileges: a platform package follows the same declaration, composition, mapping, projection, and provenance rules as an application package.
 
 ## Composition Operations
 

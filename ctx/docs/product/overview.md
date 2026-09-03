@@ -32,7 +32,7 @@ The package owns:
 ## Core Lifecycle
 
 The host application discovers its own and its installed teq-plugin fragments, applies the application-owned map for cross-package dependencies, and requests compilation for the target.
-The compiler validates ownership, references, relations, and compatibility before producing the assembled application schema, or returns diagnostics without an executable partial model.
+The selected set may include the `teqfw.db.schema` fragment supplied by `@teqfw/db`; it declares the platform history entities through the same mechanism as every other fragment. The compiler validates ownership, references, relations, and compatibility before producing the assembled application schema, or returns diagnostics without an executable partial model.
 The resulting target model is then projected into the selected database structure and used by the data-access layer.
 
 For a rebuild migration, an authorized caller captures or retains source data, creates the target structure in place or in a separately provisioned target, transfers compatible data in dependency order, and verifies the result before the old durable state is discarded.
@@ -60,6 +60,7 @@ For a rebuild migration, an authorized caller captures or retains source data, c
 ## Product Invariants
 
 - Package model fragments remain independently declarable and compose into one canonical model.
+- Every target-schema entity originates in a selected DEM fragment; the compiler never injects semantic nodes after composition.
 - A host application controls which fragments form its target schema and how cross-package dependencies are mapped.
 - The current target is one application database; future support for several databases must keep each physical target explicit rather than creating one implicit shared target.
 - The assembled schema makes relations between data owned by different packages explicit.

@@ -21,7 +21,7 @@ Components are linked by `TeqFw_Db_` dependency tokens through explicit `__deps_
 ## Main Flow
 
 ```text
-host-selected teq-plugin DEM fragments + application map + selected adapter
+host-selected teq-plugin DEM fragments (including `teqfw.db.schema` when selected) + application map + selected adapter
   -> DEM v2 decode
   -> ownership-safe composition + provenance
   -> reference resolution and logical validation
@@ -48,6 +48,7 @@ The host application or a future migration plugin may supply migration sequencin
 ## Architectural Invariants
 
 - Every semantic declaration node has one fragment owner and trusted provenance.
+- Every target-schema entity originates in a selected fragment; compiler stages do not create or inject semantic nodes.
 - The canonical application schema is the source of truth for projection and schema-bound access.
 - Logical declarations remain independent of a particular database implementation.
 - Compilation fails before side effects when ownership, relation, capability, or compatibility rules fail.

@@ -1,6 +1,6 @@
 ---
 name: teqfw-db
-description: Use this skill when integrating, configuring, using, testing, reviewing, or modifying JavaScript modules that consume @teqfw/db for distributed DEM composition, effective-DEM history, dialect-aware relational access, typed selections, schema lifecycle, or rebuild-oriented data transfer.
+description: Use this skill when integrating, configuring, using, testing, reviewing, or modifying JavaScript modules that consume @teqfw/db for distributed Data Entity Model (DEM) composition, effective-DEM history, dialect-aware relational access, typed selections, schema lifecycle, or rebuild-oriented data transfer.
 ---
 
 # @teqfw/db

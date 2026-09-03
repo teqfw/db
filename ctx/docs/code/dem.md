@@ -12,12 +12,12 @@ The evolving 2.x line accepts only explicit DEM v2 declarations and application 
 
 `src/Back/Mod/Selection.mjs` accepts Selection v2 typed expressions. It does not decode legacy condition objects. Schema, rebuild, and dialect modules consume the same canonical model and retain transaction ownership boundaries.
 
-`src/Back/Dem/Service.mjs` supplies the non-overridable package-owned `schema.snapshot` and `schema.application` declaration. The compiler adds it to each target, derives `result.effective` from the dialect-independent canonical model and provenance, and keeps `result.fingerprint` as the existing physical-plan identity.
+The accepted architecture requires `@teqfw/db` to supply an ordinary `teqfw.db.schema` declaration with `snapshot` and `application`, discovered and composed like every other DEM fragment. The current worktree instead has `src/Back/Dem/Service.mjs` supply those entities through compiler-side injection. This is a delivery gap: replace that injection with normal declaration discovery and composition without changing schema-history semantics. `result.effective` remains derived from the dialect-independent canonical model and provenance, while `result.fingerprint` remains the physical-plan identity.
 Every trusted source in effective provenance carries a content-derived immutable `revision`; direct compiler callers do not supply it.
 
 ## Required Verification
 
-- Unit tests reject a declaration or map without `version: 2` and cover deterministic composition, diagnostics, provenance, graph analysis, logical validation, and physical planning.
+- Unit tests reject a declaration or map without `version: 2` and cover deterministic composition, diagnostics, provenance, graph analysis, logical validation, and physical planning. They prove that every target-schema entity, including `teqfw.db.schema/snapshot` and `teqfw.db.schema/application`, originates in an ordinary fragment envelope and that no compiler-side semantic-node injection occurs.
 - Integration tests resolve DI 2.x components and execute v2 schema and Selection flows through SQLite/Knex.
 - Acceptance tests compile DEM v2, create a target, transfer data through rebuild, and inspect structured evidence.
 - The opt-in PostgreSQL/pgvector and MariaDB/MySQL suites provide external conformance before claiming engine-specific support.

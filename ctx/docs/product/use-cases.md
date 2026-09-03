@@ -9,7 +9,7 @@ The host application configures the one target database supported by the current
 
 ## UC-2 Compose The Application Model
 
-The host application loads its own DEM plus the fragments supplied by selected teq-plugins, applies the application-owned map for cross-package dependencies, and requests compilation for its one current database target.
+The host application loads its own DEM plus the fragments supplied by selected teq-plugins, including `teqfw.db.schema` when supplied by `@teqfw/db`, applies the application-owned map for cross-package dependencies, and requests compilation for its one current database target.
 It receives either one immutable canonical model with provenance or one aggregated diagnostic failure with no executable partial model.
 
 ## UC-3 Create, Recreate, Or Drop Structure
@@ -51,7 +51,7 @@ Each diagnostic identifies canonical location and trusted source provenance so t
 
 ## UC-11 Retain And Verify Schema History
 
-A migration agent records a successfully compiled effective DEM, starts an application attempt from the last applied snapshot to a target snapshot, and marks it applied only after the active catalog matches the target projection.
+A migration agent records a successfully compiled effective DEM through the `snapshot` entity declared by `teqfw.db.schema`, starts an application attempt through its `application` entity from the last applied snapshot to a target snapshot, and marks it applied only after the active catalog matches the target projection.
 It can resolve the last applied snapshot for planning and diagnose a mismatch without requesting an inferred migration.
 
 ## Explicitly Unsupported Use Case

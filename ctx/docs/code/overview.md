@@ -8,7 +8,7 @@
 - `src/Back/Api/` — abstract public contracts.
 - `src/Back/RDb/` — connection, transaction, schema, and rebuild execution.
 - `src/Back/Dem/` — trusted declaration scanning and compiler-backed loading.
-- `src/Back/Dem/Service.mjs` — package-owned logical service entities projected with every successful compilation.
+- `src/Back/Dem/Service.mjs` — current compiler-side schema-history entity injection; a delivery gap to replace with the ordinary `teqfw.db.schema` DEM fragment.
 - `src/Back/Dem/Compile/` — explicit DEM v2 decoding, ownership-safe composition, validation, graph, provenance, and fingerprinting.
 - `src/Back/Dem/Registry/` — frozen core logical/default/generation/operator registries.
 - `src/Back/Dto/` — backend DTOs and factories.
@@ -75,6 +75,10 @@ JSON; optional `EXTRA` objects carry specialized Knex or driver-specific setting
 - JSON export and import of modeled tables.
 - package-owned effective-DEM snapshot and schema-application history with SQLite catalog validation.
 
+### Delivery Gaps Against The Accepted Architecture
+
+- `schema.snapshot` and `schema.application` are currently injected by `src/Back/Dem/Service.mjs`; they must instead originate from the `teqfw.db.schema` declaration through ordinary fragment discovery and composition.
+
 ### Verification Status
 
 - The module, DI integration, acceptance, syntax, and ESM-validator gates pass locally.
@@ -99,6 +103,7 @@ JSON; optional `EXTRA` objects carry specialized Knex or driver-specific setting
 - Do not infer migration meaning from target DTO differences.
 - Do not report a rebuild as successful after a required table transfer failure.
 - The evolving 2.x line permits incompatible changes; declarations and maps always require explicit `version: 2`.
+- Do not add compiler-owned semantic entities or special-case a platform fragment; every target-schema entity must originate in a selected DEM fragment.
 - Schema/data/query executors must accept only a successful compiler result and operation preflight.
 - Do not route declaration strings to computed Knex method access or raw SQL.
 

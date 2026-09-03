@@ -13,7 +13,7 @@ Orient agents to `@teqfw/db` before implementation work.
 
 ## Problem Space
 
-The package compiles Domain Entity Model fragments distributed across teq-plugins into one validated application schema with provenance, projects that schema into the host application's selected database structure, and provides schema-bound access and rebuild-oriented data transfer.
+The package compiles Data Entity Model (DEM) fragments distributed across teq-plugins into one validated application schema with provenance, projects that schema into the host application's selected database structure, and provides schema-bound access and rebuild-oriented data transfer. Every target-schema entity originates in a selected fragment; the compiler never adds a semantic entity after composition.
 
 ## Product Role
 
@@ -52,7 +52,7 @@ It does not orchestrate application releases or switch production traffic.
 
 ## Current Delivery Boundary
 
-The current worktree implements explicit DEM v2 compilation, provenance, enforced semantic validation, dialect registries and capabilities, full index phases, typed expressions, PostgreSQL pgvector behavior, unified rebuild, and structured transfer evidence.
+The current worktree implements explicit DEM v2 compilation, provenance, enforced semantic validation, dialect registries and capabilities, full index phases, typed expressions, PostgreSQL pgvector behavior, unified rebuild, and structured transfer evidence. It still injects schema-history entities from `src/Back/Dem/Service.mjs`; replacing that with the ordinary `teqfw.db.schema` fragment is a documented delivery gap.
 These implementation tokens are not automatically a new documented public API.
 The external conformance gate now passes against PostgreSQL with pgvector `0.8.6` and MariaDB 10.11 in the provisioned test environment.
 

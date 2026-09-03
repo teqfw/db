@@ -14,12 +14,14 @@ It supports PostgreSQL, MySQL/MariaDB, and SQLite through [Knex](https://knexjs.
 
 ## What It Provides
 
-- Composition and validation of distributed Domain Entity Model (DEM) fragments.
+- Composition and validation of distributed Data Entity Model (DEM) fragments.
 - Logical `core.identity` and `core.ref` types, materialized by the host's `identityProfile` without package-specific key-width choices.
 - Dialect-aware schema projection, typed relational queries, and rebuild operations.
 - Explicit transaction ownership: operations can use a caller transaction or manage their own.
 - Rebuild-oriented structure recreation and compatible data transfer with evidence.
 - Immutable effective-DEM snapshots and append-only schema-application history for migration agents; catalog mismatches are diagnostic evidence, never inferred migrations.
+
+The accepted architecture requires every target-schema entity to come from a selected DEM fragment. `@teqfw/db` supplies the ordinary `teqfw.db.schema` fragment for its `snapshot` and `application` history entities; the compiler does not add hidden semantic entities after composition. The current worktree still injects those history entities internally while this architecture change is pending, and consumers must not treat that compatibility implementation as a special DEM mechanism.
 
 ## DEM Identity And References
 

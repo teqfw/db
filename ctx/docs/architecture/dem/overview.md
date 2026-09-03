@@ -21,6 +21,11 @@ A package-owned JSON document declares logical entities and optional dialect bin
 The scanner wraps the document in a trusted fragment envelope containing package identity, source filename, and fragment identity.
 Provenance is never accepted from JSON supplied by the fragment itself.
 
+### Distributed Composition Invariant
+
+The selected fragments and the application map are the complete semantic input to compilation. A package, including `@teqfw/db`, supplies its entities by declaring an ordinary fragment; `@teqfw/db` supplies `teqfw.db.schema` with the `snapshot` and `application` entities.
+The compiler decodes, canonicalizes, composes, maps, validates, and projects that input. It does not create, inject, reserve, or otherwise privilege semantic nodes. Single ownership identifies the fragment that declares a node; it does not create a special namespace or composition mode.
+
 ### Canonical DEM
 
 The compiler validates and canonicalizes explicit v2 syntax, composes disjoint package-owned nodes, resolves references, applies canonical defaults, validates semantics, and produces an immutable application-wide logical model.
@@ -93,6 +98,7 @@ An adapter may report a missing extension but must not install it as an implicit
 - Logical type, physical storage, value default, and value generation are separate fields.
 - Unknown logical types, operators, storage types, and capabilities fail before execution.
 - A semantic entity, attribute, relation, or index has one fragment owner.
+- Every target-schema entity has provenance in one selected fragment; no semantic node is added after composition.
 - Generic deep merge is not a DEM composition operation.
 - Provenance reaches every canonical semantic node and every conflict diagnostic.
 - All reference endpoints, attributes, type compatibility, cardinality, and target uniqueness are validated.

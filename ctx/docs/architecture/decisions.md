@@ -69,7 +69,16 @@ Rejected: generic deep merge with scalar overwrite and array concatenation, incl
 
 Reason: deterministic ordering cannot repair ambiguous authority; provenance and aggregated conflicts are required for distributed model maintenance.
 
-## AD-010 Separate Logical Meaning From Dialect Realization
+## AD-010 Derive Every Target-Schema Entity From A DEM Fragment
+
+Decision: every entity in a target RDB schema originates in a selected DEM fragment. `@teqfw/db` supplies the ordinary `teqfw.db.schema` fragment, which declares `snapshot` and `application` for schema history. The host application composes that fragment with all other selected fragments through the normal DEM pipeline.
+The compiler owns no semantic entities and does not append declarations, create synthetic fragment envelopes, reserve a special namespace, or apply a special composition, mapping, projection, or transfer rule for platform-supplied fragments.
+
+Rejected: compiler injection of package-owned history entities, a metadata schema outside the DEM, and special composition privileges or restrictions for platform fragments.
+
+Reason: the distributed DEM is the single declarative source of truth for the complete target schema. Ordinary fragment provenance makes ownership visible and keeps all target tables subject to the same validation and projection rules.
+
+## AD-011 Separate Logical Meaning From Dialect Realization
 
 Decision: logical type, physical storage, default value, and generation policy are separate contracts.
 Core and provider registries validate identities and parameters; an explicit selected dialect adapter produces physical descriptors and derived capabilities.
@@ -78,7 +87,7 @@ Rejected: expanding a global string enum whose values are invoked as Knex method
 
 Reason: PostgreSQL and extension types require physical parameters and capabilities that are neither one logical type nor uniformly supported by other databases.
 
-## AD-011 Make Indexes And Their Lifecycle First-Class
+## AD-012 Make Indexes And Their Lifecycle First-Class
 
 Decision: an index explicitly models kind, method, ordered attribute/expression keys, operator classes, included columns, predicate, validated options, and build phase.
 Schema and rebuild plans separate table constraints, relations, data, and late indexes.
@@ -87,7 +96,7 @@ Rejected: reducing every index to type plus column names or always building inde
 
 Reason: provider indexes such as HNSW and IVFFlat have distinct compatibility, tuning, and data-loading behavior.
 
-## AD-012 Use Typed Registered Query Expressions
+## AD-013 Use Typed Registered Query Expressions
 
 Decision: Selection v2 uses attribute, bound-value, and registered-call expression nodes.
 Core and dialect operator registries define type signatures, contexts, capabilities, and safe compilation.
@@ -96,7 +105,7 @@ Rejected: raw SQL expression nodes and indefinite growth of one closed compariso
 
 Reason: provider operations such as nearest-neighbour distance must remain schema-checked, capability-aware, and parameter-bound through the common API.
 
-## AD-013 Treat Cycles According To Operation Semantics
+## AD-014 Treat Cycles According To Operation Semantics
 
 Decision: compilation records strongly connected relation components.
 Separated schema phases support relation cycles, while cyclic transfer requires a named adapter-supported strategy and otherwise fails before data access.
@@ -105,7 +114,7 @@ Rejected: log-only cycle detection and globally rejecting every cyclic relation 
 
 Reason: schema construction and data transfer have different enforcement mechanics; one generic order cannot safely represent both.
 
-## AD-014 Keep PostgreSQL And pgvector Behind One Adapter Boundary
+## AD-015 Keep PostgreSQL And pgvector Behind One Adapter Boundary
 
 Decision: PostgreSQL physical types, provider indexes, vector operators, and extension preflight are implemented in a PostgreSQL adapter branch inside `@teqfw/db` while it shares the package release and connection lifecycle.
 The adapter reports missing pgvector capability but does not install it implicitly.
@@ -114,7 +123,7 @@ Rejected: treating `vector` as one additional core enum value or embedding Postg
 
 Reason: storage family, dimension, metric, operator class, method, options, query operators, and runtime extension availability must be validated together.
 
-## AD-015 Use Shared cfg With Host-Owned Named Connections
+## AD-016 Use Shared cfg With Host-Owned Named Connections
 
 Decision: `@teqfw/db` reads default and named connection settings from the single `TEQFW_DB` namespace supplied by
 `@teqfw/cfg`. Common connection fields use scalar parameters. A per-connection `EXTRA` object carries uncommon Knex
@@ -127,7 +136,7 @@ ordinary credentials, production use of test-only Container registration, and un
 Reason: one package-owned cfg namespace keeps ownership explicit, scalar values remain operationally convenient,
 and host-owned DI tokens make every additional connection and its lifecycle visible in composition.
 
-## AD-016 Resolve Identity And Reference Types In The Host Target
+## AD-017 Resolve Identity And Reference Types In The Host Target
 
 Decision: `core.identity` and `core.ref` are special logical DEM types forming an inter-entity addressing protocol. A package uses `core.identity` when an entity attribute is system-addressable and `core.ref` when a local attribute stores the representation of exactly one relation-resolved `core.identity`; neither type chooses a SQL type or dialect mechanism.
 `identityProfile` is the host-owned policy that defines how logical entity identities and their references are represented in one target application model. The current DEM v2 profile structure supplies a concrete type plus generation policy; its default is signed 32-bit `core.integer` plus `generation.kind: "core.identity"` with `byDefault` mode.

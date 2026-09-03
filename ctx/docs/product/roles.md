@@ -13,7 +13,7 @@ It treats model validation errors as blocking and does not bypass the assembled 
 
 ### Package Developer
 
-Is an npm package with a teqfw node in `package.json`. It declares a package-local DEM fragment and its required capabilities and uses the assembled application schema without controlling another package's model nodes or physical storage.
+Is an npm package with a teqfw node in `package.json`. It declares a package-local DEM fragment and its required capabilities and uses the assembled application schema without controlling another package's model nodes or physical storage. `@teqfw/db` is a package developer in this sense too: it supplies `teqfw.db.schema` with `snapshot` and `application`, not a compiler-side exception.
 When its model changes incompatibly, it supplies explicit transformation semantics to the host or future migration capability rather than expecting `@teqfw/db` to infer them.
 
 ### Operator

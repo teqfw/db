@@ -2,19 +2,21 @@
 
 ## Package Role
 
-`@teqfw/db` composes distributed Domain Entity Model (DEM) fragments into one validated target model, projects that model through an explicit relational dialect, and supplies schema, transaction, typed-query, and rebuild primitives.
+`@teqfw/db` composes distributed Data Entity Model (DEM) fragments into one validated target model, projects that model through an explicit relational dialect, and supplies schema, transaction, typed-query, and rebuild primitives.
 
 Knex is the database execution boundary. `@teqfw/di` performs runtime linking, and `@teqfw/cfg` supplies an immutable configuration snapshot. Database client packages remain host-selected runtime dependencies.
 
 ## Model And Provenance
 
-Each application or package owns its DEM fragment. Compilation decodes supported declaration versions, applies the application map, rejects conflicting semantic ownership, preserves trusted source provenance, validates the logical model, analyzes dependency cycles, derives dialect requirements, and produces a deterministic physical plan and fingerprint.
+Each application or package owns its DEM fragment. The host selects the fragments and owns their application map, including physical namespace configuration. Compilation decodes supported declaration versions, applies that map, rejects conflicting semantic ownership, preserves trusted source provenance, validates the logical model, analyzes dependency cycles, derives dialect requirements, and produces a deterministic physical plan and fingerprint. It processes only the selected fragments and map; it does not add semantic entities after composition.
 
 Compilation is all-or-nothing. Do not execute a partial model after diagnostics. Every declaration and application map must explicitly declare `version: 2`; omitted and unsupported versions are rejected.
 
 ## Effective DEM History
 
-Every successful compilation includes package-owned `schema.snapshot` and `schema.application` service entities. `compilation.effective.fingerprint` identifies the canonical dialect-independent effective DEM; `compilation.fingerprint` remains the physical-plan identity and is not interchangeable with it.
+`@teqfw/db` supplies the ordinary `teqfw.db.schema` DEM fragment, which declares the `snapshot` and `application` entities used for schema history. These entities follow the same composition, mapping, projection, provenance, and transfer rules as all other entities. `compilation.effective.fingerprint` identifies the canonical dialect-independent effective DEM; `compilation.fingerprint` remains the physical-plan identity and is not interchangeable with it.
+
+The current worktree still provides these entities through compiler-side injection. This is a delivery gap against the accepted architecture, not a special DEM feature for consumers to reproduce or depend on.
 
 The history service deduplicates immutable snapshots by the effective fingerprint and preserves canonical model provenance with content-derived source revisions. A schema application is append-only: `started` becomes either `applied` or `failed`, and a completed record is never rewritten. Only `applied` establishes the last applied snapshot.
 

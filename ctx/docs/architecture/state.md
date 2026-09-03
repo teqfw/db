@@ -10,7 +10,7 @@
 - Trusted fragment envelopes own source identity for one compilation input.
 - The target RDBMS owns the newly projected structure and transferred rows.
 - Dump JSON owns a portable snapshot only when explicitly exported and durably stored.
-- The package-owned `schema_snapshot` and `schema_application` tables own immutable logical-model evidence and append-only application attempts for the selected database.
+- The `snapshot` and `application` entities declared by the `teqfw.db.schema` fragment project to tables that retain immutable logical-model evidence and append-only application attempts for the selected database.
 
 ## Runtime State
 
@@ -47,6 +47,7 @@ Only the host application or operator accepts the target, performs cutover, or a
 Connection shutdown releases the Knex client.
 Rollback prevents an internally owned failed operation from committing.
 Derived descriptors never supersede the source DEM/map declarations.
+The compiler never supplies a source DEM node; every projected table is derived from a selected fragment and its application map.
 Failed compilation exposes diagnostics but no executable canonical model or physical plan.
 A runtime preflight result applies only to the connection, fingerprint, and operation it checked.
 A source snapshot remains required for recovery from destructive in-place recreation.

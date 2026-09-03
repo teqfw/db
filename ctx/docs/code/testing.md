@@ -28,7 +28,7 @@ Tests use `node:test`. `npm test` runs unit, integration, acceptance, and packag
 ## DEM v2 Compiler Verification
 
 Every declaration and map fixture has `version: 2`. Unit tests reject omitted or unsupported versions before compilation.
-Compiler tests cover deterministic composition and diagnostics, ownership conflicts, deep immutability and result branding, logical types and defaults, identity/reference resolution, mapping provenance, physical-name collisions, graph cycles, index phases, and capability validation.
+Compiler tests cover deterministic composition and diagnostics, ownership conflicts, deep immutability and result branding, logical types and defaults, identity/reference resolution, mapping provenance, physical-name collisions, graph cycles, index phases, and capability validation. They also prove that every entity in the physical target plan has ordinary fragment provenance, including `snapshot` and `application` from `teqfw.db.schema`, with no compiler-side entity injection.
 Fixture assertions use diagnostic codes, canonical paths, and structured details rather than complete English messages.
 
 ## Database And Rebuild Verification

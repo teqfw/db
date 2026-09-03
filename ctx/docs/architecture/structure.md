@@ -22,7 +22,7 @@ Logical validation checks declarations and builds a graph with strongly connecte
 The compilation result is immutable desired-state input to later blocks.
 Compilation does not inspect a live database, infer transitions from an earlier DEM, or select a winner for conflicting owners.
 
-The compiler also contributes the package-owned `schema.snapshot` and `schema.application` entities to every successful target.
+`@teqfw/db` supplies the ordinary `teqfw.db.schema` fragment, which declares the `snapshot` and `application` entities. When selected by the host, the scanner discovers it and composition retains its normal provenance; the compiler does not add it or any other semantic node.
 It preserves the existing physical-plan fingerprint for execution binding and derives a separate logical effective-DEM fingerprint from the canonical model only.
 
 ## Schema Block
@@ -66,7 +66,7 @@ These decisions are injected through explicit contracts; the rebuild block does 
 
 ## Schema History Block
 
-The history service records the logical effective model and provenance as immutable JSON, deduplicated by its logical fingerprint.
+The history service records the logical effective model and provenance through the `snapshot` entity of `teqfw.db.schema`, deduplicated by its logical fingerprint.
 It owns append-only application records and validates a claim of `applied` against the selected connection's projected tables and columns before making that record authoritative.
 It never produces an ALTER plan, transformation, cutover decision, or rollback action from a mismatch.
 
