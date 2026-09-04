@@ -1,7 +1,7 @@
 # Product Overview
 
 - Path: `ctx/docs/product/overview.md`
-- Changed: `20260813`
+- Changed: `20260904`
 
 This document is paired with `overview.skin.ru.md` and preserves its product meaning.
 
@@ -13,8 +13,8 @@ It accepts schema fragments owned by the host application and its installed teq-
 ## Product Mission
 
 Keep declarations local to their owning teq-plugins while allowing a host application to assemble one coherent schema from reusable fragments, including explicit relationships between data owned by different packages.
-The current implementation targets one application database. The product does not close the possibility of several databases in the future; that is an extension rather than a current contract. `@teqfw/db` proves the ownership and compatibility of the selected fragments before making the target model available to the database and access layers.
-When the target model changes, provide a bounded rebuild path that can recreate a schema or database and transfer compatible data without assuming responsibility for full incremental migration.
+An application may use one or more explicitly declared database targets. Each target is a physical database or an independently addressable namespace, has a full or prefix-bounded scope, and is `read` or `write`. `@teqfw/db` proves target compatibility before making the relevant target model available to the database and access layers.
+When a write target model changes, provide a standardized, bounded migration path that invokes application-owned transition semantics, verifies the result, and preserves the boundary against inferred incremental migration.
 
 ## Product Scope
 
@@ -42,10 +42,11 @@ For a rebuild migration, an authorized caller captures or retains source data, c
 ### In Scope
 
 - Distributed, versioned declarations of entities, attributes, relations, package ownership, and application mappings.
-- Compilation of selected fragments into one canonical target model for the host application.
-- Projection of the target model into the one selected database structure supported by the current implementation; additional database targets remain a future extension.
+- Compilation of selected fragments into an effective DEM and the target DEMs assigned to an application's declared database targets.
+- Compatibility verification of every target's actual assigned schema area before application work begins.
+- Projection of a target DEM into its declared physical database or namespace.
 - Data access against the assembled application schema.
-- Full recreation and data-preserving rebuild when source and target can be mapped without inferred semantics.
+- Coordinated execution and verification of application-owned migrations for authorized write targets, including full recreation and data-preserving rebuild when source and target can be mapped without inferred semantics.
 
 ### Out of Scope
 
@@ -55,14 +56,19 @@ For a rebuild migration, an authorized caller captures or retains source data, c
 - Treating an arbitrary database feature as part of the assembled schema without validation and host selection.
 - Discovering arbitrary production drift and automatically generating an incremental `ALTER` plan.
 - Inferring renames, splits, merges, type conversions, or values for newly required fields.
-- Owning application release sequencing, online cutover, migration policy, or rollback policy.
+- Inferring application migration policy, renames, splits, merges, semantic conversions, or values for new required fields.
+- Cross-target DEM relations or cross-target foreign keys.
 
 ## Product Invariants
 
 - Package model fragments remain independently declarable and compose into one canonical model.
 - Every target-schema entity originates in a selected DEM fragment; the compiler never injects semantic nodes after composition.
 - A host application controls which fragments form its target schema and how cross-package dependencies are mapped.
-- The current target is one application database; future support for several databases must keep each physical target explicit rather than creating one implicit shared target.
+- Every application database target is explicit and has one declared scope and access mode; several targets never form one implicit shared target.
+- A full-scope target describes its complete entrusted schema area; a partial-scope target describes every object in its required prefix and no object outside that prefix.
+- `read` verifies but never changes its assigned target area; `write` may change it only through an authorized application-owned migration.
+- Every declared target must be compatible before the application begins normal work.
+- A DEM relation never crosses database targets.
 - The assembled schema makes relations between data owned by different packages explicit.
 - A semantic model node has one package owner; conflicting declarations never select a silent winner.
 - Provenance connects every canonical semantic node and diagnostic to its trusted fragment source.
@@ -70,7 +76,7 @@ For a rebuild migration, an authorized caller captures or retains source data, c
 - Invalid references, attributes, relation cardinality, type compatibility, target uniqueness, indexes, and unsupported capabilities fail before execution.
 - Logical type, physical storage, value default, and value generation remain separate contracts.
 - The canonical DEM describes the target state; it does not encode the history required to infer semantic migrations.
-- A package-owned history records which immutable effective DEM was successfully applied; it is audit evidence, not release sequencing, migration planning, cutover, or rollback policy.
+- A write-target history records which immutable effective DEM was successfully applied; it is audit evidence, not proof of the current catalog and not a source of inferred migration semantics.
 - Destructive replacement of durable state requires application or operator authorization and an explicit preservation decision.
 
 ## Contract Status
@@ -81,6 +87,7 @@ The product behavior above is the accepted direction for the 2.x line.
 ## Documentation Map
 
 - `domain.md` defines the persistence model.
+- `targets.md` defines target scope, access modes, and startup compatibility.
 - `roles.md` defines participants.
 - `use-cases.md` defines supported outcomes.
 - `migration.md` defines the rebuild capability and excluded migration responsibilities.
