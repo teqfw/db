@@ -1,7 +1,7 @@
 # Product Domain Model
 
 - Path: `ctx/docs/product/domain.md`
-- Changed: `20260904`
+- Changed: `20261006`
 
 ## Domain Areas
 
@@ -52,7 +52,7 @@ An append-only schema-application record links the last known applied source sna
 
 - DEM fragment — one package-owned model declaration.
 - Data Entity Model (DEM) — the distributed declarative model of one target application data schema.
-- `teqfw.db.schema` — the DEM fragment supplied by `@teqfw/db`; it declares the `snapshot` and `application` entities used for schema history.
+- `teqfw.db.schema` — the DEM fragment supplied by `@teqfw/db`; it declares `snapshot` and `application` for schema history and `identitycounter` for preallocated identity state.
 - teq-plugin — an npm package with a teqfw node in `package.json` that contributes a DEM fragment.
 - Application schema — the coherent effective schema assembled by a host application from its own and selected teq-plugin fragments.
 - database target — a physical database or independently addressable namespace assigned a target DEM, scope, and access mode by one application.
@@ -92,3 +92,22 @@ The host application owns transition semantics, migration policy, cutover, and f
 - A rebuild never treats a guessed rename or conversion as accepted migration intent.
 - Removing a fragment does not by itself authorize destruction of its durable data.
 - Completed snapshots and schema applications are never rewritten; recovery and retry create another application record.
+
+## Identity Allocation
+
+The host selects one identity representation and allocation policy for its target model.
+`byDefault` lets the database assign an identity during insertion; `allocated` lets the
+caller obtain an identity before insertion inside its existing transaction. Package
+fragments still declare logical identity and reference intent, independently of that
+policy. Preallocation preserves required self-references without nullable root markers.
+
+An allocation belongs to its canonical entity scope and physical target. Concurrent
+successful committed allocations in one scope are distinct; different scopes are
+independent. The package never finalizes the caller's transaction. An uncommitted
+allocation may become reusable after rollback; neither gaplessness nor authorization
+is implied by an identity value.
+
+Durable counter high-water marks are modeled package-owned data and must survive
+transfer even when no live row uses the largest committed reservation. Explicitly
+imported identities may raise a counter but must never lower it. Allocation does not
+change the product's explicit cyclic-transfer or application-migration boundaries.

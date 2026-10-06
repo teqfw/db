@@ -273,11 +273,20 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
                 if (isObject(profile.generation)) {
                     checkObject(profile.generation, ['kind', 'params'], '/identityProfile/generation');
                     if (profile.generation.params !== undefined && !isObject(profile.generation.params)) checkObject(profile.generation.params, [], '/identityProfile/generation/params');
+                    if (profile.generation.params !== undefined && !isObject(profile.generation.params)) checkObject(profile.generation.params, [], '/identityProfile/generation/params');
                 }
             }
             if (!isObject(profile) || !isObject(profile.type) || !isObject(profile.generation)) {
                 const evidence = makeSource('/identityProfile');
                 addDiagnostic({code: 'DEM_DECLARATION_SHAPE_INVALID', details: {field: 'identityProfile', input: 'map'}, message: 'Identity profile requires type and generation objects.', path: '/identityProfile', sources: evidence ? [evidence] : []});
+            }
+            if (isObject(profile) && isObject(profile.type) && isObject(profile.generation)) {
+                const mode = profile.generation.params?.mode === undefined ? 'byDefault' : profile.generation.params.mode;
+                if (profile.type.id !== 'core.integer' || profile.generation.kind !== 'core.identity'
+                    || !['byDefault', 'allocated', 'always'].includes(mode)) {
+                    const evidence = makeSource('/identityProfile/generation');
+                    addDiagnostic({code: 'DEM_GENERATION_INVALID', details: {mode}, message: 'The host identity profile requires integer core.identity generation with a registered mode.', path: '/identityProfile/generation', sources: evidence ? [evidence] : [], stage: 'logical'});
+                }
             }
             const entities = {};
             /**
@@ -296,6 +305,9 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
                 for (const [entityName, entity] of Object.entries(container.entity ?? {})) {
                     const entityPointer = `${pointer}/entity/${escapePointer(entityName)}`;
                     for (const [attrName, attr] of Object.entries(entity.attr ?? {})) {
+                        if (attr.generation?.kind === 'core.identity' && attr.generation.params?.mode === 'allocated') {
+                            addDiagnostic({code: 'DEM_GENERATION_INVALID', details: {attribute: attrName}, message: 'Allocated generation must be selected through the host identityProfile for core.identity.', path: `${entityPointer}/attr/${escapePointer(attrName)}/generation`, sources: provenance[`${entityPointer}/attr/${escapePointer(attrName)}`] ?? [], stage: 'logical'});
+                        }
                         if (attr.type?.id !== 'core.identity') continue;
                         const attrPointer = `${entityPointer}/attr/${escapePointer(attrName)}`;
                         if (!isObject(profile) || !isObject(profile.type) || !isObject(profile.generation)) continue;

@@ -14,7 +14,7 @@ Compilation is all-or-nothing. Do not execute a partial model after diagnostics.
 
 ## Effective DEM History
 
-`@teqfw/db` supplies the ordinary `teqfw.db.schema` DEM fragment, which declares the `snapshot` and `application` entities used for schema history. These entities follow the same composition, mapping, projection, provenance, and transfer rules as all other entities. `compilation.effective.fingerprint` identifies the canonical dialect-independent effective DEM; `compilation.fingerprint` remains the physical-plan identity and is not interchangeable with it.
+`@teqfw/db` supplies the ordinary `teqfw.db.schema` DEM fragment, which declares `snapshot` and `application` for schema history and `identitycounter` for allocation. These entities follow the same composition, mapping, projection, provenance, and transfer rules as all other entities. `compilation.effective.fingerprint` identifies the canonical dialect-independent effective DEM; `compilation.fingerprint` remains the physical-plan identity and is not interchangeable with it.
 
 The package publishes this fragment at `etc/teqfw.schema.json`; the standard loader discovers it from the installed package alongside other selected fragments. Direct compiler callers must include the returned package envelope explicitly, because the compiler processes only the fragments passed to it.
 
@@ -39,3 +39,19 @@ Transformations must be explicit. Evidence reports processed tables, row counts,
 The host project decides product meaning, composition, authorization, lifecycle, and tests. This skill describes the installed package version and does not define TeqFW platform policy.
 
 Canonical `teqfw.fw.di.namespaces` metadata and `TeqFw_Db_` addressing are stable. An individual token is stable consumer API only when package documentation grants that status; resolvability or source-file existence alone is insufficient.
+
+## Identity Generation And Preallocation
+
+The host application map selects one identityProfile. With byDefault, insertion uses
+native database generation; with allocated, the caller obtains an exact positive ID
+in its active transaction and inserts it explicitly. Both modes materialize the same
+logical identity/reference protocol and compiler-derived primary key. Package fragments
+do not choose allocation policy. Preallocation is appropriate for required self-references
+or several records that need an identity before their inserts.
+
+The ordinary package fragment also declares identitycounter; its durable per-entity
+high-water marks are data to preserve, including committed reservations with no live
+row. Allocation never finalizes the caller's transaction. Rollback may permit reuse
+of an uncommitted value; identities are neither gapless nor authorization credentials.
+Allocated columns are ordinary integer/bigint primary keys and have no native sequence
+state. Self-relations remain dependency-graph cycles with explicit transfer strategies.

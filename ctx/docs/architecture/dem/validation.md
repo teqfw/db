@@ -1,7 +1,7 @@
 # DEM Validation And Diagnostics
 
 - Path: `ctx/docs/architecture/dem/validation.md`
-- Changed: `20260813`
+- Changed: `20261006`
 
 ## Enforcement Rule
 
@@ -163,3 +163,23 @@ It does not expose a usable `model` or `physical` property.
 Preflight and operation-plan errors use the same diagnostic shape and preserve the compilation fingerprint.
 
 Warnings never authorize silent fallback.
+
+## Allocation Validation
+
+An unsupported generation mode produces DEM_GENERATION_INVALID. Allocated generation
+on a package's explicitly typed integer attribute is invalid: allocation policy belongs
+to the host identityProfile. Ordinary ownership, provenance, primary-key, relation, and
+cross-package reference checks still apply.
+
+Before allocation or counter reconciliation, the RDB service requires authentic
+compilation and the modeled counter entity with its exact structural contract.
+Allocation also requires a supported matching dialect, successful read-only preflight,
+an active database transaction, and exactly one allocated identity in the canonical
+entity scope. Counter keys must match their stored canonical paths. Counter values
+and maximum persisted identities must be exact integers within the profile range.
+A guarded atomic increment prevents overflow. The current 64-bit value contract is
+bounded by JavaScript safe integers; no driver value is silently rounded.
+
+Rebuild checks allocator model prerequisites before mutation and requires explicit
+allocated IDs during transfer. Allocation does not validate or bypass cyclic transfer
+strategy requirements.

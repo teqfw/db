@@ -7,8 +7,8 @@
 
 /** @implements TeqFw_Db_Back_Api_RDb_History */
 export default class TeqFw_Db_Back_RDb_History {
-    /** @param {object} deps @param {TeqFw_Db_Back_Dem_Compile} deps.compile */
-    constructor({compile}) {
+    /** @param {object} deps @param {TeqFw_Db_Back_Dem_Compile} deps.compile @param {TeqFw_Db_Back_RDb_Identity} deps.identity */
+    constructor({compile, identity}) {
         const snapshotEntity = '/teqfw/db/schema/snapshot';
         const applicationEntity = '/teqfw/db/schema/application';
 
@@ -19,14 +19,14 @@ export default class TeqFw_Db_Back_RDb_History {
             return Object.freeze(value);
         };
 
-        /** @param {any} compilation @param {string} entity @returns {any} */
+        /** @param {TeqFw_Db_DemCompilationResult} compilation @param {string} entity @returns {TeqFw_Db_PhysicalTable} */
         const tableFor = function (compilation, entity) {
             const table = compilation.physical.tables.find((item) => item.entity === entity);
             if (!table) throw new Error(`The package-owned history entity '${entity}' is absent from the compilation.`);
             return table;
         };
 
-        /** @param {object} deps @param {object} deps.connection @param {any} [deps.transaction] @returns {any} */
+        /** @param {object} deps @param {TeqFw_Db_Connection} deps.connection @param {TeqFw_Db_Transaction} [deps.transaction] @returns {TeqFw_Db_KnexQuerySource} */
         const query = function ({connection, transaction}) {
             const knex = transaction?.getKnexTrx?.() ?? connection?.getClient?.();
             if (!knex) throw new TypeError('A database connection or transaction is required.');
@@ -43,13 +43,27 @@ export default class TeqFw_Db_Back_RDb_History {
             }
         };
 
+        /** @param {unknown} value @returns {number} */
+        const identityValue = function (value) {
+            const id = typeof value === 'string' && /^[1-9][0-9]*$/.test(value) ? Number(value) : value;
+            if (typeof id !== 'number' || !Number.isSafeInteger(id) || id <= 0) throw new TypeError('Schema history requires exact positive identity values.');
+            return id;
+        };
+
+        /** @param {unknown} value @returns {string} */
+        const timestamp = function (value) {
+            if (value instanceof Date) return value.toISOString();
+            if (typeof value === 'string') return value;
+            throw new TypeError('Schema history requires a timestamp value.');
+        };
+
         /** @param {any} row @returns {any} */
         const snapshot = function (row) {
             return freeze({
-                createdAt: row.created_at,
+                createdAt: timestamp(row.created_at),
                 dem: decode(row.dem),
                 fingerprint: row.fingerprint,
-                id: row.id,
+                id: identityValue(row.id),
                 provenance: decode(row.provenance),
             });
         };
@@ -57,49 +71,75 @@ export default class TeqFw_Db_Back_RDb_History {
         /** @param {any} row @returns {any} */
         const application = function (row) {
             return freeze({
-                completedAt: row.completed_at,
-                id: row.id,
-                sourceSnapshotId: row.source_snapshot_id,
-                startedAt: row.started_at,
+                completedAt: row.completed_at === null ? null : timestamp(row.completed_at),
+                id: identityValue(row.id),
+                sourceSnapshotId: row.source_snapshot_id === null ? null : identityValue(row.source_snapshot_id),
+                startedAt: timestamp(row.started_at),
                 status: row.status,
-                targetSnapshotId: row.target_snapshot_id,
+                targetSnapshotId: identityValue(row.target_snapshot_id),
             });
+        };
+
+        /**
+         * @param {TeqFw_Db_HistoryWriteInput} input
+         * @param {TeqFw_Db_HistoryWriteAction} action
+         * @returns {Promise<TeqFw_Db_HistoryWriteResult>}
+         */
+        const write = async function (input, action) {
+            const {compilation, connection, transaction, entity} = input;
+            const table = compilation.physical.tables.find((item) => item.entity === entity);
+            const allocated = table?.columns.some((column) => column.generation?.implementation === 'allocated');
+            if (!allocated || transaction) return action(transaction);
+            const owned = await connection.startTransaction();
+            try {
+                const result = await action(owned);
+                await owned.commit();
+                return result;
+            } catch (error) {
+                await owned.rollback();
+                throw error;
+            }
         };
 
         /**
          * Record the immutable effective model for a successful compilation, or return the pre-existing equal snapshot.
          * @param {object} deps
-         * @param {object} deps.compilation
-         * @param {TeqFw_Db_Back_RDb_IConnect} deps.connection
-         * @param {TeqFw_Db_Back_RDb_ITrans} [deps.transaction]
+         * @param {TeqFw_Db_DemCompilationResult} deps.compilation
+         * @param {TeqFw_Db_Connection} deps.connection
+         * @param {TeqFw_Db_Transaction} [deps.transaction]
          * @returns {Promise<any>}
          */
         this.recordSnapshot = async function ({compilation, connection, transaction}) {
             compile.assertResult({value: compilation});
-            const knex = query({connection, transaction});
-            const table = tableFor(compilation, snapshotEntity).name;
-            const effective = compilation.effective;
-            const dem = JSON.stringify(effective.model);
-            const provenance = JSON.stringify(effective.provenance);
-            await knex(table).insert({dem, fingerprint: effective.fingerprint, provenance}).onConflict('fingerprint').ignore();
-            const row = await knex(table).where({fingerprint: effective.fingerprint}).first();
-            if (!row) throw new Error('Effective-DEM snapshot insert did not produce a readable row.');
-            if (row.dem !== dem || row.provenance !== provenance) {
-                const error = new Error('An existing snapshot fingerprint has different immutable content.');
-                error.name = 'DemSnapshotIntegrityError';
-                throw freeze(error);
-            }
-            return snapshot(row);
+            return write({compilation, connection, transaction, entity: snapshotEntity}, async function (transaction) {
+                const knex = query({connection, transaction});
+                const descriptor = tableFor(compilation, snapshotEntity);
+                const table = descriptor.name;
+                const effective = compilation.effective;
+                const dem = JSON.stringify(effective.model);
+                const provenance = JSON.stringify(effective.provenance);
+                const id = descriptor.columns.some((column) => column.generation?.implementation === 'allocated') && transaction
+                    ? await identity.allocate({compilation, transaction, entity: snapshotEntity}) : undefined;
+                await knex(table).insert({...(id === undefined ? {} : {id}), dem, fingerprint: effective.fingerprint, provenance}).onConflict('fingerprint').ignore();
+                const row = await knex(table).where({fingerprint: effective.fingerprint}).first();
+                if (!row) throw new Error('Effective-DEM snapshot insert did not produce a readable row.');
+                if (row.dem !== dem || row.provenance !== provenance) {
+                    const error = new Error('An existing snapshot fingerprint has different immutable content.');
+                    error.name = 'DemSnapshotIntegrityError';
+                    throw freeze(error);
+                }
+                return snapshot(row);
+            });
         };
 
         /**
          * Start a schema application attempt from the known last-applied snapshot to a recorded target snapshot.
          * @param {object} deps
-         * @param {object} deps.compilation
-         * @param {TeqFw_Db_Back_RDb_IConnect} deps.connection
-         * @param {object} deps.sourceSnapshotId
+         * @param {TeqFw_Db_DemCompilationResult} deps.compilation
+         * @param {TeqFw_Db_Connection} deps.connection
+         * @param {TeqFw_Db_NumberNullable} [deps.sourceSnapshotId]
          * @param {number} deps.targetSnapshotId
-         * @param {TeqFw_Db_Back_RDb_ITrans} [deps.transaction]
+         * @param {TeqFw_Db_Transaction} [deps.transaction]
          * @returns {Promise<any>}
          */
         this.startApplication = async function ({compilation, connection, sourceSnapshotId = null, targetSnapshotId, transaction}) {
@@ -110,29 +150,35 @@ export default class TeqFw_Db_Back_RDb_History {
             if (sourceSnapshotId !== null && (!Number.isSafeInteger(sourceSnapshotId) || sourceSnapshotId <= 0)) {
                 throw new TypeError('sourceSnapshotId must be null or a positive integer.');
             }
-            const knex = query({connection, transaction});
-            const snapshots = tableFor(compilation, snapshotEntity).name;
-            const applications = tableFor(compilation, applicationEntity).name;
-            const target = await knex(snapshots).where({id: targetSnapshotId}).first();
-            if (!target) throw new Error(`Target snapshot '${targetSnapshotId}' does not exist.`);
-            if (sourceSnapshotId !== null && !await knex(snapshots).where({id: sourceSnapshotId}).first()) {
-                throw new Error(`Source snapshot '${sourceSnapshotId}' does not exist.`);
-            }
-            const last = await knex(applications).where({status: 'applied'}).orderBy('completed_at', 'desc').orderBy('id', 'desc').first();
-            if ((last?.target_snapshot_id ?? null) !== sourceSnapshotId) {
-                throw new Error('sourceSnapshotId must equal the last successfully applied snapshot, or be null for first-time creation.');
-            }
-            const [id] = await knex(applications).insert({source_snapshot_id: sourceSnapshotId, status: 'started', target_snapshot_id: targetSnapshotId});
-            const row = await knex(applications).where({id: typeof id === 'object' ? id.id : id}).first();
-            if (!row) throw new Error('Schema application insert did not produce a readable row.');
-            return application(row);
+            return write({compilation, connection, transaction, entity: applicationEntity}, async function (transaction) {
+                const knex = query({connection, transaction});
+                const snapshots = tableFor(compilation, snapshotEntity).name;
+                const applications = tableFor(compilation, applicationEntity).name;
+                const target = await knex(snapshots).where({id: targetSnapshotId}).first();
+                if (!target) throw new Error(`Target snapshot '${targetSnapshotId}' does not exist.`);
+                if (sourceSnapshotId !== null && !await knex(snapshots).where({id: sourceSnapshotId}).first()) {
+                    throw new Error(`Source snapshot '${sourceSnapshotId}' does not exist.`);
+                }
+                const last = await knex(applications).where({status: 'applied'}).orderBy('completed_at', 'desc').orderBy('id', 'desc').first();
+                if ((last ? identityValue(last.target_snapshot_id) : null) !== sourceSnapshotId) {
+                    throw new Error('sourceSnapshotId must equal the last successfully applied snapshot, or be null for first-time creation.');
+                }
+                const descriptor = tableFor(compilation, applicationEntity);
+                const allocated = descriptor.columns.some((column) => column.generation?.implementation === 'allocated') && transaction
+                    ? await identity.allocate({compilation, transaction, entity: applicationEntity}) : undefined;
+                const [inserted] = await knex(applications).insert({...(allocated === undefined ? {} : {id: allocated}), source_snapshot_id: sourceSnapshotId, status: 'started', target_snapshot_id: targetSnapshotId}).returning('id');
+                const id = allocated ?? (typeof inserted === 'object' ? inserted.id : inserted);
+                const row = await knex(applications).where({id: id}).first();
+                if (!row) throw new Error('Schema application insert did not produce a readable row.');
+                return application(row);
+            });
         };
 
         /**
          * Compare the declared physical projection with the active connection catalog without inferring a migration.
          * @param {object} deps
-         * @param {object} deps.compilation
-         * @param {TeqFw_Db_Back_RDb_IConnect} deps.connection
+         * @param {TeqFw_Db_DemCompilationResult} deps.compilation
+         * @param {TeqFw_Db_CatalogConnection} deps.connection
          * @returns {Promise<any>}
          */
         this.validateCatalog = async function ({compilation, connection}) {
@@ -165,9 +211,9 @@ export default class TeqFw_Db_Back_RDb_History {
          * Mark a started attempt as applied only after its target fingerprint and physical projection have been verified.
          * @param {object} deps
          * @param {number} deps.applicationId
-         * @param {object} deps.compilation
-         * @param {TeqFw_Db_Back_RDb_IConnect} deps.connection
-         * @param {TeqFw_Db_Back_RDb_ITrans} [deps.transaction]
+         * @param {TeqFw_Db_DemCompilationResult} deps.compilation
+         * @param {TeqFw_Db_Connection} deps.connection
+         * @param {TeqFw_Db_Transaction} [deps.transaction]
          * @returns {Promise<any>}
          */
         this.completeApplication = async function ({applicationId, compilation, connection, transaction}) {
@@ -182,14 +228,20 @@ export default class TeqFw_Db_Back_RDb_History {
             if (!target || target.fingerprint !== compilation.effective.fingerprint) {
                 throw new Error('The claimed applied compilation does not match the application target snapshot.');
             }
-            const catalog = await this.validateCatalog({compilation, connection});
+            const catalogConnection = transaction ? {
+                getClient: () => transaction.getKnexTrx(),
+                getSchemaBuilder: () => transaction.getKnexTrx().schema,
+            } : connection;
+            const catalog = await this.validateCatalog({compilation, connection: catalogConnection});
             if (!catalog.matches) {
                 const error = new Error('The claimed applied snapshot does not match the active database catalog.');
                 error.name = 'DemCatalogMismatchError';
                 Object.defineProperty(error, 'diagnostics', {enumerable: true, value: catalog.diagnostics});
                 throw freeze(error);
             }
-            await knex(applications).where({id: applicationId, status: 'started'}).update({completed_at: new Date().toISOString(), status: 'applied'});
+            const completedColumn = tableFor(compilation, applicationEntity).columns.find((column) => column.name === 'completed_at');
+            const completedAt = connection.getDialectAdapter().encodeValue({column: completedColumn, value: new Date()});
+            await knex(applications).where({id: applicationId, status: 'started'}).update({completed_at: completedAt, status: 'applied'});
             return application(await knex(applications).where({id: applicationId}).first());
         };
 
@@ -197,9 +249,9 @@ export default class TeqFw_Db_Back_RDb_History {
          * Mark a started application attempt as failed. Completed history is never rewritten.
          * @param {object} deps
          * @param {number} deps.applicationId
-         * @param {object} deps.compilation
-         * @param {TeqFw_Db_Back_RDb_IConnect} deps.connection
-         * @param {TeqFw_Db_Back_RDb_ITrans} [deps.transaction]
+         * @param {TeqFw_Db_DemCompilationResult} deps.compilation
+         * @param {TeqFw_Db_Connection} deps.connection
+         * @param {TeqFw_Db_Transaction} [deps.transaction]
          * @returns {Promise<any>}
          */
         this.failApplication = async function ({applicationId, compilation, connection, transaction}) {
@@ -209,16 +261,18 @@ export default class TeqFw_Db_Back_RDb_History {
             const row = await knex(applications).where({id: applicationId}).first();
             if (!row) throw new Error(`Schema application '${applicationId}' does not exist.`);
             if (row.status !== 'started') throw new Error('Only a started schema application may be failed.');
-            await knex(applications).where({id: applicationId, status: 'started'}).update({completed_at: new Date().toISOString(), status: 'failed'});
+            const completedColumn = tableFor(compilation, applicationEntity).columns.find((column) => column.name === 'completed_at');
+            const completedAt = connection.getDialectAdapter().encodeValue({column: completedColumn, value: new Date()});
+            await knex(applications).where({id: applicationId, status: 'started'}).update({completed_at: completedAt, status: 'failed'});
             return application(await knex(applications).where({id: applicationId}).first());
         };
 
         /**
          * Resolve the last successfully applied snapshot and its immutable application record.
          * @param {object} deps
-         * @param {object} deps.compilation
-         * @param {TeqFw_Db_Back_RDb_IConnect} deps.connection
-         * @param {TeqFw_Db_Back_RDb_ITrans} [deps.transaction]
+         * @param {TeqFw_Db_DemCompilationResult} deps.compilation
+         * @param {TeqFw_Db_Connection} deps.connection
+         * @param {TeqFw_Db_Transaction} [deps.transaction]
          * @returns {Promise<any>}
          */
         this.resolveLastApplied = async function ({compilation, connection, transaction}) {
@@ -236,5 +290,5 @@ export default class TeqFw_Db_Back_RDb_History {
 }
 
 export const __deps__ = Object.freeze({
-    default: Object.freeze({compile: 'TeqFw_Db_Back_Dem_Compile$'}),
+    default: Object.freeze({compile: 'TeqFw_Db_Back_Dem_Compile$', identity: 'TeqFw_Db_Back_RDb_Identity$'}),
 });

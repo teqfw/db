@@ -17,7 +17,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Builder_Execute {
          * @param {TeqFw_Db_Back_Api_RDb_Dialect} deps.adapter
          * @param {TeqFw_Db_Back_RDb_IConnect} deps.connection
          * @param {object} deps.plan
-         * @param {object} deps.data
+         * @param {TeqFw_Db_SchemaDataTransfer} [deps.data]
          * @returns {Promise<any>}
          */
         this.exec = async function ({adapter, connection, plan, data}) {

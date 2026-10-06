@@ -95,7 +95,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Sqlite {
             generations: {
                 'core.identity': {
                     implementation: 'identity',
-                    modes: ['byDefault'],
+                    modes: ['byDefault', 'allocated'],
                     bits: [32, 64],
                     requirements: [capability],
                     types: ['core.integer'],
@@ -106,6 +106,19 @@ export default class TeqFw_Db_Back_RDb_Dialect_Sqlite {
             types,
         });
         Object.assign(this, adapter);
+        const baseAddColumn = adapter.addColumn;
+        /** @param {TeqFw_Db_SqliteAllocatedColumnInput} args @returns {unknown} */
+        this.addColumn = function (args) {
+            if (args.column.generation?.implementation === 'identity' && args.column.physicalType.type === 'bigint') {
+                // Both SQLite increment forms use a 64-bit ROWID; Knex only detects increments when suppressing a second primary key.
+                return baseAddColumn({...args, column: {...args.column, physicalType: {...args.column.physicalType, type: 'integer'}}});
+            }
+            if (args.column.generation?.implementation !== 'allocated' || args.column.physicalType.type !== 'integer') return baseAddColumn(args);
+            // SQLite INTEGER PRIMARY KEY aliases ROWID and would generate an omitted ID.
+            const builder = args.tableBuilder.specificType(args.column.name, 'int').notNullable();
+            if (args.column.comment) builder.comment(args.column.comment);
+            return builder;
+        };
         Object.freeze(this);
     }
 }

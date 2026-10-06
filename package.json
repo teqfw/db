@@ -22,11 +22,12 @@
     "test:package": "find test/package -name '*.test.mjs' -print0 | xargs -0 node --test",
     "typecheck": "tsc -p jsconfig.json",
     "lint:md": "markdownlint-cli2 \"skills/**/*.md\" \"*.md\"",
-    "test:optin": "npm run test:optin:preflight && npm run test:optin:postgresql && npm run test:optin:mariadb",
+    "test:optin": "npm run test:optin:preflight && npm run test:optin:postgresql && npm run test:optin:mariadb && npm run test:optin:identity",
     "test:optin:preflight": "node --test test/optin/Preflight.test.mjs",
     "test:optin:postgresql": "node --test test/optin/Postgresql.test.mjs",
     "test:optin:mariadb": "node --test test/optin/Mysql.test.mjs",
-    "test:manual": "find test/manual -name '*.test.mjs' -print0 | xargs -r -0 node --test"
+    "test:manual": "find test/manual -name '*.test.mjs' -print0 | xargs -r -0 node --test",
+    "test:optin:identity": "node --test test/optin/Identity.test.mjs"
   },
   "repository": {
     "type": "git",

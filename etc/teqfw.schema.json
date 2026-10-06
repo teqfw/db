@@ -129,6 +129,44 @@
               }
             }
           }
+        },
+        "identitycounter": {
+          "attr": {
+            "scope": {
+              "type": {
+                "id": "core.string",
+                "params": {
+                  "length": 64
+                }
+              }
+            },
+            "entity_path": {
+              "type": {
+                "id": "core.text"
+              }
+            },
+            "value": {
+              "type": {
+                "id": "core.integer",
+                "params": {
+                  "bits": 64,
+                  "unsigned": false
+                }
+              }
+            }
+          },
+          "index": {
+            "pk": {
+              "kind": "primary",
+              "keys": [
+                {
+                  "attr": "scope"
+                }
+              ],
+              "phase": "table"
+            }
+          },
+          "relation": {}
         }
   }
 }

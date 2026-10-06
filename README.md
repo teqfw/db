@@ -101,3 +101,23 @@ Each TeqFW package is both a practical software component and a working demonstr
 ## License
 
 [Apache-2.0](LICENSE)
+
+## Preallocated identities
+
+Select `identityProfile.generation.params.mode: "allocated"` in the host application
+map to obtain an identity before insertion. Package fragments still declare
+`core.identity` and `core.ref`; a root row can keep `parent_ref NOT NULL` by inserting
+`{id, parent_ref: id}` in the same transaction after allocation.
+
+The documented `TeqFw_Db_Back_RDb_Identity$` token exposes
+`allocate({compilation, transaction, entity})` and
+`synchronize({compilation, transaction})`. Supply an authentic successful compilation,
+a canonical entity path, and an active caller-owned transaction. The allocator never
+commits or rolls back it. The omitted profile still uses signed 32-bit `byDefault`.
+
+Include the ordinary package-owned fragment, now declaring `identitycounter` alongside
+schema history. Existing databases need an explicit authorized schema update; mode
+selection never creates a hidden table. Preserve counter high-water marks during
+export/rebuild and reconcile explicit imported IDs. Allocated columns have no native
+sequence to restore and do not change cyclic-transfer rules. See the packaged
+[transaction example](skills/teqfw-db/references/usage.md#preallocated-identities).

@@ -1,7 +1,7 @@
 # DEM And Map Declarations
 
 - Path: `ctx/docs/architecture/dem/declaration.md`
-- Changed: `20260903`
+- Changed: `20261006`
 
 ## Version Rule
 
@@ -137,7 +137,7 @@ An attribute supports:
 - `storage` — optional map from dialect identity to physical storage binding;
 - `nullable` — boolean, default `false`;
 - `default` — optional value used when an insert omits the attribute;
-- `generation` — optional database-side value-generation policy.
+- `generation` — optional value-generation policy; allocated identity timing is selected by the host profile.
 
 `default` and `generation` are mutually exclusive in the core contract.
 An adapter extension may support a combined behavior only through a new namespaced generation kind and an explicit validation rule.
@@ -224,7 +224,7 @@ Unknown functions and type-incompatible literal values are errors.
 ```
 
 `generation.kind: "core.identity"` is valid only for an integer logical type.
-`mode` is `byDefault` or `always`.
+`mode` is `byDefault`, `always`, or host-selected `allocated`; adapters reject any mode they do not implement.
 Additional generators use namespaced registry identities and declare their capability requirements.
 
 `core.identity` and `core.ref` are logical types whose representation is intentionally unresolved in reusable package declarations. They are not database-specific generation mechanisms.
@@ -241,7 +241,7 @@ Conceptually, `core.ref` is the counterpart of `core.identity`:
 core.identity <--- core.ref
 ```
 
-The current materialization of `core.identity` creates the entity's one generated single-column primary key. This normative constraint is a consequence of the current type-resolution contract, not the definition of system identity.
+The current materialization of `core.identity` creates the entity's one single-column primary key with profile-selected generation timing. This normative constraint is a consequence of the current type-resolution contract, not the definition of system identity.
 `core.ref` does not itself name a target or declare a foreign key. The relation remains the sole target authority; where the target is external, the application map resolves its path and attribute mapping without changing ownership. A `core.ref` target must be `core.identity`, never an arbitrary PRIMARY, UNIQUE, natural, or other non-identity attribute.
 
 The compiler rejects an identity profile that cannot produce a valid logical type and generation pair, a `core.ref` attribute without exactly one resolvable `core.identity` target, or a cycle of unresolved reference types.
@@ -397,3 +397,31 @@ It does not authorize deletion, identify a rename, or add migration history to t
 Changing either declaration format changes desired state only.
 Deletion plus addition is not a rename, a changed type is not a conversion, and a new non-nullable attribute does not define a value for existing rows.
 Those transition meanings remain explicit inputs to rebuild or host/future migration orchestration; the packaging boundary is undecided.
+
+## Allocated Identity Profile
+
+The application map may select this target-wide policy:
+
+```json
+{
+  "version": 2,
+  "identityProfile": {
+    "type": {"id": "core.integer", "params": {"bits": 64, "unsigned": false}},
+    "generation": {"kind": "core.identity", "params": {"mode": "allocated"}}
+  }
+}
+```
+
+The existing omitted-profile default remains signed 32-bit integer with byDefault.
+Allocated is selected through this host profile for logical core.identity attributes;
+per-entity allocation overrides on explicitly typed integer attributes are rejected.
+The existing adapters support allocated 32-bit and 64-bit integer profiles with their
+existing signedness constraints. References retain the identity's concrete logical
+representation and receive no generation descriptor.
+
+Physical allocated columns have implementation allocated, an ordinary integer/bigint
+primary key, and no native generation. SQLite's 32-bit projection uses INT rather than
+INTEGER to avoid implicit ROWID assignment. An omitted allocated ID is an error.
+The ordinary package fragment additionally declares identitycounter with scope string
+length 64 as its primary key, entity_path text, and signed 64-bit integer value; this
+counter has no core.identity and cannot recursively require allocation.

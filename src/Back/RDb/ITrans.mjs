@@ -20,9 +20,9 @@ export default class TeqFw_Db_Back_RDb_ITrans {
 
     /**
      * Return knex based query builder.
-     * @returns {any}
+     * @returns {TeqFw_Db_KnexQuery}
      */
-    createQuery() {}
+    createQuery() { throw new Error('Transaction interface method.'); }
 
     /**
      * @returns {Promise<void>}
@@ -34,41 +34,42 @@ export default class TeqFw_Db_Back_RDb_ITrans {
      * @param {any} meta
      * @returns {string}
      */
-    getTableName(meta) {}
+    getTableName(meta) { throw new Error('Transaction interface method.'); }
 
     /**
      * 'true' if type of connected RDBMS is MariaDB or MySQL.
      * @returns {boolean}
      */
-    isMariaDB() {}
+    isMariaDB() { throw new Error('Transaction interface method.'); }
 
     /**
      * 'true' if type of connected RDBMS is PostgreSQL
      * @returns {boolean}
      */
-    isPostgres() {}
+    isPostgres() { throw new Error('Transaction interface method.'); }
 
     /**
      * 'true' if type of connected RDBMS is SQLite
      * @returns {boolean}
      */
-    isSqlite() {}
+    isSqlite() { throw new Error('Transaction interface method.'); }
 
     /**
      * Return row expression for input data.
      * @param {string} exp
-     * @param {any} params
+     * @param {TeqFw_Db_QueryBindings} [params]
+     * @returns {TeqFw_Db_KnexRaw}
      */
-    raw(exp, params) {}
+    raw(exp, params) { throw new Error('Transaction interface method.'); }
 
     /**
      * @returns {Promise<void>}
      */
     async rollback() {}
 
-    /** @returns {TeqFw_Db_Back_Api_RDb_Dialect} */
-    getDialectAdapter() {}
+    /** @returns {TeqFw_Db_DialectAdapter} */
+    getDialectAdapter() { throw new Error('Transaction interface method.'); }
 
-    /** @returns {any} */
-    getKnexTrx() {}
+    /** @returns {TeqFw_Db_KnexTransaction} */
+    getKnexTrx() { throw new Error('Transaction interface method.'); }
 }

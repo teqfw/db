@@ -20,19 +20,24 @@ export default class TeqFw_Db_Back_RDb_IConnect {
 
     /**
      * Access the underlying database client for dialect-specific execution.
+     * @returns {TeqFw_Db_KnexQuerySource}
      */
-    getClient() {}
+    getClient() { throw new Error('Connection interface method.'); }
 
     /**
      * Initialize the component.
+     * @returns {TeqFw_Db_KnexSchema}
      */
-    getSchemaBuilder() {}
+    getSchemaBuilder() { throw new Error('Connection interface method.'); }
 
     /**
      * Create new transaction to manipulate data in DB.
-     * @param {any} opts
+     * @param {TeqFw_Db_TransactionOptions} [opts]
      * @returns {Promise<TeqFw_Db_Back_RDb_ITrans>}
      */
-    async startTransaction(opts) {}
+    async startTransaction(opts) { throw new Error('Connection interface method.'); }
+
+    /** @returns {TeqFw_Db_DialectAdapter} */
+    getDialectAdapter() { throw new Error('Connection interface method.'); }
 
 }

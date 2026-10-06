@@ -1,4 +1,5 @@
 import type {
+    DbIdentity,
     DbConfig,
     DbConnection,
     DbDialectAdapter,
@@ -25,3 +26,8 @@ const ambientSelection: TeqFw_Db_Shared_Dto_Query_Selection = selection;
 
 void [config, adapter, diagnostic, evidence];
 void [ambientConnection, ambientTransaction, ambientCompilerResult, ambientSelection];
+
+declare const identity: DbIdentity;
+const allocation: Promise<number> = identity.allocate({compilation, transaction, entity: '/sample/people/person'});
+const sync = identity.synchronize({compilation, transaction});
+void [allocation, sync];

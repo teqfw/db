@@ -9,11 +9,12 @@ export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_Dem_Compile} deps.compile
+     * @param {TeqFw_Db_Back_RDb_Identity} deps.identity
      * @param {TeqFw_Db_Back_Dem_Registry_CoreValue} deps.coreValue
      * @param {TeqFw_Db_Back_RDb_Schema_A_Builder} deps.builder
      * @param {TeqFw_Db_Back_RDb_Schema_A_Plan} deps.planner
      */
-    constructor({compile, coreValue, builder, planner}) {
+    constructor({compile, coreValue, builder, planner, identity}) {
         /** @param {any} value @param {any} seen @returns {any} */
         const freeze = function (value, seen = new WeakSet()) {
             if (!value || typeof value !== 'object' || Object.isFrozen(value) || ArrayBuffer.isView(value)) return value;
@@ -75,8 +76,8 @@ export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
          * @param {object} deps.snapshot
          * @param {boolean} deps.authorizeDiscard
          * @param {object} deps.transformations
-         * @param {object} deps.sourceTransaction
-         * @param {object} deps.targetTransaction
+         * @param {TeqFw_Db_Transaction} [deps.sourceTransaction]
+         * @param {TeqFw_Db_Transaction} [deps.targetTransaction]
          * @param {object} deps.cycleStrategy
          * @returns {Promise<any>}
          */
@@ -95,7 +96,8 @@ export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
             targetTransaction,
             cycleStrategy,
         }) {
-            compile.assertResult({value: compilation});
+            /** @type {TeqFw_Db_DemCompilationResult} */
+            const checkedCompilation = compile.assertResult({value: compilation});
             compile.assertResult({value: sourceCompilation});
             if (!['inPlace', 'parallel'].includes(mode)) throw new TypeError(`Unsupported rebuild mode '${mode}'.`);
             if (!source || !target) throw new TypeError('Explicit source and target connections are required.');
@@ -150,6 +152,7 @@ export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
                 if (transactionAdapter.id !== targetDescription.id) throw new TypeError('Target transaction adapter identity does not match the target.');
             }
 
+            identity.assertCompilation({compilation: checkedCompilation});
             const targetEntities = compilation.graph.topological;
             const sourceEntities = new Set(sourceCompilation.graph.entities);
             const missingSource = targetEntities.filter((entity) => !sourceEntities.has(entity));
@@ -186,7 +189,8 @@ export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
                 dataComplete: false,
                 failures: [],
                 fingerprint: compilation.fingerprint,
-                generatedState: [],
+                generatedState: /** @type {TeqFw_Db_GeneratedStateEvidenceArray} */ ([]),
+                identityCounters: /** @type {TeqFw_Db_IdentityCounterEvidenceArray} */ ([]),
                 mode,
                 mutationStarted: false,
                 phases: [],
@@ -194,7 +198,7 @@ export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
                 preflight: {},
                 source: {adapter: sourceDescription.id, fingerprint: sourceCompilation.fingerprint, id: sourceId},
                 status: 'running',
-                strategy: null,
+                strategy: /** @type {TeqFw_Db_TransferStrategyEvidence} */ (null),
                 tables: [],
                 target: {adapter: targetDescription.id, fingerprint: compilation.fingerprint, id: targetId},
                 transaction: {owned: !targetTransaction, outcome: 'notStarted'},
@@ -300,7 +304,7 @@ export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
                             for (const column of targetTable.columns) {
                                 const value = transformed[column.name];
                                 if (value === undefined) {
-                                    if (!column.nullable && column.defaultValue === undefined && column.generation === undefined) {
+                                    if (!column.nullable && column.defaultValue === undefined && (column.generation === undefined || column.generation.implementation === 'allocated')) {
                                         throw new TypeError(`Required target value '${entity}/${column.name}' is absent.`);
                                     }
                                 } else if (value === null) {
@@ -335,6 +339,7 @@ export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
                     evidence.generatedState = await targetAdapter.restoreGeneratedState({
                         compilation, tables: Object.values(targetByEntity), transaction,
                     });
+                    evidence.identityCounters = await identity.synchronize({compilation: checkedCompilation, transaction});
                     evidence.dataComplete = true;
                     return {tables: evidence.tables};
                 };
@@ -392,6 +397,7 @@ export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
 export const __deps__ = Object.freeze({
     default: Object.freeze({
         compile: 'TeqFw_Db_Back_Dem_Compile$',
+        identity: 'TeqFw_Db_Back_RDb_Identity$',
         coreValue: 'TeqFw_Db_Back_Dem_Registry_CoreValue$',
         builder: 'TeqFw_Db_Back_RDb_Schema_A_Builder$',
         planner: 'TeqFw_Db_Back_RDb_Schema_A_Plan$',

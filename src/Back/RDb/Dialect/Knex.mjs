@@ -115,7 +115,8 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex {
                     };
                 }
                 return {
-                    descriptor: {implementation: entry.implementation, kind: generation.kind, params: structuredClone(generation.params)},
+                    descriptor: {implementation: generation.kind === 'core.identity' && generation.params?.mode === 'allocated'
+                        ? 'allocated' : entry.implementation, kind: generation.kind, params: structuredClone(generation.params)},
                     diagnostics: [],
                     requirements: [...new Set(entry.requirements ?? [])].sort(),
                 };

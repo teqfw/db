@@ -278,7 +278,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Validate {
                     if (entry) Object.assign(params, entry.params.defaults ?? {}, value.params ?? {});
                     const valid = Boolean(entry) && entry.types.includes(attr.type?.id)
                         && Object.keys(params).every((key) => entry.params.allowed.includes(key))
-                        && params.mode !== undefined && ['always', 'byDefault'].includes(params.mode);
+                        && params.mode !== undefined && ['always', 'byDefault', 'allocated'].includes(params.mode);
                     if (!valid) {
                         addDiagnostic({
                             code: 'DEM_GENERATION_INVALID',
