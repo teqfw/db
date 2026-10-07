@@ -7,8 +7,8 @@
 
 /** @implements TeqFw_Db_Back_Api_RDb_History */
 export default class TeqFw_Db_Back_RDb_History {
-    /** @param {object} deps @param {TeqFw_Db_Back_Dem_Compile} deps.compile @param {TeqFw_Db_Back_RDb_Identity} deps.identity */
-    constructor({compile, identity}) {
+    /** @param {object} deps @param {TeqFw_Db_Back_Dem_Compile} deps.compile */
+    constructor({compile}) {
         const snapshotEntity = '/teqfw/db/schema/snapshot';
         const applicationEntity = '/teqfw/db/schema/application';
 
@@ -81,27 +81,6 @@ export default class TeqFw_Db_Back_RDb_History {
         };
 
         /**
-         * @param {TeqFw_Db_HistoryWriteInput} input
-         * @param {TeqFw_Db_HistoryWriteAction} action
-         * @returns {Promise<TeqFw_Db_HistoryWriteResult>}
-         */
-        const write = async function (input, action) {
-            const {compilation, connection, transaction, entity} = input;
-            const table = compilation.physical.tables.find((item) => item.entity === entity);
-            const allocated = table?.columns.some((column) => column.generation?.implementation === 'allocated');
-            if (!allocated || transaction) return action(transaction);
-            const owned = await connection.startTransaction();
-            try {
-                const result = await action(owned);
-                await owned.commit();
-                return result;
-            } catch (error) {
-                await owned.rollback();
-                throw error;
-            }
-        };
-
-        /**
          * Record the immutable effective model for a successful compilation, or return the pre-existing equal snapshot.
          * @param {object} deps
          * @param {TeqFw_Db_DemCompilationResult} deps.compilation
@@ -111,25 +90,21 @@ export default class TeqFw_Db_Back_RDb_History {
          */
         this.recordSnapshot = async function ({compilation, connection, transaction}) {
             compile.assertResult({value: compilation});
-            return write({compilation, connection, transaction, entity: snapshotEntity}, async function (transaction) {
-                const knex = query({connection, transaction});
-                const descriptor = tableFor(compilation, snapshotEntity);
-                const table = descriptor.name;
-                const effective = compilation.effective;
-                const dem = JSON.stringify(effective.model);
-                const provenance = JSON.stringify(effective.provenance);
-                const id = descriptor.columns.some((column) => column.generation?.implementation === 'allocated') && transaction
-                    ? await identity.allocate({compilation, transaction, entity: snapshotEntity}) : undefined;
-                await knex(table).insert({...(id === undefined ? {} : {id}), dem, fingerprint: effective.fingerprint, provenance}).onConflict('fingerprint').ignore();
-                const row = await knex(table).where({fingerprint: effective.fingerprint}).first();
-                if (!row) throw new Error('Effective-DEM snapshot insert did not produce a readable row.');
-                if (row.dem !== dem || row.provenance !== provenance) {
-                    const error = new Error('An existing snapshot fingerprint has different immutable content.');
-                    error.name = 'DemSnapshotIntegrityError';
-                    throw freeze(error);
-                }
-                return snapshot(row);
-            });
+            const knex = query({connection, transaction});
+            const descriptor = tableFor(compilation, snapshotEntity);
+            const table = descriptor.name;
+            const effective = compilation.effective;
+            const dem = JSON.stringify(effective.model);
+            const provenance = JSON.stringify(effective.provenance);
+            await knex(table).insert({dem, fingerprint: effective.fingerprint, provenance}).onConflict('fingerprint').ignore();
+            const row = await knex(table).where({fingerprint: effective.fingerprint}).first();
+            if (!row) throw new Error('Effective-DEM snapshot insert did not produce a readable row.');
+            if (row.dem !== dem || row.provenance !== provenance) {
+                const error = new Error('An existing snapshot fingerprint has different immutable content.');
+                error.name = 'DemSnapshotIntegrityError';
+                throw freeze(error);
+            }
+            return snapshot(row);
         };
 
         /**
@@ -150,28 +125,23 @@ export default class TeqFw_Db_Back_RDb_History {
             if (sourceSnapshotId !== null && (!Number.isSafeInteger(sourceSnapshotId) || sourceSnapshotId <= 0)) {
                 throw new TypeError('sourceSnapshotId must be null or a positive integer.');
             }
-            return write({compilation, connection, transaction, entity: applicationEntity}, async function (transaction) {
-                const knex = query({connection, transaction});
-                const snapshots = tableFor(compilation, snapshotEntity).name;
-                const applications = tableFor(compilation, applicationEntity).name;
-                const target = await knex(snapshots).where({id: targetSnapshotId}).first();
-                if (!target) throw new Error(`Target snapshot '${targetSnapshotId}' does not exist.`);
-                if (sourceSnapshotId !== null && !await knex(snapshots).where({id: sourceSnapshotId}).first()) {
-                    throw new Error(`Source snapshot '${sourceSnapshotId}' does not exist.`);
-                }
-                const last = await knex(applications).where({status: 'applied'}).orderBy('completed_at', 'desc').orderBy('id', 'desc').first();
-                if ((last ? identityValue(last.target_snapshot_id) : null) !== sourceSnapshotId) {
-                    throw new Error('sourceSnapshotId must equal the last successfully applied snapshot, or be null for first-time creation.');
-                }
-                const descriptor = tableFor(compilation, applicationEntity);
-                const allocated = descriptor.columns.some((column) => column.generation?.implementation === 'allocated') && transaction
-                    ? await identity.allocate({compilation, transaction, entity: applicationEntity}) : undefined;
-                const [inserted] = await knex(applications).insert({...(allocated === undefined ? {} : {id: allocated}), source_snapshot_id: sourceSnapshotId, status: 'started', target_snapshot_id: targetSnapshotId}).returning('id');
-                const id = allocated ?? (typeof inserted === 'object' ? inserted.id : inserted);
-                const row = await knex(applications).where({id: id}).first();
-                if (!row) throw new Error('Schema application insert did not produce a readable row.');
-                return application(row);
-            });
+            const knex = query({connection, transaction});
+            const snapshots = tableFor(compilation, snapshotEntity).name;
+            const applications = tableFor(compilation, applicationEntity).name;
+            const target = await knex(snapshots).where({id: targetSnapshotId}).first();
+            if (!target) throw new Error(`Target snapshot '${targetSnapshotId}' does not exist.`);
+            if (sourceSnapshotId !== null && !await knex(snapshots).where({id: sourceSnapshotId}).first()) {
+                throw new Error(`Source snapshot '${sourceSnapshotId}' does not exist.`);
+            }
+            const last = await knex(applications).where({status: 'applied'}).orderBy('completed_at', 'desc').orderBy('id', 'desc').first();
+            if ((last ? identityValue(last.target_snapshot_id) : null) !== sourceSnapshotId) {
+                throw new Error('sourceSnapshotId must equal the last successfully applied snapshot, or be null for first-time creation.');
+            }
+            const [inserted] = await knex(applications).insert({source_snapshot_id: sourceSnapshotId, status: 'started', target_snapshot_id: targetSnapshotId}).returning('id');
+            const id = typeof inserted === 'object' ? inserted.id : inserted;
+            const row = await knex(applications).where({id: id}).first();
+            if (!row) throw new Error('Schema application insert did not produce a readable row.');
+            return application(row);
         };
 
         /**
@@ -290,5 +260,5 @@ export default class TeqFw_Db_Back_RDb_History {
 }
 
 export const __deps__ = Object.freeze({
-    default: Object.freeze({compile: 'TeqFw_Db_Back_Dem_Compile$', identity: 'TeqFw_Db_Back_RDb_Identity$'}),
+    default: Object.freeze({compile: 'TeqFw_Db_Back_Dem_Compile$'}),
 });

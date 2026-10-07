@@ -17,7 +17,6 @@ The namespace metadata maps `TeqFw_Db_` to `./src` with `.mjs`. This addressing 
 | `TeqFw_Db_Back_RDb_Connect$$` | Create an independent transient connection | Documented named-connection composition token |
 | `TeqFw_Db_Back_Dem_Compile$` | Compile trusted DEM envelopes with one adapter | Current implementation token; not automatically a stable public API |
 | `TeqFw_Db_Back_RDb_Rebuild$` | Execute bounded evidence-producing rebuild | Current implementation token; not yet a documented stable public token |
-| `TeqFw_Db_Back_RDb_Identity$` | Allocate explicit identities and reconcile imported counters | Documented consumer allocation token |
 | `TeqFw_Db_Back_RDb_History$` | Record and verify effective-DEM history | Documented schema-history token |
 
 The suffix `$` requests the normal DI lifecycle; `$$` requests a transient instance. Configure `@teqfw/di` namespace roots before the first resolution.
@@ -73,23 +72,3 @@ Schema history uses the documented `TeqFw_Db_Back_RDb_History$` token. Its princ
 ## Verification Rule
 
 Before editing consumer code, verify exact metadata, token dependencies, callable shapes, and behavior in the installed package. Do not infer public support from a deep path, test fixture, or class name alone.
-
-## Identity Allocation API
-
-TeqFw_Db_Back_RDb_Identity$ is an intentionally documented consumer token. Its named
-structural contracts are DbIdentity, DbIdentityInput, DbIdentitySyncInput, and
-DbIdentityCounterEvidence.
-
-- allocate({compilation, transaction, entity}) returns Promise<number> for one canonical
-  entity's allocated identity. All three arguments are required.
-- synchronize({compilation, transaction}) returns frozen per-entity counter evidence
-  after reconciling imported explicit identities. Both arguments are required.
-
-Compilation must be authentic and successful. An allocated target must include the
-ordinary identitycounter entity from the published package fragment; no hidden compiler
-injection or runtime table creation occurs. The active caller-owned transaction must
-match the compiled supported dialect. Neither call finalizes or retries that transaction.
-
-assertCompilation is an internal executor preflight helper on the current implementation;
-it is not an additional stable consumer operation. Other compiler/rebuild implementation
-tokens retain their existing exposure status.

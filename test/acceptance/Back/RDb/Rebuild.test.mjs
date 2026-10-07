@@ -104,8 +104,8 @@ describe('TeqFw_Db_Back_RDb_Rebuild', () => {
 
         assert.equal(evidence.status, 'complete');
         assert.equal(evidence.accepted, false);
-        assert.deepEqual(evidence.tables.map((item) => item.entity), ['/parent', '/teqfw/db/schema/identitycounter', '/teqfw/db/schema/snapshot', '/child', '/teqfw/db/schema/application']);
-        assert.deepEqual(evidence.tables.map((item) => [item.sourceRows, item.targetRows]), [[2, 2], [0, 0], [0, 0], [2, 2], [0, 0]]);
+        assert.deepEqual(evidence.tables.map((item) => item.entity), ['/parent', '/teqfw/db/schema/snapshot', '/child', '/teqfw/db/schema/application']);
+        assert.deepEqual(evidence.tables.map((item) => [item.sourceRows, item.targetRows]), [[2, 2], [0, 0], [2, 2], [0, 0]]);
         assert.deepEqual(evidence.transformations, [{entity: '/parent', id: 'uppercase-parent-v1'}]);
         assert.equal(evidence.transaction.outcome, 'committed');
         assert.equal((await target.getClient()('teq_parent').where({id: 1}).first()).name, 'FIRST');
@@ -167,7 +167,7 @@ describe('TeqFw_Db_Back_RDb_Rebuild', () => {
                 assert.equal(error.evidence.accepted, false);
                 assert.equal(error.evidence.dataComplete, true);
                 assert.equal(error.evidence.failures[0].stage, 'afterData');
-                assert.equal(error.evidence.tables.length, 5);
+                assert.equal(error.evidence.tables.length, 4);
                 return true;
             },
         );
@@ -180,7 +180,6 @@ describe('TeqFw_Db_Back_RDb_Rebuild', () => {
         const rows = {
             '/parent': await connection.getClient()('teq_parent').select(),
             '/child': await connection.getClient()('teq_child').select(),
-            '/teqfw/db/schema/identitycounter': await connection.getClient()('teq_teqfw_db_schema_identitycounter').select(),
             '/teqfw/db/schema/snapshot': await connection.getClient()('teq_teqfw_db_schema_snapshot').select(),
             '/teqfw/db/schema/application': await connection.getClient()('teq_teqfw_db_schema_application').select(),
         };

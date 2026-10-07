@@ -25,12 +25,11 @@
     "lint:md": "node bin/lint/markdown.mjs",
     "verify": "npm test && npm run typecheck && npm run lint:md",
     "prepublishOnly": "npm run verify && npm audit --omit=dev",
-    "test:optin": "npm run test:optin:preflight && npm run test:optin:postgresql && npm run test:optin:mariadb && npm run test:optin:identity",
+    "test:optin": "npm run test:optin:preflight && npm run test:optin:postgresql && npm run test:optin:mariadb",
     "test:optin:preflight": "node --test test/optin/Preflight.test.mjs",
     "test:optin:postgresql": "node --test test/optin/Postgresql.test.mjs",
     "test:optin:mariadb": "node --test test/optin/Mysql.test.mjs",
-    "test:manual": "find test/manual -name '*.test.mjs' -print0 | xargs -r -0 node --test",
-    "test:optin:identity": "node --test test/optin/Identity.test.mjs"
+    "test:manual": "find test/manual -name '*.test.mjs' -print0 | xargs -r -0 node --test"
   },
   "repository": {
     "type": "git",

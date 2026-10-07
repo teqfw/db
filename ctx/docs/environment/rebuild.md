@@ -1,7 +1,7 @@
 # Rebuild Runtime Requirements
 
 - Path: `ctx/docs/environment/rebuild.md`
-- Changed: `20261006`
+- Changed: `20261007`
 
 ## In-Place Rebuild
 
@@ -53,20 +53,3 @@ It does not authorize a parallel cutover or allow an in-place rebuild to discard
 Rollback guarantees apply only to work enclosed by a transaction that the selected engine honors.
 A durable snapshot is the recovery source for a failed destructive in-place rebuild.
 For a failed parallel rebuild, the source remains authoritative and the caller decides whether to inspect, clear, or recreate the target.
-
-## Allocated Identity Preservation
-
-Preserve identitycounter rows together with explicit allocated IDs. Counter values may
-exceed the largest live ID because an allocation can commit without a corresponding
-row; do not reconstruct the whole counter solely from live rows. Target reconciliation
-raises transferred counters to at least the maximum imported ID before normal work.
-Imports lacking counters may seed them from explicit rows, but such an import cannot
-preserve reservations absent from its source data. Quiescence and explicit migration
-selection remain caller-owned.
-
-Allocated identity columns have no native generated-sequence state. PostgreSQL sequence
-restoration applies only to native-generated columns. When importing into allocated
-mode, legacy dumped serial entries are not applied to allocated columns; any separately
-declared native generators are restored from their transferred values. Switching from
-byDefault to allocated requires an authorized physical schema transition; changing the
-map alone does not alter an existing database. Cyclic transfer requirements are unchanged.

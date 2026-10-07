@@ -1,7 +1,7 @@
 # Architecture Decisions
 
 - Path: `ctx/docs/architecture/decisions.md`
-- Changed: `20261006`
+- Changed: `20261007`
 
 ## AD-001 Preserve Legacy Line On Branch v1
 
@@ -141,7 +141,7 @@ and host-owned DI tokens make every additional connection and its lifecycle visi
 Decision: `core.identity` and `core.ref` are special logical DEM types forming an inter-entity addressing protocol. A package uses `core.identity` when an entity attribute is system-addressable and `core.ref` when a local attribute stores the representation of exactly one relation-resolved `core.identity`; neither type chooses a SQL type or dialect mechanism.
 `identityProfile` is the host-owned policy that defines how logical entity identities and their references are represented in one target application model. The current DEM v2 profile structure supplies a concrete type plus generation policy; its default is signed 32-bit `core.integer` plus `generation.kind: "core.identity"` with `byDefault` mode.
 `core.identity` resolves through that profile into a concrete type and generation policy. `core.ref` derives only its concrete type from the one mapped `core.identity` target of its relation; the relation remains target authority, and external mapping only resolves package-external paths.
-The compiler writes these results into the canonical DEM before normal relation and dialect validation. The current materialization of `core.identity` creates one single-column primary key with generation timing selected by the host profile. Ordinary relations between explicitly typed attributes remain a separate mechanism and may use compatible primary or unique targets.
+The compiler writes these results into the canonical DEM before normal relation and dialect validation. The current materialization of `core.identity` creates one generated single-column primary key. Ordinary relations between explicitly typed attributes remain a separate mechanism and may use compatible primary or unique targets.
 
 Rejected: requiring independently reusable packages to coordinate concrete identifier storage conventions, making `ref` an alternative foreign-key declaration, allowing `core.ref` to target an arbitrary PRIMARY or UNIQUE attribute, or inferring a type from an undeclared or ambiguous relation.
 
@@ -194,31 +194,20 @@ Any future adoption must preserve the rule that commands do not own process term
 Approve package ownership, provider metadata shape, result/error semantics, and host-managed cleanup before replacing the local DB command DTOs and shutdown adapter.
 This decision is independent of whether rebuild is invoked through CLI, API, or another host.
 
-## Preallocated Identity Mode
+## Native Identity Generation
 
-Decision: the host-owned identityProfile accepts allocated alongside the existing
-byDefault mode. Both preserve the compiler-derived single-column primary key and
-relation-derived reference representation. Allocated projects ordinary integer
-storage and requires an explicit value; it does not invoke a native identity generator.
-Reusable fragments cannot select allocated generation per attribute.
+Decision: remove the table-backed preallocation mode at the Human's request. The
+host identity profile selects native database generation; supported modes remain
+byDefault and adapter-supported always. The package provides no durable identity
+counters or allocation service. Removed mode allocated is rejected explicitly.
 
-The RDB identity service accepts an authentic successful compilation, a canonical
-entity path, and an active caller-owned transaction. Its documented consumer token is
-TeqFw_Db_Back_RDb_Identity$. Counter state comes from the ordinary selected
-teqfw.db.schema identitycounter entity; the compiler never injects it. A SHA-256 key
-bounds the indexed scope representation, while the full canonical path is retained
-and checked for integrity. Physical names come exclusively from the compiled plan.
+Reason: maintaining a portable counter allocator adds lock contention, state-transfer
+requirements, and coupling to entity paths. Required self-references alone do not
+justify this mechanism. Applications needing identities before insertion must choose
+an explicit database-specific or application-owned strategy. No replacement allocator
+or automatic schema conversion is introduced.
 
-Conflict-update obtains the counter write lock without resetting its value. A current
-locking read on PostgreSQL/InnoDB avoids stale transaction snapshots; SQLite uses its
-writer serialization. The service reconciles persisted explicit IDs, performs a
-range-guarded atomic increment, and reads the result before releasing the transaction.
-Calls sharing the same underlying transaction are serialized across service instances.
-The service never commits, rolls back, or retries an outer transaction. Lock failures
-and serialization failures require caller-owned whole-operation recovery.
-
-Reason: allocation timing is infrastructure policy, whereas a required self-reference
-is application semantics. Counter persistence permits portable allocation without
-reserving values through dialect-specific native identity mechanisms. Durable counters
-are transferred and reconciled separately from native sequence restoration; cyclic
-transfer still requires its existing explicit supported strategy.
+Existing databases created with the removed mode require an authorized migration or
+rebuild to native-generated keys, preserving explicit IDs, relations, and immutable
+history and restoring native sequence state. Removal of declarations does not delete
+an existing counter table or convert ordinary integer primary keys.

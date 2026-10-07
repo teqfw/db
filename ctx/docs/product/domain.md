@@ -57,7 +57,7 @@ An append-only schema-application record links the last known applied source sna
 
 - DEM fragment — one package-owned model declaration.
 - Data Entity Model (DEM) — the distributed declarative model of one target application data schema.
-- `teqfw.db.schema` — the DEM fragment supplied by `@teqfw/db`; it declares `snapshot` and `application` for schema history and `identitycounter` for preallocated identity state.
+- `teqfw.db.schema` — the DEM fragment supplied by `@teqfw/db`; it declares the `snapshot` and `application` entities used for schema history.
 - teq-plugin — an npm package with a teqfw node in `package.json` that contributes a DEM fragment.
 - Application schema — the coherent effective schema assembled by a host application from its own and selected teq-plugin fragments.
 - database target — a physical database or independently addressable namespace assigned a target DEM, scope, and access mode by one application.
@@ -98,21 +98,9 @@ The host application owns transition semantics, migration policy, cutover, and f
 - Removing a fragment does not by itself authorize destruction of its durable data.
 - Completed snapshots and schema applications are never rewritten; recovery and retry create another application record.
 
-## Identity Allocation
+## Identity Generation
 
-The host selects one identity representation and allocation policy for its target model.
-`byDefault` lets the database assign an identity during insertion; `allocated` lets the
-caller obtain an identity before insertion inside its existing transaction. Package
-fragments still declare logical identity and reference intent, independently of that
-policy. Preallocation preserves required self-references without nullable root markers.
-
-An allocation belongs to its canonical entity scope and physical target. Concurrent
-successful committed allocations in one scope are distinct; different scopes are
-independent. The package never finalizes the caller's transaction. An uncommitted
-allocation may become reusable after rollback; neither gaplessness nor authorization
-is implied by an identity value.
-
-Durable counter high-water marks are modeled package-owned data and must survive
-transfer even when no live row uses the largest committed reservation. Explicitly
-imported identities may raise a counter but must never lower it. Allocation does not
-change the product's explicit cyclic-transfer or application-migration boundaries.
+Package fragments declare logical identity and reference intent; the host selects
+the concrete representation and native database generation policy. The package does
+not own durable identity counters or a service for reserving IDs before insertion.
+Applications own any database-specific strategy required for such insertion flows.

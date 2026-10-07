@@ -349,6 +349,40 @@ describe('TeqFw_Db_Back_Dem_Compile', () => {
         }
     });
 
+    it('rejects removed counter allocation in host profiles and explicit generation declarations', async () => {
+        const adapters = [
+            ...Object.values(dialectAdapters),
+            await container.get('TeqFw_Db_Back_RDb_Dialect_Mysql$'),
+        ];
+        for (const adapter of adapters) {
+            for (const withIdentity of [false, true]) {
+                await assert.rejects(compiler.exec({
+                    adapter,
+                    fragments: [fragment('app', {
+                        version: 2, requires: [], package: {}, refs: {},
+                        entity: withIdentity ? {person: {attr: {id: {type: {id: 'core.identity'}}}, index: {}, relation: {}}} : {},
+                    })],
+                    mapEnvelope: mapEnvelope({version: 2, identityProfile: {
+                        type: {id: 'core.integer', params: {bits: 64, unsigned: false}},
+                        generation: {kind: 'core.identity', params: {mode: 'allocated'}},
+                    }}),
+                }), (error) => error.diagnostics.some((item) => item.code === 'DEM_GENERATION_INVALID'));
+            }
+            await assert.rejects(compiler.exec({
+                adapter,
+                fragments: [fragment('app', {
+                    version: 2, requires: [], package: {}, refs: {},
+                    entity: {person: {
+                        attr: {id: {type: {id: 'core.integer', params: {bits: 32, unsigned: false}},
+                            generation: {kind: 'core.identity', params: {mode: 'allocated'}}}},
+                        index: {pk: primary()}, relation: {},
+                    }},
+                })],
+                mapEnvelope: mapEnvelope(),
+            }), (error) => error.diagnostics.some((item) => item.code === 'DEM_GENERATION_INVALID'));
+        }
+    });
+
     it('rejects obsolete role declarations, invalid profiles, and ambiguous core.ref derivations deterministically', async () => {
         const declaration = {
             version: 2, requires: [], package: {}, refs: {},

@@ -84,9 +84,6 @@ export default class TeqFw_Db_Back_RDb_Schema {
             return Object.freeze((await this.fetchTablesByDependencyOrder()).map((table) => table.name));
         };
 
-        /** @returns {TeqFw_Db_DemCompilationResult} */
-        this.getCompilation = function () { return getCompilation(); };
-
         /**
          * @param {object} deps
          * @param {object} deps.compilation

@@ -1,7 +1,7 @@
 # Architecture State
 
 - Path: `ctx/docs/architecture/state.md`
-- Changed: `20261006`
+- Changed: `20261007`
 
 ## Durable State
 
@@ -53,18 +53,3 @@ A runtime preflight result applies only to the connection, fingerprint, and oper
 A source snapshot remains required for recovery from destructive in-place recreation.
 An unaccepted parallel target never silently replaces the source as authoritative state.
 An application record with `started` or `failed` status never establishes an applied schema state.
-
-## Allocated Identity State
-
-The ordinary identitycounter entity in the selected teqfw.db.schema fragment owns one
-counter per canonical entity path in the physical target. Its value is the committed
-reservation high-water mark, not a derived row count. It must not decrease after row
-deletion. The full entity path checks the integrity of the bounded hashed scope key.
-
-The supplied database transaction owns counter changes and domain inserts together.
-Rollback may discard an uncommitted reservation. Process-local promise queues order
-allocator calls within one transaction but are never authoritative durable state.
-Imported explicit IDs and copied counters are reconciled in the target transaction
-before normal allocation resumes. Schema history allocates its own IDs under the
-same profile; absent an external transaction, an allocated history insert owns and
-finalizes only the transaction it creates for that operation.

@@ -145,7 +145,6 @@ export interface DbRebuildEvidence {
     readonly failures: readonly DbOperationFailure[];
     readonly fingerprint: string;
     readonly generatedState: readonly unknown[];
-    readonly identityCounters?: readonly DbIdentityCounterEvidence[];
     readonly mode: DbRebuildMode;
     readonly mutationStarted: boolean;
     readonly phases: readonly DbLateIndexOutcome[];
@@ -161,14 +160,7 @@ export interface DbRebuildEvidence {
 }
 export interface DbRebuild { exec(input: DbRebuildInput): Promise<DbRebuildEvidence>; }
 
-export interface DbGeneration { readonly kind: string; readonly implementation?: string; readonly params?: Readonly<{mode?: 'byDefault' | 'allocated' | 'always'}>; }
-export interface DbIdentityInput { readonly compilation: DemCompilationResult; readonly transaction: DbTransaction; readonly entity: string; }
-export interface DbIdentitySyncInput { readonly compilation: DemCompilationResult; readonly transaction: DbTransaction; }
-export interface DbIdentityCounterEvidence { readonly entity: string; readonly value: number; }
-export interface DbIdentity {
-    allocate(input: DbIdentityInput): Promise<number>;
-    synchronize(input: DbIdentitySyncInput): Promise<readonly DbIdentityCounterEvidence[]>;
-}
+export interface DbGeneration { readonly kind: string; readonly implementation?: string; readonly params?: Readonly<{mode?: 'byDefault' | 'always'}>; }
 export interface DbEffectiveSnapshot { readonly id: number; readonly fingerprint: string; readonly dem: Readonly<Record<string, unknown>>; readonly provenance: DemProvenance; readonly createdAt: string; }
 export interface DbSchemaApplication { readonly id: number; readonly sourceSnapshotId: number | null; readonly targetSnapshotId: number; readonly status: DbSchemaApplicationStatus; readonly startedAt: string; readonly completedAt: string | null; }
 export interface DbCatalogDiagnostic { readonly code: string; readonly details: Readonly<Record<string, unknown>>; }
@@ -259,7 +251,7 @@ declare global {
     type TeqFw_Db_LateSchemaPhase = 'afterRelations' | 'afterData';
     type TeqFw_Db_RebuildEvidenceDraft = {
         accepted: boolean; dataComplete: boolean; failures: DbOperationFailure[];
-        fingerprint: string; generatedState: readonly unknown[]; identityCounters: readonly DbIdentityCounterEvidence[];
+        fingerprint: string; generatedState: readonly unknown[];
         mode: DbRebuildMode; mutationStarted: boolean; phases: DbLateIndexOutcome[];
         preservation: {authorizedDiscard: boolean; status: 'notStarted' | 'verifiedReadable' | 'discardAuthorized' | 'notRequired'; tables: {entity: string; table: string; rows: number}[]};
         preflight: Record<string, DbPreflightResult>; source: {adapter: string; fingerprint: string; id: string};
@@ -303,12 +295,6 @@ declare global {
     type TeqFw_Db_GeneratedStateEvidenceArray = readonly unknown[];
     type TeqFw_Db_TransferStrategyEvidence = Readonly<Record<string, unknown>> | null;
     type TeqFw_Db_SchemaDataTransfer = () => Promise<unknown>;
-    type TeqFw_Db_PhysicalColumnArray = DemPhysicalColumn[];
-    type TeqFw_Db_PhysicalTableOptional = DemPhysicalTable | undefined;
-    type TeqFw_Db_IdentityCounterEvidenceArray = readonly DbIdentityCounterEvidence[];
-    type TeqFw_Db_Release = () => void;
-    type TeqFw_Db_HistoryWriteResult = DbEffectiveSnapshot | DbSchemaApplication;
-    type TeqFw_Db_HistoryWriteAction = (transaction: DbTransaction | undefined) => Promise<TeqFw_Db_HistoryWriteResult>;
     type TeqFw_Db_NumberNullable = number | null;
     type TeqFw_Db_QueryBindings = readonly unknown[];
     type TeqFw_Db_CatalogConnection = Pick<DbConnection, 'getClient' | 'getSchemaBuilder'>;
@@ -319,21 +305,14 @@ declare global {
     type TeqFw_Db_TransactionOptions = Knex.TransactionConfig;
     type TeqFw_Db_Transaction = DbTransaction;
     type TeqFw_Db_Connection = DbConnection;
-    type TeqFw_Db_HistoryWriteInput = {compilation: DemCompilationResult; connection: DbConnection; transaction?: DbTransaction; entity: string};
-    type TeqFw_Db_SqliteAllocatedColumnInput = {column: DemPhysicalColumn & {readonly comment?: string; readonly physicalType: {readonly type: string}}; tableBuilder: Knex.CreateTableBuilder; knex: Knex};
+    type TeqFw_Db_SqliteColumnInput = {column: DemPhysicalColumn & {readonly comment?: string; readonly physicalType: {readonly type: string}}; tableBuilder: Knex.CreateTableBuilder; knex: Knex};
     type TeqFw_Db_DemCompilationResult = DemCompilationResult;
     type TeqFw_Db_DemCompiler = DemCompiler;
     type TeqFw_Db_PhysicalTable = DemPhysicalTable;
     type TeqFw_Db_PhysicalColumn = DemPhysicalColumn;
-    type TeqFw_Db_IdentityInput = DbIdentityInput;
-    type TeqFw_Db_IdentitySyncInput = DbIdentitySyncInput;
-    type TeqFw_Db_IdentityCounterEvidence = DbIdentityCounterEvidence;
-    type TeqFw_Db_IdentityCounterRow = {scope: string; entity_path: string; value: unknown};
     type TeqFw_Db_KnexTransaction = Knex.Transaction;
     type TeqFw_Db_KnexQuerySource = Knex | Knex.Transaction;
 
-    type TeqFw_Db_Back_RDb_Identity = import('./src/Back/RDb/Identity.mjs').default;
-    type TeqFw_Db_Back_RDb_Identity__Class = typeof import('./src/Back/RDb/Identity.mjs').default;
     type TeqFw_Cfg_Reader = {get: any};
     type TeqFw_Db_Back_Act_Dem_RdbTables = import("./src/Back/Act/Dem/RdbTables.mjs").default;
     type TeqFw_Db_Back_Act_Dem_RdbTables__Class = typeof import("./src/Back/Act/Dem/RdbTables.mjs").default;

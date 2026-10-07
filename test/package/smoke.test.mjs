@@ -96,7 +96,7 @@ describe('npm publication', () => {
 
             writeFileSync(join(temp, 'consumer.mts'), `
 import type {
-    DbConfig, DbConnection, DbIdentity, DbRebuildEvidence,
+    DbConfig, DbConnection, DbRebuildEvidence,
     DbSelectionV2, DbTransaction, DemCompilationResult, DemDiagnostic
 } from '@teqfw/db';
 declare const cfg: DbConfig;
@@ -106,10 +106,6 @@ declare const compilation: DemCompilationResult;
 declare const diagnostic: DemDiagnostic;
 declare const selection: DbSelectionV2;
 declare const evidence: DbRebuildEvidence;
-declare const identity: DbIdentity;
-const allocation: Promise<number> = identity.allocate({compilation, transaction: trx, entity: '/sample/people/person'});
-const synchronization = identity.synchronize({compilation, transaction: trx});
-void [allocation, synchronization];
 const ambientConn: TeqFw_Db_Back_RDb_IConnect = conn;
 const ambientTrx: TeqFw_Db_Back_RDb_ITrans = trx;
 const ambientCompilation: TeqFw_Db_Back_Dto_Dem_Compile_Result = compilation;

@@ -26,8 +26,6 @@ const OPT_FILE = 'file';
  * @param {TeqFw_Db_Back_Cli_Dto_Command_Option__Factory} deps.fOpt
  * @param {TeqFw_Db_Back_App_Shutdown} deps.app
  * @param {TeqFw_Db_Back_RDb_IConnect} deps.conn
- * @param {TeqFw_Db_Back_RDb_Identity} deps.identity
- * @param {TeqFw_Db_Back_RDb_Schema} deps.schema
  * @param {TeqFw_Db_Back_Util} deps.util
  * @param {TeqFw_Db_Back_Util_File} deps.utilFile
  * @param {TeqFw_Db_Back_Api_Import_Transform} deps.transform
@@ -35,7 +33,7 @@ const OPT_FILE = 'file';
  * @returns {TeqFw_Db_Back_Cli_Dto_Command}
  * @memberOf TeqFw_Db_Back_Cli_Import
  */
-export default function Factory({DEF, logger, fCommand, fOpt, app, conn, util, utilFile, transform, aDemTables, identity, schema}) {
+export default function Factory({DEF, logger, fCommand, fOpt, app, conn, util, utilFile, transform, aDemTables}) {
     const log = logger.forSource('TeqFw_Db_Back_Cli_Import');
 
     // FUNCS
@@ -67,11 +65,8 @@ export default function Factory({DEF, logger, fCommand, fOpt, app, conn, util, u
                     log.info(`Inserting '${tableRows.length}' rows for '${name}' table...`);
                     await util.itemsInsert(trx, name, tableRows);
                 }
-                await identity.synchronize({compilation: schema.getCompilation(), transaction: trx});
-                // update native serials only; allocated identities have no database sequence.
-                if (trx.isPostgres() && schema.getCompilation().physical.tables.some((table) => table.columns.some((column) => column.generation?.implementation === 'allocated'))) {
-                    await trx.getDialectAdapter().restoreGeneratedState({tables: schema.getCompilation().physical.tables, transaction: trx});
-                } else if (trx.isPostgres() && dump.serials) {
+                // Restore native sequences after importing explicit IDs.
+                if (trx.isPostgres() && dump.serials) {
                     const schema = trx.getKnexTrx().schema;
                     const norm = transform.prepareSerials(dump.serials);
                     await util.pgSerialsSet(schema, norm);
@@ -116,7 +111,5 @@ export const __deps__ = Object.freeze({
             utilFile: 'TeqFw_Db_Back_Util_File$',
             transform: 'TeqFw_Db_Back_Api_Import_Transform$',
             aDemTables: 'TeqFw_Db_Back_Act_Dem_Tables$',
-            identity: 'TeqFw_Db_Back_RDb_Identity$',
-            schema: 'TeqFw_Db_Back_RDb_Schema$',
     }),
 });

@@ -65,22 +65,3 @@ Extension installation and server-setting changes are separately authorized oper
 An in-place rebuild requires snapshot storage outside the schema or database objects that will be replaced.
 A parallel rebuild requires independently addressable source and target connections or namespaces.
 Application quiescence, cutover, traffic switching, and source retirement are deployment concerns owned outside this package.
-
-## Allocated Identity Prerequisites
-
-Allocated mode requires the selected package-owned identitycounter table to exist
-through the normal authorized schema lifecycle. Existing installations must explicitly
-migrate to the extended package fragment; selecting a mode never creates a hidden
-allocator table. The account requires SELECT, INSERT, and UPDATE on the modeled
-counter table and SELECT on the allocated entity table for high-water reconciliation.
-MariaDB/MySQL tables must use a transaction-capable engine such as InnoDB.
-
-Keep allocations and dependent inserts inside one active transaction. PostgreSQL and
-InnoDB can report deadlock or serialization errors; SQLite can report SQLITE_BUSY or
-SQLITE_BUSY_SNAPSHOT. The caller decides whether to retry the entire transaction.
-The allocator never finalizes or retries the caller's transaction. Different SQLite
-writers serialize; a read snapshot cannot always be upgraded to a writer.
-
-Current integer codecs use exact JavaScript numbers: signed 32-bit allocation ends at
-2147483647; supported 64-bit allocation ends at Number.MAX_SAFE_INTEGER. Exhaustion
-and unsafe driver-returned values fail explicitly.

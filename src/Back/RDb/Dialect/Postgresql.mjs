@@ -94,7 +94,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql {
             generations: {
                 'core.identity': {
                     implementation: 'identity',
-                    modes: ['byDefault', 'allocated'],
+                    modes: ['byDefault'],
                     bits: [32, 64],
                     requirements: [capability],
                     types: ['core.integer'],

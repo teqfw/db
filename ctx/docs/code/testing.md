@@ -66,29 +66,16 @@ When repairing a type, use the narrowest truthful contract: primitive, bounded u
 SQLite is the deterministic default database. PostgreSQL and MariaDB/MySQL-specific behavior belongs to the opt-in conformance gate.
 Schema and rebuild tests prove preflight before mutation, dependency ordering, cycle rejection or an explicit dialect strategy, source/target transaction ownership, preservation before destructive recreation, explicit transformations, late-index outcomes, and structured evidence. Rebuild never implies acceptance, cutover, source deletion, or incremental migration planning.
 
+Compiler regressions reject the removed `allocated` mode in host profiles, including
+models without identity attributes, and in explicitly typed attribute generation
+declarations for SQLite, PostgreSQL, and MySQL adapters. Ordinary native generation,
+schema history, import sequence restoration, and rebuild remain covered by their
+existing test layers.
+
 ## ESM Conformity
 
 `teqfw-esm-validator src --profile base` is a release gate. Interface publication units declare `@interface` at module level. Concrete behavior is defined through constructor closures rather than prototype methods. Callable JSDoc contracts mirror actual parameters, DI dependency names, and asynchronous return values.
 
-## Allocated Identity Verification
-
-Issue 8 adds compiler and three-dialect SQL projection checks, allocator unit and SQLite
-integration checks, independent-connection concurrency, history and CLI import checks,
-and allocated rebuild acceptance. Verify concurrent first use, existing scopes under a
-prior transaction snapshot, same-transaction overlapping calls, rollback, scope
-independence, reconnect, exact ranges, missing/forged compilation, missing counter
-fragments, unsupported modes, required self-references, and cross-package references.
-
-npm run test:optin:identity exercises PostgreSQL and MariaDB allocation with actual
-independent connections; it is included in npm run test:optin after the existing
-preflight and database conformance layers. Opt-in databases must be explicitly disposable.
-Native generation and allocated generation both retain existing rebuild-cycle rules.
-
-For issue 8 the Human accepted reporting the existing global typing debt separately
-and requested correction of affected contracts. Compare source diagnostics and JSDoc
-any counts with the pre-change baseline; package declaration/consumer tests remain
-required. This scope decision does not relax the general blocking typecheck contract
-for future delivery.
 
 ## Typecheck Repair Verification
 

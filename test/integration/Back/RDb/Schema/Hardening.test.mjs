@@ -97,10 +97,10 @@ describe('schema plan and execution hardening', () => {
         });
         const plan = planner.exec({compilation: result, operation: 'drop'});
         assert.deepEqual(plan.phases.tables.map((item) => item.entity), [
-            '/old_child', '/teqfw/db/schema/application', '/old_parent', '/child', '/teqfw/db/schema/snapshot', '/teqfw/db/schema/identitycounter', '/parent',
+            '/old_child', '/teqfw/db/schema/application', '/old_parent', '/child', '/teqfw/db/schema/snapshot', '/parent',
         ]);
         assert.deepEqual(plan.phases.verification.map((item) => item.kind), [
-            'tableAbsent', 'tableAbsent', 'tableAbsent', 'tableAbsent', 'tableAbsent', 'tableAbsent', 'tableAbsent',
+            'tableAbsent', 'tableAbsent', 'tableAbsent', 'tableAbsent', 'tableAbsent', 'tableAbsent',
         ]);
     });
 

@@ -41,6 +41,12 @@ Handle `DemCompilationError` through its structured `diagnostics` and `warnings`
 
 The loader scans the application and installed-package declarations before compilation, including `@teqfw/db`'s published `etc/teqfw.schema.json` fragment. Do not present test-only inputs such as `testDems` or `testMapRoot` as production integration patterns. Direct compiler callers must pass every selected envelope, including the package-owned fragment when schema history is used.
 
+Identity generation uses the database's native mechanism. The former `allocated`
+mode and allocation service are unsupported. Existing databases using that mode need
+an explicitly authorized migration/rebuild to native-generated keys; preserve IDs,
+relations, and immutable history and restore native sequence state. Declaration edits
+alone do not convert columns or drop an existing counter table.
+
 ## DEM Path Naming
 
 Choose logical roots from domain concepts; do not automatically mirror npm package names or DI namespaces. Names must be readable and preserve public domain terminology, rather than merely being as short as possible. These are declaration design rules, not additional compiler validation or automatic rewriting.
@@ -72,8 +78,8 @@ This declares the primary `/pde/hub/person` and related `/pde/hub/person/profile
 Before changing an existing path:
 
 1. Audit all selected fragments and the composed target for semantic ownership conflicts and physical-name collisions. Compile the proposed declarations with the host map and selected adapter.
-2. Update local relations, external reference aliases and host maps, allocator/query paths, tests, and public/private documentation together. Preserve trusted fragment identity and ownership.
-3. For an existing database, provide an explicit authorized migration/rebuild plan covering table data, foreign keys, schema history, and identity allocation counters. Retain the authentic old source compilation and explicitly map renamed entities and counter scopes while preserving allocated high-water marks. Keep immutable historical snapshots intact and record the new target through the schema-history lifecycle. Editing declarations alone does not rename tables or move data; the compiler and rebuild service do not infer renames.
+2. Update local relations, external reference aliases and host maps, query paths, tests, and public/private documentation together. Preserve trusted fragment identity and ownership.
+3. For an existing database, provide an explicit authorized migration/rebuild plan covering table data, foreign keys, and schema history. Retain the authentic old source compilation and explicitly map renamed entities. Keep immutable historical snapshots intact and record the new target through the schema-history lifecycle. Editing declarations alone does not rename tables or move data; the compiler and rebuild service do not infer renames.
 
 ## Application-map Prefix Selection
 
@@ -155,68 +161,3 @@ await history.completeApplication({applicationId: attempt.id, compilation, conne
 ```
 
 Use `failApplication()` for an interrupted or rejected started attempt; retry by creating a new application record. `resolveLastApplied()` returns the last successful application and its immutable snapshot for migration planning. A `DemCatalogMismatchError` exposes explicit diagnostics; do not turn it into inferred DDL or transformations. Pass a caller-owned transaction when the history event must share an atomic boundary, and do not finalize that transaction in the history service.
-
-## Preallocated Identities
-
-Select this policy in the host-owned map; reusable fragments only declare core.identity
-and relation-linked core.ref attributes:
-
-```json
-{
-  "version": 2,
-  "identityProfile": {
-    "type": {"id": "core.integer", "params": {"bits": 64, "unsigned": false}},
-    "generation": {"kind": "core.identity", "params": {"mode": "allocated"}}
-  }
-}
-```
-
-Include the published package fragment and create its modeled identitycounter table
-through your authorized schema lifecycle. The standard loader discovers it; direct
-compiler callers must include its trusted envelope explicitly. Existing schemas need
-an explicit migration to ordinary allocated primary-key columns and the counter table.
-No mode selection implicitly changes an existing database.
-
-After obtaining the authentic successful compilation and initialized connection:
-
-```js
-const identity = await container.get('TeqFw_Db_Back_RDb_Identity$');
-const entity = '/sample/people/person';
-const table = compilation.physical.tables.find((item) => item.entity === entity);
-if (!table) throw new Error('The person entity is absent from the target model.');
-const transaction = await connection.startTransaction();
-try {
-    const id = await identity.allocate({compilation, transaction, entity});
-    await transaction.getKnexTrx()(table.name).insert({id, parent_ref: id});
-    // Other package operations share this transaction and must not finalize it.
-    await transaction.commit();
-} catch (error) {
-    await transaction.rollback();
-    throw error;
-}
-```
-
-The person fragment must declare id as core.identity, parent_ref as non-null core.ref,
-and a relation from parent_ref to its own id. A root needs no nullable marker or deferred
-foreign key. Allocation accepts a canonical logical path, never a physical SQL name.
-
-The allocator validates transaction/dialect capabilities, serializes conflicting scope
-updates, and never commits, rolls back, or retries the supplied transaction. Handle
-lock/deadlock/serialization failures by deciding whether to retry the whole operation.
-SQLite writers serialize; an existing read snapshot can fail when upgraded to a writer.
-
-Returned IDs are exact positive numbers. Signed 32-bit allocation ends at 2147483647;
-the current 64-bit integer codec ends at Number.MAX_SAFE_INTEGER. Unsupported modes,
-missing transactions, native-generation entities, unsafe persisted values, and exhausted
-ranges fail explicitly. Omitting identityProfile preserves the current byDefault policy.
-
-Export and transfer identitycounter rows, then reconcile explicit IDs in the target
-transaction with `await identity.synchronize({compilation, transaction})`. Reconciliation
-raises counters but never lowers transferred reservations. The package CLI import and
-rebuild perform it themselves. An import without counters cannot preserve unused
-committed reservations. Keep import/rebuild sources quiescent as required by the
-existing transfer contract. PostgreSQL native sequence restoration excludes allocated
-columns, and allocated mode never bypasses the existing cyclic-transfer strategy gate.
-
-Schema history uses the same profile. If you pass a transaction, history operations
-participate in it; otherwise allocated history inserts own an internal transaction.

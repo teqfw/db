@@ -1,14 +1,14 @@
 # Code Overview
 
 - Path: `ctx/docs/code/overview.md`
-- Changed: `20261006`
+- Changed: `20261007`
 
 ## Source Structure
 
 - `src/Back/Api/` — abstract public contracts.
 - `src/Back/RDb/` — connection, transaction, schema, and rebuild execution.
 - `src/Back/Dem/` — trusted declaration scanning and compiler-backed loading.
-- `etc/teqfw.schema.json` — package-owned `teqfw.db.schema` DEM fragment declaring `snapshot` and `application` history entities plus `identitycounter` allocation state; published and discovered through the standard package scanner.
+- `etc/teqfw.schema.json` — package-owned `teqfw.db.schema` DEM fragment declaring `snapshot` and `application` history entities; published and discovered through the standard package scanner.
 - `src/Back/Dem/Compile/` — explicit DEM v2 decoding, ownership-safe composition, validation, graph, provenance, and fingerprinting.
 - `src/Back/Dem/Registry/` — frozen core logical/default/generation/operator registries.
 - `src/Back/Dto/` — backend DTOs and factories.
@@ -119,28 +119,7 @@ Agents must not invent one in downstream documentation or consumer code before t
 
 The target compiler and adapter module names in `dem.md` are implementation mapping, not a claim that their DI tokens are currently public.
 
-## Allocated Identity Delivery
-
-src/Back/RDb/Identity.mjs implements the documented allocation and synchronization
-consumer token. It validates compiled counter structure and transaction capabilities,
-uses transactional conflict-update plus locking read and guarded increment, normalizes
-exact driver values, and serializes calls sharing one underlying transaction.
-etc/teqfw.schema.json declares identitycounter through ordinary fragment provenance.
-
-The host profile materializes allocated generation distinctly from native identity;
-SQLite avoids implicit ROWID generation for allocated 32-bit keys. History inserts
-allocate explicit IDs and retain external transaction ownership. Rebuild validates
-counter prerequisites before mutation, requires transferred allocated IDs, and returns
-identityCounters reconciliation evidence. CLI import reconciles counters and excludes
-allocated identities from native serial restoration. Consumer declarations expose
-DbIdentity, DbIdentityInput, and DbIdentitySyncInput.
-
-The Human explicitly limited the typing scope for issue 8 to affected contracts. The
-initial global typecheck had 1133 errors across 75 source/consumer files; this existing
-debt remains separately recorded rather than weakening compiler settings or adding any.
-At issue 8 completion, 1083 errors remained across 68 files. Comparison
-against the baseline found no added diagnostic variants, and no changed source or
-declaration file increased its use of any.
+## Checked JavaScript Contracts
 
 The subsequent Human-authorized typecheck repair resolved all 1083 remaining diagnostics
 without changing compiler settings or excluding source. Public graph, model, physical
