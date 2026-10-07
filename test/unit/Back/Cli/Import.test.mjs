@@ -30,8 +30,6 @@ test('native sequence restoration uses the active import transaction', async () 
         utilFile: {readJson: () => ({tables: {}, serials})},
         transform: {prepareSerials: (values) => values},
         aDemTables: {async act() {return [];}},
-        identity: {async synchronize() {}},
-        schema: {getCompilation: () => ({physical: {tables: []}})},
     });
     await command.action({file: '/fixture/import.json'});
     assert.deepEqual(events, ['restore', 'commit', 'stop']);

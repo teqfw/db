@@ -17,9 +17,10 @@ declare const compilation: DemCompilationResult;
 declare const schema: TeqFw_Db_Back_RDb_Schema;
 declare const schemaContract: TeqFw_Db_Back_Api_RDb_Schema;
 schema.setCompilation({compilation});
-const installedCompilation: DemCompilationResult = schema.getCompilation();
-const contractCompilation: DemCompilationResult = schemaContract.getCompilation();
-void [installedCompilation, contractCompilation];
+// @ts-expect-error Compilation access is internal to schema operations.
+schema.getCompilation();
+// @ts-expect-error The public schema contract does not expose compilation access.
+schemaContract.getCompilation();
 declare const diagnostic: DemDiagnostic;
 declare const selection: DbSelectionV2;
 declare const evidence: DbRebuildEvidence;

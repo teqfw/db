@@ -112,10 +112,11 @@ both are published/decoded, composed, projected, and verified through the ordina
 ## Public Surface
 
 `RDb/Schema.setCompilation({compilation})` installs an authentic successful compiler
-result. `getCompilation()` synchronously returns that same immutable result and
-throws before initialization. Host schema preparation and history operations may
-use this accessor independently of value generation. A rejected replacement leaves
-the previously installed result intact.
+result for internal schema operations. Compilation access remains private to the
+constructor; the schema exposes no compilation getter. Hosts retain the successful
+loader result for their own schema preparation and history operations. Schema
+operations reject uninitialized state; a rejected replacement leaves the previously
+installed result intact.
 
 The stable logical surface is the `TeqFw_Db_` token namespace plus package metadata that registers it.
 Direct source-path imports are implementation-level unless explicitly documented.

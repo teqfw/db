@@ -63,7 +63,7 @@ describe('compiled schema execution', () => {
         connection = await dbConnect();
         const result = await compilation();
         schema.setCompilation({compilation: result});
-        assert.equal(schema.getCompilation(), result);
+        assert.equal('getCompilation' in schema, false);
         const createEvidence = await schema.createAllTables({conn: connection});
         assert.equal(createEvidence.status, 'complete');
 
@@ -109,7 +109,9 @@ describe('compiled schema execution', () => {
         const result = await compilation();
         schema.setCompilation({compilation: result});
         assert.throws(() => schema.setCompilation({compilation: {...result}}), /successful DEM compilation result/);
-        assert.equal(schema.getCompilation(), result);
+        const byEntity = new Map(result.physical.tables.map((table) => [table.entity, table]));
+        const expected = result.graph.topological.map((entity) => byEntity.get(entity)).filter(Boolean);
+        assert.deepEqual(await schema.fetchTablesByDependencyOrder(), expected);
     });
 
     it('rejects unbranded state at the schema boundary', () => {

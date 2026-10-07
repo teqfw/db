@@ -6,9 +6,11 @@ test('Back/RDb/Schema.mjs exposes its default unit contract', () => {
     assert.notEqual(subject, undefined);
 });
 
-test('getCompilation validates state before exposing the installed result', () => {
-    const first = Object.freeze({physical: Object.freeze({tables: []})});
-    const second = Object.freeze({physical: Object.freeze({tables: []})});
+test('schema operations validate internal compilation without exposing an accessor', async () => {
+    const firstTable = Object.freeze({entity: 'first', name: 'first'});
+    const first = Object.freeze({physical: {tables: [firstTable]}, graph: {topological: ['first']}});
+    const secondTable = Object.freeze({entity: 'second', name: 'second'});
+    const second = Object.freeze({physical: {tables: [secondTable]}, graph: {topological: ['second']}});
     const accepted = new Set([first, second]);
     const schema = new subject({
         _compile: {assertResult({value}) {
@@ -17,11 +19,12 @@ test('getCompilation validates state before exposing the installed result', () =
         }},
         logger: {forSource: () => ({})}, _builder: {}, _plan: {},
     });
-    assert.throws(() => schema.getCompilation(), /successful DEM compilation result/);
+    assert.equal('getCompilation' in schema, false);
+    await assert.rejects(schema.fetchTablesByDependencyOrder(), /successful DEM compilation result/);
     schema.setCompilation({compilation: first});
-    assert.equal(schema.getCompilation(), first);
+    assert.deepEqual(await schema.fetchTablesByDependencyOrder(), [firstTable]);
     assert.throws(() => schema.setCompilation({compilation: {...first}}), /successful DEM compilation result/);
-    assert.equal(schema.getCompilation(), first);
+    assert.deepEqual(await schema.fetchTablesByDependencyOrder(), [firstTable]);
     schema.setCompilation({compilation: second});
-    assert.equal(schema.getCompilation(), second);
+    assert.deepEqual(await schema.fetchTablesByDependencyOrder(), [secondTable]);
 });
