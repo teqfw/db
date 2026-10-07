@@ -2,7 +2,28 @@
 
 All notable changes to this package are documented in this file.
 
-## Unreleased
+## 2.4.0 - 2026-10-07
+
+### Requirements
+
+- Require Node.js 22 or newer (previously 20.17) and `@teqfw/di` 2.11 or newer within the 2.x line (previously 2.7).
+
+### Fixed in 2.4.0
+
+- Describe connections using the selected dialect: SQLite logs its filename; server databases log database, host, and user without treating leftover filename settings as SQLite configuration.
+- Omit raw connection setup errors from logs to avoid disclosing credentials while preserving the original thrown error.
+- Resolve checked-JavaScript contract errors and verify the published declarations against a consumer of the actual npm artifact.
+
+### Documentation
+
+- Clarify when independent applications sharing database space need an application-map prefix; packages contributing to one application do not require an extra prefix.
+- Guide concise domain-based DEM names and explicit migration planning for logical path or physical prefix changes.
+- Keep compilation access internal to `Schema`; hosts retain the successful loader result for preparation and history operations.
+
+### Development Snapshot Compatibility
+
+- Table-backed identity allocation and the public `Schema.getCompilation()` getter existed only in intermediate development commits after 2.3.0 and are not part of this release.
+- Consumers of those snapshots must retain the loader result instead of calling the getter. Databases created with allocated identities require an explicit migration/rebuild to native generation, preserving IDs, foreign keys, and native sequence state; changing the map alone does not convert existing storage.
 
 ### Security
 

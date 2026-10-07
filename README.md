@@ -55,12 +55,15 @@ Package fragments declare logical identity and reference types; the host selects
 
 `core.ref` always points through a relation to a `core.identity`; it receives the identity representation, is never generated, and does not select a SQL type. The host profile lets the same package model use the target database representation. See the packaged [consumer skill](skills/teqfw-db/SKILL.md) for integration details.
 
-The former `allocated` mode and its counter service have been removed. Existing
-databases using that mode require an explicit migration/rebuild to native-generated
+The experimental `allocated` mode and its counter service existed only in
+intermediate development commits after 2.3.0 and are not included in 2.4.0. Existing
+databases using those snapshots require an explicit migration/rebuild to native-generated
 keys, preserving IDs and foreign keys and restoring native sequence state. Changing
 the map alone does not convert columns or remove the old counter table.
 
 ## Install
+
+Requires Node.js 22 or newer and `@teqfw/di` 2.11 or newer within the 2.x line.
 
 ```sh
 npm install @teqfw/db
