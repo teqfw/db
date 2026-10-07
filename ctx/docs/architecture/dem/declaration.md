@@ -1,7 +1,7 @@
 # DEM And Map Declarations
 
 - Path: `ctx/docs/architecture/dem/declaration.md`
-- Changed: `20261006`
+- Changed: `20261007`
 
 ## Version Rule
 
@@ -346,7 +346,6 @@ Default location: `etc/teqfw.schema.map.json`.
 ```json
 {
   "version": 2,
-  "namespace": "teq",
   "identityProfile": {
     "type": {"id": "core.integer", "params": {"bits": 64, "unsigned": false}},
     "generation": {"kind": "core.identity", "params": {"mode": "byDefault"}}
@@ -372,6 +371,17 @@ of the final logical entity path:
 ```text
 table = [namespace + "_"] + entity.path.segments.join("_")
 ```
+
+Omit the map `namespace` by default when one application exclusively owns its database/table space.
+Set it when independent applications share that space and require distinct table prefixes; any other exception
+requires an explicit host deployment requirement. Agents must not invent future sharing as justification.
+Multiple packages contributing fragments to one application do not constitute independent applications sharing
+a database and do not justify an application-level physical prefix. Prefixes control names, not authorization.
+
+The host configures each connection resolver from `compilation.physical.namespace`, including the empty string
+when the setting is omitted. Changing, adding, or removing this setting changes physical table names and requires
+an explicit migration/rebuild plan for an existing populated database. Editing the map alone neither renames
+tables nor migrates data; the source model and its physical names must remain available for data preservation.
 
 For example, a fragment root `teqfw.db.schema` with entity `snapshot` projects to logical path
 `/teqfw/db/schema/snapshot` and, with an empty map namespace, to physical table `teqfw_db_schema_snapshot`.

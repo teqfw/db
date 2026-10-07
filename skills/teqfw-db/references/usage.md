@@ -41,11 +41,25 @@ Handle `DemCompilationError` through its structured `diagnostics` and `warnings`
 
 The loader scans the application and installed-package declarations before compilation, including `@teqfw/db`'s published `etc/teqfw.schema.json` fragment. Do not present test-only inputs such as `testDems` or `testMapRoot` as production integration patterns. Direct compiler callers must pass every selected envelope, including the package-owned fragment when schema history is used.
 
+## Application-map Prefix Selection
+
+Omit `namespace` from the application map when one application exclusively owns the database/table space. A minimal map is:
+
+```json
+{"version": 2}
+```
+
+Set a physical prefix when independent applications share the same database/table space and require distinct table prefixes. Any other exception needs an explicit host deployment requirement. Do not invent future sharing as a reason to add a prefix. Multiple packages contributing DEM fragments to one application still form one application model and do not justify an application-level prefix.
+
+The fragment's `namespace` remains a logical package root. Without a map prefix, all logical package/entity segments still determine the table name: `/pde/hub/person/person` becomes `pde_hub_person_person`. An explicitly required map `namespace: "hub"` would instead produce `hub_pde_hub_person_person`. Neither choice changes fragment-root semantics. A table prefix controls naming; it does not provide database authorization or security isolation.
+
+Changing, adding, or removing the map prefix changes physical table names. For an existing populated database, require an explicit migration/rebuild plan that preserves source data and verifies the target before cutover. Editing the map alone does not rename tables or migrate data. For rebuild across different prefixes, retain the authentic old `sourceCompilation` and compile the new target separately; see [Rebuild](#rebuild).
+
 ## Entity-to-table access
 
 Keep database access in logical DEM terms: consumer code must use an entity's logical name and must never hardcode a physical table name. The complete host-owned flow is `DEM map` → `compilation.physical.namespace` → connection resolver configuration → transaction `getTableName(entity metadata)` → physical table name.
 
-Loading and compiling DEM declarations does not configure a connection resolver. After a successful load and before any database access through that connection, the host must apply the compiled map namespace explicitly:
+Loading and compiling DEM declarations does not configure a connection resolver. After a successful load and before any database access through that connection, the host must apply the compiled map namespace explicitly, including the empty string produced when the map prefix is omitted. Do not skip initialization based on the prefix's truthiness:
 
 ```js
 const loaded = await demLoad.exec({path: projectRoot, adapter});

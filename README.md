@@ -35,6 +35,8 @@ DEM fragments may shorten repeated package nesting with a lowercase dot-delimite
 
 The logical path is `/vendor/sales/order`; the root is expanded before composition and omitted optional nodes are handled by the compiler. The application-map `namespace` remains a separate physical table prefix.
 
+Omit the map prefix by default when the application exclusively owns its database/table space; the example then uses table `vendor_sales_order`. Select a prefix when independent applications share that space and need distinct table prefixes, or when another explicit host deployment requirement calls for one. Multiple packages contributing fragments to one application do not justify an extra prefix. Always configure each connection resolver from `compilation.physical.namespace`, including when empty. Changing the prefix in a populated database requires an explicit migration/rebuild plan: editing the map does not rename tables or transfer data. See [prefix selection](skills/teqfw-db/references/usage.md#application-map-prefix-selection).
+
 ## DEM Identity And References
 
 Package fragments declare logical identity and reference types; the host selects one `identityProfile` for the target model. For example:
