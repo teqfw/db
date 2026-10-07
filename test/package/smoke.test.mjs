@@ -35,7 +35,8 @@ describe('npm publication', () => {
         const entry = readFileSync(join(skillRoot, 'SKILL.md'), 'utf8');
         const links = [...entry.matchAll(/\]\(([^)]+)\)/g)].map((match) => match[1]);
         for (const link of links) {
-            const target = normalize(join(skillRoot, link));
+            const [path] = link.split('#');
+            const target = normalize(join(skillRoot, path));
             assert.equal(relative(skillRoot, target).startsWith('..'), false, `External skill link: ${link}`);
             assert(existsSync(target), `Broken skill link: ${link}`);
         }
@@ -144,9 +145,10 @@ void [cfg, diagnostic, selection, evidence, ambientConn, ambientTrx, ambientComp
             assert.deepEqual(installedManifest.teqfw.fw.di.namespaces, [{
                 prefix: 'TeqFw_Db_', path: './src', ext: '.mjs',
             }]);
-            const container = new Container({namespaces: installedManifest.teqfw.fw.di.namespaces.map((item) => ({
-                prefix: item.prefix, target: join(packageDir, item.path), defaultExt: item.ext,
-            }))});
+            const container = new Container();
+            for (const item of installedManifest.teqfw.fw.di.namespaces) {
+                container.addNamespaceRoot(item.prefix, join(packageDir, item.path), item.ext);
+            }
             const factory = await container.get('TeqFw_Db_Back_Dto_Dem__Factory$');
             const dto = factory.create({entity: {example: {attr: {id: {type: 'id'}}}}});
             assert.deepEqual(Object.keys(dto.entity), ['example']);

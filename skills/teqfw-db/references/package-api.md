@@ -52,6 +52,8 @@ DEM fragments may provide a lowercase dot-delimited top-level `namespace` to sho
 that logical root before composition and resolves local relation paths against it; the application-map `namespace` remains
 the independent physical table prefix. External aliases declared in a fragment's `refs` are not rewritten by the root.
 
+Package and entity containers may share a local key, yielding distinct paths such as `/person` and `/person/profile`. Naming guidance is a declaration design decision, not a compiler rename API: compilation preserves every logical path segment in physical projection and does not collapse repetitions. See [DEM path naming](usage.md#dem-path-naming) before changing paths and their consumers.
+
 The standard DEM loader discovers the package-owned `teqfw.db.schema` fragment from the installed package's `etc/teqfw.schema.json`. Direct compiler callers must provide that trusted fragment envelope themselves when they need the `snapshot` and `application` history entities; compilation never injects it.
 
 The current rebuild callable shape is:

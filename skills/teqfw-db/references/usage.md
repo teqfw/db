@@ -41,6 +41,40 @@ Handle `DemCompilationError` through its structured `diagnostics` and `warnings`
 
 The loader scans the application and installed-package declarations before compilation, including `@teqfw/db`'s published `etc/teqfw.schema.json` fragment. Do not present test-only inputs such as `testDems` or `testMapRoot` as production integration patterns. Direct compiler callers must pass every selected envelope, including the package-owned fragment when schema history is used.
 
+## DEM Path Naming
+
+Choose logical roots from domain concepts; do not automatically mirror npm package names or DI namespaces. Names must be readable and preserve public domain terminology, rather than merely being as short as possible. These are declaration design rules, not additional compiler validation or automatic rewriting.
+
+| Redundant path | Preferred declaration and path |
+| --- | --- |
+| `/pde/hub/person/person` | `namespace: "pde.hub"` with `entity.person`: `/pde/hub/person` |
+| `/pde/hub/auth/authchallenge` | `namespace: "pde.hub.auth"` with `entity.challenge`: `/pde/hub/auth/challenge` |
+| `/pde/hub/auth/authsession` | `namespace: "pde.hub.auth"` with `entity.session`: `/pde/hub/auth/session` |
+| `/pde/hub/invite/invitation` | For a single primary Invitation, `namespace: "pde.hub"` with `entity.invitation`: `/pde/hub/invitation` |
+
+When the primary entity repeats the last namespace segment, shorten the declaration root by that segment. Review near-duplicates such as `invite/invitation` as well as exact repetitions. Retain qualifiers that distinguish concepts: `emailidentity`, `access/operator`, and `teqfw.db.schema/snapshot` carry useful meaning.
+
+A same-level entity and package may share a name. For example:
+
+```json
+{
+  "version": 2,
+  "namespace": "pde.hub",
+  "entity": {"person": {}},
+  "package": {
+    "person": {"entity": {"profile": {}}}
+  }
+}
+```
+
+This declares the primary `/pde/hub/person` and related `/pde/hub/person/profile`, projected without a map prefix to `pde_hub_person` and `pde_hub_person_profile`. Add grouping packages only for actual related entities; do not add empty groups speculatively. Shortening a DEM path does not transfer fragment ownership or require renaming npm packages, DI tokens, or domain objects. The compiler preserves every declared path segment; do not implement automatic collapsing, physical overrides, or hidden renames.
+
+Before changing an existing path:
+
+1. Audit all selected fragments and the composed target for semantic ownership conflicts and physical-name collisions. Compile the proposed declarations with the host map and selected adapter.
+2. Update local relations, external reference aliases and host maps, allocator/query paths, tests, and public/private documentation together. Preserve trusted fragment identity and ownership.
+3. For an existing database, provide an explicit authorized migration/rebuild plan covering table data, foreign keys, schema history, and identity allocation counters. Retain the authentic old source compilation and explicitly map renamed entities and counter scopes while preserving allocated high-water marks. Keep immutable historical snapshots intact and record the new target through the schema-history lifecycle. Editing declarations alone does not rename tables or move data; the compiler and rebuild service do not infer renames.
+
 ## Application-map Prefix Selection
 
 Omit `namespace` from the application map when one application exclusively owns the database/table space. A minimal map is:
@@ -51,7 +85,7 @@ Omit `namespace` from the application map when one application exclusively owns 
 
 Set a physical prefix when independent applications share the same database/table space and require distinct table prefixes. Any other exception needs an explicit host deployment requirement. Do not invent future sharing as a reason to add a prefix. Multiple packages contributing DEM fragments to one application still form one application model and do not justify an application-level prefix.
 
-The fragment's `namespace` remains a logical package root. Without a map prefix, all logical package/entity segments still determine the table name: `/pde/hub/person/person` becomes `pde_hub_person_person`. An explicitly required map `namespace: "hub"` would instead produce `hub_pde_hub_person_person`. Neither choice changes fragment-root semantics. A table prefix controls naming; it does not provide database authorization or security isolation.
+The fragment's `namespace` remains a logical package root. Without a map prefix, all logical package/entity segments still determine the table name: `/pde/hub/person` becomes `pde_hub_person`. An explicitly required map `namespace: "hub"` would instead produce `hub_pde_hub_person`. Neither choice changes fragment-root semantics. A table prefix controls naming; it does not provide database authorization or security isolation.
 
 Changing, adding, or removing the map prefix changes physical table names. For an existing populated database, require an explicit migration/rebuild plan that preserves source data and verifies the target before cutover. Editing the map alone does not rename tables or migrate data. For rebuild across different prefixes, retain the authentic old `sourceCompilation` and compile the new target separately; see [Rebuild](#rebuild).
 

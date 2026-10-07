@@ -1,9 +1,15 @@
 # DEM v2 Implementation Map
 
 - Path: `ctx/docs/code/dem.md`
-- Changed: `20260903`
+- Changed: `20261007`
 
 ## Current Contract
+
+Apply the declaration design rules in [logical path naming](../architecture/dem/declaration.md#logical-path-naming).
+The compiler keeps entity and package keys in distinct containers, so same-level `entity.person` and
+`package.person` may coexist. Naming improvements must stay explicit in input declarations; do not implement
+automatic repetition collapsing, physical overrides, or hidden renames. The physical-name integration suite
+verifies both this coexistence and preservation of repeated path segments.
 
 The evolving 2.x line accepts only explicit DEM v2 declarations and application maps. Every input has `version: 2`; omitted or unsupported versions fail with deterministic diagnostics before composition. Fragment declarations may use a lowercase dot-delimited `namespace` root; the decoder expands it into the ordinary package structure and resolves local relation paths against the expanded root. The branch `v1` is retained as historical reference, not as a runtime compatibility boundary. Agents comparing that branch with current v2 may prepare migration guidance for a specific consumer; this package does not publish a generic migration guide.
 

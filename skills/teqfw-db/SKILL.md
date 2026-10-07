@@ -7,6 +7,8 @@ description: Use this skill when integrating, configuring, using, testing, revie
 
 Use this skill for consumer code that composes or depends on the installed `@teqfw/db` package. Treat the host project's instructions, architecture, data policy, and tests as authoritative.
 
+Choose logical roots from the domain model rather than copying npm package names or DI namespaces. Remove redundant namespace/entity repetition while preserving useful qualifiers, public terminology, and semantic ownership. Make path choices explicitly in declarations; audit collisions and plan compatibility updates before renaming an existing path. Read [DEM path naming](references/usage.md#dem-path-naming) before defining or changing paths.
+
 ## Apply
 
 1. Compose the package through the published `TeqFw_Db_` DI namespace; do not import `@teqfw/db/src/**` as a public API.

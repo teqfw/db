@@ -1,7 +1,7 @@
 # Product Domain Model
 
 - Path: `ctx/docs/product/domain.md`
-- Changed: `20261006`
+- Changed: `20261007`
 
 ## Domain Areas
 
@@ -10,6 +10,11 @@
 A Data Entity Model (DEM) is a distributed declarative description of an application data schema. A teq-plugin is an npm package with a teqfw node in `package.json`. It owns a DEM fragment describing packages, entities, attributes, relations, and unresolved external references.
 The host application selects its own and installed plugin fragments, then owns the map that binds cross-package references to actual entity paths and optionally remaps attribute names.
 DEM declarations and application maps use the explicit v2 contract (`version: 2`).
+
+Logical paths express domain concepts rather than automatically copying npm package or DI naming boundaries.
+Prefer concise names without redundant grouping while preserving useful qualifiers, distinct concepts, and public
+domain terminology. A shorter logical path does not transfer semantic ownership or require package, token, or
+domain-object renames. Changing an established path is a compatibility change with application-owned migration semantics.
 
 ### Model Composition
 

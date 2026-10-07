@@ -12,6 +12,8 @@ Each application or package owns its DEM fragment. A fragment may declare a conc
 
 Compilation is all-or-nothing. Do not execute a partial model after diagnostics. Every declaration and application map must explicitly declare `version: 2`; omitted and unsupported versions are rejected.
 
+Logical roots express domain grouping and need not mirror npm packages or DI namespaces. An entity and a grouping package can share a local name: `/pde/hub/person` and `/pde/hub/person/profile` remain distinct entities with their own provenance. Prefer concise paths without redundant qualifiers while preserving distinct concepts and public terminology; see [DEM path naming](usage.md#dem-path-naming). Path shortening neither transfers ownership nor authorizes migration of existing data.
+
 ## Effective DEM History
 
 `@teqfw/db` supplies the ordinary `teqfw.db.schema` DEM fragment, which declares `snapshot` and `application` for schema history and `identitycounter` for allocation. These entities follow the same composition, mapping, projection, provenance, and transfer rules as all other entities. `compilation.effective.fingerprint` identifies the canonical dialect-independent effective DEM; `compilation.fingerprint` remains the physical-plan identity and is not interchangeable with it.

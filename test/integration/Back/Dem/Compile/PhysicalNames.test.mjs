@@ -9,6 +9,41 @@ const integer = () => ({type: {id: 'core.integer', params: {bits: 32, unsigned: 
 const primary = () => ({include: [], keys: [{attr: 'id'}], kind: 'primary', options: {}, phase: 'table'});
 
 describe('physical schema name registry', () => {
+    it('allows a primary entity beside its related package and preserves explicit qualifiers and repetitions', async () => {
+        const entity = () => ({attr: {id: integer()}, index: {pk: primary()}});
+        const result = await compile.exec({
+            adapter,
+            fragments: [{
+                declaration: {
+                    version: 2, namespace: 'pde.hub',
+                    entity: {person: entity(), emailidentity: entity()},
+                    package: {
+                        person: {entity: {profile: entity(), person: entity()}},
+                        access: {entity: {operator: entity()}},
+                    },
+                },
+                filename: '/fixtures/naming/person.json', fragmentId: 'person', packageName: '@example/people',
+            }],
+            mapEnvelope: {
+                declaration: {version: 2}, filename: '/fixtures/naming/map.json',
+                mapId: 'naming:map', packageName: 'host',
+            },
+        });
+
+        assert.deepEqual(
+            Object.fromEntries(result.physical.tables.map((table) => [table.entity, table.name])),
+            {
+                '/pde/hub/access/operator': 'pde_hub_access_operator',
+                '/pde/hub/emailidentity': 'pde_hub_emailidentity',
+                '/pde/hub/person': 'pde_hub_person',
+                '/pde/hub/person/person': 'pde_hub_person_person',
+                '/pde/hub/person/profile': 'pde_hub_person_profile',
+            },
+        );
+        assert.equal(result.provenance['/package/pde/package/hub/entity/person'][0].fragmentId, 'person');
+        assert.equal(result.provenance['/package/pde/package/hub/package/person/entity/profile'][0].fragmentId, 'person');
+    });
+
     it('projects every package-path segment into a table name while allowing snake_case attributes', async () => {
         const entity = () => ({
             attr: {id: integer(), owner_id: integer()}, index: {pk: primary()}, relation: {},

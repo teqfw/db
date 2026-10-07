@@ -103,6 +103,45 @@ Canonical entity identity is the slash-delimited package path plus entity name. 
 Package containers may be co-declared only as structural path segments.
 A non-empty package metadata field such as `comment` is a semantic node and has one owner.
 
+## Logical Path Naming
+
+Choose fragment roots from the domain model; do not automatically mirror npm package names or DI namespaces.
+When a primary entity repeats the last namespace segment, shorten the root by that segment: use `pde.hub`
+with `entity.person` for `/pde/hub/person`, rather than `pde.hub.person` with `entity.person`.
+Within `pde.hub.auth`, use `challenge` and `session` rather than `authchallenge` and `authsession`.
+Review near-duplicates too: a single primary Invitation belongs at `/pde/hub/invitation`, without an `invite` group.
+Keep meaningful qualifiers and distinct concepts such as `emailidentity`, `access/operator`, and
+`teqfw.db.schema/snapshot`; shortest possible paths are not the goal.
+
+A same-level entity and package may use the same local key:
+
+```json
+{
+  "version": 2,
+  "namespace": "pde.hub",
+  "entity": {"person": {}},
+  "package": {"person": {"entity": {"profile": {}}}}
+}
+```
+
+The resulting entities are `/pde/hub/person` and `/pde/hub/person/profile`, with physical names
+`pde_hub_person` and `pde_hub_person_profile` when the application-map prefix is absent.
+Only add grouping packages for actual related entities; do not create empty groups speculatively.
+Entity and package paths remain distinct composition nodes with the ordinary ownership and provenance rules.
+Shorter paths do not transfer ownership or require npm package, DI token, or domain-object renames.
+
+These are explicit declaration design choices, not automatic compiler normalization rules. Physical projection
+preserves every declared logical segment; no automatic collapsing, physical overrides, or hidden renames are allowed.
+Before changing a path, audit all selected fragments for semantic ownership and physical-name collisions, then
+update relations, external aliases, host maps, allocator/query paths, tests, and public/private documentation together.
+Compile the proposed target with its selected map and adapter before database work.
+
+Existing databases require an explicit authorized migration/rebuild covering table data, foreign keys, schema history,
+and identity allocation counters. Retain the authentic source compilation and explicitly map renamed entity paths
+and counter scopes while preserving allocated high-water marks. Immutable historical snapshots remain intact;
+record the new target through the history lifecycle. Editing declarations neither renames tables nor moves data,
+and neither compilation nor rebuild infers rename semantics.
+
 ## Attribute Contract
 
 ```json
