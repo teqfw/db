@@ -82,7 +82,8 @@ both are published/decoded, composed, projected, and verified through the ordina
 
 ### Verification Status
 
-- The module, DI integration, acceptance, syntax, and ESM-validator gates pass locally. `npm run typecheck` currently exposes unresolved source-contract debt from the exact published aliases; it is a blocking delivery gap and must not be concealed with `any`.
+- The module, DI integration, acceptance, package-consumer, syntax, and source ESM-validator gates pass locally. `npm run typecheck` passes with strict checked JavaScript and the published aliases. Existing JSDoc `any` exceptions remain technical debt; successful typechecking does not imply their elimination.
+- Additional package-root ESM validation reports declaration-map incompatibilities, including exported contract references and structural syntax accepted by TypeScript. Source ESM validation and `teqfw-platform .` pass; this additional validator compatibility gap remains explicit.
 - The real MariaDB opt-in suite passes against MariaDB 10.11, including DDL, rebuild, generated values, late indexes, and cyclic schema creation.
 - The real PostgreSQL opt-in suite passes with pgvector `0.8.6`, including storage, codecs, distances, approximate indexes, rebuild, sequence restoration, transaction-local options, and cyclic transfer.
 
@@ -137,7 +138,15 @@ DbIdentity, DbIdentityInput, and DbIdentitySyncInput.
 The Human explicitly limited the typing scope for issue 8 to affected contracts. The
 initial global typecheck had 1133 errors across 75 source/consumer files; this existing
 debt remains separately recorded rather than weakening compiler settings or adding any.
-After the affected contract repairs, 1083 errors remain across 68 files. Comparison
+At issue 8 completion, 1083 errors remained across 68 files. Comparison
 against the baseline found no added diagnostic variants, and no changed source or
 declaration file increased its use of any.
-The global gate must not be described as passing until that debt is resolved.
+
+The subsequent Human-authorized typecheck repair resolved all 1083 remaining diagnostics
+without changing compiler settings or excluding source. Public graph, model, physical
+plan, schema-plan, diagnostic, and query contracts now match runtime shapes; intermediate
+DEM nodes preserve invalid tags until semantic validation. Legacy DTOs expose absent
+fields truthfully, while successful compilation DTOs initialize their required fields.
+Runtime fixes preserve Unix-socket paths as strings and normalize nested table columns
+through their factory. JSDoc any occurrences decreased from 432 to 393 with no per-file
+increase. Current evidence is recorded in [typecheck-repair-verification.md](../../assets/typecheck-repair-verification.md).

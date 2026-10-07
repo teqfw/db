@@ -34,12 +34,15 @@ export default function Factory({DEF, logger, fCommand, conn, config, dbSchema, 
     // FUNCS
     /**
      * Command action.
+     * @param {TeqFw_Db_LoadTestOptions} [options]
      * @returns {Promise<void>}
      * @memberOf TeqFw_Db_Back_Cli_Init
      */
-    async function action({testDems, testMapRoot} = {}) {
+    async function action(options = {}) {
+        const {testDems, testMapRoot} = options;
         // load DEMs then drop/create all tables
         const path = config.getPathToRoot();
+        if (!path) throw new TypeError('Application root is required to load DEM sources.');
         const adapter = conn.getDialectAdapter();
         const {compilation} = await demLoad.exec({path, testDems, testMapRoot, adapter});
         dbSchema.setCompilation({compilation});

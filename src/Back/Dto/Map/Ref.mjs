@@ -15,17 +15,17 @@ const NS = 'TeqFw_Db_Back_Dto_Map_Ref';
 export default class TeqFw_Db_Back_Dto_Map_Ref {
     /**
      * Path to virtual entity (/virtual/entity).
-     * @type {string}
+     * @type {string | undefined}
      */
     alias;
     /**
      * Attributes mapping: virtual => real.
-     * @type {Object<string, string>}
+     * @type {Object<string, string> | undefined}
      */
     attrs;
     /**
      * Path to existing entity (/real/entity).
-     * @type {string}
+     * @type {string | undefined}
      */
     path;
 }

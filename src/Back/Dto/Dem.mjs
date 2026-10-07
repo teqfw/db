@@ -19,16 +19,16 @@ const NS = 'TeqFw_Db_Back_Dto_Dem';
 export default class TeqFw_Db_Back_Dto_Dem {
     /**
      * List of deprecated tables with dependencies (foreign keys).
-     * @type {Object<string, string[]>}
+     * @type {Object<string, string[]> | undefined}
      */
     deprecated;
-    /** @type {Object<string, TeqFw_Db_Back_Dto_Dem_Entity>} */
+    /** @type {Object<string, TeqFw_Db_Back_Dto_Dem_Entity> | undefined} */
     entity;
-    /** @type {Object<string, TeqFw_Db_Back_Dto_Dem_Package>} */
+    /** @type {Object<string, TeqFw_Db_Back_Dto_Dem_Package> | undefined} */
     package;
     /**
      * External references and attributes for relations (foreign keys).
-     * @type {Object<string, string[]>}
+     * @type {Object<string, string[]> | undefined}
      */
     refs;
 }
@@ -54,10 +54,12 @@ export class Factory {
 
     constructor({TEntity, fEntity, fPkg}) {
         /**
-         * @param {TeqFw_Db_ObjectOrNull} data
+         * @param {unknown} input
          * @returns {TeqFw_Db_Back_Dto_Dem}
          */
-        this.create = function (data = null) {
+        this.create = function (input = null) {
+            const data = input && typeof input === 'object' && !Array.isArray(input)
+                ? /** @type {TeqFw_Db_Object} */ (input) : null;
             // FUNCS
             /**
              * Create object node from ${data} using factory ${fnCreate} to create node entries.
@@ -68,6 +70,7 @@ export class Factory {
              * @returns {any}
              */
             function parse(fnCreate, data, key = null) {
+                /** @type {TeqFw_Db_Object} */
                 const res = {};
                 if (typeof data === 'object') {
                     for (const name of Object.keys(data)) {
@@ -84,6 +87,7 @@ export class Factory {
              * @returns {any}
              */
             function parseRefs(data) {
+                /** @type {TeqFw_Db_Object} */
                 const res = {};
                 if (typeof data === 'object')
                     for (const path of Object.keys(data))

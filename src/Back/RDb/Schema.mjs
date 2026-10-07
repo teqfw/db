@@ -18,11 +18,11 @@ export default class TeqFw_Db_Back_RDb_Schema {
      */
     constructor({_compile, logger, _builder, _plan}) {
         const log = logger.forSource('TeqFw_Db_Back_RDb_Schema');
-        /** @type {any} */
+        /** @type {unknown} */
         let _compilation;
 
         /**
-         * @returns {any}
+         * @returns {TeqFw_Db_DemCompilationResult}
          */
         const getCompilation = function () {
             return _compile.assertResult({value: _compilation});
@@ -69,7 +69,7 @@ export default class TeqFw_Db_Back_RDb_Schema {
         };
 
         /**
-         * @returns {Promise<any>}
+         * @returns {Promise<TeqFw_Db_PhysicalTableArray>}
          */
         this.fetchTablesByDependencyOrder = async function () {
             const compilation = getCompilation();

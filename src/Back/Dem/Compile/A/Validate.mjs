@@ -38,23 +38,25 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Validate {
 
         /**
          * @param {object} deps
-         * @param {object} deps.mapped
+         * @param {TeqFw_Db_ComposedDem} deps.mapped
          * @returns {any}
          */
         this.exec = function ({mapped}) {
             const diagnostics = [...mapped.diagnostics];
+            /** @type {Record<string, TeqFw_Db_ValidatingEntityInfo>} */
             const entities = {};
             const model = mapped.model;
+            /** @type {TeqFw_Db_StringMap} */
             const physicalNames = {};
             const provenance = mapped.provenance;
 
             /**
              * @param {object} deps
              * @param {string} deps.code
-             * @param {object} deps.details
+             * @param {TeqFw_Db_Object} [deps.details]
              * @param {string} deps.message
              * @param {string} deps.path
-             * @param {string} deps.stage
+             * @param {string} [deps.stage]
              */
             const addDiagnostic = function ({code, details = {}, message, path, stage = 'logical'}) {
                 diagnostics.push(diagnostic.create({
@@ -211,7 +213,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Validate {
                         break;
                     case 'core.enum':
                         valid = valid && Array.isArray(params.values) && params.values.length > 0
-                            && params.values.every((item) => typeof item === 'string')
+                            && params.values.every((/** @type {unknown} */ item) => typeof item === 'string')
                             && new Set(params.values).size === params.values.length;
                         break;
                     case 'core.integer':
@@ -348,11 +350,11 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Validate {
                 const args = Array.isArray(expression.args) ? expression.args : [];
                 const arityValid = typeof operator.arity === 'number'
                     ? args.length === operator.arity : args.length >= operator.arity.min;
-                const types = args.map((arg, index) => validateExpression(arg, entityInfo, context, `${path}/args/${index}`));
+                const types = args.map((/** @type {unknown} */ arg, /** @type {number} */ index) => validateExpression(arg, entityInfo, context, `${path}/args/${index}`));
                 let typesValid = arityValid && types.every(Boolean);
-                if (typesValid && operator.args === 'boolean') typesValid = types.every((type) => type.id === 'core.boolean');
+                if (typesValid && operator.args === 'boolean') typesValid = types.every((/** @type {TeqFw_Db_LogicalType} */ type) => type.id === 'core.boolean');
                 if (typesValid && (operator.args === 'same' || operator.args === 'orderedSame')) {
-                    typesValid = types.every((type) => typeSignature(type) === typeSignature(types[0]));
+                    typesValid = types.every((/** @type {TeqFw_Db_LogicalType} */ type) => typeSignature(type) === typeSignature(types[0]));
                     if (typesValid && operator.args === 'orderedSame') {
                         typesValid = ['core.date', 'core.datetime', 'core.decimal', 'core.integer', 'core.string', 'core.text'].includes(types[0].id);
                     }
@@ -361,7 +363,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Validate {
                 if (!typesValid) {
                     addDiagnostic({
                         code: 'DEM_EXPRESSION_INVALID',
-                        details: {arity: args.length, operator: expression.operator, types: types.filter(Boolean).map((type) => type.id)},
+                        details: {arity: args.length, operator: expression.operator, types: types.filter(Boolean).map((/** @type {TeqFw_Db_LogicalType} */ type) => type.id)},
                         message: 'Expression operator arity or logical argument types are invalid.',
                         path,
                     });
@@ -432,7 +434,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Validate {
                             valid = valid && index.method === undefined && index.phase === 'table'
                                 && index.predicate === undefined && (index.include?.length ?? 0) === 0
                                 && Object.keys(index.options ?? {}).length === 0
-                                && index.keys.every((key) => typeof key.attr === 'string'
+                                && index.keys.every((/** @type {TeqFw_Db_DecodedIndexKey} */ key) => typeof key.attr === 'string'
                                     && Object.keys(key).every((field) => field === 'attr'));
                         }
                         const direct = [];
@@ -460,7 +462,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Validate {
                         }
                         valid = valid && new Set(direct).size === direct.length;
                         const include = Array.isArray(index.include) ? index.include : [];
-                        valid = valid && include.every((name) => Boolean(entity.attr[name]) && !keyAttributes.has(name))
+                        valid = valid && include.every((/** @type {string} */ name) => Boolean(entity.attr[name]) && !keyAttributes.has(name))
                             && new Set(include).size === include.length;
                         for (const name of include) {
                             if (!entity.attr[name]) {
@@ -563,7 +565,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Validate {
                     }
                     const actions = Object.values(relation.action ?? {});
                     if (!actions.every((value) => value === 'cascade' || value === 'restrict')
-                        || !['deferred', 'immediate', 'notDeferrable'].includes(relation.deferrable)) {
+                        || (relation.deferrable !== 'deferred' && relation.deferrable !== 'immediate' && relation.deferrable !== 'notDeferrable')) {
                         addDiagnostic({
                             code: 'DEM_DECLARATION_SHAPE_INVALID',
                             details: {action: relation.action, deferrable: relation.deferrable},

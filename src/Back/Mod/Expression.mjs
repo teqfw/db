@@ -17,6 +17,7 @@ export default class TeqFw_Db_Back_Mod_Expression {
         const normalize = function (value) {
             if (Array.isArray(value)) return value.map(normalize);
             if (value && typeof value === 'object') {
+                /** @type {TeqFw_Db_Object} */
                 const result = {};
                 for (const key of Object.keys(value).sort()) result[key] = normalize(value[key]);
                 return result;
@@ -44,11 +45,11 @@ export default class TeqFw_Db_Back_Mod_Expression {
 
         /**
          * @param {object} deps
-         * @param {object} deps.expression
-         * @param {object} deps.entitySchema
+         * @param {TeqFw_Db_QueryExpression} deps.expression
+         * @param {TeqFw_Db_ExpressionSchema} deps.entitySchema
          * @param {TeqFw_Db_Back_Api_RDb_Dialect} deps.adapter
-         * @param {object} deps.context
-         * @param {object} deps.knex
+         * @param {TeqFw_Db_ExpressionContext} deps.context
+         * @param {TeqFw_Db_KnexQuerySource} deps.knex
          * @returns {Promise<any>}
          */
         this.exec = async function ({expression, entitySchema, adapter, context, knex}) {
@@ -60,9 +61,9 @@ export default class TeqFw_Db_Back_Mod_Expression {
             const findAttr = function (name) {
                 const raw = entitySchema?.attr?.[name] ?? entitySchema?.columns?.find?.((item) => item.name === name);
                 if (!raw) return null;
-                const mapped = typeof entitySchema.mapColumn === 'function' ? entitySchema.mapColumn(name) : (raw.column ?? raw.name ?? name);
+                const mapped = typeof entitySchema.mapColumn === 'function' ? entitySchema.mapColumn(name) : (('column' in raw ? raw.column : undefined) ?? raw.name ?? name);
                 if (typeof mapped !== 'string' || !mapped) return null;
-                const type = coreValue.normalizeType({allowAny, type: raw.type ?? raw.logicalType});
+                const type = coreValue.normalizeType({allowAny, type: ('type' in raw ? raw.type : undefined) ?? raw.logicalType});
                 return {column: mapped, type};
             };
 

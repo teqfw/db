@@ -8,12 +8,13 @@
 const NS = 'TeqFw_Db_Shared_Dto_Query_Expression';
 
 export default class TeqFw_Db_Shared_Dto_Query_Expression {
-    /** @type {'attr'|'value'|'call'} */ kind;
-    /** @type {string} */ name;
+    /** @type {TeqFw_Db_ExpressionKind | undefined} */ kind;
+    /** @type {TeqFw_Db_StringOptional} */ name;
     /** @type {unknown} */ value;
-    /** @type {TeqFw_Db_LogicalType} */ type;
-    /** @type {string} */ operator;
-    /** @type {TeqFw_Db_QueryExpressionArray} */ args;
+    /** @type {TeqFw_Db_LogicalTypeOptional} */ type;
+    /** @type {TeqFw_Db_StringOptional} */ operator;
+    /** @type {TeqFw_Db_QueryExpressionArrayOptional} */ args;
+
 }
 
 export class Factory {
@@ -41,7 +42,7 @@ export class Factory {
             if (unknown.length) throw new TypeError(`Unknown expression field '${unknown.sort()[0]}'.`);
         };
 
-        /** @param {any} data @returns {any} */
+        /** @param {any} data @returns {TeqFw_Db_QueryExpression} */
         this.create = function (data) {
             if (data instanceof TeqFw_Db_Shared_Dto_Query_Expression) {
                 data = Object.fromEntries(Object.entries(data).filter(([, value]) => value !== undefined));
@@ -72,7 +73,7 @@ export class Factory {
                 }
                 result.kind = 'call';
                 result.operator = data.operator;
-                result.args = data.args.map((item) => this.create(item));
+                result.args = data.args.map((/** @type {unknown} */ item) => this.create(item));
             } else {
                 throw new TypeError(`Unknown query expression kind '${data.kind}'.`);
             }

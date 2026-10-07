@@ -21,7 +21,7 @@ export default class TeqFw_Db_Back_RDb_Connect {
      * @param {TeqFw_Log_Provider} deps.logger
      * @param {TeqFw_Db_Back_RDb_Connect_Resolver} deps._resolver
      * @param {TeqFw_Db_Back_RDb_Trans__Class} deps.Trans
-     * @param {object} deps.knexFactory
+     * @param {typeof import('knex').default} deps.knexFactory
      */
     constructor({_dialects, logger, _resolver, Trans, knexFactory}) {
         const log = logger.forSource('TeqFw_Db_Back_RDb_Connect');
@@ -104,7 +104,7 @@ export default class TeqFw_Db_Back_RDb_Connect {
         };
 
         /**
-         * @returns {Promise<any>}
+         * @returns {Promise<void>}
          */
         this.disconnect = async function () {
             const pool = _knex?.client?.pool;
@@ -130,7 +130,7 @@ export default class TeqFw_Db_Back_RDb_Connect {
                                     log.info(`Connections to ${_info} are closed.`);
                                     resolve();
                                 })
-                                .catch((e) => {
+                                .catch((/** @type {unknown} */ e) => {
                                     log.error('Cannot close database connections.', {err: e});
                                     resolve();
                                 });

@@ -11,22 +11,44 @@ const NS = 'TeqFw_Db_Back_Dto_Dem_Compile_Result';
  * Successful compilation value. Authenticity is held privately by the compiler.
  */
 export default class TeqFw_Db_Back_Dto_Dem_Compile_Result {
-    /** @type {{fingerprint: string, model: object, provenance: object}} */
+    /** @type {TeqFw_Db_EffectiveModel} */
     effective;
     /** @type {string} */
     fingerprint;
-    /** @type {any} */
+    /** @type {TeqFw_Db_Graph} */
     graph;
-    /** @type {any} */
+    /** @type {TeqFw_Db_Model} */
     model;
-    /** @type {any} */
+    /** @type {TeqFw_Db_PhysicalPlan} */
     physical;
-    /** @type {any} */
+    /** @type {TeqFw_Db_Provenance} */
     provenance;
     /** @type {ReadonlyArray<string>} */
     requirements;
-    /** @type {ReadonlyArray<object>} */
+    /** @type {TeqFw_Db_DiagnosticArray} */
     warnings;
+
+    /**
+     * @param {object} deps
+     * @param {TeqFw_Db_EffectiveModel} deps.effective
+     * @param {string} deps.fingerprint
+     * @param {TeqFw_Db_Graph} deps.graph
+     * @param {TeqFw_Db_Model} deps.model
+     * @param {TeqFw_Db_PhysicalPlan} deps.physical
+     * @param {TeqFw_Db_Provenance} deps.provenance
+     * @param {ReadonlyArray<string>} deps.requirements
+     * @param {TeqFw_Db_DiagnosticArray} deps.warnings
+     */
+    constructor({effective, fingerprint, graph, model, physical, provenance, requirements, warnings}) {
+        this.effective = effective;
+        this.fingerprint = fingerprint;
+        this.graph = graph;
+        this.model = model;
+        this.physical = physical;
+        this.provenance = provenance;
+        this.requirements = [...requirements];
+        this.warnings = [...warnings];
+    }
 }
 
 /**
@@ -51,26 +73,20 @@ export class Factory {
 
         /**
          * @param {object} deps
-         * @param {object} deps.effective
+         * @param {TeqFw_Db_EffectiveModel} deps.effective
          * @param {string} deps.fingerprint
-         * @param {object} deps.graph
-         * @param {object} deps.model
-         * @param {object} deps.physical
-         * @param {object} deps.provenance
-         * @param {object} deps.requirements
-         * @param {object} deps.warnings
+         * @param {TeqFw_Db_Graph} deps.graph
+         * @param {TeqFw_Db_Model} deps.model
+         * @param {TeqFw_Db_PhysicalPlan} deps.physical
+         * @param {TeqFw_Db_Provenance} deps.provenance
+         * @param {ReadonlyArray<string>} deps.requirements
+         * @param {TeqFw_Db_DiagnosticArray} deps.warnings
          * @returns {TeqFw_Db_Back_Dto_Dem_Compile_Result}
          */
         this.create = function ({effective, fingerprint, graph, model, physical, provenance, requirements, warnings}) {
-            const res = new TeqFw_Db_Back_Dto_Dem_Compile_Result();
-            res.effective = effective;
-            res.fingerprint = fingerprint;
-            res.graph = graph;
-            res.model = model;
-            res.physical = physical;
-            res.provenance = provenance;
-            res.requirements = [...requirements];
-            res.warnings = [...warnings];
+            const res = new TeqFw_Db_Back_Dto_Dem_Compile_Result({
+                effective, fingerprint, graph, model, physical, provenance, requirements, warnings,
+            });
             return freeze(res);
         };
     }

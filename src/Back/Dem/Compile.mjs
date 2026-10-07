@@ -39,7 +39,7 @@ export default class TeqFw_Db_Back_Dem_Compile {
 
         /**
          * @param {TeqFw_Db_ObjectArray} diagnostics
-         * @param {TeqFw_Db_ObjectArray} warnings
+         * @param {TeqFw_Db_DiagnosticArray} warnings
          * @returns {TeqFw_Db_Error}
          */
         const createError = function (diagnostics, warnings) {
@@ -55,14 +55,14 @@ export default class TeqFw_Db_Back_Dem_Compile {
         /**
          * Reject values that were not produced successfully by this compiler instance.
          * @param {object} deps
-         * @param {object} deps.value
-         * @returns {any}
+         * @param {unknown} deps.value
+         * @returns {TeqFw_Db_DemCompilationResult}
          */
         this.assertResult = function ({value}) {
             if (!value || typeof value !== 'object' || !successful.has(value)) {
                 throw new TypeError('A successful DEM compilation result is required.');
             }
-            return value;
+            return /** @type {TeqFw_Db_DemCompilationResult} */ (value);
         };
 
         /**
@@ -107,6 +107,7 @@ export default class TeqFw_Db_Back_Dem_Compile {
             const addRequirement = function (capability, originPath) {
                 requirements.add(capability);
                 const requirementPath = '/requires/' + capability.replaceAll('~', '~0').replaceAll('/', '~1');
+                /** @type {TeqFw_Db_MutableSourceArray} */
                 const values = analyzed.provenance[requirementPath] ?? [];
                 const sources = analyzed.provenance[originPath] ?? [];
                 for (const item of sources) {
@@ -123,7 +124,7 @@ export default class TeqFw_Db_Back_Dem_Compile {
             };
 
             /**
-             * @param {TeqFw_Db_ObjectArray} values
+             * @param {TeqFw_Db_ProjectionDiagnosticArray} values
              * @param {string} fallbackPath
              * @param {string} fallbackStage
              */
@@ -155,7 +156,7 @@ export default class TeqFw_Db_Back_Dem_Compile {
             const hasLogicalError = allDiagnostics.some((item) => item.severity === 'error');
             if (!hasLogicalError) {
                 const requiredMethods = ['describe', 'resolveType', 'resolveDefault', 'resolveGeneration', 'resolveIndex', 'resolveRelation'];
-                const missing = requiredMethods.filter((name) => typeof adapter?.[name] !== 'function');
+                const missing = requiredMethods.filter((name) => typeof Reflect.get(adapter, name) !== 'function');
                 if (missing.length > 0) {
                     allDiagnostics.push(diagnostic.create({
                         code: 'DEM_CAPABILITY_UNSUPPORTED',
@@ -172,7 +173,9 @@ export default class TeqFw_Db_Back_Dem_Compile {
                     const tableIndexes = [];
                     const afterRelations = [];
                     const afterData = [];
+                    /** @type {Record<string, Record<string, string>>} */
                     const physicalByAttr = {};
+                    /** @type {Record<string, string>} */
                     const physicalNames = {};
                     /** @param {string} name @param {string} path */
                     const claimPhysicalName = function (name, path) {
@@ -193,6 +196,7 @@ export default class TeqFw_Db_Back_Dem_Compile {
                     for (const entityPath of Object.keys(analyzed.entities).sort()) {
                         const info = analyzed.entities[entityPath];
                         claimPhysicalName(info.tableName, info.pointer);
+                        /** @type {TeqFw_Db_PhysicalTableDraft} */
                         const table = {
                             comment: info.entity.comment,
                             columns: [],
@@ -215,6 +219,7 @@ export default class TeqFw_Db_Back_Dem_Compile {
                                 }], path, 'dialect');
                                 continue;
                             }
+                            /** @type {TeqFw_Db_PhysicalColumnDraft} */
                             const column = {
                                 comment: attr.comment,
                                 logicalType: attr.type,
@@ -325,7 +330,7 @@ export default class TeqFw_Db_Back_Dem_Compile {
                     physical = {
                         adapter: description.id,
                         namespace: analyzed.model.namespace,
-                        registryVersions: normalize(description.registryVersions ?? {}),
+                        registryVersions: /** @type {TeqFw_Db_Object} */ (normalize(description.registryVersions ?? {})),
                         tables,
                         phases: {
                             preflight: {requirements: [...requirements].sort()},

@@ -11,14 +11,28 @@ const NS = 'TeqFw_Db_Back_Dto_Dem_Compile_Graph';
  * Entity dependency graph.
  */
 export default class TeqFw_Db_Back_Dto_Dem_Compile_Graph {
-    /** @type {ReadonlyArray<object>} */
+    /** @type {TeqFw_Db_GraphCycleArray} */
     cycles;
-    /** @type {ReadonlyArray<object>} */
+    /** @type {TeqFw_Db_GraphEdgeArray} */
     edges;
     /** @type {ReadonlyArray<string>} */
     entities;
     /** @type {ReadonlyArray<string>} */
     topological;
+
+    /**
+     * @param {object} deps
+     * @param {TeqFw_Db_GraphCycleArray} deps.cycles
+     * @param {TeqFw_Db_GraphEdgeArray} deps.edges
+     * @param {ReadonlyArray<string>} deps.entities
+     * @param {ReadonlyArray<string>} deps.topological
+     */
+    constructor({cycles, edges, entities, topological}) {
+        this.cycles = cycles.map((item) => ({...item}));
+        this.edges = edges.map((item) => ({...item}));
+        this.entities = [...entities];
+        this.topological = [...topological];
+    }
 }
 
 /**
@@ -43,18 +57,14 @@ export class Factory {
 
         /**
          * @param {object} deps
-         * @param {TeqFw_Db_ObjectArray} deps.cycles
-         * @param {TeqFw_Db_ObjectArray} deps.edges
+         * @param {TeqFw_Db_GraphCycleArray} deps.cycles
+         * @param {TeqFw_Db_GraphEdgeArray} deps.edges
          * @param {TeqFw_Db_StringArray} deps.entities
          * @param {TeqFw_Db_StringArray} deps.topological
          * @returns {TeqFw_Db_Back_Dto_Dem_Compile_Graph}
          */
         this.create = function ({cycles, edges, entities, topological}) {
-            const res = new TeqFw_Db_Back_Dto_Dem_Compile_Graph();
-            res.cycles = cycles.map((item) => ({...item}));
-            res.edges = edges.map((item) => ({...item}));
-            res.entities = [...entities];
-            res.topological = [...topological];
+            const res = new TeqFw_Db_Back_Dto_Dem_Compile_Graph({cycles, edges, entities, topological});
             return freeze(res);
         };
     }

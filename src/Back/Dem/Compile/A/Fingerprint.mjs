@@ -8,7 +8,7 @@
 export default class TeqFw_Db_Back_Dem_Compile_A_Fingerprint {
     /**
      * @param {object} deps
-     * @param {object} deps.createHash
+     * @param {typeof import('node:crypto').createHash} deps.createHash
      */
     constructor({createHash}) {
         /**
@@ -29,7 +29,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Fingerprint {
 
         /**
          * @param {object} deps
-         * @param {object} deps.value
+         * @param {unknown} deps.value
          * @returns {string}
          */
         this.exec = function ({value}) {

@@ -10,9 +10,13 @@ export default class Option {
      * Initialize the component.
      */
     constructor() {
+        /** @type {unknown} */
         this.defaultValue = undefined;
+        /** @type {TeqFw_Db_StringOptional} */
         this.description = undefined;
+        /** @type {TeqFw_Db_StringOptional} */
         this.flags = undefined;
+        /** @type {unknown} */
         this.fn = undefined;
     }
 }

@@ -21,12 +21,12 @@ class Dto {
      * Contains all tables with data.
      * @type {Object<string, Object[]>}
      */
-    tables;
+    tables = {};
     /**
      * Contains all serials (for PostgreSQL DBs).
      * @type {Object<string, string>}
      */
-    serials;
+    serials = {};
 }
 
 /**
@@ -38,15 +38,15 @@ export default class TeqFw_Db_Back_Dto_Export {
      */
     constructor({cast}) {
         /**
-         * @param {TeqFw_Db_ExportDto} data
+         * @param {TeqFw_Db_ExportDto} [data]
          * @returns {TeqFw_Db_ExportDto}
          */
         this.createDto = function (data) {
             // create a new DTO
             const res = new Dto();
             // cast known attributes
-            res.tables = cast.object(data?.tables);
-            res.serials = cast.object(data?.serials);
+            res.tables = /** @type {Record<string, object[]>} */ (cast.object(data?.tables));
+            res.serials = /** @type {TeqFw_Db_StringMap} */ (cast.object(data?.serials));
             return res;
         };
     }

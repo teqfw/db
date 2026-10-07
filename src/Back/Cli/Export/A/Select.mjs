@@ -17,7 +17,7 @@ export default class TeqFw_Db_Back_Cli_Export_A_Select {
         /**
          * @param {object} deps
          * @param {TeqFw_Db_Back_RDb_ITrans} deps.trx
-         * @param {TeqFw_Db_Back_Dto_RDb_Table} deps.table
+         * @param {TeqFw_Db_ExportTable} deps.table
          * @returns {Promise<any>}
          */
         this.run = async function ({trx, table}) {

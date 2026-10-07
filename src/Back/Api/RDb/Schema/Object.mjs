@@ -21,7 +21,7 @@ export default class TeqFw_Db_Back_Api_RDb_Schema_Object {
      * @param {any} data
      * @returns {any}
      */
-    createDto(data) {}
+    createDto(data) { throw new Error('Not implemented.'); }
 
     /**
      * Get codifier for entity attributes.
@@ -31,13 +31,13 @@ export default class TeqFw_Db_Back_Api_RDb_Schema_Object {
      * Example: { ID: 'id', DATE_CREATED: 'date_created', ... }.
      * @returns {any}
      */
-    getAttributes() {}
+    getAttributes() { throw new Error('Not implemented.'); }
     /**
      * Return registered logical type descriptors keyed by persistent attribute name or attribute codifier key.
      * Selection v2 requires this metadata.
      * @returns {any}
      */
-    getLogicalTypes() {}
+    getLogicalTypes() { throw new Error('Not implemented.'); }
 
 
     /**
@@ -45,7 +45,7 @@ export default class TeqFw_Db_Back_Api_RDb_Schema_Object {
      * Format: '@vendor/package/path/to/entity'.
      * @returns {string}
      */
-    getEntityName() {}
+    getEntityName() { throw new Error('Not implemented.'); }
 
     /**
      * Return array with primary keys for the entity.
@@ -53,5 +53,5 @@ export default class TeqFw_Db_Back_Api_RDb_Schema_Object {
      * in the order they are defined in the schema.
      * @returns {any}
      */
-    getPrimaryKey() {}
+    getPrimaryKey() { throw new Error('Not implemented.'); }
 }

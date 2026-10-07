@@ -18,7 +18,9 @@ export default class Config {
     constructor({deep, reader}) {
         /** @type {Map<string, any>} */
         const configurations = new Map();
+        /** @type {TeqFw_Db_StringOptional} */
         let projectRoot;
+        /** @type {TeqFw_Db_StringOptional} */
         let version;
 
         /**

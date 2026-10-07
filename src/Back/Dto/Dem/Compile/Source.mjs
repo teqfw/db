@@ -21,6 +21,22 @@ export default class TeqFw_Db_Back_Dto_Dem_Compile_Source {
     revision;
     /** @type {string} */
     sourcePointer;
+
+    /**
+     * @param {object} deps
+     * @param {string} deps.filename
+     * @param {string} deps.fragmentId
+     * @param {string} deps.packageName
+     * @param {string} deps.revision
+     * @param {string} deps.sourcePointer
+     */
+    constructor({filename, fragmentId, packageName, revision, sourcePointer}) {
+        this.filename = filename;
+        this.fragmentId = fragmentId;
+        this.packageName = packageName;
+        this.revision = revision;
+        this.sourcePointer = sourcePointer;
+    }
 }
 
 /**
@@ -52,12 +68,9 @@ export class Factory {
             if (typeof sourcePointer !== 'string') {
                 throw new TypeError("Trusted source field 'sourcePointer' must be a string.");
             }
-            const res = new TeqFw_Db_Back_Dto_Dem_Compile_Source();
-            res.filename = filename;
-            res.fragmentId = fragmentId;
-            res.packageName = packageName;
-            res.revision = revision;
-            res.sourcePointer = sourcePointer;
+            const res = new TeqFw_Db_Back_Dto_Dem_Compile_Source({
+                filename, fragmentId, packageName, revision, sourcePointer,
+            });
             return Object.freeze(res);
         };
     }

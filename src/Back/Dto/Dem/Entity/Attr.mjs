@@ -13,17 +13,17 @@ const NS = 'TeqFw_Db_Back_Dto_Dem_Entity_Attr';
 
 // MODULE'S CLASSES
 export default class TeqFw_Db_Back_Dto_Dem_Entity_Attr {
-    /** @type {string} */
+    /** @type {string | undefined} */
     comment;
-    /** @type {string|number|boolean} */
+    /** @type {unknown} */
     default;
-    /** @type {string} */
+    /** @type {string | undefined} */
     name;
-    /** @type {boolean} */
+    /** @type {boolean | undefined} */
     nullable;
-    /** @type {TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options} */
+    /** @type {TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options | undefined} */
     options;
-    /** @type {string} */
+    /** @type {string | undefined} */
     type;
 }
 
@@ -41,10 +41,12 @@ export class Factory {
      */
     constructor({cast, fOpts}) {
         /**
-         * @param {TeqFw_Db_ObjectOrNull} data
+         * @param {unknown} input
          * @returns {TeqFw_Db_Back_Dto_Dem_Entity_Attr}
          */
-        this.create = function (data = null) {
+        this.create = function (input = null) {
+            const data = input && typeof input === 'object' && !Array.isArray(input)
+                ? /** @type {TeqFw_Db_Object} */ (input) : null;
             const res = new TeqFw_Db_Back_Dto_Dem_Entity_Attr();
             res.comment = cast.string(data?.comment);
             res.default = cast.primitive(data?.default);

@@ -18,23 +18,23 @@ export default class TeqFw_Db_Back_RDb_Meta_IEntity {
      * @param {any} data
      * @returns {any}
      */
-    createDto(data) {}
+    createDto(data) { throw new Error('Not implemented.'); }
 
     /**
      * Get codifier for entity attributes.
      * @returns {any}
      */
-    getAttributes() {}
+    getAttributes() { throw new Error('Not implemented.'); }
 
     /**
      * Get entity name: '@vnd/plugin/path/to/entity'.
      * @returns {string}
      */
-    getEntityName() { }
+    getEntityName() { throw new Error('Not implemented.'); }
 
     /**
      * Return array with primary keys for the entity.
      * @returns {any}
      */
-    getPrimaryKey() {}
+    getPrimaryKey() { throw new Error('Not implemented.'); }
 }

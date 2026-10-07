@@ -21,8 +21,8 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
         };
 
         /**
-         * @param {any} value
-         * @returns {boolean}
+         * @param {unknown} value
+         * @returns {value is TeqFw_Db_Object}
          */
         const isObject = function (value) {
             return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
@@ -46,15 +46,15 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
 
         /**
          * @param {object} deps
-         * @param {object} deps.composed
-         * @param {object} deps.mapEnvelope
+         * @param {TeqFw_Db_ComposedDem} deps.composed
+         * @param {TeqFw_Db_InputEnvelope} deps.mapEnvelope
          * @returns {any}
          */
         this.exec = function ({composed, mapEnvelope}) {
             const diagnostics = [...composed.diagnostics];
             const model = composed.model;
             const provenance = composed.provenance;
-            const raw = isObject(mapEnvelope?.declaration) ? mapEnvelope.declaration : {};
+            const raw = /** @type {TeqFw_Db_Object} */ (isObject(mapEnvelope?.declaration) ? mapEnvelope.declaration : {});
             const mapId = mapEnvelope?.mapId ?? mapEnvelope?.fragmentId;
             const trusted = typeof mapId === 'string' && mapId.length > 0
                 && typeof mapEnvelope?.packageName === 'string' && mapEnvelope.packageName.length > 0
@@ -67,9 +67,9 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
             const makeSource = function (sourcePointer) {
                 if (!trusted) return null;
                 return source.create({
-                    filename: mapEnvelope.filename,
+                    filename: /** @type {string} */ (mapEnvelope.filename),
                     fragmentId: mapId,
-                    packageName: mapEnvelope.packageName,
+                    packageName: /** @type {string} */ (mapEnvelope.packageName),
                     revision: mapEnvelope.revision,
                     sourcePointer,
                 });
@@ -78,21 +78,21 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
             /**
              * @param {object} deps
              * @param {string} deps.code
-             * @param {object} deps.details
+             * @param {TeqFw_Db_Object} [deps.details]
              * @param {string} deps.message
              * @param {string} deps.path
-             * @param {object} deps.sources
-             * @param {string} deps.stage
+             * @param {TeqFw_Db_SourceArray} [deps.sources]
+             * @param {string} [deps.stage]
              */
             const addDiagnostic = function ({code, details = {}, message, path, sources = [], stage = 'decode'}) {
                 diagnostics.push(diagnostic.create({code, details, message, path, sources, stage}));
             };
 
             /**
-             * @param {any} value
-             * @param {any} allowed
+             * @param {unknown} value
+             * @param {TeqFw_Db_StringArray} allowed
              * @param {string} path
-             * @returns {boolean}
+             * @returns {value is TeqFw_Db_Object}
              */
             const checkObject = function (value, allowed, path) {
                 if (!isObject(value)) {
@@ -154,6 +154,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
                 });
             }
             model.namespace = typeof raw.namespace === 'string' ? normalizeName(raw.namespace) : '';
+            /** @type {Record<string, Record<string, {attrs: TeqFw_Db_StringMap; path: string; sourcePointer: string}>>} */
             const mapRefs = {};
             if (raw.ref !== undefined && !isObject(raw.ref)) {
                 checkObject(raw.ref, [], '/ref');
@@ -161,12 +162,13 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
                 for (const owner of Object.keys(raw.ref).sort()) {
                     const ownerValue = raw.ref[owner];
                     const ownerPointer = `/ref/${escapePointer(owner)}`;
-                    if (!checkObject(ownerValue, Object.keys(ownerValue ?? {}), ownerPointer)) continue;
+                    if (!checkObject(ownerValue, isObject(ownerValue) ? Object.keys(ownerValue) : [], ownerPointer)) continue;
                     mapRefs[owner] = {};
                     for (const refPath of Object.keys(ownerValue).sort()) {
-                        let entry = ownerValue[refPath];
                         const entryPointer = `${ownerPointer}/${escapePointer(refPath)}`;
-                        if (!checkObject(entry, ['attrs', 'path'], entryPointer)) entry = {};
+                        const entry = checkObject(ownerValue[refPath], ['attrs', 'path'], entryPointer)
+                            ? /** @type {TeqFw_Db_Object} */ (ownerValue[refPath]) : {};
+                        /** @type {TeqFw_Db_StringMap} */
                         const attrs = {};
                         if (entry.attrs !== undefined && !isObject(entry.attrs)) {
                             checkObject(entry.attrs, [], `${entryPointer}/attrs`);
@@ -217,7 +219,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
             }
 
             /**
-             * @param {any} container
+             * @param {TeqFw_Db_DecodedContainer} container
              * @param {string} pointer
              */
             const walk = function (container, pointer) {
@@ -243,7 +245,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
                             continue;
                         }
                         relation.ref.path = entry.path;
-                        relation.ref.attrs = relation.ref.attrs.map((name) => entry.attrs[name] ?? name);
+                        relation.ref.attrs = relation.ref.attrs.map((/** @type {string} */ name) => entry.attrs[name] ?? name);
                         const mapSource = makeSource(entry.sourcePointer);
                         if (mapSource) {
                             const values = provenance[relationPointer] ?? [];
@@ -281,16 +283,24 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
                 addDiagnostic({code: 'DEM_DECLARATION_SHAPE_INVALID', details: {field: 'identityProfile', input: 'map'}, message: 'Identity profile requires type and generation objects.', path: '/identityProfile', sources: evidence ? [evidence] : []});
             }
             if (isObject(profile) && isObject(profile.type) && isObject(profile.generation)) {
-                const mode = profile.generation.params?.mode === undefined ? 'byDefault' : profile.generation.params.mode;
+                const generationParams = isObject(profile.generation.params) ? profile.generation.params : {};
+                const mode = generationParams.mode === undefined ? 'byDefault' : generationParams.mode;
                 if (profile.type.id !== 'core.integer' || profile.generation.kind !== 'core.identity'
-                    || !['byDefault', 'allocated', 'always'].includes(mode)) {
+                    || (mode !== 'byDefault' && mode !== 'allocated' && mode !== 'always')) {
                     const evidence = makeSource('/identityProfile/generation');
                     addDiagnostic({code: 'DEM_GENERATION_INVALID', details: {mode}, message: 'The host identity profile requires integer core.identity generation with a registered mode.', path: '/identityProfile/generation', sources: evidence ? [evidence] : [], stage: 'logical'});
                 }
             }
+            const identityProfile = isObject(profile) && isObject(profile.type) && isObject(profile.generation)
+                && typeof profile.type.id === 'string' && typeof profile.generation.kind === 'string'
+                ? {
+                    type: {id: profile.type.id, params: isObject(profile.type.params) ? structuredClone(profile.type.params) : {}},
+                    generation: {kind: profile.generation.kind, params: isObject(profile.generation.params) ? structuredClone(profile.generation.params) : {}},
+                } : null;
+            /** @type {Record<string, TeqFw_Db_DecodedEntity>} */
             const entities = {};
             /**
-             * @param {any} container
+             * @param {TeqFw_Db_DecodedContainer} container
              */
             const collectEntities = function (container) {
                 for (const entity of Object.values(container.entity ?? {})) entities[entity.path] = entity;
@@ -298,7 +308,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
             };
             collectEntities(model);
             /**
-             * @param {any} container
+             * @param {TeqFw_Db_DecodedContainer} container
              * @param {string} pointer
              */
             const resolveIdentities = function (container, pointer) {
@@ -310,13 +320,13 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
                         }
                         if (attr.type?.id !== 'core.identity') continue;
                         const attrPointer = `${entityPointer}/attr/${escapePointer(attrName)}`;
-                        if (!isObject(profile) || !isObject(profile.type) || !isObject(profile.generation)) continue;
+                        if (!identityProfile) continue;
                         if (Object.keys(attr.type.params ?? {}).length > 0) {
                             addDiagnostic({code: 'DEM_TYPE_PARAMS_INVALID', details: {type: 'core.identity'}, message: 'core.identity does not accept type parameters.', path: attrPointer + '/type/params', sources: provenance[attrPointer] ?? [], stage: 'logical'});
                             continue;
                         }
-                        attr.type = structuredClone(profile.type);
-                        attr.generation = structuredClone(profile.generation);
+                        attr.type = structuredClone(identityProfile.type);
+                        attr.generation = structuredClone(identityProfile.generation);
                         attr.__demSpecial = 'identity';
                         const generationSource = raw.identityProfile === undefined
                             ? provenance[attrPointer] ?? []
@@ -336,7 +346,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
             };
             resolveIdentities(model, '');
             /**
-             * @param {any} container
+             * @param {TeqFw_Db_DecodedContainer} container
              * @param {string} pointer
              */
             const resolveReferences = function (container, pointer) {
@@ -369,7 +379,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
             };
             resolveReferences(model, '');
             /**
-             * @param {any} container
+             * @param {TeqFw_Db_DecodedContainer} container
              */
             const clearSpecialMarkers = function (container) {
                 for (const entity of Object.values(container.entity ?? {})) {

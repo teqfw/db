@@ -41,11 +41,11 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Plan {
 
         /**
          * @param {object} deps
-         * @param {object} deps.compilation
-         * @param {object} deps.operation
-         * @param {boolean} deps.includeData
-         * @param {object} deps.cycleStrategy
-         * @returns {any}
+         * @param {TeqFw_Db_DemCompilationResult} deps.compilation
+         * @param {TeqFw_Db_SchemaOperation} [deps.operation]
+         * @param {boolean} [deps.includeData]
+         * @param {TeqFw_Db_CycleStrategyNullable} [deps.cycleStrategy]
+         * @returns {TeqFw_Db_SchemaPlan}
          */
         this.exec = function ({compilation, operation = 'create', includeData = false, cycleStrategy = null}) {
             compile.assertResult({value: compilation});
@@ -62,6 +62,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Plan {
                 return (tableRank[left.entity] ?? Number.MAX_SAFE_INTEGER) - (tableRank[right.entity] ?? Number.MAX_SAFE_INTEGER)
                     || String(left.name).localeCompare(String(right.name));
             };
+            /** @type {Record<string, TeqFw_Db_PhysicalIndexArray>} */
             const indexesByEntity = {};
             for (const index of physical.phases.tables) {
                 (indexesByEntity[index.entity] ??= []).push(index);
@@ -69,6 +70,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Plan {
             for (const indexes of Object.values(indexesByEntity)) indexes.sort(sortOperations);
 
             const cycleOperation = operation === 'transfer' || operation === 'rebuild';
+            /** @type {ReadonlyArray<string>} */
             let cycleRequirements = [];
             if (cycleOperation && compilation.graph.cycles.length > 0) {
                 const adapter = dialects.getById({id: physical.adapter});

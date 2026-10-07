@@ -22,7 +22,8 @@ declare const evidence: DbRebuildEvidence;
 const ambientConnection: TeqFw_Db_Back_RDb_IConnect = connection;
 const ambientTransaction: TeqFw_Db_Back_RDb_ITrans = transaction;
 const ambientCompilerResult: TeqFw_Db_Back_Dto_Dem_Compile_Result = compilation;
-const ambientSelection: TeqFw_Db_Shared_Dto_Query_Selection = selection;
+declare const selectionFactory: TeqFw_Db_Shared_Dto_Query_Selection__Factory;
+const ambientSelection: TeqFw_Db_Shared_Dto_Query_Selection = selectionFactory.create(selection);
 
 void [config, adapter, diagnostic, evidence];
 void [ambientConnection, ambientTransaction, ambientCompilerResult, ambientSelection];

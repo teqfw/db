@@ -13,24 +13,24 @@ const NS = 'TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options';
 
 // MODULE'S CLASSES
 export default class TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options {
-    /** @type {boolean} */
+    /** @type {boolean | null | undefined} */
     dateOnly;
     /**
      * Used with 'integer' attributes.
-     * @type {boolean}
+     * @type {boolean | null | undefined}
      */
     isTiny;
-    /** @type {number} */
+    /** @type {number | undefined} */
     length;
-    /** @type {number} */
+    /** @type {number | undefined} */
     precision;
-    /** @type {number} */
+    /** @type {number | undefined} */
     scale;
-    /** @type {boolean} */
+    /** @type {boolean | null | undefined} */
     unsigned;
     /**
      * Enum values.
-     * @type {Array}
+     * @type {unknown[] | undefined}
      */
     values;
 }
@@ -49,10 +49,12 @@ export class Factory {
      */
     constructor({cast}) {
         /**
-         * @param {TeqFw_Db_ObjectOrNull} data
+         * @param {unknown} input
          * @returns {TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options}
          */
-        this.create = function (data = null) {
+        this.create = function (input = null) {
+            const data = input && typeof input === 'object' && !Array.isArray(input)
+                ? /** @type {TeqFw_Db_Object} */ (input) : null;
             const res = new TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options();
             res.dateOnly = cast.booleanIfExists(data?.dateOnly);
             res.isTiny = cast.booleanIfExists(data?.isTiny);

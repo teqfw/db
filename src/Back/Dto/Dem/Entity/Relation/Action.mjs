@@ -13,9 +13,9 @@ const NS = 'TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action';
 
 // MODULE'S CLASSES
 export default class TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action {
-    /** @type {TeqFw_Db_Back_Enum_Dem_Type_Action} */
+    /** @type {TeqFw_Db_StringOptional} */
     delete;
-    /** @type {TeqFw_Db_Back_Enum_Dem_Type_Action} */
+    /** @type {TeqFw_Db_StringOptional} */
     update;
 }
 
@@ -33,13 +33,17 @@ export class Factory {
      */
     constructor({cast, ACTION}) {
         /**
-         * @param {TeqFw_Db_ObjectOrNull} data
+         * @param {unknown} input
          * @returns {TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action}
          */
-        this.create = function (data = null) {
+        this.create = function (input = null) {
+            const data = input && typeof input === 'object' && !Array.isArray(input)
+                ? /** @type {TeqFw_Db_Object} */ (input) : null;
             const res = new TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action();
-            res.delete = cast.enum(data?.delete, ACTION);
-            res.update = cast.enum(data?.update, ACTION);
+            const deleteValue = cast.enum(data?.delete, ACTION);
+            res.delete = typeof deleteValue === 'string' ? deleteValue : undefined;
+            const updateValue = cast.enum(data?.update, ACTION);
+            res.update = typeof updateValue === 'string' ? updateValue : undefined;
             return res;
         };
     }

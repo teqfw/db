@@ -48,4 +48,6 @@ export default class TeqFw_Db_Back_Api_RDb_Dialect {
     encodeValue(input) {}
     /** @param {any} input @returns {any} */
     decodeValue(input) {}
+    /** @param {TeqFw_Db_CycleValidationInput} input @returns {TeqFw_Db_CycleValidation} */
+    validateCycleStrategy(input) { throw new Error('Not implemented.'); }
 }

@@ -12,7 +12,7 @@ export default class TeqFw_Db_Back_RDb_Identity {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_DemCompiler} deps.compile
-     * @param {TeqFw_Db_CreateHash} deps.createHash
+     * @param {typeof import('node:crypto').createHash} deps.createHash
      */
     constructor({compile, createHash}) {
         const counterEntity = '/teqfw/db/schema/identitycounter';

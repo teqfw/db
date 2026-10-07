@@ -13,9 +13,9 @@ const NS = 'TeqFw_Db_Back_Dto_Dem_Entity_Relation_Ref';
 
 // MODULE'S CLASSES
 export default class TeqFw_Db_Back_Dto_Dem_Entity_Relation_Ref {
-    /** @type {string[]} */
+    /** @type {unknown[] | undefined} */
     attrs;
-    /** @type {string} */
+    /** @type {string | undefined} */
     path;
 }
 
@@ -32,10 +32,12 @@ export class Factory {
      */
     constructor({cast}) {
         /**
-         * @param {TeqFw_Db_ObjectOrNull} data
+         * @param {unknown} input
          * @returns {TeqFw_Db_Back_Dto_Dem_Entity_Relation_Ref}
          */
-        this.create = function (data = null) {
+        this.create = function (input = null) {
+            const data = input && typeof input === 'object' && !Array.isArray(input)
+                ? /** @type {TeqFw_Db_Object} */ (input) : null;
             const res = new TeqFw_Db_Back_Dto_Dem_Entity_Relation_Ref();
             res.attrs = cast.array(data?.attrs);
             res.path = cast.string(data?.path);

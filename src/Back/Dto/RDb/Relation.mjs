@@ -13,17 +13,17 @@ const NS = 'TeqFw_Db_Back_Dto_RDb_Relation';
 
 // MODULE'S CLASSES
 export default class TeqFw_Db_Back_Dto_RDb_Relation {
-    /** @type {string[]} */
+    /** @type {unknown[] | undefined} */
     itsColumns;
-    /** @type {string} */
+    /** @type {string | undefined} */
     itsTable;
-    /** @type {string} */
+    /** @type {string | undefined} */
     name;
-    /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Action} */
+    /** @type {TeqFw_Db_StringOptional} */
     onDelete;
-    /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Action} */
+    /** @type {TeqFw_Db_StringOptional} */
     onUpdate;
-    /** @type {string[]} */
+    /** @type {unknown[] | undefined} */
     ownColumns;
 }
 // attributes names to use as aliases in queries to object props
@@ -48,16 +48,20 @@ export class Factory {
      */
     constructor({cast, ACTION}) {
         /**
-         * @param {TeqFw_Db_ObjectOrNull} data
+         * @param {unknown} input
          * @returns {TeqFw_Db_Back_Dto_RDb_Relation}
          */
-        this.create = function (data = null) {
+        this.create = function (input = null) {
+            const data = input && typeof input === 'object' && !Array.isArray(input)
+                ? /** @type {TeqFw_Db_Object} */ (input) : null;
             const res = new TeqFw_Db_Back_Dto_RDb_Relation();
             res.itsColumns = cast.array(data?.itsColumns);
             res.itsTable = cast.string(data?.itsTable);
             res.name = cast.string(data?.name);
-            res.onDelete = cast.enum(data?.onDelete, ACTION);
-            res.onUpdate = cast.enum(data?.onUpdate, ACTION);
+            const onDeleteValue = cast.enum(data?.onDelete, ACTION);
+            res.onDelete = typeof onDeleteValue === 'string' ? onDeleteValue : undefined;
+            const onUpdateValue = cast.enum(data?.onUpdate, ACTION);
+            res.onUpdate = typeof onUpdateValue === 'string' ? onUpdateValue : undefined;
             res.ownColumns = cast.array(data?.ownColumns);
             return res;
         };

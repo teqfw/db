@@ -13,9 +13,9 @@ const NS = 'TeqFw_Db_Back_Dto_Dem_Package';
 
 // MODULE'S CLASSES
 export default class TeqFw_Db_Back_Dto_Dem_Package {
-    /** @type {Object<string, TeqFw_Db_Back_Dto_Dem_Entity>} */
+    /** @type {Object<string, TeqFw_Db_Back_Dto_Dem_Entity> | undefined} */
     entity;
-    /** @type {Object<string, TeqFw_Db_Back_Dto_Dem_Package>} */
+    /** @type {Object<string, TeqFw_Db_Back_Dto_Dem_Package> | undefined} */
     package;
 }
 
@@ -44,6 +44,7 @@ export class Factory {
              * @returns {any}
              */
             function parse(fnCreate, data) {
+                /** @type {TeqFw_Db_Object} */
                 const res = {};
                 if (typeof data === 'object') {
                     for (const name of Object.keys(data)) {

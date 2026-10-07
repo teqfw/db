@@ -8,13 +8,13 @@
 const NS = 'TeqFw_Db_Shared_Dto_Query_Selection';
 
 export default class TeqFw_Db_Shared_Dto_Query_Selection {
-    /** @type {number} */ version;
+    /** @type {2} */ version = 2;
     /** @type {TeqFw_Db_QueryExpression|undefined} */ where;
-    /** @type {TeqFw_Db_QueryProjectionArray} */ select;
-    /** @type {TeqFw_Db_QueryOrderingArray} */ orderBy;
-    /** @type {number} */ limit;
-    /** @type {number} */ offset;
-    /** @type {TeqFw_Db_Object} */ execution;
+    /** @type {TeqFw_Db_QueryProjectionArray} */ select = [];
+    /** @type {TeqFw_Db_QueryOrderingArray} */ orderBy = [];
+    /** @type {number} */ limit = 0;
+    /** @type {number} */ offset = 0;
+    /** @type {TeqFw_Db_Object} */ execution = {};
 }
 
 export class Factory {
@@ -34,7 +34,7 @@ export class Factory {
             return Object.freeze(value);
         };
 
-        /** @param {any} data @returns {any} */
+        /** @param {any} data @returns {TeqFw_Db_Shared_Dto_Query_Selection} */
         this.create = function (data) {
             if (!isObject(data) || data.version !== 2) throw new TypeError('Selection v2 requires version: 2.');
             const allowed = ['execution', 'limit', 'offset', 'orderBy', 'select', 'version', 'where'];
@@ -44,7 +44,7 @@ export class Factory {
             result.version = 2;
             if (data.where !== undefined) result.where = expression.create(data.where);
             if (data.select !== undefined && !Array.isArray(data.select)) throw new TypeError('Selection select must be an array.');
-            result.select = (data.select ?? []).map((item) => {
+            result.select = (data.select ?? []).map((/** @type {TeqFw_Db_Object} */ item) => {
                 if (!isObject(item) || typeof item.as !== 'string' || !item.as || item.expression === undefined) {
                     throw new TypeError('Derived selection requires as and expression.');
                 }
@@ -56,15 +56,15 @@ export class Factory {
                 throw new TypeError('Derived selection aliases must be unique.');
             }
             if (data.orderBy !== undefined && !Array.isArray(data.orderBy)) throw new TypeError('Selection orderBy must be an array.');
-            result.orderBy = (data.orderBy ?? []).map((item) => {
-                if (!isObject(item) || !['asc', 'desc'].includes(item.direction) || item.expression === undefined) {
+            result.orderBy = (data.orderBy ?? []).map((/** @type {TeqFw_Db_Object} */ item) => {
+                if (!isObject(item) || (item.direction !== 'asc' && item.direction !== 'desc') || item.expression === undefined) {
                     throw new TypeError('Selection ordering requires expression and asc/desc direction.');
                 }
                 const fields = Object.keys(item).filter((key) => !['direction', 'expression'].includes(key));
                 if (fields.length) throw new TypeError(`Unknown ordering field '${fields.sort()[0]}'.`);
                 return {direction: item.direction, expression: expression.create(item.expression)};
             });
-            for (const name of ['limit', 'offset']) {
+            for (const name of /** @type {TeqFw_Db_PaginationFields} */ (['limit', 'offset'])) {
                 const value = data[name] ?? 0;
                 if (!Number.isInteger(value) || value < 0) throw new TypeError(`Selection ${name} must be a non-negative integer.`);
                 result[name] = value;

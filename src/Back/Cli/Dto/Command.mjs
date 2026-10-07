@@ -10,11 +10,17 @@ export default class Command {
      * Initialize the component.
      */
     constructor() {
+        /** @type {unknown} */
         this.action = undefined;
+        /** @type {unknown[]} */
         this.args = [];
+        /** @type {TeqFw_Db_StringOptional} */
         this.desc = undefined;
+        /** @type {TeqFw_Db_StringOptional} */
         this.name = undefined;
+        /** @type {unknown[]} */
         this.opts = [];
+        /** @type {TeqFw_Db_StringOptional} */
         this.realm = undefined;
     }
 }

@@ -13,15 +13,15 @@ const NS = 'TeqFw_Db_Back_Dto_RDb_Table';
 
 // MODULE'S CLASSES
 export default class TeqFw_Db_Back_Dto_RDb_Table {
-    /** @type {TeqFw_Db_Back_Dto_RDb_Column[]} */
+    /** @type {TeqFw_Db_Back_Dto_RDb_Column[] | undefined} */
     columns;
-    /** @type {string} */
+    /** @type {string | undefined} */
     comment;
-    /** @type {TeqFw_Db_Back_Dto_RDb_Index[]} */
+    /** @type {TeqFw_Db_Back_Dto_RDb_Index[] | undefined} */
     indexes;
-    /** @type {string} */
+    /** @type {string | undefined} */
     name;
-    /** @type {TeqFw_Db_Back_Dto_RDb_Relation[]} */
+    /** @type {TeqFw_Db_Back_Dto_RDb_Relation[] | undefined} */
     relations;
 }
 // attributes names to use as aliases in queries to object props
@@ -46,16 +46,18 @@ export class Factory {
      */
     constructor({cast, fColumn, fIndex, fRelation}) {
         /**
-         * @param {TeqFw_Db_ObjectOrNull} data
+         * @param {unknown} input
          * @returns {TeqFw_Db_Back_Dto_RDb_Table}
          */
-        this.create = function (data = null) {
+        this.create = function (input = null) {
+            const data = input && typeof input === 'object' && !Array.isArray(input)
+                ? /** @type {TeqFw_Db_Object} */ (input) : null;
             const res = new TeqFw_Db_Back_Dto_RDb_Table();
-            res.columns = cast.arrayOfObj(data?.columns, fColumn);
+            res.columns = Array.isArray(data?.columns) ? data.columns.map((item) => fColumn.create(item)) : [];
             res.comment = cast.string(data?.comment);
-            res.indexes = cast.arrayOfObj(data?.indexes, fIndex.create);
+            res.indexes = Array.isArray(data?.indexes) ? data.indexes.map((item) => fIndex.create(item)) : [];
             res.name = cast.string(data?.name);
-            res.relations = cast.arrayOfObj(data?.relations, fRelation.create);
+            res.relations = Array.isArray(data?.relations) ? data.relations.map((item) => fRelation.create(item)) : [];
             return res;
         };
     }

@@ -29,11 +29,11 @@ Object.freeze(ATTR);
 class Dto {
     static namespace = NS;
     /**
-     * @type {string}
+     * @type {TeqFw_Db_StringOptional}
      */
     alias;
     /**
-     * @type {string}
+     * @type {TeqFw_Db_StringOptional}
      * @see TeqFw_Db_Shared_Enum_Direction
      */
     dir;
@@ -58,7 +58,8 @@ export default class TeqFw_Db_Shared_Dto_Order {
             const res = Object.assign(new Dto(), data);
             // cast known attributes
             res.alias = cast.string(data?.alias);
-            res.dir = cast.enum(data?.dir, DIR, false);
+            const direction = cast.enum(data?.dir, DIR, false);
+            res.dir = typeof direction === 'string' ? direction : undefined;
             return res;
         };
 

@@ -35,9 +35,9 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
             return {code, details, message};
         };
 
-        /** @param {any} value @param {number} minimum @param {number} maximum @returns {boolean} */
+        /** @param {unknown} value @param {number} minimum @param {number} maximum @returns {value is number} */
         const integerInRange = function (value, minimum, maximum) {
-            return Number.isInteger(value) && value >= minimum && value <= maximum;
+            return typeof value === 'number' && Number.isInteger(value) && value >= minimum && value <= maximum;
         };
 
         /** @param {string} installed @param {string} minimum @returns {boolean} */
@@ -53,7 +53,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
             return true;
         };
 
-        /** @param {any} type @param {any} value @returns {boolean} */
+        /** @param {TeqFw_Db_LogicalType} type @param {unknown} value @returns {value is TeqFw_Db_VectorValue} */
         const validCanonical = function (type, value) {
             const params = type?.params ?? {};
             if (type?.id !== 'core.vector' || !integerInRange(params.dimensions, 1, 1_000_000_000)) return false;
@@ -61,11 +61,14 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
                 return params.sparse === false && typeof value === 'string'
                     && value.length === params.dimensions && /^[01]+$/.test(value);
             }
+            const dimensions = params.dimensions;
             if (params.sparse === true) {
-                if (!value || value.dimensions !== params.dimensions || !Array.isArray(value.entries)
-                    || value.entries.length > 16_000) return false;
-                return value.entries.every((entry, index, entries) => Number.isInteger(entry.index)
-                    && entry.index > 0 && entry.index <= params.dimensions
+                if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+                const sparse = /** @type {TeqFw_Db_Object} */ (value);
+                if (sparse.dimensions !== params.dimensions || !Array.isArray(sparse.entries)
+                    || sparse.entries.length > 16_000) return false;
+                return sparse.entries.every((entry, index, entries) => Number.isInteger(entry.index)
+                    && entry.index > 0 && entry.index <= dimensions
                     && typeof entry.value === 'number' && Number.isFinite(entry.value) && entry.value !== 0
                     && (index === 0 || entries[index - 1].index < entry.index));
             }
@@ -74,6 +77,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
                 && value.every((item) => typeof item === 'number' && Number.isFinite(item));
         };
 
+        /** @type {Record<string, TeqFw_Db_VectorStorageRule>} */
         const storageRules = Object.freeze({
             bit: {capability: 'postgresql.type.bit', maxDimensions: 64_000, element: 'bit', sparse: false},
             halfvec: {capability: 'postgresql.type.halfvec', maxDimensions: 16_000, element: 'float', sparse: false},
@@ -86,6 +90,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
             const rule = storageRules[physicalType];
             return {
                 requirements: [extensionCapability, rule.capability],
+                /** @param {TeqFw_Db_VectorStorageInput} input @returns {TeqFw_Db_VectorProjection} */
                 project: function ({binding, logicalType}) {
                     const params = binding?.params;
                     const logical = logicalType?.params ?? {};
@@ -102,13 +107,14 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
                     return {
                         diagnostics,
                         physicalType: diagnostics.length ? undefined : {
-                            args: [logical.dimensions], dialect: 'postgresql', type: physicalType, unsigned: false,
+                            args: [/** @type {number} */ (logical.dimensions)], dialect: 'postgresql', type: physicalType, unsigned: false,
                         },
                     };
                 },
             };
         };
 
+        /** @type {Record<string, TeqFw_Db_VectorOperatorClass>} */
         const operatorClasses = Object.freeze({
             'postgresql.bit_hamming_ops': {methods: ['hnsw', 'ivfflat'], physical: 'bit_hamming_ops', storage: 'bit'},
             'postgresql.bit_jaccard_ops': {methods: ['hnsw'], physical: 'bit_jaccard_ops', storage: 'bit'},
@@ -145,12 +151,13 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
             const requirement = `postgresql.index.${method}`;
             return {
                 requirements: [extensionCapability, requirement],
+                /** @param {TeqFw_Db_VectorIndexInput} input @returns {TeqFw_Db_IndexProjection} */
                 project: function ({entity, index, physicalName}) {
                     const diagnostics = [];
                     const key = index.keys?.[0];
                     const attr = key?.attr ? entity.attr?.[key.attr] : null;
                     const storage = attr?.storage?.postgresql?.type;
-                    const operatorClass = operatorClasses[key?.operatorClass];
+                    const operatorClass = key?.operatorClass ? operatorClasses[key.operatorClass] : undefined;
                     if (index.keys?.length !== 1 || !attr || key.expression !== undefined || key.order !== undefined
                         || key.nulls !== undefined || !operatorClass || operatorClass.storage !== storage
                         || !operatorClass.methods.includes(method)) {
@@ -163,6 +170,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
                             include: index.include ?? [], method: `postgresql.${method}`,
                         }));
                     }
+                    /** @type {TeqFw_Db_NumberRangeMap} */
                     const allowedOptions = method === 'hnsw'
                         ? {m: [2, 100], ef_construction: [4, 1000]} : {lists: [1, 32768]};
                     const options = index.options ?? {};
@@ -182,7 +190,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
                     }
                     const dimensions = attr?.type?.params?.dimensions;
                     const maxDimensions = storage === 'vector' ? 2000 : storage === 'halfvec' ? 4000 : storage === 'bit' ? 64000 : null;
-                    if (maxDimensions && dimensions > maxDimensions) {
+                    if (maxDimensions && typeof dimensions === 'number' && dimensions > maxDimensions) {
                         diagnostics.push(diagnostic('DEM_INDEX_INVALID', 'Vector dimensions exceed the selected pgvector 0.7 index limit.', {
                             dimensions, maximum: maxDimensions, storage,
                         }));
@@ -190,7 +198,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
                     return {
                         descriptor: diagnostics.length ? undefined : {
                             include: [],
-                            keys: [{attr: key.attr, operatorClass: operatorClass.physical}],
+                            keys: [{attr: key.attr, operatorClass: operatorClass?.physical}],
                             kind: 'index',
                             method,
                             name: physicalName,
@@ -214,6 +222,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
             'postgresql.hnsw': indexEntry('hnsw'),
             'postgresql.ivfflat': indexEntry('ivfflat'),
         });
+        /** @type {Record<string, TeqFw_Db_VectorOperator>} */
         const operators = freeze({
             'postgresql.pgvector.cosineDistance': {implementation: 'cosineDistance', physical: '<=>', storage: ['vector', 'halfvec', 'sparsevec']},
             'postgresql.pgvector.hammingDistance': {implementation: 'hammingDistance', physical: '<~>', storage: ['bit']},
@@ -241,7 +250,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
         /**
          * @param {object} deps
          * @param {string} deps.operator
-         * @param {object} deps.argumentTypes
+         * @param {ReadonlyArray<TeqFw_Db_LogicalType>} [deps.argumentTypes]
          * @returns {any}
          */
         this.resolveOperator = function ({operator, argumentTypes = []}) {
@@ -271,11 +280,11 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
 
         /**
          * @param {object} deps
-         * @param {object} deps.base
-         * @param {object} deps.connection
-         * @param {object} deps.fingerprint
+         * @param {TeqFw_Db_PreflightFunction} deps.base
+         * @param {TeqFw_Db_PreflightConnection} deps.connection
+         * @param {string} deps.fingerprint
          * @param {string} deps.operation
-         * @param {object} deps.requirements
+         * @param {ReadonlyArray<string>} deps.requirements
          * @returns {Promise<any>}
          */
         this.preflight = async function ({base, connection, fingerprint, operation, requirements}) {
@@ -285,8 +294,11 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
             const needsVector = requirements.some((item) => capabilities.includes(item));
             let installed = null;
             if (needsVector && diagnostics.length === 0) {
-                const database = connection?.getClient?.() ?? connection?.getKnexTrx?.();
+                /** @type {TeqFw_Db_KnexProvider} */
+                const provider = connection;
+                const database = provider.getClient?.() ?? provider.getKnex?.() ?? provider.getKnexTrx?.();
                 try {
+                    if (!database) throw new TypeError('Connection must expose a Knex client.');
                     const row = await database('pg_extension').select('extversion').where({extname: 'vector'}).first();
                     installed = row?.extversion ?? null;
                 } catch (error) {
@@ -311,29 +323,27 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
             });
         };
 
-        /** @param {object} deps @param {object} deps.column @param {object} deps.value @returns {any} */
+        /** @param {object} deps @param {TeqFw_Db_PhysicalColumn} deps.column @param {unknown} deps.value @returns {any} */
         this.encodeValue = function ({column, value}) {
             const type = column?.logicalType;
             if (type?.id !== 'core.vector') return value;
             if (value === null) return null;
             if (!validCanonical(type, value)) throw new TypeError('Value is not a canonical vector for the declared logical type.');
-            if (type.params.element === 'bit') return value;
-            if (type.params.sparse === true) {
-                return `{${value.entries.map((entry) => `${entry.index}:${entry.value}`).join(',')}}/${value.dimensions}`;
-            }
-            return `[${value.join(',')}]`;
+            if (typeof value === 'string') return value;
+            if (Array.isArray(value)) return `[${value.join(',')}]`;
+            return `{${value.entries.map((entry) => `${entry.index}:${entry.value}`).join(',')}}/${value.dimensions}`;
         };
 
-        /** @param {object} deps @param {object} deps.column @param {object} deps.value @returns {any} */
+        /** @param {object} deps @param {TeqFw_Db_PhysicalColumn} deps.column @param {unknown} deps.value @returns {any} */
         this.decodeValue = function ({column, value}) {
             const type = column?.logicalType;
             if (type?.id !== 'core.vector' || value === null) return value;
-            if (type.params.element === 'bit') {
+            if (type.params?.element === 'bit') {
                 if (!validCanonical(type, value)) throw new TypeError('Database bit vector is not canonical.');
                 return value;
             }
             let decoded;
-            if (type.params.sparse === true) {
+            if (type.params?.sparse === true) {
                 const match = /^\{(.*)\}\/(\d+)$/.exec(String(value));
                 if (!match) throw new TypeError('Database sparse vector is malformed.');
                 const entries = match[1] === '' ? [] : match[1].split(',').map((item) => {
@@ -352,10 +362,10 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
 
         /**
          * @param {object} deps
-         * @param {object} deps.base
-         * @param {object} deps.column
-         * @param {object} deps.knex
-         * @param {object} deps.tableBuilder
+         * @param {TeqFw_Db_AddColumnFunction} deps.base
+         * @param {TeqFw_Db_PhysicalColumn} deps.column
+         * @param {TeqFw_Db_KnexQuerySource} deps.knex
+         * @param {TeqFw_Db_KnexTableBuilder} deps.tableBuilder
          * @returns {any}
          */
         this.addColumn = function ({base, column, knex, tableBuilder}) {
@@ -374,9 +384,10 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
             return builder;
         };
 
-        /** @param {any} expression @param {any} knex @returns {any} */
+        /** @param {TeqFw_Db_QueryExpression} expression @param {TeqFw_Db_KnexQuerySource} knex @returns {any} */
         const compilePredicate = function (expression, knex) {
             if (expression.kind === 'attr') return knex.raw('??', [expression.name]);
+            if (expression.kind !== 'call') throw new TypeError('pgvector index predicate operator is not registered.');
             const args = expression.args.map((item) => compilePredicate(item, knex));
             switch (expression.operator) {
                 case 'core.isNull': return knex.raw('? is null', [args[0]]);
@@ -390,22 +401,24 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
 
         /**
          * @param {object} deps
-         * @param {object} deps.base
-         * @param {object} deps.connection
-         * @param {object} deps.index
-         * @param {object} deps.knex
-         * @param {object} deps.table
+         * @param {TeqFw_Db_AddIndexFunction} deps.base
+         * @param {TeqFw_Db_Connection} deps.connection
+         * @param {TeqFw_Db_PhysicalIndex} deps.index
+         * @param {TeqFw_Db_KnexQuerySource} deps.knex
+         * @param {TeqFw_Db_PhysicalTable} deps.table
          * @returns {Promise<void>}
          */
         this.addIndex = async function ({base, connection, index, knex, table}) {
-            if (!['hnsw', 'ivfflat'].includes(index.method)) {
+            const method = index.method ?? '';
+            if (!['hnsw', 'ivfflat'].includes(method)) {
                 await base({connection, index, knex, table});
                 return;
             }
             const key = index.keys?.[0];
             const allowedClass = Object.values(operatorClasses).find((entry) => entry.physical === key?.operatorClass
-                && entry.methods.includes(index.method));
-            if (!allowedClass || index.keys.length !== 1) throw new TypeError('Unregistered pgvector physical index descriptor.');
+                && entry.methods.includes(method));
+            if (!allowedClass || index.keys.length !== 1 || typeof key?.attr !== 'string') throw new TypeError('Unregistered pgvector physical index descriptor.');
+            /** @type {TeqFw_Db_NumberRangeMap} */
             const optionRules = index.method === 'hnsw'
                 ? {m: [2, 100], ef_construction: [4, 1000]} : {lists: [1, 32768]};
             for (const [name, value] of Object.entries(index.options ?? {})) {
@@ -416,6 +429,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
             }
             if (!validPredicate(index.predicate)) throw new TypeError('Unregistered pgvector physical index predicate.');
             let sql = `CREATE INDEX ?? ON ?? USING ${index.method} (?? ${allowedClass.physical})`;
+            /** @type {Array<TeqFw_Db_SqlBinding>} */
             const bindings = [index.name, table.name, key.attr];
             const optionNames = index.method === 'hnsw' ? ['m', 'ef_construction'] : ['lists'];
             const options = optionNames.filter((name) => index.options[name] !== undefined);
@@ -429,7 +443,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
             await knex.raw(sql, bindings);
         };
 
-        /** @param {object} deps @param {object} deps.args @param {object} deps.descriptor @param {object} deps.knex @returns {any} */
+        /** @param {object} deps @param {TeqFw_Db_SqlArguments} deps.args @param {TeqFw_Db_OperatorDescriptor} deps.descriptor @param {TeqFw_Db_KnexQuerySource} deps.knex @returns {any} */
         this.compileExpression = function ({args, descriptor, knex}) {
             const entry = operators[descriptor.operator];
             if (!entry || entry.physical !== descriptor.physical) return null;
@@ -438,11 +452,12 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
 
         /**
          * @param {object} deps
-         * @param {object} deps.execution
-         * @param {object} deps.knex
+         * @param {TeqFw_Db_Object} deps.execution
+         * @param {TeqFw_Db_KnexQuerySource} deps.knex
          * @returns {Promise<void>}
          */
         this.applyExecutionOptions = async function ({execution, knex}) {
+            /** @type {Record<string, TeqFw_Db_ExecutionSetting>} */
             const registry = {
                 'postgresql.hnsw.ef_search': {maximum: 1000, minimum: 1, setting: 'hnsw.ef_search'},
                 'postgresql.ivfflat.probes': {maximum: 32768, minimum: 1, setting: 'ivfflat.probes'},
@@ -455,7 +470,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
                     throw new TypeError(`Query execution option '${name}' is outside its registered range.`);
                 }
             }
-            if (entries.length && knex?.isTransaction !== true) {
+            if (entries.length && !('isTransaction' in knex && knex.isTransaction === true)) {
                 throw new TypeError('PostgreSQL query execution options require one active transaction.');
             }
             for (const [name, value] of entries) {

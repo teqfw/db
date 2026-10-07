@@ -28,7 +28,7 @@ const OPT_FILE = 'file';
  * @param {TeqFw_Db_Back_Act_Dem_RdbTables} deps.actTables
  * @param {TeqFw_Db_Back_Cli_Export_A_Select} deps.aExport
  * @param {TeqFw_Db_Back_Dto_Export} deps.dtoExport
- * @param {object} deps.fs
+ * @param {typeof import('node:fs')} deps.fs
  * @returns {TeqFw_Db_Back_Cli_Dto_Command}
  * @memberOf TeqFw_Db_Back_Cli_Export
  */

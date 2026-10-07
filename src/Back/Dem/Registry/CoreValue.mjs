@@ -17,13 +17,14 @@ export default class TeqFw_Db_Back_Dem_Registry_CoreValue {
 
         /**
          * @param {object} deps
-         * @param {object} deps.type
-         * @param {boolean} deps.allowAny
-         * @returns {any}
+         * @param {unknown} deps.type
+         * @param {boolean} [deps.allowAny]
+         * @returns {TeqFw_Db_NormalizedCoreTypeNullable}
          */
-        this.normalizeType = function ({type, allowAny = false}) {
-            if (!type || typeof type !== 'object' || Array.isArray(type)
-                || typeof type.id !== 'string' || !type.params || typeof type.params !== 'object'
+        this.normalizeType = function ({type: input, allowAny = false}) {
+            if (!input || typeof input !== 'object' || Array.isArray(input)) return null;
+            const type = /** @type {TeqFw_Db_Object} */ (input);
+            if (typeof type.id !== 'string' || !type.params || typeof type.params !== 'object'
                 || Array.isArray(type.params)) return null;
             if (allowAny && type.id === 'core.any' && Object.keys(type.params).length === 0) {
                 return Object.freeze({id: 'core.any', params: Object.freeze({})});
@@ -49,7 +50,7 @@ export default class TeqFw_Db_Back_Dem_Registry_CoreValue {
                     break;
                 case 'core.enum':
                     valid = Array.isArray(params.values) && params.values.length > 0
-                        && params.values.every((item) => typeof item === 'string')
+                        && params.values.every((/** @type {unknown} */ item) => typeof item === 'string')
                         && new Set(params.values).size === params.values.length;
                     break;
                 case 'core.integer':
@@ -69,21 +70,20 @@ export default class TeqFw_Db_Back_Dem_Registry_CoreValue {
 
         /**
          * @param {object} deps
-         * @param {object} deps.type
-         * @param {object} deps.value
-         * @param {boolean} deps.allowAny
+         * @param {unknown} deps.type
+         * @param {unknown} deps.value
+         * @param {boolean} [deps.allowAny]
          * @returns {boolean}
          */
         this.matches = function ({type, value, allowAny = false}) {
             const canonical = this.normalizeType({allowAny, type});
             if (!canonical) return false;
-            const params = canonical.params;
             switch (canonical.id) {
                 case 'core.any':
                     return allowAny && value !== undefined;
                 case 'core.binary': {
                     if (!(Buffer.isBuffer(value) || value instanceof Uint8Array)) return false;
-                    return params.length === undefined || value.byteLength <= params.length;
+                    return canonical.params.length === undefined || value.byteLength <= canonical.params.length;
                 }
                 case 'core.boolean':
                     return typeof value === 'boolean';
@@ -102,16 +102,16 @@ export default class TeqFw_Db_Back_Dem_Registry_CoreValue {
                     if (!/^-?\d+(?:\.\d+)?$/.test(literal)) return false;
                     const [integer, fraction = ''] = literal.replace('-', '').split('.');
                     const integerDigits = integer.replace(/^0+/, '').length;
-                    return integerDigits <= params.precision - params.scale && fraction.length <= params.scale
-                        && (params.unsigned !== true || !literal.startsWith('-'));
+                    return integerDigits <= canonical.params.precision - canonical.params.scale && fraction.length <= canonical.params.scale
+                        && (canonical.params.unsigned !== true || !literal.startsWith('-'));
                 }
                 case 'core.enum':
-                    return typeof value === 'string' && params.values.includes(value);
+                    return typeof value === 'string' && canonical.params.values.includes(value);
                 case 'core.integer': {
-                    if (!Number.isSafeInteger(value)) return false;
-                    const minimum = params.unsigned ? 0 : params.bits === 64 ? Number.MIN_SAFE_INTEGER : -(2 ** (params.bits - 1));
-                    const maximum = params.bits === 64 ? Number.MAX_SAFE_INTEGER
-                        : params.unsigned ? 2 ** params.bits - 1 : 2 ** (params.bits - 1) - 1;
+                    if (typeof value !== 'number' || !Number.isSafeInteger(value)) return false;
+                    const minimum = canonical.params.unsigned ? 0 : canonical.params.bits === 64 ? Number.MIN_SAFE_INTEGER : -(2 ** (canonical.params.bits - 1));
+                    const maximum = canonical.params.bits === 64 ? Number.MAX_SAFE_INTEGER
+                        : canonical.params.unsigned ? 2 ** canonical.params.bits - 1 : 2 ** (canonical.params.bits - 1) - 1;
                     return value >= minimum && value <= maximum;
                 }
                 case 'core.json':
@@ -121,26 +121,27 @@ export default class TeqFw_Db_Back_Dem_Registry_CoreValue {
                         return false;
                     }
                 case 'core.string':
-                    return typeof value === 'string' && value.length <= params.length;
+                    return typeof value === 'string' && value.length <= canonical.params.length;
                 case 'core.text':
                     return typeof value === 'string';
                 case 'core.uuid':
                     return typeof value === 'string'
                         && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
                 case 'core.vector': {
-                    if (params.element === 'bit') {
-                        return typeof value === 'string' && value.length === params.dimensions && /^[01]+$/.test(value);
+                    if (canonical.params.element === 'bit') {
+                        return typeof value === 'string' && value.length === canonical.params.dimensions && /^[01]+$/.test(value);
                     }
-                    if (params.sparse === true) {
-                        if (!value || typeof value !== 'object' || Array.isArray(value)
-                            || value.dimensions !== params.dimensions || !Array.isArray(value.entries)
-                            || value.entries.length > 16_000) return false;
-                        return value.entries.every((entry, index, entries) => entry && Number.isInteger(entry.index)
-                            && entry.index > 0 && entry.index <= params.dimensions
+                    if (canonical.params.sparse === true) {
+                        if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+                        const sparse = /** @type {TeqFw_Db_Object} */ (value);
+                        if (sparse.dimensions !== canonical.params.dimensions || !Array.isArray(sparse.entries)
+                            || sparse.entries.length > 16_000) return false;
+                        return sparse.entries.every((entry, index, entries) => entry && Number.isInteger(entry.index)
+                            && entry.index > 0 && entry.index <= canonical.params.dimensions
                             && typeof entry.value === 'number' && Number.isFinite(entry.value) && entry.value !== 0
                             && (index === 0 || entries[index - 1].index < entry.index));
                     }
-                    return Array.isArray(value) && value.length === params.dimensions
+                    return Array.isArray(value) && value.length === canonical.params.dimensions
                         && value.every((item) => typeof item === 'number' && Number.isFinite(item));
                 }
                 default:

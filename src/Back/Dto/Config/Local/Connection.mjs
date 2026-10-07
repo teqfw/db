@@ -13,30 +13,30 @@ const NS = 'TeqFw_Db_Back_Dto_Config_Local_Connection';
 
 // MODULE'S CLASSES
 export default class TeqFw_Db_Back_Dto_Config_Local_Connection {
-    /** @type {string} */
+    /** @type {string | undefined} */
     database;
     /**
      * Used for SQLite.
-     * @type {string}
+     * @type {string | undefined}
      */
     filename;
     /**
      * Used for SQLite.
-     * @type {string[]}
+     * @type {Array<TeqFw_Db_StringOptional> | undefined}
      */
     flags;
-    /** @type {string} */
+    /** @type {string | undefined} */
     host;
-    /** @type {string} */
+    /** @type {string | undefined} */
     password;
-    /** @type {number} */
+    /** @type {number | undefined} */
     port;
     /**
      * You can also connect via a unix domain socket, which will ignore host and port.
-     * @type {string}
+     * @type {string | undefined}
      */
     socketPath;
-    /** @type {string} */
+    /** @type {string | undefined} */
     user;
 }
 
@@ -53,10 +53,12 @@ export class Factory {
      */
     constructor({cast}) {
         /**
-         * @param {TeqFw_Db_ObjectOrNull} data
+         * @param {unknown} input
          * @returns {TeqFw_Db_Back_Dto_Config_Local_Connection}
          */
-        this.create = function (data = null) {
+        this.create = function (input = null) {
+            const data = input && typeof input === 'object' && !Array.isArray(input)
+                ? /** @type {TeqFw_Db_Object} */ (input) : null;
             const res = new TeqFw_Db_Back_Dto_Config_Local_Connection();
             res.database = cast.string(data?.database);
             res.filename = cast.string(data?.filename);
@@ -64,7 +66,7 @@ export class Factory {
             res.host = cast.string(data?.host);
             res.password = cast.string(data?.password);
             res.port = cast.int(data?.port);
-            res.socketPath = cast.int(data?.socketPath);
+            res.socketPath = cast.string(data?.socketPath);
             res.user = cast.string(data?.user);
             return res;
         };

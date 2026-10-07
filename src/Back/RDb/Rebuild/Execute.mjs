@@ -24,26 +24,45 @@ export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
             return Object.freeze(value);
         };
 
+
+        /** @param {unknown} cause @returns {TeqFw_Db_FailureDetails} */
+        const failureDetails = function (cause) {
+            const data = cause && typeof cause === 'object' ? /** @type {TeqFw_Db_Object} */ (cause) : {};
+            const evidence = data.evidence && typeof data.evidence === 'object'
+                ? /** @type {TeqFw_Db_Object} */ (data.evidence) : {};
+            const phases = [];
+            if (Array.isArray(evidence.phases)) {
+                for (const item of evidence.phases) {
+                    if (!item || typeof item !== 'object') continue;
+                    const phase = /** @type {TeqFw_Db_Object} */ (item);
+                    if (typeof phase.identity === 'string' && typeof phase.phase === 'string' && typeof phase.status === 'string') {
+                        phases.push({identity: phase.identity, phase: phase.phase, status: phase.status});
+                    }
+                }
+            }
+            return {
+                message: typeof data.message === 'string' ? data.message : String(cause),
+                name: typeof data.name === 'string' ? data.name : 'Error', phases,
+            };
+        };
+
         /** @param {string} value @returns {string} */
         const normalizeIdentity = (value) => value.trim();
 
         /**
-         * @param {any} evidence
-         * @param {any} cause
+         * @param {TeqFw_Db_RebuildEvidenceDraft} evidence
+         * @param {unknown} cause
          * @param {string} stage
          * @param {any} entity
          * @returns {any}
          */
         const fail = function (evidence, cause, stage, entity = null) {
+            const details = failureDetails(cause);
             evidence.accepted = false;
             evidence.status = 'failed';
-            evidence.failures.push({entity, message: cause?.message ?? String(cause), name: cause?.name ?? 'Error', stage});
-            if (cause?.evidence?.phases) {
-                evidence.phases.push(...cause.evidence.phases.map((item) => ({
-                    identity: item.identity, phase: item.phase, status: item.status,
-                })));
-            }
-            const error = new Error(`Database rebuild failed in '${stage}': ${cause?.message ?? String(cause)}`, {cause});
+            evidence.failures.push({entity, message: details.message, name: details.name, stage});
+            evidence.phases.push(...details.phases);
+            const error = new Error(`Database rebuild failed in '${stage}': ${details.message}`, {cause});
             error.name = 'RebuildError';
             Object.defineProperty(error, 'evidence', {enumerable: true, value: freeze(evidence)});
             return Object.freeze(error);
@@ -66,19 +85,19 @@ export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
 
         /**
          * @param {object} deps
-         * @param {object} deps.mode
-         * @param {object} deps.compilation
-         * @param {object} deps.sourceCompilation
+         * @param {TeqFw_Db_RebuildMode} deps.mode
+         * @param {TeqFw_Db_DemCompilationResult} deps.compilation
+         * @param {TeqFw_Db_DemCompilationResult} [deps.sourceCompilation]
          * @param {TeqFw_Db_Back_RDb_IConnect} deps.source
          * @param {TeqFw_Db_Back_RDb_IConnect} deps.target
          * @param {string} deps.sourceId
          * @param {string} deps.targetId
-         * @param {object} deps.snapshot
-         * @param {boolean} deps.authorizeDiscard
-         * @param {object} deps.transformations
+         * @param {TeqFw_Db_SnapshotReaderOptional} [deps.snapshot]
+         * @param {boolean} [deps.authorizeDiscard]
+         * @param {TeqFw_Db_TransformationMap} [deps.transformations]
          * @param {TeqFw_Db_Transaction} [deps.sourceTransaction]
          * @param {TeqFw_Db_Transaction} [deps.targetTransaction]
-         * @param {object} deps.cycleStrategy
+         * @param {TeqFw_Db_CycleStrategyNullable} [deps.cycleStrategy]
          * @returns {Promise<any>}
          */
         this.exec = async function ({
@@ -171,6 +190,7 @@ export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
 
             const targetByEntity = Object.fromEntries(compilation.physical.tables.map((table) => [table.entity, table]));
             const sourceByEntity = Object.fromEntries(sourceCompilation.physical.tables.map((table) => [table.entity, table]));
+            /** @type {Record<string, TeqFw_Db_Transformation>} */
             const transformByEntity = {};
             for (const [identity, value] of Object.entries(transformations).sort(([left], [right]) => left.localeCompare(right))) {
                 const fields = value && typeof value === 'object' ? Reflect.ownKeys(value).filter((name) => typeof name !== 'string' || !['exec', 'id'].includes(name)) : [];
@@ -184,6 +204,7 @@ export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
                 transformByEntity[entity] = value;
             }
 
+            /** @type {TeqFw_Db_RebuildEvidenceDraft} */
             const evidence = {
                 accepted: false,
                 dataComplete: false,
@@ -204,9 +225,11 @@ export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
                 transaction: {owned: !targetTransaction, outcome: 'notStarted'},
                 transformations: [],
             };
+            /** @type {TeqFw_Db_StringNullable} */
             let activeEntity = null;
             let activeStage = 'preflight';
             let ownedTransaction;
+            /** @type {Record<string, Array<TeqFw_Db_Object>>} */
             const snapshotRows = {};
 
             try {
@@ -286,6 +309,7 @@ export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
                         const transformation = transformByEntity[entity];
                         const output = [];
                         for (const sourceRow of rows) {
+                            /** @type {TeqFw_Db_Object} */
                             const decoded = {};
                             for (const column of sourceTable.columns) {
                                 decoded[column.name] = sourceAdapter.decodeValue({column, value: sourceRow[column.name]});
@@ -300,6 +324,7 @@ export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
                             if (unknown.length) {
                                 throw new TypeError(`Transferred row for '${entity}' contains unknown target value '${unknown[0]}'.`);
                             }
+                            /** @type {TeqFw_Db_Object} */
                             const encoded = {};
                             for (const column of targetTable.columns) {
                                 const value = transformed[column.name];
@@ -363,12 +388,14 @@ export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
                         evidence.transaction.outcome = 'rolledBack';
                     } catch (rollback) {
                         evidence.transaction.outcome = 'rollbackFailed';
-                        evidence.failures.push({entity: activeEntity, message: rollback.message, name: rollback.name, stage: 'rollback'});
+                        const rollbackFailure = failureDetails(rollback);
+                        evidence.failures.push({entity: activeEntity, message: rollbackFailure.message, name: rollbackFailure.name, stage: 'rollback'});
                     }
                 } else if (targetTransaction) {
                     evidence.transaction.outcome = 'externalUnchanged';
                 }
-                const schemaFailure = cause?.evidence?.phases?.findLast?.((item) => item.status === 'failed');
+                const details = failureDetails(cause);
+                const schemaFailure = details.phases.findLast((item) => item.status === 'failed');
                 const failureStage = schemaFailure?.phase ?? (evidence.dataComplete ? 'afterData' : activeStage);
                 const indexed = [...compilation.physical.phases.afterRelations, ...compilation.physical.phases.afterData]
                     .find((item) => item.name === schemaFailure?.identity);
@@ -376,12 +403,12 @@ export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
                 const tableEvidence = failureEntity
                     ? evidence.tables.find((item) => item.entity === failureEntity) : null;
                 if (tableEvidence) {
-                    tableEvidence.error = {message: cause?.message ?? String(cause), name: cause?.name ?? 'Error'};
+                    tableEvidence.error = {message: details.message, name: details.name};
                     tableEvidence.status = 'failed';
                 } else if (failureEntity) {
                     evidence.tables.push({
                         entity: failureEntity,
-                        error: {message: cause?.message ?? String(cause), name: cause?.name ?? 'Error'},
+                        error: {message: details.message, name: details.name},
                         status: 'failed',
                         table: targetByEntity[failureEntity]?.name ?? sourceByEntity[failureEntity]?.name,
                     });

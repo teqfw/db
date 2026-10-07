@@ -13,7 +13,9 @@ export default class TeqFw_Db_Back_RDb_Dialect_Registry {
      * @param {TeqFw_Db_Back_Api_RDb_Dialect} deps.sqlite
      */
     constructor({mysql, postgresql, sqlite}) {
+        /** @type {Record<string, TeqFw_Db_Back_Api_RDb_Dialect>} */
         const adapters = Object.freeze({mysql, postgresql, sqlite});
+        /** @type {Record<string, string>} */
         const clients = Object.freeze({
             'better-sqlite3': 'sqlite',
             mariadb: 'mysql',

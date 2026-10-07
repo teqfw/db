@@ -10,8 +10,8 @@ export default class TeqFw_Db_Back_RDb_Schema_A_DropOrder {
     constructor() {
         /**
          * @param {object} deps
-         * @param {object} deps.compilation
-         * @returns {any}
+         * @param {TeqFw_Db_DemCompilationResult} deps.compilation
+         * @returns {TeqFw_Db_DropTableArray}
          */
         this.exec = function ({compilation}) {
             const physical = compilation.physical;
@@ -19,6 +19,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_DropOrder {
             const deprecated = new Set(Object.keys(compilation.model.deprecated ?? {}).filter((path) => !active.has(path)));
             const entities = [...active, ...deprecated].sort();
             const entitySet = new Set(entities);
+            /** @type {Record<string, string[]>} */
             const adjacency = Object.fromEntries(entities.map((path) => [path, []]));
 
             for (const edge of compilation.graph.edges) {
@@ -49,10 +50,14 @@ export default class TeqFw_Db_Back_RDb_Schema_A_DropOrder {
             for (const path of entities) adjacency[path] = [...new Set(adjacency[path])].sort();
 
             let nextIndex = 0;
+            /** @type {Record<string, number>} */
             const indexByEntity = {};
+            /** @type {Record<string, number>} */
             const lowByEntity = {};
             const onStack = new Set();
+            /** @type {string[]} */
             const stack = [];
+            /** @type {TeqFw_Db_StringLists} */
             const components = [];
             /** @param {string} entity */
             const visit = function (entity) {
@@ -70,10 +75,12 @@ export default class TeqFw_Db_Back_RDb_Schema_A_DropOrder {
                     }
                 }
                 if (lowByEntity[entity] !== indexByEntity[entity]) return;
-                const component = [];
+                /** @type {string[]} */
+            const component = [];
                 let current;
                 do {
                     current = stack.pop();
+                    if (current === undefined) throw new Error('Internal drop-order stack underflow.');
                     onStack.delete(current);
                     component.push(current);
                 } while (current !== entity);
@@ -105,6 +112,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_DropOrder {
                 throw Object.freeze(error);
             }
 
+            /** @type {Record<string, number>} */
             const componentByEntity = {};
             components.forEach((component, index) => component.forEach((entity) => componentByEntity[entity] = index));
             const dependencies = components.map(() => new Set());
@@ -116,6 +124,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_DropOrder {
                 }
             }
             const pending = new Set(components.map((_, index) => index));
+            /** @type {string[]} */
             const dependencyFirst = [];
             while (pending.size) {
                 const ready = [...pending].filter((index) => [...dependencies[index]].every((item) => !pending.has(item)));

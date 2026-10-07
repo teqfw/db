@@ -12,14 +12,13 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex_Executor {
     constructor() {
         /**
          * @param {object} deps
-         * @param {object} deps.tableBuilder
-         * @param {object} deps.column
-         * @param {object} deps.knex
+         * @param {TeqFw_Db_KnexTableBuilder} deps.tableBuilder
+         * @param {TeqFw_Db_PhysicalColumn} deps.column
+         * @param {TeqFw_Db_KnexQuerySource} deps.knex
          * @returns {any}
          */
         this.addColumn = function ({tableBuilder, column, knex}) {
             const type = column.physicalType;
-            const args = type.args ?? [];
             let builder;
             if (column.generation?.implementation === 'identity' && type.type !== 'increments') {
                 builder = type.type === 'bigint'
@@ -27,7 +26,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex_Executor {
             } else {
                 switch (type.type) {
                     case 'binary':
-                        builder = args[0] === undefined ? tableBuilder.binary(column.name) : tableBuilder.binary(column.name, args[0]);
+                        builder = type.args?.[0] === undefined ? tableBuilder.binary(column.name) : tableBuilder.binary(column.name, type.args?.[0]);
                         break;
                     case 'boolean':
                         builder = tableBuilder.boolean(column.name);
@@ -36,17 +35,16 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex_Executor {
                         builder = tableBuilder.date(column.name);
                         break;
                     case 'datetime':
-                        builder = tableBuilder.datetime(column.name, ...args);
+                        builder = tableBuilder.datetime(column.name, type.args?.[0]);
                         break;
                     case 'decimal':
-                        builder = tableBuilder.decimal(column.name, args[0], args[1]);
+                        builder = tableBuilder.decimal(column.name, type.args?.[0], type.args?.[1]);
                         break;
                     case 'enum':
-                        builder = tableBuilder.enum(column.name, args[0]);
+                        builder = tableBuilder.enum(column.name, type.args[0]);
                         break;
                     case 'increments':
-                        builder = type.type === 'bigint'
-                    ? tableBuilder.bigIncrements(column.name) : tableBuilder.increments(column.name);
+                        builder = tableBuilder.increments(column.name);
                         break;
                     case 'integer':
                         builder = tableBuilder.integer(column.name);
@@ -61,7 +59,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex_Executor {
                         builder = tableBuilder.smallint(column.name);
                         break;
                     case 'string':
-                        builder = args[0] === undefined ? tableBuilder.string(column.name) : tableBuilder.string(column.name, args[0]);
+                        builder = type.args?.[0] === undefined ? tableBuilder.string(column.name) : tableBuilder.string(column.name, type.args?.[0]);
                         break;
                     case 'text':
                         builder = tableBuilder.text(column.name);
@@ -101,11 +99,14 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex_Executor {
 
         /**
          * @param {object} deps
-         * @param {object} deps.tableBuilder
-         * @param {object} deps.constraint
+         * @param {TeqFw_Db_KnexTableBuilder} deps.tableBuilder
+         * @param {TeqFw_Db_PhysicalIndex} deps.constraint
          */
         this.addConstraint = function ({tableBuilder, constraint}) {
-            const columns = constraint.keys.map((item) => item.attr);
+            const columns = constraint.keys.map((item) => {
+                if (typeof item.attr !== 'string') throw new TypeError('Constraint keys must be direct attributes.');
+                return item.attr;
+            });
             switch (constraint.kind) {
                 case 'primary':
                     tableBuilder.primary(columns, constraint.name);
@@ -124,12 +125,12 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex_Executor {
 
         /**
          * @param {object} deps
-         * @param {object} deps.tableBuilder
-         * @param {object} deps.relation
+         * @param {TeqFw_Db_KnexTableBuilder} deps.tableBuilder
+         * @param {TeqFw_Db_PhysicalRelation} deps.relation
          */
         this.addRelation = function ({tableBuilder, relation}) {
-            const builder = tableBuilder.foreign(relation.columns, relation.name)
-                .references(relation.referencedColumns)
+            const builder = tableBuilder.foreign([...relation.columns], relation.name)
+                .references([...relation.referencedColumns])
                 .inTable(relation.referencedTable);
             if (relation.action?.delete) builder.onDelete(relation.action.delete.toUpperCase());
             if (relation.action?.update) builder.onUpdate(relation.action.update.toUpperCase());
@@ -140,23 +141,24 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex_Executor {
 
         /**
          * @param {object} deps
-         * @param {object} deps.tableBuilder
-         * @param {object} deps.index
+         * @param {TeqFw_Db_KnexTableBuilder} deps.tableBuilder
+         * @param {TeqFw_Db_PhysicalIndex} deps.index
+         * @param {TeqFw_Db_KnexQuerySource} [deps.knex]
          */
-        this.addIndex = function ({tableBuilder, index}) {
+        this.addIndex = function ({tableBuilder, index, knex}) {
             this.addConstraint({tableBuilder, constraint: index});
         };
 
         /**
          * @param {object} deps
-         * @param {object} deps.tableBuilder
-         * @param {object} deps.relation
+         * @param {TeqFw_Db_KnexTableBuilder} deps.tableBuilder
+         * @param {TeqFw_Db_PhysicalRelation} deps.relation
          */
         this.dropRelation = function ({tableBuilder, relation}) {
-            tableBuilder.dropForeign(relation.columns, relation.name);
+            tableBuilder.dropForeign([...relation.columns], relation.name);
         };
 
-        /** @param {object} deps @param {object} deps.args @param {object} deps.descriptor @param {object} deps.knex @returns {any} */
+        /** @param {object} deps @param {TeqFw_Db_SqlArguments} deps.args @param {TeqFw_Db_ExpressionDescriptor} deps.descriptor @param {TeqFw_Db_KnexQuerySource} deps.knex @returns {any} */
         this.compileExpression = function ({args, descriptor, knex}) {
             switch (descriptor.implementation) {
                 case 'and': return args.slice(1).reduce((left, right) => knex.raw('(? and ?)', [left, right]), args[0]);

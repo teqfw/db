@@ -8,8 +8,8 @@
 export default class File {
     /**
      * @param {object} deps
-     * @param {object} deps.fs
-     * @param {object} deps.path
+     * @param {typeof import('node:fs')} deps.fs
+     * @param {typeof import('node:path')} deps.path
      */
     constructor({fs, path}) {
         /**
@@ -22,7 +22,7 @@ export default class File {
                 return JSON.parse(fs.readFileSync(filename, 'utf8'));
             } catch (error) {
                 /** @type {TeqFw_Db_FileError} */
-                const issue = error;
+                const issue = /** @type {TeqFw_Db_FileError} */ (error);
                 if (issue.code === 'ENOENT' || issue.code === 'ENOTDIR') return null;
                 issue.message = `${issue.message} (file: ${filename})`;
                 throw issue;
@@ -33,8 +33,9 @@ export default class File {
          * @returns {string}
          */
         this.readPackageName = function (root) {
-            const declared = this.readJson(path.join(root, "package.json"))?.name;
-            if (declared) return declared;
+            const metadata = this.readJson(path.join(root, 'package.json'));
+            const declared = metadata && typeof metadata === 'object' && 'name' in metadata ? metadata.name : undefined;
+            if (typeof declared === 'string' && declared) return declared;
             const parts = root.split(path.sep);
             const nodeModules = parts.lastIndexOf("node_modules");
             if (nodeModules < 0) return "app";

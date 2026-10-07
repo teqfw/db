@@ -19,7 +19,7 @@ export default class TeqFw_Db_Back_Dem_Load_A_Scan_A_Map {
         /**
          * Load DEM mapping data for the application and parse it.
          * @param {object} deps
-         * @param {object} deps.filename
+         * @param {string} deps.filename
          * @returns {Promise<any>}
          */
         this.exec = async function ({filename}) {

@@ -13,17 +13,17 @@ const NS = 'TeqFw_Db_Back_Dto_Dem_Entity';
 
 // MODULE'S CLASSES
 export default class TeqFw_Db_Back_Dto_Dem_Entity {
-    /** @type {Object<string, TeqFw_Db_Back_Dto_Dem_Entity_Attr>} */
+    /** @type {Object<string, TeqFw_Db_Back_Dto_Dem_Entity_Attr> | undefined} */
     attr;
-    /** @type {string} */
+    /** @type {string | undefined} */
     comment;
-    /** @type {Object<string, TeqFw_Db_Back_Dto_Dem_Entity_Index>} */
+    /** @type {Object<string, TeqFw_Db_Back_Dto_Dem_Entity_Index> | undefined} */
     index;
-    /** @type {string} */
+    /** @type {string | undefined} */
     name;
-    /** @type {string} */
+    /** @type {string | undefined} */
     path;
-    /** @type {Object<string, TeqFw_Db_Back_Dto_Dem_Entity_Relation>} */
+    /** @type {Object<string, TeqFw_Db_Back_Dto_Dem_Entity_Relation> | undefined} */
     relation;
 }
 
@@ -47,10 +47,12 @@ export class Factory {
     constructor({cast, fAttr, fIndex, fRelation}) {
 
         /**
-         * @param {TeqFw_Db_ObjectOrNull} data
+         * @param {unknown} input
          * @returns {TeqFw_Db_Back_Dto_Dem_Entity}
          */
-        this.create = function (data = null) {
+        this.create = function (input = null) {
+            const data = input && typeof input === 'object' && !Array.isArray(input)
+                ? /** @type {TeqFw_Db_Object} */ (input) : null;
             // FUNCS
 
             /**
@@ -59,6 +61,7 @@ export class Factory {
              * @returns {any}
              */
             function parse(fnCreate, data) {
+                /** @type {TeqFw_Db_Object} */
                 const res = {};
                 if (typeof data === 'object') {
                     for (const name of Object.keys(data)) {

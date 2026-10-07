@@ -53,6 +53,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
         const copy = function (value) {
             if (Array.isArray(value)) return value.map(copy);
             if (isObject(value)) {
+                /** @type {TeqFw_Db_Object} */
                 const res = {};
                 for (const key of Object.keys(value).sort()) res[key] = copy(value[key]);
                 return res;
@@ -62,11 +63,13 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
 
         /**
          * @param {object} deps
-         * @param {object} deps.envelope
+         * @param {TeqFw_Db_InputEnvelope} deps.envelope
          * @returns {any}
          */
         this.exec = function ({envelope}) {
+            /** @type {TeqFw_Db_DiagnosticArrayMutable} */
             const diagnostics = [];
+            /** @type {TeqFw_Db_StringMap} */
             const pointers = {};
             const trusted = envelope && typeof envelope === 'object'
                 && typeof envelope.fragmentId === 'string' && envelope.fragmentId.length > 0
@@ -84,15 +87,17 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
                 return {declaration: null, diagnostics, envelope, pointers};
             }
 
+            const trustedMetadata = /** @type {{filename: string; fragmentId: string; packageName: string; revision?: string}} */ (envelope);
+
             /**
              * @param {string} sourcePointer
              * @returns {any}
              */
             const makeSource = function (sourcePointer) {
                 return source.create({
-                    filename: envelope.filename,
-                    fragmentId: envelope.fragmentId,
-                    packageName: envelope.packageName,
+                    filename: trustedMetadata.filename,
+                    fragmentId: trustedMetadata.fragmentId,
+                    packageName: trustedMetadata.packageName,
                     revision: envelope.revision,
                     sourcePointer,
                 });
@@ -101,11 +106,11 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
             /**
              * @param {object} deps
              * @param {string} deps.code
-             * @param {object} deps.details
+             * @param {TeqFw_Db_Object} [deps.details]
              * @param {string} deps.message
              * @param {string} deps.path
-             * @param {object} deps.severity
-             * @param {string} deps.stage
+             * @param {TeqFw_Db_DiagnosticSeverity} [deps.severity]
+             * @param {string} [deps.stage]
              */
             const addDiagnostic = function ({code, details = {}, message, path, severity = 'error', stage = 'decode'}) {
                 diagnostics.push(diagnostic.create({
@@ -181,7 +186,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
              * @returns {any}
              */
             const decodeExpression = function (raw, path) {
-                if (!isObject(raw)) {
+                if (!isObject(envelope.declaration)) {
                     checkObject(raw, [], path);
                     return {kind: ''};
                 }
@@ -191,6 +196,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
                 }
                 if (raw.kind === 'value') {
                     checkObject(raw, ['kind', 'type', 'value'], path);
+                    /** @type {TeqFw_Db_DecodedExpression} */
                     const res = {kind: 'value', value: copy(raw.value)};
                     if (raw.type !== undefined) res.type = decodeType(raw.type, `${path}/type`);
                     return res;
@@ -209,7 +215,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
                     return {
                         kind: 'call',
                         operator: typeof raw.operator === 'string' ? raw.operator : '',
-                        args: args.map((item, index) => decodeExpression(item, `${path}/args/${index}`)),
+                        args: args.map((/** @type {unknown} */ item, /** @type {number} */ index) => decodeExpression(item, `${path}/args/${index}`)),
                     };
                 }
                 checkObject(raw, ['kind'], path);
@@ -231,6 +237,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
              */
             const decodeAttr = function (raw, rawPointer, canonicalPointer, name) {
                 if (!checkObject(raw, ['comment', 'default', 'generation', 'nullable', 'storage', 'type'], rawPointer)) raw = {};
+                /** @type {TeqFw_Db_DecodedAttribute} */
                 const res = {
                     name,
                     comment: typeof raw.comment === 'string' ? raw.comment : '',
@@ -310,11 +317,12 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
                         path: `${rawPointer}/keys`,
                     });
                 }
+                /** @type {TeqFw_Db_DecodedIndex} */
                 const res = {
                     name,
                     kind: typeof raw.kind === 'string' ? raw.kind : '',
                     keys: [],
-                    include: Array.isArray(raw.include) ? raw.include.map((item) => normalizeName(String(item))) : [],
+                    include: Array.isArray(raw.include) ? raw.include.map((/** @type {unknown} */ item) => normalizeName(String(item))) : [],
                     options: isObject(raw.options) ? copy(raw.options) : {},
                     phase: typeof raw.phase === 'string' ? raw.phase : '',
                 };
@@ -328,10 +336,11 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
                         path: `${rawPointer}/include`,
                     });
                 }
-                keys.forEach((rawKey, index) => {
+                keys.forEach((/** @type {TeqFw_Db_Object} */ rawKey, /** @type {number} */ index) => {
                     const path = `${rawPointer}/keys/${index}`;
                     let key = rawKey;
                     if (!checkObject(key, ['attr', 'expression', 'nulls', 'operatorClass', 'order'], path)) key = {};
+                    /** @type {TeqFw_Db_DecodedIndexKey} */
                     const value = {};
                     if (key.attr !== undefined) value.attr = typeof key.attr === 'string' ? normalizeName(key.attr) : '';
                     if (key.expression !== undefined) value.expression = decodeExpression(key.expression, `${path}/expression`);
@@ -358,12 +367,13 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
                 if (!checkObject(ref, ['attrs', 'path'], `${rawPointer}/ref`)) ref = {};
                 const action = isObject(raw.action) ? raw.action : {};
                 if (raw.action !== undefined) checkObject(action, ['delete', 'update'], `${rawPointer}/action`);
+                /** @type {TeqFw_Db_DecodedRelation} */
                 const res = {
                     name,
-                    attrs: Array.isArray(raw.attrs) ? raw.attrs.map((item) => normalizeName(String(item))) : [],
+                    attrs: Array.isArray(raw.attrs) ? raw.attrs.map((/** @type {unknown} */ item) => normalizeName(String(item))) : [],
                     ref: {
                         path: typeof ref.path === 'string' ? normalizePath(ref.path) : '',
-                        attrs: Array.isArray(ref.attrs) ? ref.attrs.map((item) => normalizeName(String(item))) : [],
+                        attrs: Array.isArray(ref.attrs) ? ref.attrs.map((/** @type {unknown} */ item) => normalizeName(String(item))) : [],
                     },
                     action: {},
                     deferrable: raw.deferrable ?? 'notDeferrable',
@@ -403,6 +413,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
                     ? ['entity', 'namespace', 'package', 'refs', 'requires', 'version']
                     : ['comment', 'entity', 'package'];
                 if (!checkObject(raw, allowed, rawPointer)) raw = {};
+                /** @type {TeqFw_Db_DecodedContainer} */
                 const res = {entity: {}, package: {}};
                 if (!root && typeof raw.comment === 'string') {
                     res.comment = raw.comment;
@@ -417,6 +428,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
                         const targetPointer = `${canonicalPointer}/entity/${escapePointer(name)}`;
                         let item = raw.entity[rawName];
                         if (!checkObject(item, ['attr', 'comment', 'index', 'relation'], sourcePointer)) item = {};
+                        /** @type {TeqFw_Db_DecodedEntity} */
                         const entity = {
                             name,
                             path: normalizePath(`${logicalPath}/${name}`),
@@ -483,14 +495,16 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
 
             /**
              * @param {any} container
-             * @param {any} segments
+             * @param {TeqFw_Db_StringArray} segments
              * @returns {any}
              */
             const applyRoot = function (container, segments) {
                 if (segments.length === 0) return container;
+                /** @type {TeqFw_Db_DecodedContainer} */
                 const result = {entity: {}, package: {}};
                 let cursor = result;
                 for (const segment of segments) {
+                    /** @type {TeqFw_Db_DecodedContainer} */
                     const child = {entity: {}, package: {}};
                     cursor.package[segment] = child;
                     cursor = child;
@@ -501,13 +515,14 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
             };
 
             /**
-             * @param {any} values
-             * @param {any} segments
+             * @param {TeqFw_Db_StringMap} values
+             * @param {TeqFw_Db_StringArray} segments
              * @returns {any}
              */
             const applyRootPointers = function (values, segments) {
                 if (segments.length === 0) return values;
                 const prefix = segments.map((item) => `/package/${escapePointer(item)}`).join('');
+                /** @type {TeqFw_Db_StringMap} */
                 const result = {};
                 for (const [pointer, sourcePointer] of Object.entries(values)) {
                     const target = pointer === '/entity' || pointer.startsWith('/entity/') || pointer === '/package' || pointer.startsWith('/package/')
@@ -545,8 +560,8 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
                 for (const child of Object.values(container.package ?? {})) resolveLocalRelations(child, paths, refs, rootPath);
             };
 
-            const raw = envelope.declaration;
-            if (!isObject(raw)) {
+            const raw = /** @type {TeqFw_Db_Object} */ (isObject(envelope.declaration) ? envelope.declaration : {});
+            if (!isObject(envelope.declaration)) {
                 addDiagnostic({
                     code: 'DEM_DECLARATION_SHAPE_INVALID',
                     details: {expected: 'object'},
@@ -606,8 +621,9 @@ export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
             if (raw?.refs !== undefined && !isObject(raw.refs)) {
                 checkObject(raw.refs, [], '/refs');
             } else if (isObject(raw?.refs)) {
-                for (const refPath of Object.keys(raw.refs).sort()) {
-                    const value = raw.refs[refPath];
+                const refs = /** @type {TeqFw_Db_Object} */ (raw.refs);
+                for (const refPath of Object.keys(refs).sort()) {
+                    const value = refs[refPath];
                     const normalized = normalizePath(refPath);
                     if (!Array.isArray(value) || !value.every((item) => typeof item === 'string')) {
                         addDiagnostic({

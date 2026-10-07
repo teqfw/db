@@ -8,7 +8,7 @@
 export default class Shutdown {
     /**
      * @param {object} deps
-     * @param {object} deps.connection
+     * @param {TeqFw_Db_Connection} deps.connection
      */
     constructor({connection}) {
         /**

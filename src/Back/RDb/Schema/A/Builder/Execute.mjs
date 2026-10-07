@@ -16,14 +16,14 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Builder_Execute {
          * @param {object} deps
          * @param {TeqFw_Db_Back_Api_RDb_Dialect} deps.adapter
          * @param {TeqFw_Db_Back_RDb_IConnect} deps.connection
-         * @param {object} deps.plan
+         * @param {TeqFw_Db_SchemaPlan} deps.plan
          * @param {TeqFw_Db_SchemaDataTransfer} [deps.data]
-         * @returns {Promise<any>}
+         * @returns {Promise<TeqFw_Db_SchemaExecutionEvidence>}
          */
         this.exec = async function ({adapter, connection, plan, data}) {
             planner.assertPlan({value: plan});
             const requiredMethods = ['describe', 'preflight', 'addColumn', 'addConstraint', 'addRelation', 'addIndex', 'dropRelation'];
-            const missing = requiredMethods.filter((name) => typeof adapter?.[name] !== 'function');
+            const missing = requiredMethods.filter((name) => typeof Reflect.get(adapter, name) !== 'function');
             if (missing.length > 0) throw new TypeError(`Dialect adapter execution methods are missing: ${missing.join(', ')}.`);
             const description = await adapter.describe();
             if (description.id !== plan.adapter) {
@@ -41,6 +41,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Builder_Execute {
                 Object.defineProperty(error, 'evidence', {enumerable: true, value: preflight});
                 throw Object.freeze(error);
             }
+            /** @type {Array<TeqFw_Db_SchemaExecutionPhase>} */
             const phases = [];
             const knex = connection.getClient();
             let active = {identity: 'execution', phase: 'execution'};
@@ -80,7 +81,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Builder_Execute {
                     });
                     phases.push({identity: relation.name, phase: 'relations', status: 'complete'});
                 }
-                /** @param {string} phase @returns {Promise<void>} */
+                /** @param {TeqFw_Db_LateSchemaPhase} phase @returns {Promise<void>} */
                 const executeIndexes = async function (phase) {
                     for (const index of plan.phases[phase]) {
                         active = {identity: index.name, phase};
@@ -116,8 +117,11 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Builder_Execute {
                 phases.push({evidence: Object.freeze(evidence), identity: verification.name, phase: 'verification', status: 'complete'});
             }
             } catch (cause) {
+                const issue = cause && typeof cause === 'object' ? /** @type {TeqFw_Db_Object} */ (cause) : {};
+                const message = typeof issue.message === 'string' ? issue.message : String(cause);
+                const name = typeof issue.name === 'string' ? issue.name : 'Error';
                 const failure = Object.freeze({
-                    error: Object.freeze({message: cause?.message ?? String(cause), name: cause?.name ?? 'Error'}),
+                    error: Object.freeze({message, name}),
                     identity: active.identity,
                     phase: active.phase,
                     status: 'failed',
@@ -130,7 +134,6 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Builder_Execute {
                     preflight,
                     status: 'failed',
                 });
-                const message = cause?.message ?? String(cause);
                 const error = new Error("Schema execution failed in phase '" + active.phase + "': " + message, {cause});
                 error.name = 'DemSchemaExecutionError';
                 Object.defineProperty(error, 'evidence', {enumerable: true, value: evidence});
@@ -141,7 +144,7 @@ export default class TeqFw_Db_Back_RDb_Schema_A_Builder_Execute {
                 operation: plan.operation,
                 phases,
                 preflight,
-                status: 'complete',
+                status: /** @type {'complete'} */ ('complete'),
             };
             Object.freeze(result.phases);
             return Object.freeze(result);

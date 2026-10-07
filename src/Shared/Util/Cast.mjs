@@ -25,12 +25,12 @@ export default class Cast {
          * @returns {TeqFw_Db_ObjectArray}
          */
         this.arrayOfObj = function (data, factory) {
-            const normalize = typeof factory === 'function' ? factory : (value) => value ?? {};
+            const normalize = typeof factory === 'function' ? factory : (/** @type {unknown} */ value) => value ?? {};
             return Array.isArray(data) ? data.map((item) => normalize(item)) : [];
         };
         /**
          * @param {unknown} data
-         * @returns {TeqFw_Db_StringArray}
+         * @returns {Array<TeqFw_Db_StringOptional>}
          */
         this.arrayOfStr = function (data) {
             return Array.isArray(data) ? data.map((item) => this.string(item)) : [];
@@ -74,7 +74,7 @@ export default class Cast {
          * @returns {TeqFw_Db_NumberOptional}
          */
         this.decimal = function (data) {
-            const result = Number.parseFloat(data);
+            const result = Number.parseFloat(String(data));
             return Number.isNaN(result) ? undefined : result;
         };
         /**
@@ -100,7 +100,7 @@ export default class Cast {
          */
         this.int = function (data) {
             const normalized = typeof data === 'string' ? data.trim() : data;
-            const result = Number.parseInt(normalized);
+            const result = Number.parseInt(String(normalized));
             return Number.isNaN(result) ? undefined : result;
         };
         /**
@@ -116,10 +116,11 @@ export default class Cast {
          * @returns {TeqFw_Db_Object}
          */
         this.objectsMap = function (data, factory) {
-            const normalize = typeof factory === 'function' ? factory : (value) => value ?? {};
+            const normalize = typeof factory === 'function' ? factory : (/** @type {unknown} */ value) => value ?? {};
+            /** @type {TeqFw_Db_Object} */
             const result = {};
             if (typeof data === 'object' && data !== null)
-                for (const key of Object.keys(data)) result[key] = normalize(data[key]);
+                for (const key of Object.keys(data)) result[key] = normalize(/** @type {TeqFw_Db_Object} */ (data)[key]);
             return result;
         };
         /**

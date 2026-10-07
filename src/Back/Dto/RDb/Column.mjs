@@ -13,25 +13,25 @@ const NS = 'TeqFw_Db_Back_Dto_RDb_Column';
 
 // MODULE'S CLASSES
 export default class TeqFw_Db_Back_Dto_RDb_Column {
-    /** @type {string} */
+    /** @type {string | undefined} */
     comment;
-    /** @type {string} */
+    /** @type {string | undefined} */
     default;
-    /** @type {Array} */
+    /** @type {unknown[] | undefined} */
     enum;
-    /** @type {number} */
+    /** @type {number | undefined} */
     length;
-    /** @type {string} */
+    /** @type {string | undefined} */
     name;
-    /** @type {boolean} */
+    /** @type {boolean | null | undefined} */
     nullable;
-    /** @type {number} */
+    /** @type {number | undefined} */
     precision;
-    /** @type {number} */
+    /** @type {number | undefined} */
     scale;
-    /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Column} */
+    /** @type {TeqFw_Db_StringOptional} */
     type;
-    /** @type {boolean} */
+    /** @type {boolean | null | undefined} */
     unsigned;
 }
 
@@ -50,10 +50,12 @@ export class Factory {
      */
     constructor({cast, COLUMN}) {
         /**
-         * @param {TeqFw_Db_ObjectOrNull} data
+         * @param {unknown} input
          * @returns {TeqFw_Db_Back_Dto_RDb_Column}
          */
-        this.create = function (data = null) {
+        this.create = function (input = null) {
+            const data = input && typeof input === 'object' && !Array.isArray(input)
+                ? /** @type {TeqFw_Db_Object} */ (input) : null;
             const res = new TeqFw_Db_Back_Dto_RDb_Column();
             res.comment = cast.string(data?.comment);
             res.default = cast.string(data?.default);
@@ -63,7 +65,8 @@ export class Factory {
             res.nullable = cast.booleanIfExists(data?.nullable);
             res.precision = cast.int(data?.precision);
             res.scale = cast.int(data?.scale);
-            res.type = cast.enum(data?.type, COLUMN);
+            const typeValue = cast.enum(data?.type, COLUMN);
+            res.type = typeof typeValue === 'string' ? typeValue : undefined;
             res.unsigned = cast.booleanIfExists(data?.unsigned);
             return res;
         };

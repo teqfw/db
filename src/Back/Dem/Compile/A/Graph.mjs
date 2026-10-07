@@ -18,6 +18,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Graph {
          */
         this.exec = function ({validated}) {
             const entities = Object.keys(validated.entities).sort();
+            /** @type {TeqFw_Db_GraphEdges} */
             const edges = [];
             for (const from of entities) {
                 const info = validated.entities[from];
@@ -36,16 +37,21 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Graph {
                 }
             }
             edges.sort((a, b) => `${a.from}\u0000${a.to}\u0000${a.relation}`.localeCompare(`${b.from}\u0000${b.to}\u0000${b.relation}`));
+            /** @type {Record<string, string[]>} */
             const adjacency = {};
             for (const entity of entities) adjacency[entity] = [];
             for (const edge of edges) adjacency[edge.from].push(edge.to);
             for (const entity of entities) adjacency[entity] = [...new Set(adjacency[entity])].sort();
 
             let nextIndex = 0;
+            /** @type {Record<string, number>} */
             const indexByEntity = {};
+            /** @type {Record<string, number>} */
             const lowByEntity = {};
             const onStack = new Set();
+            /** @type {string[]} */
             const stack = [];
+            /** @type {TeqFw_Db_StringLists} */
             const components = [];
 
             /**
@@ -66,10 +72,12 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Graph {
                     }
                 }
                 if (lowByEntity[entity] !== indexByEntity[entity]) return;
-                const component = [];
+                /** @type {string[]} */
+            const component = [];
                 let current;
                 do {
                     current = stack.pop();
+                    if (current === undefined) throw new Error('Internal dependency stack underflow.');
                     onStack.delete(current);
                     component.push(current);
                 } while (current !== entity);
@@ -78,6 +86,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Graph {
             };
             for (const entity of entities) if (indexByEntity[entity] === undefined) visit(entity);
             components.sort((a, b) => a[0].localeCompare(b[0]));
+            /** @type {Record<string, number>} */
             const componentByEntity = {};
             components.forEach((component, index) => component.forEach((entity) => componentByEntity[entity] = index));
 
@@ -107,6 +116,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Graph {
                 if (from !== to) dependencies[from].add(to);
             }
             const pending = new Set(components.map((_, index) => index));
+            /** @type {string[]} */
             const topological = [];
             while (pending.size > 0) {
                 const ready = [...pending].filter((index) => [...dependencies[index]].every((item) => !pending.has(item)));

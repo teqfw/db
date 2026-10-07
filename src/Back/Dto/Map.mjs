@@ -15,17 +15,17 @@ const NS = 'TeqFw_Db_Back_Dto_Map';
 export default class TeqFw_Db_Back_Dto_Map {
     /**
      * List of deprecated tables with dependencies (foreign keys).
-     * @type {Object<string, string[]>}
+     * @type {Object<string, string[]> | undefined}
      */
     deprecated;
     /**
      * Prefix for tables in RDB ('teq' => 'teq_table_name'). Default: use w/o prefix.
-     * @type {string}
+     * @type {string | undefined}
      */
     namespace;
     /**
      * Plugin's references resolutions (map plugin's external reference to existing entity & attr).
-     * @type {Object<string, Object<string, TeqFw_Db_Back_Dto_Map_Ref>>}
+     * @type {Object<string, Object<string, TeqFw_Db_Back_Dto_Map_Ref>> | undefined}
      */
     ref;
 }
@@ -59,6 +59,7 @@ export class Factory {
              * @returns {any}
              */
             function parseDeprecated(data) {
+                /** @type {TeqFw_Db_Object} */
                 const res = {};
                 if (typeof data === 'object')
                     for (const name of Object.keys(data))
@@ -71,14 +72,17 @@ export class Factory {
              * @returns {any}
              */
             function parseRef(data) {
+                /** @type {TeqFw_Db_Object} */
                 const res = {};
                 if (typeof data === 'object')
                     for (const name of Object.keys(data)) {
-                        res[name] = {};
+                        /** @type {Record<string, TeqFw_Db_Back_Dto_Map_Ref>} */
+                        const references = {};
+                        res[name] = references;
                         for (const path of Object.keys(data[name])) {
                             const item = fRef.create(data[name][path]);
                             item.alias = path;
-                            res[name][path] = item;
+                            references[path] = item;
                         }
                     }
                 return res;
@@ -87,7 +91,7 @@ export class Factory {
             // MAIN
             const res = new TeqFw_Db_Back_Dto_Map();
             res.deprecated = parseDeprecated(data?.deprecated);
-            res.namespace = data?.namespace;
+            res.namespace = cast.string(data?.namespace);
             res.ref = parseRef(data?.ref);
             return res;
         };

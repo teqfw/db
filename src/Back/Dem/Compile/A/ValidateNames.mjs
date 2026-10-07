@@ -12,7 +12,7 @@ export default class TeqFw_Db_Back_Dem_Compile_A_ValidateNames {
      * @param {TeqFw_Db_Back_Dto_Dem_Compile_Source__Factory} deps.source
      */
     constructor({diagnostic, source}) {
-        /** @param {any} value @returns {boolean} */
+        /** @param {unknown} value @returns {value is TeqFw_Db_Object} */
         const isObject = (value) => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
         /** @param {string} value @returns {string} */
         const escapePointer = (value) => value.replaceAll('~', '~0').replaceAll('/', '~1');
@@ -25,8 +25,8 @@ export default class TeqFw_Db_Back_Dem_Compile_A_ValidateNames {
 
         /**
          * @param {object} deps
-         * @param {object} deps.fragments
-         * @param {object} deps.mapEnvelope
+         * @param {TeqFw_Db_InputEnvelopeArray} deps.fragments
+         * @param {TeqFw_Db_InputEnvelope} deps.mapEnvelope
          * @returns {any}
          */
         this.exec = function ({fragments, mapEnvelope}) {
@@ -57,9 +57,9 @@ export default class TeqFw_Db_Back_Dem_Compile_A_ValidateNames {
              * @param {object} deps.envelope
              * @param {string} deps.rawName
              * @param {string} deps.sourcePointer
-             * @param {boolean} deps.pathName
-             * @param {object} deps.identifierKind
-             * @param {object} deps.seen
+             * @param {boolean} [deps.pathName]
+             * @param {string} [deps.identifierKind]
+             * @param {TeqFw_Db_NameClaims} deps.seen
              * @returns {any}
              */
             const claim = function ({canonicalPath, envelope, rawName, sourcePointer, pathName = false, identifierKind, seen}) {
@@ -135,9 +135,11 @@ export default class TeqFw_Db_Back_Dem_Compile_A_ValidateNames {
                         if (!entity) continue;
                         const entityPointer = `${canonicalPointer}/entity/${escapePointer(entity)}`;
                         const value = container.entity[rawEntity];
+                        if (!isObject(value)) continue;
                         for (const kind of ['attr', 'index', 'relation']) {
-                            if (!isObject(value?.[kind])) continue;
-                            for (const rawName of Object.keys(value[kind]).sort()) {
+                            const members = value[kind];
+                            if (!isObject(members)) continue;
+                            for (const rawName of Object.keys(members).sort()) {
                                 const itemSource = `${entitySource}/${kind}/${escapePointer(rawName)}`;
                                 const name = claim({
                                     canonicalPath: `${entityPointer}/${kind}`,
@@ -147,8 +149,8 @@ export default class TeqFw_Db_Back_Dem_Compile_A_ValidateNames {
                                     sourcePointer: itemSource,
                                 });
                                 if (!name || kind !== 'attr') continue;
-                                const attr = value[kind][rawName];
-                                if (!isObject(attr?.storage)) continue;
+                                const attr = members[rawName];
+                                if (!isObject(attr) || !isObject(attr.storage)) continue;
                                 for (const dialect of Object.keys(attr.storage).sort()) {
                                     claim({
                                         canonicalPath: `${entityPointer}/attr/${escapePointer(name)}/storage`,
@@ -186,8 +188,9 @@ export default class TeqFw_Db_Back_Dem_Compile_A_ValidateNames {
             };
 
             for (const envelope of fragments ?? []) {
+                /** @type {TeqFw_Db_NameClaims} */
                 const seen = {};
-                const declaration = envelope?.declaration;
+                const declaration = /** @type {TeqFw_Db_Object} */ (isObject(envelope?.declaration) ? envelope.declaration : {});
                 if (typeof declaration?.namespace === 'string') {
                     const pattern = '^[a-z][a-z0-9]*(\\.[a-z][a-z0-9]*)*$';
                     if (!new RegExp(pattern).test(declaration.namespace)) {
@@ -218,8 +221,9 @@ export default class TeqFw_Db_Back_Dem_Compile_A_ValidateNames {
             }
 
             if (isObject(mapEnvelope?.declaration)) {
+                /** @type {TeqFw_Db_NameClaims} */
                 const seen = {};
-                const declaration = mapEnvelope.declaration;
+                const declaration = /** @type {TeqFw_Db_Object} */ (mapEnvelope.declaration);
                 if (isObject(declaration.ref)) {
                     for (const owner of Object.keys(declaration.ref).sort()) {
                         const values = declaration.ref[owner];
@@ -234,8 +238,9 @@ export default class TeqFw_Db_Back_Dem_Compile_A_ValidateNames {
                                 seen,
                                 sourcePointer,
                             });
-                            if (!path || !isObject(values[rawPath]?.attrs)) continue;
-                            for (const alias of Object.keys(values[rawPath].attrs).sort()) {
+                            const entry = values[rawPath];
+                            if (!path || !isObject(entry) || !isObject(entry.attrs)) continue;
+                            for (const alias of Object.keys(entry.attrs).sort()) {
                                 claim({
                                     canonicalPath: `/ref/${escapePointer(owner)}/${escapePointer(path)}/attrs`,
                                     envelope: mapEnvelope,

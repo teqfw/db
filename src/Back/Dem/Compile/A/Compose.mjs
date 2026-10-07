@@ -38,16 +38,22 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Compose {
 
         /**
          * @param {object} deps
-         * @param {object} deps.decoded
+         * @param {TeqFw_Db_DecodedFragmentArray} deps.decoded
          * @returns {any}
          */
         this.exec = function ({decoded}) {
+            /** @type {TeqFw_Db_DiagnosticArrayMutable} */
             const diagnostics = [];
+            /** @type {TeqFw_Db_ComposedDem['externalRefs']} */
             const externalRefs = {};
             const invalid = new Set();
+            /** @type {TeqFw_Db_ComposedModel} */
             const model = {version: 2, namespace: '', requires: [], deprecated: {}, entity: {}, package: {}};
+            /** @type {TeqFw_Db_StringMap} */
             const ownerByPath = {};
+            /** @type {TeqFw_Db_ComposedDem['provenance']} */
             const provenance = {};
+            /** @type {TeqFw_Db_ComposedDem['provenance']} */
             const conflictSources = {};
 
             /**
@@ -168,13 +174,13 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Compose {
                 const fragment = String(a.envelope?.fragmentId ?? '').localeCompare(String(b.envelope?.fragmentId ?? ''));
                 return fragment || String(a.envelope?.filename ?? '').localeCompare(String(b.envelope?.filename ?? ''));
             });
-            const requirements = new Set();
+            const requirements = new Set(/** @type {string[]} */ ([]));
             for (const item of sorted) {
                 diagnostics.push(...(item.diagnostics ?? []));
                 if (!item.declaration || !item.envelope) continue;
-                externalRefs[item.envelope.fragmentId] = {
-                    refs: copy(item.declaration.refs ?? {}),
-                    pointers: copy(item.pointers),
+                externalRefs[item.envelope.fragmentId ?? ''] = {
+                    refs: /** @type {Record<string, string[]>} */ (copy(item.declaration.refs ?? {})),
+                    pointers: /** @type {TeqFw_Db_StringMap} */ (copy(item.pointers)),
                     envelope: item.envelope,
                 };
                 for (const capability of item.declaration.requires ?? []) {

@@ -63,18 +63,41 @@ export interface DbSelectionV2 extends DbPagination {
     readonly orderBy?: readonly DbOrdering[];
     readonly execution?: Readonly<Record<string, unknown>>;
 }
+export interface DemAttribute { type: DbLogicalType; nullable: boolean; comment?: string; storage?: Record<string, {type: string; params: Record<string, unknown>}>; default?: {kind: string; name?: string; value?: unknown}; generation?: DbGeneration; }
+export interface DemRelation { attrs: string[]; ref: {path: string; attrs: string[]}; action: {delete?: string; update?: string}; deferrable: string; }
+export interface DemIndex { kind: string; keys: {attr?: string; expression?: DbExpression; operatorClass?: string; order?: string; nulls?: string}[]; method?: string; options: Record<string, number>; include: string[]; predicate?: DbExpression; phase: string; }
+export interface DemEntity { attr: Record<string, DemAttribute>; relation: Record<string, DemRelation>; index: Record<string, DemIndex>; comment?: string; }
+export interface DemContainer { entity: Record<string, DemEntity>; package: Record<string, DemContainer>; }
+export interface DemModel extends DemContainer { version: 2; namespace: string; requires: string[]; deprecated: Record<string, string[]>; }
+export interface DbSchemaVerification { readonly kind: string; readonly name: string; }
+export interface DbDropTable { readonly deprecated: boolean; readonly entity: string; readonly name: string; }
+export interface DbSchemaTable { readonly table: DemPhysicalTable; readonly constraints: readonly DemPhysicalIndex[]; }
+export interface DbSchemaPlanBase { readonly adapter: string; readonly fingerprint: string; readonly operation: 'create' | 'drop' | 'rebuild' | 'transfer'; }
+export interface DbSchemaDropPlan extends DbSchemaPlanBase { readonly operation: 'drop'; readonly phases: {readonly preflight: {readonly requirements: readonly string[]}; readonly tables: readonly DbDropTable[]; readonly relations: readonly DemPhysicalRelation[]; readonly verification: readonly DbSchemaVerification[]}; }
+export interface DbSchemaBuildPlan extends DbSchemaPlanBase { readonly operation: 'create' | 'rebuild' | 'transfer'; readonly phases: {readonly preflight: {readonly requirements: readonly string[]}; readonly tables: readonly DbSchemaTable[]; readonly relations: readonly DemPhysicalRelation[]; readonly afterRelations: readonly DemPhysicalIndex[]; readonly afterData: readonly DemPhysicalIndex[]; readonly data: readonly unknown[]; readonly verification: readonly DbSchemaVerification[]}; }
 export interface DemSource { readonly fragmentId: string; readonly filename: string; readonly sourcePointer: string; readonly packageName?: string; readonly revision?: string; }
 export interface DemFragmentEnvelope { readonly fragmentId: string; readonly filename: string; readonly packageName: string; readonly declaration: unknown; }
 export interface DemMapEnvelope { readonly filename?: string; readonly declaration: unknown; }
 export interface DemDiagnostic { readonly code: string; readonly details: Readonly<Record<string, unknown>>; readonly message: string; readonly path: string; readonly severity: DemDiagnosticSeverity; readonly sources: readonly DemSource[]; readonly stage: DemDiagnosticStage; }
-export interface DemGraph { readonly entities: readonly string[]; readonly topological: readonly string[]; readonly cycles: readonly (readonly string[])[]; readonly relations?: readonly unknown[]; }
-export interface DemPhysicalPlan { readonly adapter: string; readonly namespace?: string; readonly tables: readonly DemPhysicalTable[]; readonly relations: readonly unknown[]; readonly phases: DemPhysicalPhases; }
-export interface DemPhysicalIndex { readonly entity: string; readonly kind: string; readonly keys: readonly Readonly<{attr?: string}>[]; }
-export interface DemPhysicalPhases { readonly tables: readonly DemPhysicalIndex[]; readonly preflight: Readonly<{requirements: readonly string[]}>; readonly relations: readonly unknown[]; readonly afterRelations: readonly unknown[]; readonly data: readonly unknown[]; readonly afterData: readonly unknown[]; readonly verification: readonly unknown[]; }
+export interface DemGraphEdge { readonly from: string; readonly to: string; readonly relation: string; readonly path: string; readonly deferrable?: string; readonly sources: readonly DemSource[]; }
+export interface DemGraphCycle { readonly entities: readonly string[]; readonly relations: readonly DemGraphEdge[]; }
+export interface DemGraph { readonly entities: readonly string[]; readonly topological: readonly string[]; readonly cycles: readonly DemGraphCycle[]; readonly edges: readonly DemGraphEdge[]; }
+export interface DemPhysicalPlan { readonly adapter: string; readonly namespace?: string; readonly registryVersions: Readonly<Record<string, unknown>>; readonly tables: readonly DemPhysicalTable[]; readonly phases: DemPhysicalPhases; }
+export interface DemPhysicalIndex { readonly entity: string; readonly kind: string; readonly name: string; readonly method?: string; readonly keys: readonly Readonly<{attr?: string; expression?: DbExpression; operatorClass?: string}>[]; readonly options: Readonly<Record<string, number>>; readonly predicate?: DbExpression; readonly include?: readonly string[]; }
+export type DbPhysicalType = {readonly dialect: string; readonly unsigned: boolean} & (
+    {readonly type: 'binary' | 'string' | 'vector' | 'halfvec' | 'sparsevec' | 'bit'; readonly args?: readonly [number?]}
+    | {readonly type: 'datetime'; readonly args?: readonly [Readonly<{precision?: number; useTz?: boolean}>?]}
+    | {readonly type: 'decimal'; readonly args?: readonly [number?, number?]}
+    | {readonly type: 'enum'; readonly args: readonly [readonly string[]]}
+    | {readonly type: 'boolean' | 'date' | 'increments' | 'integer' | 'json' | 'jsonb' | 'smallint' | 'text' | 'tinyint' | 'uuid' | 'bigint'; readonly args?: readonly []}
+);
+export type DbPhysicalDefault = {readonly kind: 'literal'; readonly value: Knex.Value} | {readonly kind: 'function'; readonly implementation: string; readonly name: string};
+export interface DemPhysicalRelation { readonly entity: string; readonly name: string; readonly columns: readonly string[]; readonly referencedColumns: readonly string[]; readonly referencedTable: string; readonly table: string; readonly action?: Readonly<{delete?: string; update?: string}>; readonly deferrable?: 'deferred' | 'immediate' | 'notDeferrable'; }
+export interface DemPhysicalPhases { readonly tables: readonly DemPhysicalIndex[]; readonly preflight: Readonly<{requirements: readonly string[]}>; readonly relations: readonly DemPhysicalRelation[]; readonly afterRelations: readonly DemPhysicalIndex[]; readonly data: readonly unknown[]; readonly afterData: readonly DemPhysicalIndex[]; readonly verification: readonly DbSchemaVerification[]; }
 export interface DemPhysicalTable { readonly entity: string; readonly name: string; readonly comment?: string; readonly columns: readonly DemPhysicalColumn[]; }
-export interface DemPhysicalColumn { readonly name: string; readonly logicalType: DbLogicalType; readonly physicalType: unknown; readonly nullable: boolean; readonly defaultValue?: unknown; readonly generation?: DbGeneration; readonly requirements: readonly string[]; }
-export interface DemEffectiveModel { readonly fingerprint: string; readonly model: Readonly<Record<string, unknown>>; readonly provenance: DemProvenance; }
-export interface DemCompilationResult { readonly effective: DemEffectiveModel; readonly fingerprint: string; readonly graph: DemGraph; readonly model: Readonly<Record<string, unknown>>; readonly physical: DemPhysicalPlan; readonly provenance: DemProvenance; readonly requirements: readonly string[]; readonly warnings: readonly DemDiagnostic[]; }
+export interface DemPhysicalColumn { readonly name: string; readonly logicalType: DbLogicalType; readonly comment?: string; readonly physicalType: DbPhysicalType; readonly nullable: boolean; readonly defaultValue?: DbPhysicalDefault; readonly generation?: DbGeneration; readonly requirements: readonly string[]; }
+export interface DemEffectiveModel { readonly fingerprint: string; readonly model: DemModel; readonly provenance: DemProvenance; }
+export interface DemCompilationResult { readonly effective: DemEffectiveModel; readonly fingerprint: string; readonly graph: DemGraph; readonly model: DemModel; readonly physical: DemPhysicalPlan; readonly provenance: DemProvenance; readonly requirements: readonly string[]; readonly warnings: readonly DemDiagnostic[]; }
 export interface DemCompiler { exec(input: {readonly fragments: readonly DemFragmentEnvelope[]; readonly mapEnvelope: DemMapEnvelope; readonly adapter: DbDialectAdapter}): Promise<DemCompilationResult>; assertResult(input: {readonly value: unknown}): DemCompilationResult; }
 
 export interface DbDialectDescription { readonly id: string; readonly family?: string; readonly capabilities?: readonly string[]; readonly [key: string]: unknown; }
@@ -82,9 +105,10 @@ export interface DbCapabilityPreflight { readonly operation: string; readonly re
 export interface DbValueCodec { encode(value: unknown): unknown; decode(value: unknown): unknown; }
 export interface DbTypedOperator { readonly id: string; readonly arity: number | readonly number[]; readonly contexts: readonly string[]; readonly result: DbLogicalType; }
 export interface DbSchemaOperation { readonly identity: string; readonly phase: DbSchemaPhase; readonly entity?: string; readonly required?: boolean; readonly payload?: unknown; }
-export interface DbSchemaPlan { readonly fingerprint: string; readonly operation: 'create' | 'drop' | 'rebuild' | 'transfer'; readonly phases: Readonly<Record<DbSchemaPhase, readonly DbSchemaOperation[] | Readonly<Record<string, unknown>>>>; }
+export type DbSchemaPlan = DbSchemaDropPlan | DbSchemaBuildPlan;
 export interface DbSchemaExecutionEvidence { readonly status: 'complete' | 'failed'; readonly phases: readonly DbLateIndexOutcome[]; readonly failure?: DbOperationFailure; }
-export interface DbPreflightResult { readonly diagnostics: readonly DemDiagnostic[]; readonly [key: string]: unknown; }
+export interface DbAdapterDiagnostic { readonly code: string; readonly message: string; readonly details: Readonly<Record<string, unknown>>; readonly severity?: DemDiagnosticSeverity; readonly stage?: DemDiagnosticStage; readonly path?: string; readonly sources?: readonly DemSource[]; }
+export interface DbPreflightResult { readonly diagnostics: readonly DbAdapterDiagnostic[]; readonly [key: string]: unknown; }
 export interface DbResolution<T = unknown> { readonly diagnostics?: readonly DemDiagnostic[]; readonly requirements?: readonly string[]; readonly descriptor?: T; readonly physicalType?: T; readonly compatibilitySignature?: string; }
 export interface DbDialectAdapter {
     describe(): DbDialectDescription | Promise<DbDialectDescription>;
@@ -106,6 +130,7 @@ export interface DbDialectAdapter {
     restoreGeneratedState(input: Readonly<Record<string, unknown>>): Promise<readonly unknown[]>;
     encodeValue(input: Readonly<Record<string, unknown>>): unknown;
     decodeValue(input: Readonly<Record<string, unknown>>): unknown;
+    validateCycleStrategy(input: {readonly cycles: readonly DemGraphCycle[]; readonly strategy?: DbCycleStrategy | null}): {readonly valid: boolean; readonly requirements?: readonly string[]; readonly diagnostics?: readonly DemDiagnostic[]};
 }
 
 export interface DbSnapshotReader { readTable(input: {readonly entity: string; readonly table: string}): Promise<readonly DbRow[]> | readonly DbRow[]; }
@@ -157,6 +182,122 @@ export interface DbHistory {
     resolveLastApplied(input: {readonly compilation: DemCompilationResult; readonly connection: DbConnection; readonly transaction?: DbTransaction}): Promise<Readonly<{application: DbSchemaApplication; snapshot: DbEffectiveSnapshot}> | null>;
 }
 declare global {
+    type TeqFw_Db_NormalizedCoreType =
+        {id: 'core.binary'; params: {length?: number}} |
+        {id: 'core.datetime'; params: {timezone: boolean; precision?: number}} |
+        {id: 'core.decimal'; params: {precision: number; scale: number; unsigned: boolean}} |
+        {id: 'core.enum'; params: {values: string[]}} |
+        {id: 'core.integer'; params: {bits: 8 | 16 | 32 | 64; unsigned: boolean}} |
+        {id: 'core.string'; params: {length: number}} |
+        {id: 'core.vector'; params: {dimensions: number; element: 'bit' | 'float'; sparse: boolean}} |
+        {id: 'core.any' | 'core.boolean' | 'core.date' | 'core.identity' | 'core.json' | 'core.ref' | 'core.text' | 'core.uuid'; params: Record<string, never>};
+    type TeqFw_Db_NormalizedCoreTypeNullable = TeqFw_Db_NormalizedCoreType | null;
+
+    type TeqFw_Db_PaginationFields = readonly ('limit' | 'offset')[];
+    type TeqFw_Db_ExpressionKind = 'attr' | 'value' | 'call';
+    type TeqFw_Db_LogicalTypeOptional = DbLogicalType | undefined;
+    type TeqFw_Db_QueryExpressionArrayOptional = readonly DbExpression[] | undefined;
+    type TeqFw_Db_ExpressionSchema = {compatibilityUntyped?: boolean; attr?: Record<string, {name?: string; column?: string; type?: DbLogicalType; logicalType?: DbLogicalType}>; columns?: readonly DemPhysicalColumn[]; mapColumn?: (name: string) => string | undefined};
+    type TeqFw_Db_ExpressionContext = 'filter' | 'projection' | 'ordering' | 'index' | 'predicate';
+
+    type TeqFw_Db_IntegerBits = 8 | 16 | 32 | 64;
+    type TeqFw_Db_StorageTypeSelector = string | ((logicalType: TeqFw_Db_CanonicalLogicalType) => string);
+
+    type TeqFw_Db_PreflightInput = DbCapabilityPreflight;
+    type TeqFw_Db_CanonicalLogicalType = {id: string; params: Record<string, unknown>};
+    type TeqFw_Db_TypeResolutionInput = {logicalType: TeqFw_Db_CanonicalLogicalType; storage?: {type: string; params?: Record<string, unknown>}};
+    type TeqFw_Db_TypeProjectionInput = {logicalType: TeqFw_Db_CanonicalLogicalType; binding?: {type: string; params?: Record<string, unknown>}};
+    type TeqFw_Db_DefaultResolutionInput = {defaultValue: {kind: string; value?: unknown; name?: string}; logicalType: TeqFw_Db_CanonicalLogicalType};
+    type TeqFw_Db_GenerationResolutionInput = {generation: DbGeneration; logicalType: TeqFw_Db_CanonicalLogicalType};
+    type TeqFw_Db_RelationResolutionInput = {relation: DemRelation};
+    type TeqFw_Db_OperatorInput = {operator: string};
+    type TeqFw_Db_OperatorContract = {arity: number | {min: number}; args: string | readonly string[]; result: string; contexts: string[]};
+    type TeqFw_Db_ValueInput = {column: DemPhysicalColumn; value: unknown};
+    type TeqFw_Db_IndexExecutionInput = {connection: DbConnection; index: DemPhysicalIndex; knex: Knex | Knex.Transaction; table: DemPhysicalTable};
+    type TeqFw_Db_ExecutionInput = {execution: DbExecutionOptions; knex?: Knex | Knex.Transaction};
+
+    type TeqFw_Db_FailureDetails = {message: string; name: string; phases: DbLateIndexOutcome[]};
+
+    type TeqFw_Db_ExportTable = {name: string; columns: readonly {name: string; type?: unknown}[]};
+
+    type TeqFw_Db_SqlBinding = string | number | boolean | null | Knex.Raw;
+    type TeqFw_Db_VectorProjection = {diagnostics: DbAdapterDiagnostic[]; physicalType?: {args: number[]; dialect: string; type: string; unsigned: boolean}};
+    type TeqFw_Db_IndexProjection = {diagnostics: DbAdapterDiagnostic[]; descriptor?: {include: string[]; keys: {attr?: string; operatorClass?: string}[]; kind: string; method: string; name: string; options: Record<string, number>; predicate?: DbExpression; requirements: string[]}};
+
+    type TeqFw_Db_VectorStorageRule = {capability: string; maxDimensions: number; element: string; sparse: boolean};
+    type TeqFw_Db_VectorOperatorClass = {methods: string[]; physical: string; storage: string};
+    type TeqFw_Db_VectorOperator = {implementation: string; physical: string; storage: string[]};
+    type TeqFw_Db_NumberRangeMap = Record<string, readonly [number, number]>;
+    type TeqFw_Db_VectorStorageInput = {binding: {params?: Record<string, unknown>}; logicalType: DbLogicalType};
+    type TeqFw_Db_VectorIndexInput = {entity: DemEntity; index: DemIndex; physicalName: string};
+    type TeqFw_Db_VectorValue = string | number[] | {dimensions: number; entries: {index: number; value: number}[]};
+
+    type TeqFw_Db_PreflightFunction = (input: DbCapabilityPreflight) => Promise<DbPreflightResult & {availableCapabilities?: readonly string[]}>;
+    type TeqFw_Db_PreflightConnection = DbConnection | DbTransaction;
+    type TeqFw_Db_KnexProvider = {getClient?: () => Knex; getKnex?: () => Knex; getKnexTrx?: () => Knex.Transaction};
+    type TeqFw_Db_AddColumnFunction = (input: {column: DemPhysicalColumn; knex: Knex | Knex.Transaction; tableBuilder: Knex.CreateTableBuilder}) => unknown;
+    type TeqFw_Db_AddIndexFunction = (input: {connection: DbConnection; index: DemPhysicalIndex; knex: Knex | Knex.Transaction; table: DemPhysicalTable}) => Promise<void>;
+
+    type TeqFw_Db_OperatorDescriptor = {operator: string; physical: string};
+    type TeqFw_Db_ExecutionSetting = {maximum: number; minimum: number; setting: string};
+
+    type TeqFw_Db_ProjectionDiagnosticArray = readonly {code?: string; details?: Record<string, unknown>; message?: string; path?: string; severity?: DemDiagnosticSeverity; sources?: readonly DemSource[]; stage?: DemDiagnosticStage}[];
+    type TeqFw_Db_SchemaExecutionPhase = {identity: string; phase: string; status: string; evidence?: unknown; error?: {message: string; name: string}};
+    type TeqFw_Db_PhysicalColumnDraft = {name: string; logicalType: DbLogicalType; physicalType: DbPhysicalType; nullable: boolean; comment?: string; defaultValue?: DbPhysicalDefault; generation?: DbGeneration; requirements: string[]};
+    type TeqFw_Db_PhysicalTableDraft = {entity: string; name: string; comment?: string; columns: TeqFw_Db_PhysicalColumnDraft[]};
+
+
+    type TeqFw_Db_PhysicalTableArray = readonly DemPhysicalTable[];
+    type TeqFw_Db_SchemaExecutionEvidence = {fingerprint: string; operation: string; phases: readonly DbLateIndexOutcome[]; preflight: DbPreflightResult; status: 'complete'};
+
+    type TeqFw_Db_StringNullable = string | null;
+
+    type TeqFw_Db_RebuildMode = DbRebuildMode;
+    type TeqFw_Db_SnapshotReaderOptional = DbSnapshotReader | undefined;
+    type TeqFw_Db_TransformationMap = Readonly<Record<string, DbTransformation>>;
+    type TeqFw_Db_Transformation = DbTransformation;
+    type TeqFw_Db_LateSchemaPhase = 'afterRelations' | 'afterData';
+    type TeqFw_Db_RebuildEvidenceDraft = {
+        accepted: boolean; dataComplete: boolean; failures: DbOperationFailure[];
+        fingerprint: string; generatedState: readonly unknown[]; identityCounters: readonly DbIdentityCounterEvidence[];
+        mode: DbRebuildMode; mutationStarted: boolean; phases: DbLateIndexOutcome[];
+        preservation: {authorizedDiscard: boolean; status: 'notStarted' | 'verifiedReadable' | 'discardAuthorized' | 'notRequired'; tables: {entity: string; table: string; rows: number}[]};
+        preflight: Record<string, DbPreflightResult>; source: {adapter: string; fingerprint: string; id: string};
+        status: DbOperationStatus; strategy: Readonly<Record<string, unknown>> | null;
+        tables: {entity: string; table: string; status: string; sourceRows?: number; targetRows?: number; transformation?: string; error?: {name: string; message: string}}[];
+        target: {adapter: string; fingerprint: string; id: string}; transaction: {owned: boolean; outcome: DbTransactionOutcome};
+        transformations: {entity: string; id: string}[];
+    };
+
+    type TeqFw_Db_Model = DemModel;
+    type TeqFw_Db_EffectiveModel = DemEffectiveModel;
+    type TeqFw_Db_Provenance = DemProvenance;
+    type TeqFw_Db_PhysicalPlan = DemPhysicalPlan;
+    type TeqFw_Db_SchemaPlan = DbSchemaPlan;
+    type TeqFw_Db_CycleStrategyNullable = DbCycleStrategy | null;
+    type TeqFw_Db_SchemaOperation = 'create' | 'drop' | 'rebuild' | 'transfer';
+    type TeqFw_Db_DropTableArray = readonly DbDropTable[];
+    type TeqFw_Db_PhysicalIndexArray = DemPhysicalIndex[];
+    type TeqFw_Db_GraphEdges = DemGraphEdge[];
+    type TeqFw_Db_StringLists = string[][];
+
+    type TeqFw_Db_DiagnosticStage = DemDiagnosticStage;
+    type TeqFw_Db_CycleValidation = {valid: boolean; requirements?: readonly string[]; diagnostics?: readonly DemDiagnostic[]};
+    type TeqFw_Db_CycleValidationInput = {cycles: readonly DemGraphCycle[]; strategy?: DbCycleStrategy | null};
+
+    type TeqFw_Db_DiagnosticSeverity = DemDiagnosticSeverity;
+    type TeqFw_Db_MutableSourceArray = DemSource[];
+    type TeqFw_Db_LegacySerialSchema = PromiseLike<{rows: {nextval: string | number}[]}> & {raw(sql: string): unknown};
+    type TeqFw_Db_SourceArray = readonly DemSource[];
+    type TeqFw_Db_Graph = DemGraph;
+    type TeqFw_Db_GraphEdgeArray = readonly DemGraphEdge[];
+    type TeqFw_Db_GraphCycleArray = readonly DemGraphCycle[];
+    type TeqFw_Db_KnexTableBuilder = Knex.CreateTableBuilder;
+    type TeqFw_Db_PhysicalIndex = DemPhysicalIndex;
+    type TeqFw_Db_PhysicalRelation = DemPhysicalRelation;
+    type TeqFw_Db_ExpressionDescriptor = {implementation: string; operator?: string; physical?: string};
+    type TeqFw_Db_SqlArguments = readonly Knex.Raw[];
+
     type TeqFw_Db_GeneratedStateEvidenceArray = readonly unknown[];
     type TeqFw_Db_TransferStrategyEvidence = Readonly<Record<string, unknown>> | null;
     type TeqFw_Db_SchemaDataTransfer = () => Promise<unknown>;
@@ -188,7 +329,7 @@ declare global {
     type TeqFw_Db_IdentityCounterRow = {scope: string; entity_path: string; value: unknown};
     type TeqFw_Db_KnexTransaction = Knex.Transaction;
     type TeqFw_Db_KnexQuerySource = Knex | Knex.Transaction;
-    type TeqFw_Db_CreateHash = typeof import('node:crypto').createHash;
+
     type TeqFw_Db_Back_RDb_Identity = import('./src/Back/RDb/Identity.mjs').default;
     type TeqFw_Db_Back_RDb_Identity__Class = typeof import('./src/Back/RDb/Identity.mjs').default;
     type TeqFw_Cfg_Reader = {get: any};
@@ -435,13 +576,31 @@ declare global {
     type TeqFw_Db_Back_Util__serialsSet = typeof import("./src/Back/Util.mjs").serialsSet;
     type TeqFw_Db_BooleanNullable = boolean | null | undefined;
     type TeqFw_Db_ClientLike = {constructor: {name: string}};
-    type TeqFw_Db_DateInput = object | string | number | null | undefined;
-    type TeqFw_Db_DemEntityInfo = {entity: TeqFw_Db_Back_Dto_Dem_Entity; pointer: string; tableName: string};
+    type TeqFw_Db_DateInput = Date | string | number | null | undefined;
+    type TeqFw_Db_DemEntityInfo = {entity: DemEntity; pointer: string; tableName: string; path: string; uniqueKeys: string[][]};
     type TeqFw_Db_DemEntityMap = {[key: string]: TeqFw_Db_DemEntityInfo};
     type TeqFw_Db_DemEnvelope = {declaration: unknown; [key: string]: unknown};
+    /** Intermediate DEM nodes preserve invalid tags until semantic validation. */
+    type TeqFw_Db_DiagnosticArrayMutable = DemDiagnostic[];
+    type TeqFw_Db_DecodedExpression = {kind: string; name?: string; value?: unknown; type?: DbLogicalType; operator?: string; args?: TeqFw_Db_DecodedExpression[]};
+    type TeqFw_Db_DecodedAttribute = {name: string; comment: string; type: DbLogicalType; storage: Record<string, {type: string; params: Record<string, unknown>}>; nullable: boolean; default?: {kind: string; value?: unknown; name?: string; params?: Record<string, unknown>}; generation?: {kind: string; params: Record<string, unknown>}; __demSpecial?: string};
+    type TeqFw_Db_DecodedIndexKey = {attr?: string; expression?: TeqFw_Db_DecodedExpression; order?: unknown; nulls?: unknown; operatorClass?: unknown};
+    type TeqFw_Db_DecodedIndex = {name: string; kind: string; keys: TeqFw_Db_DecodedIndexKey[]; include: string[]; options: Record<string, unknown>; phase: string; method?: string; predicate?: TeqFw_Db_DecodedExpression};
+    type TeqFw_Db_DecodedRelation = {name: string; attrs: string[]; ref: {path: string; attrs: string[]}; action: {delete?: string; update?: string}; deferrable: unknown};
+    type TeqFw_Db_DecodedEntity = {name: string; path: string; comment: string; attr: Record<string, TeqFw_Db_DecodedAttribute>; index: Record<string, TeqFw_Db_DecodedIndex>; relation: Record<string, TeqFw_Db_DecodedRelation>};
+    type TeqFw_Db_DecodedContainer = {entity: Record<string, TeqFw_Db_DecodedEntity>; package: Record<string, TeqFw_Db_DecodedContainer>; comment?: string; version?: number; requires?: string[]; refs?: Record<string, string[]>};
+    type TeqFw_Db_ComposedModel = TeqFw_Db_DecodedContainer & {version: number; namespace: string; requires: string[]; deprecated: Record<string, string[]>};
+    type TeqFw_Db_InputEnvelope = {declaration: unknown; filename?: string; fragmentId?: string; packageName?: string; revision?: string; mapId?: string};
+    type TeqFw_Db_DecodedFragment = {declaration: TeqFw_Db_DecodedContainer | null; diagnostics: DemDiagnostic[]; envelope: TeqFw_Db_InputEnvelope; pointers: TeqFw_Db_StringMap};
+    type TeqFw_Db_ComposedDem = {diagnostics: DemDiagnostic[]; externalRefs: Record<string, {refs: Record<string, string[]>; pointers: TeqFw_Db_StringMap; envelope: TeqFw_Db_InputEnvelope}>; invalid: Set<string>; model: TeqFw_Db_ComposedModel; ownerByPath: TeqFw_Db_StringMap; provenance: Record<string, DemSource[]>};
+    type TeqFw_Db_ValidatingEntityInfo = {entity: TeqFw_Db_DecodedEntity; pointer: string; tableName: string; signatures: TeqFw_Db_StringMap; uniqueKeys: string[][]};
+    type TeqFw_Db_LoadTestOptions = {testDems?: TeqFw_Db_StringMap; testMapRoot?: string};
+    type TeqFw_Db_DecodedFragmentArray = ReadonlyArray<TeqFw_Db_DecodedFragment>;
+    type TeqFw_Db_InputEnvelopeArray = ReadonlyArray<TeqFw_Db_InputEnvelope>;
+    type TeqFw_Db_NameClaims = Record<string, {rawName: string; sourcePointer: string}>;
     type TeqFw_Db_DemFragment = {declaration: unknown; filename?: string; fragmentId?: string; packageName?: string};
     type TeqFw_Db_DemFragmentArray = TeqFw_Db_DemFragment[];
-    type TeqFw_Db_DiagnosticArray = TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic[];
+    type TeqFw_Db_DiagnosticArray = readonly DemDiagnostic[];
     type TeqFw_Db_Error = {name: string; message: string};
     type TeqFw_Db_ExportDto = {tables: {[key: string]: object[]}; serials: TeqFw_Db_StringMap};
     type TeqFw_Db_FileError = {code?: string; message: string};
@@ -452,14 +611,14 @@ declare global {
     type TeqFw_Db_ObjectArray = object[];
     type TeqFw_Db_ObjectArrayOrNull = object[] | null;
     type TeqFw_Db_ObjectOptional = object | undefined;
-    type TeqFw_Db_ObjectOrNull = object | null;
-    type TeqFw_Db_OrderDto = {alias: string; dir: string};
-    type TeqFw_Db_QueryExpression = {kind: string; name?: string; value?: unknown; type?: TeqFw_Db_LogicalType; operator?: string; args?: TeqFw_Db_QueryExpressionArray};
-    type TeqFw_Db_QueryExpressionArray = TeqFw_Db_QueryExpression[];
-    type TeqFw_Db_QueryOrdering = {direction: string; expression: TeqFw_Db_QueryExpression};
-    type TeqFw_Db_QueryOrderingArray = TeqFw_Db_QueryOrdering[];
+    type TeqFw_Db_ObjectOrNull = TeqFw_Db_Object | null;
+    type TeqFw_Db_OrderDto = {alias: TeqFw_Db_StringOptional; dir: TeqFw_Db_StringOptional};
+    type TeqFw_Db_QueryExpression = DbExpression;
+    type TeqFw_Db_QueryExpressionArray = readonly DbExpression[];
+    type TeqFw_Db_QueryOrdering = DbOrdering;
+    type TeqFw_Db_QueryOrderingArray = readonly DbOrdering[];
     type TeqFw_Db_QueryProjection = {as: string; expression: TeqFw_Db_QueryExpression};
-    type TeqFw_Db_QueryProjectionArray = TeqFw_Db_QueryProjection[];
+    type TeqFw_Db_QueryProjectionArray = readonly DbProjection[];
     type TeqFw_Db_SerialValue = number | string | null;
     type TeqFw_Db_Shared_Dto_Order = import("./src/Shared/Dto/Order.mjs").default;
     type TeqFw_Db_Shared_Dto_Order__Class = typeof import("./src/Shared/Dto/Order.mjs").default;
@@ -482,7 +641,7 @@ declare global {
     type TeqFw_Db_StringMap = {[key: string]: string};
     type TeqFw_Db_StringNumberMap = {[key: string]: number | string};
     type TeqFw_Db_StringOptional = string | undefined;
-    type TeqFw_Db_ValidatedDem = {entities: TeqFw_Db_DemEntityMap; provenance: {[key: string]: object[]}; [key: string]: unknown};
+    type TeqFw_Db_ValidatedDem = {entities: TeqFw_Db_DemEntityMap; provenance: Record<string, DemSource[]>; model: DemModel; diagnostics: DemDiagnostic[]};
     type TeqFw_Log_Provider = {forSource: any};
 }
 export {};

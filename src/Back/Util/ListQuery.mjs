@@ -12,8 +12,8 @@ export default class TeqFw_Db_Back_Util_ListQuery {
     constructor() {
         /**
          * Convert the query columns into the tables' fields to group by.
-         * @param {any} columns
-         * @param {any} map
+         * @param {TeqFw_Db_StringMap} columns
+         * @param {TeqFw_Db_StringMap} map
          * @returns {any}
          */
         this.prepareGroupBy = function(columns, map) {
@@ -26,14 +26,15 @@ export default class TeqFw_Db_Back_Util_ListQuery {
 
         /**
          * Convert the query columns into the tables' fields to select.
-         * @param {any} columns
-         * @param {any} map
+         * @param {TeqFw_Db_StringMap} columns
+         * @param {TeqFw_Db_StringMap} map
          * @returns {any}
          */
         this.prepareSelect = function(columns, map) {
             const res = [];
             for (const key of Object.values(columns)) {
                 if (map.hasOwnProperty(key)) {
+                    /** @type {TeqFw_Db_StringMap} */
                     const obj = {};
                     obj[key] = map[key];
                     res.push(obj);

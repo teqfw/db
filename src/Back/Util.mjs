@@ -62,6 +62,7 @@ export function formatAsDateTime(dateIn) {
  */
 export function getTables(trx) {
     return (async () => {
+        /** @type {string[]} */
         const result = [];
         const knex = trx.getKnexTrx();
         const dialect = knex.client.config.client;
@@ -69,12 +70,12 @@ export function getTables(trx) {
             const rs = await knex.raw('show tables');
             if (Array.isArray(rs)) {
                 const column = rs[1][0]['name'];
-                rs[0].map(one => result.push(one[column]));
+                rs[0].map((/** @type {TeqFw_Db_StringMap} */ one) => result.push(one[column]));
             }
         } else if (['pg'].includes(dialect)) {
             const rs = await knex.raw('SELECT * FROM information_schema.tables  WHERE table_schema = \'public\'');
             if (Array.isArray(rs?.rows)) {
-                rs.rows.map(one => result.push(one['table_name']));
+                rs.rows.map((/** @type {TeqFw_Db_StringMap} */ one) => result.push(one['table_name']));
             }
         } else {
             throw new Error(`This dialect (${dialect}) is not supported.`);
@@ -183,20 +184,21 @@ export function pgSerialsGet(trx) {
 
 /**
  * Get 'nextval' for Postgres serials.
- * @param {object} schema
+ * @param {TeqFw_Db_LegacySerialSchema} schema
  * @param {TeqFw_Db_StringArray} serials
  * @returns {Promise<TeqFw_Db_StringNumberMap>}
  * @memberOf TeqFw_Db_Back_Util
  */
 export function serialsGet(schema, serials) {
     return (async () => {
+        /** @type {TeqFw_Db_StringNumberMap} */
         const result = {};
         for (const one of serials) {
             schema.raw(`SELECT nextval('${one}')`);
         }
         const rs = await schema;
         for (const i in rs.rows) {
-            const key = serials[i];
+            const key = serials[Number(i)];
             result[key] = rs.rows[0].nextval;
         }
         return result;
@@ -205,7 +207,7 @@ export function serialsGet(schema, serials) {
 
 /**
  * Get 'nextval' for one Postgres serial.
- * @param {object} schema
+ * @param {TeqFw_Db_LegacySerialSchema} schema
  * @param {string} serial
  * @returns {Promise<TeqFw_Db_SerialValue>}
  * @memberOf TeqFw_Db_Back_Util
@@ -224,7 +226,7 @@ export function serialsGetOne(schema, serial) {
 }
 
 /**
- * @param {object} schema
+ * @param {TeqFw_Db_LegacySerialSchema} schema
  * @param {TeqFw_Db_StringNumberMap} serials
  * @returns {Promise<any>}
  * @deprecated
@@ -282,6 +284,7 @@ export default class TeqFw_Db_Back_Util {
          * @memberOf TeqFw_Db_Back_Util
          */
         this.pgSerialsGet = async function(trx) {
+            /** @type {TeqFw_Db_StringNumberMap} */
             const res = {};
             const all = await trx.raw('SELECT sequence_name FROM information_schema.sequences  WHERE sequence_schema = \'public\'');
             if (Array.isArray(all?.rows)) {
@@ -338,6 +341,7 @@ export default class TeqFw_Db_Back_Util {
             const res = [];
             for (const key of Object.values(columns)) {
                 if (map.hasOwnProperty(key)) {
+                    /** @type {TeqFw_Db_StringMap} */
                     const obj = {};
                     obj[key] = map[key];
                     res.push(obj);

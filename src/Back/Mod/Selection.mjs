@@ -19,6 +19,7 @@ export default class TeqFw_Db_Back_Mod_Selection {
          */
         const adaptEntitySchema = function (meta) {
             if (meta?.attr || meta?.columns) {
+                /** @type {NonNullable<TeqFw_Db_ExpressionSchema['attr']>[string][]} */
                 const values = meta.attr ? Object.values(meta.attr) : meta.columns;
                 if (values.some((item) => !(item?.type ?? item?.logicalType))) {
                     throw new TypeError('Selection v2 requires registered logical types for every schema attribute.');
@@ -30,6 +31,7 @@ export default class TeqFw_Db_Back_Mod_Selection {
             if (!logicalTypes || typeof logicalTypes !== 'object' || Array.isArray(logicalTypes)) {
                 throw new TypeError('Selection v2 requires schema.getLogicalTypes().');
             }
+            /** @type {NonNullable<TeqFw_Db_ExpressionSchema['attr']>} */
             const attr = {};
             for (const [key, name] of Object.entries(attributes ?? {})) {
                 const type = logicalTypes?.[name] ?? logicalTypes?.[key]
@@ -39,7 +41,7 @@ export default class TeqFw_Db_Back_Mod_Selection {
             }
             return {
                 attr,
-                mapColumn: (name) => typeof meta?.mapColumn === 'function' ? meta.mapColumn(name) : (attr[name] ? name : undefined),
+                mapColumn: (/** @type {string} */ name) => typeof meta?.mapColumn === 'function' ? meta.mapColumn(name) : (attr[name] ? name : undefined),
             };
         };
 

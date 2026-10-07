@@ -23,7 +23,7 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
      * @throws {any} - Throws an error if the operation fails.
      * @returns {Promise<any>}
      */
-    createOne({trx, dto}) {}
+    createOne({trx, dto}) { throw new Error('Not implemented.'); }
 
     /**
      * Create a persistent DTO.
@@ -34,7 +34,7 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
      * @param {any} data
      * @returns {any}
      */
-    createDto(data) {}
+    createDto(data) { throw new Error('Not implemented.'); }
 
     /**
      * Delete a single record matching the provided key.
@@ -44,7 +44,7 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
      * @throws {any} - Throws an error if the operation fails.
      * @returns {Promise<any>}
      */
-    deleteOne({trx, key}) {}
+    deleteOne({trx, key}) { throw new Error('Not implemented.'); }
 
     /**
      * Delete records matching the provided conditions.
@@ -54,13 +54,13 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
      * @throws {any} - Throws an error if the operation fails.
      * @returns {Promise<any>}
      */
-    deleteMany({trx, selection}) {}
+    deleteMany({trx, selection}) { throw new Error('Not implemented.'); }
 
     /**
      * Get a schema object related to the repo.
      * @returns {TeqFw_Db_Back_Api_RDb_Schema_Object}
      */
-    getSchema() {}
+    getSchema() { throw new Error('Not implemented.'); }
 
     /**
      * Read a single record by primary or unique key(s).
@@ -72,7 +72,7 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
      * @throws {any} - Throws an error if the operation fails.
      * @returns {Promise<any>}
      */
-    readOne({trx, key, select}) {}
+    readOne({trx, key, select}) { throw new Error('Not implemented.'); }
 
     /**
      * Read multiple records matching the provided conditions.
@@ -83,7 +83,7 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
      * @throws {any} - Throws an error if the operation fails.
      * @returns {Promise<any>}
      */
-    readMany({trx, selection}) {}
+    readMany({trx, selection}) { throw new Error('Not implemented.'); }
 
     /**
      * Update a single record matching the provided key.
@@ -94,7 +94,7 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
      * @throws {any} - Throws an error if the operation fails or if parameters are invalid.
      * @returns {Promise<any>}
      */
-    updateOne({trx, key, updates}) {}
+    updateOne({trx, key, updates}) { throw new Error('Not implemented.'); }
 
     /**
      * Update existing records matching the provided conditions.
@@ -105,5 +105,5 @@ export default class TeqFw_Db_Back_Api_RDb_Repository {
      * @throws {any} - Throws an error if the operation fails or if parameters are invalid.
      * @returns {Promise<any>}
      */
-    updateMany({trx, selection, updates}) {}
+    updateMany({trx, selection, updates}) { throw new Error('Not implemented.'); }
 }

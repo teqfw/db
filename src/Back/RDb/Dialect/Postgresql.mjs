@@ -18,6 +18,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql {
             return {
                 bindingParams: [],
                 requirements: [capability],
+                /** @param {TeqFw_Db_TypeProjectionInput} input */
                 project: function ({logicalType}) {
                     const diagnostics = validate(logicalType);
                     const physicalType = typeof type === 'function' ? type(logicalType) : type;
@@ -31,21 +32,21 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql {
             };
         };
         /** @param {any} type @returns {any} */
-        const rejectUnsigned = (type) => type.params.unsigned ? [{
+        const rejectUnsigned = (/** @type {TeqFw_Db_CanonicalLogicalType} */ type) => type.params.unsigned ? [{
             code: 'DEM_STORAGE_UNSUPPORTED',
             details: {adapter: 'postgresql', type: type.id},
             message: 'PostgreSQL has no registered exact unsigned numeric storage mapping.',
         }] : [];
         const types = {
-            'core.binary': entry('binary', (type) => type.params.length ? [type.params.length] : []),
+            'core.binary': entry('binary', (/** @type {TeqFw_Db_CanonicalLogicalType} */ type) => type.params.length ? [type.params.length] : []),
             'core.boolean': entry('boolean'),
             'core.date': entry('date'),
-            'core.datetime': entry('datetime', (type) => [{precision: type.params.precision, useTz: type.params.timezone}]),
-            'core.decimal': entry('decimal', (type) => [type.params.precision, type.params.scale], (type) => type.params.unsigned, rejectUnsigned),
-            'core.enum': entry('enum', (type) => [type.params.values]),
-            'core.integer': entry((type) => ({8: 'smallint', 16: 'smallint', 32: 'integer', 64: 'bigint'}[type.params.bits]), () => [], (type) => type.params.unsigned, rejectUnsigned),
+            'core.datetime': entry('datetime', (/** @type {TeqFw_Db_CanonicalLogicalType} */ type) => [{precision: type.params.precision, useTz: type.params.timezone}]),
+            'core.decimal': entry('decimal', (/** @type {TeqFw_Db_CanonicalLogicalType} */ type) => [type.params.precision, type.params.scale], (/** @type {TeqFw_Db_CanonicalLogicalType} */ type) => type.params.unsigned, rejectUnsigned),
+            'core.enum': entry('enum', (/** @type {TeqFw_Db_CanonicalLogicalType} */ type) => [type.params.values]),
+            'core.integer': entry((/** @type {TeqFw_Db_CanonicalLogicalType} */ type) => ({8: 'smallint', 16: 'smallint', 32: 'integer', 64: 'bigint'}[/** @type {TeqFw_Db_IntegerBits} */ (type.params.bits)]), () => [], (/** @type {TeqFw_Db_CanonicalLogicalType} */ type) => type.params.unsigned, rejectUnsigned),
             'core.json': entry('jsonb'),
-            'core.string': entry('string', (type) => [type.params.length]),
+            'core.string': entry('string', (/** @type {TeqFw_Db_CanonicalLogicalType} */ type) => [type.params.length]),
             'core.text': entry('text'),
             'core.uuid': entry('uuid'),
         };
@@ -67,6 +68,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql {
         const indexes = {
             'core.btree': {
                 requirements: [capability],
+                /** @param {TeqFw_Db_VectorIndexInput} input */
                 project: function ({index, physicalName}) {
                     return {
                         descriptor: {
@@ -103,13 +105,13 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql {
             types,
         });
         Object.assign(this, adapter);
-        const baseAddColumn = this.addColumn;
-        const baseAddIndex = this.addIndex;
-        const baseCompileExpression = this.compileExpression;
-        const baseDecodeValue = this.decodeValue;
-        const baseEncodeValue = this.encodeValue;
-        const basePreflight = this.preflight;
-        const baseResolveOperator = this.resolveOperator;
+        const baseAddColumn = adapter.addColumn;
+        const baseAddIndex = adapter.addIndex;
+        const baseCompileExpression = adapter.compileExpression;
+        const baseDecodeValue = adapter.decodeValue;
+        const baseEncodeValue = adapter.encodeValue;
+        const basePreflight = adapter.preflight;
+        const baseResolveOperator = adapter.resolveOperator;
         /** @param {any} args @returns {any} */
         this.addColumn = function (args) {
             return vector.addColumn({...args, base: baseAddColumn});
@@ -146,8 +148,8 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql {
         };
         /**
          * @param {object} deps
-         * @param {object} deps.cycleStrategy
-         * @param {object} deps.transaction
+         * @param {TeqFw_Db_CycleStrategyNullable} [deps.cycleStrategy]
+         * @param {TeqFw_Db_Transaction} deps.transaction
          * @returns {Promise<any>}
          */
         this.prepareTransfer = async function ({cycleStrategy, transaction}) {
@@ -160,8 +162,8 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql {
         };
         /**
          * @param {object} deps
-         * @param {object} deps.tables
-         * @param {object} deps.transaction
+         * @param {TeqFw_Db_PhysicalTableArray} deps.tables
+         * @param {TeqFw_Db_Transaction} deps.transaction
          * @returns {Promise<any>}
          */
         this.restoreGeneratedState = async function ({tables, transaction}) {
@@ -184,8 +186,8 @@ export default class TeqFw_Db_Back_RDb_Dialect_Postgresql {
         };
         /**
          * @param {object} deps
-         * @param {object} deps.cycles
-         * @param {object} deps.strategy
+         * @param {TeqFw_Db_GraphCycleArray} deps.cycles
+         * @param {TeqFw_Db_CycleStrategyNullable} [deps.strategy]
          * @returns {any}
          */
         this.validateCycleStrategy = function ({cycles, strategy}) {

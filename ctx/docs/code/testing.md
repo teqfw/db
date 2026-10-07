@@ -66,8 +66,22 @@ independent connections; it is included in npm run test:optin after the existing
 preflight and database conformance layers. Opt-in databases must be explicitly disposable.
 Native generation and allocated generation both retain existing rebuild-cycle rules.
 
-For this task the Human accepted reporting the existing global typing debt separately
+For issue 8 the Human accepted reporting the existing global typing debt separately
 and requested correction of affected contracts. Compare source diagnostics and JSDoc
 any counts with the pre-change baseline; package declaration/consumer tests remain
 required. This scope decision does not relax the general blocking typecheck contract
 for future delivery.
+
+## Typecheck Repair Verification
+
+The subsequent authorized repair passes the unchanged global typecheck and the package
+consumer checks. Regression tests cover string Unix-socket paths and normalization of
+nested table DTO columns. Full npm test, source syntax, source ESM validation, and
+source/unit topology checks pass. The existing source JSDoc any count decreased from
+432 to 393; no changed source file increased its count. PostgreSQL/MariaDB opt-in suites
+were not rerun for this follow-up; issue 8's engine evidence remains historical.
+
+Package-root ESM validation additionally checks the declaration map. The installed
+validator rejects several named/structural aliases and references to exported contracts
+accepted by TypeScript, including some already present at issue 8 completion. Record
+this compatibility gap separately; do not erase truthful contracts to make it pass.

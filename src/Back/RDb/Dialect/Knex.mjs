@@ -44,6 +44,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex {
             adapter.describe = async function () {
                 return frozenDescription;
             };
+            /** @param {TeqFw_Db_TypeResolutionInput} input */
             adapter.resolveType = async function ({logicalType, storage: binding}) {
                 const entry = binding ? storageRegistry[binding.type] : typeRegistry[logicalType.id];
                 if (!entry) {
@@ -79,11 +80,12 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex {
                     requirements: [...new Set(entry.requirements ?? [])].sort(),
                 };
             };
+            /** @param {TeqFw_Db_DefaultResolutionInput} input */
             adapter.resolveDefault = async function ({defaultValue, logicalType}) {
                 if (defaultValue.kind === 'literal') {
                     return {descriptor: structuredClone(defaultValue), diagnostics: [], requirements: []};
                 }
-                const entry = defaultRegistry[defaultValue.name];
+                const entry = defaultValue.name ? defaultRegistry[defaultValue.name] : undefined;
                 if (!entry || !entry.types.includes(logicalType.id)) {
                     return {
                         diagnostics: [{
@@ -100,6 +102,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex {
                     requirements: [...new Set(entry.requirements ?? [])].sort(),
                 };
             };
+            /** @param {TeqFw_Db_GenerationResolutionInput} input */
             adapter.resolveGeneration = async function ({generation, logicalType}) {
                 const entry = generationRegistry[generation.kind];
                 if (!entry || !entry.types.includes(logicalType.id)
@@ -121,6 +124,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex {
                     requirements: [...new Set(entry.requirements ?? [])].sort(),
                 };
             };
+            /** @param {TeqFw_Db_VectorIndexInput} input */
             adapter.resolveIndex = async function ({entity, index, physicalName}) {
                 if (index.kind === 'primary' || index.kind === 'unique') {
                     const valid = index.phase === 'table' && index.method === undefined
@@ -150,7 +154,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex {
                         requirements: [],
                     };
                 }
-                const entry = indexRegistry[index.method];
+                const entry = index.method ? indexRegistry[index.method] : undefined;
                 if (!entry) {
                     return {
                         diagnostics: [{
@@ -184,7 +188,9 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex {
                     requirements: [...new Set(entry.requirements ?? [])].sort(),
                 };
             };
+            /** @param {TeqFw_Db_OperatorInput} input */
             adapter.resolveOperator = async function ({operator}) {
+                /** @type {Record<string, TeqFw_Db_OperatorContract>} */
                 const contracts = {
                     'core.and': {arity: {min: 2}, args: 'boolean', result: 'core.boolean', contexts: ['filter', 'predicate']},
                     'core.eq': {arity: 2, args: 'same', result: 'core.boolean', contexts: ['filter', 'predicate']},
@@ -204,12 +210,16 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex {
                     : {diagnostics: [{code: 'DEM_EXPRESSION_INVALID', details: {operator}, message: 'The selected adapter has no registered query operator.'}], requirements: []};
             };
 
+            /** @param {TeqFw_Db_RelationResolutionInput} input */
             adapter.resolveRelation = async function ({relation}) {
                 return {descriptor: structuredClone(relation), diagnostics: [], requirements: []};
             };
+            /** @param {TeqFw_Db_PreflightInput} input */
             adapter.preflight = async function ({connection, fingerprint, operation, requirements}) {
                 const supported = new Set(frozenDescription.supportedCapabilities);
-                const client = (connection?.getClient?.() ?? connection?.getKnexTrx?.())?.client?.config?.client;
+                /** @type {TeqFw_Db_KnexProvider} */
+                const provider = connection;
+                const client = (provider.getClient?.() ?? provider.getKnex?.() ?? provider.getKnexTrx?.())?.client?.config?.client;
                 const identityMatches = frozenDescription.clients.includes(client);
                 const unavailable = requirements.filter((item) => !supported.has(item) || !identityMatches);
                 return freeze({
@@ -225,6 +235,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex {
                     })),
                 });
             };
+            /** @param {TeqFw_Db_ValueInput} input */
             adapter.encodeValue = function ({column, value}) {
                 if (value === null || value === undefined) return value;
                 const type = column?.logicalType?.id;
@@ -232,6 +243,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex {
                 if (type === 'core.datetime' && value instanceof Date) return value.toISOString();
                 return value;
             };
+            /** @param {TeqFw_Db_ValueInput} input */
             adapter.decodeValue = function ({column, value}) {
                 if (value === null || value === undefined) return value;
                 const type = column?.logicalType?.id;
@@ -254,6 +266,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex {
             adapter.addColumn = executor.addColumn;
             adapter.addConstraint = executor.addConstraint;
             adapter.addRelation = executor.addRelation;
+            /** @param {TeqFw_Db_IndexExecutionInput} input */
             adapter.addIndex = async function ({connection, index, knex, table}) {
                 await connection.getSchemaBuilder().alterTable(table.name, (tableBuilder) => {
                     executor.addIndex({index, knex, tableBuilder});
@@ -267,6 +280,7 @@ export default class TeqFw_Db_Back_RDb_Dialect_Knex {
             adapter.restoreGeneratedState = async function () {
                 return freeze([]);
             };
+            /** @param {TeqFw_Db_ExecutionInput} input */
             adapter.applyExecutionOptions = async function ({execution}) {
                 const keys = Object.keys(execution ?? {});
                 if (keys.length) throw new TypeError("Query execution option is not registered: '" + keys.sort()[0] + "'.");

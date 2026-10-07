@@ -13,11 +13,11 @@ const NS = 'TeqFw_Db_Back_Dto_RDb_Index';
 
 // MODULE'S CLASSES
 export default class TeqFw_Db_Back_Dto_RDb_Index {
-    /** @type {string[]} */
+    /** @type {unknown[] | undefined} */
     columns;
-    /** @type {string} */
+    /** @type {string | undefined} */
     name;
-    /** @type {typeof TeqFw_Db_Back_Enum_Db_Type_Index} */
+    /** @type {TeqFw_Db_StringOptional} */
     type;
 }
 // attributes names to use as aliases in queries to object props
@@ -40,14 +40,17 @@ export class Factory {
     constructor({cast, INDEX}) {
 
         /**
-         * @param {TeqFw_Db_ObjectOrNull} data
+         * @param {unknown} input
          * @returns {TeqFw_Db_Back_Dto_RDb_Index}
          */
-        this.create = function (data = null) {
+        this.create = function (input = null) {
+            const data = input && typeof input === 'object' && !Array.isArray(input)
+                ? /** @type {TeqFw_Db_Object} */ (input) : null;
             const res = new TeqFw_Db_Back_Dto_RDb_Index();
             res.columns = cast.array(data?.columns);
             res.name = cast.string(data?.name);
-            res.type = cast.enum(data?.type, INDEX);
+            const typeValue = cast.enum(data?.type, INDEX);
+            res.type = typeof typeValue === 'string' ? typeValue : undefined;
             return res;
         };
     }

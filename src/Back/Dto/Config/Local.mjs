@@ -14,24 +14,24 @@ const NS = 'TeqFw_Db_Back_Dto_Config_Local';
 
 // MODULE'S CLASSES
 export default class TeqFw_Db_Back_Dto_Config_Local {
-    /** @type {string} */
+    /** @type {string | undefined} */
     client;
-    /** @type {TeqFw_Db_Back_Dto_Config_Local_Connection} */
+    /** @type {TeqFw_Db_Back_Dto_Config_Local_Connection | undefined} */
     connection;
     /**
      * PostgreSQL client allows you to set the initial search path for each connection automatically.
-     * @type {string[]}
+     * @type {Array<TeqFw_Db_StringOptional> | undefined}
      */
     searchPath;
     /**
      * SQLite: replace undefined keys with NULL instead of DEFAULT.
      *
-     * @type {boolean}
+     * @type {boolean | undefined}
      */
     useNullAsDefault;
     /**
      * When you use the PostgreSQL adapter to connect a non-standard database.
-     * @type {string}
+     * @type {string | undefined}
      */
     version;
 }
@@ -50,10 +50,12 @@ export class Factory {
      */
     constructor({cast, fConn}) {
         /**
-         * @param {TeqFw_Db_ObjectOrNull} data
+         * @param {unknown} input
          * @returns {TeqFw_Db_Back_Dto_Config_Local}
          */
-        this.create = function (data = null) {
+        this.create = function (input = null) {
+            const data = input && typeof input === 'object' && !Array.isArray(input)
+                ? /** @type {TeqFw_Db_Object} */ (input) : null;
             const res = new TeqFw_Db_Back_Dto_Config_Local();
             res.client = cast.string(data?.client);
             res.connection = fConn.create(data?.connection);

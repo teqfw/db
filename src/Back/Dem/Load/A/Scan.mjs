@@ -15,7 +15,7 @@ export default class TeqFw_Db_Back_Dem_Load_A_Scan {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_Util_File} deps.file
-     * @param {object} deps.pathUtil
+     * @param {typeof import('node:path')} deps.pathUtil
      * @param {TeqFw_Db_Back_Dem_Load_A_Scan_A_Dem} deps._loadDem
      * @param {TeqFw_Db_Back_Dem_Load_A_Scan_A_Map} deps._loadMap
      */
@@ -32,8 +32,8 @@ export default class TeqFw_Db_Back_Dem_Load_A_Scan {
          * Load DEM mapping data for the application and parse it.
          * @param {object} deps
          * @param {string} deps.path
-         * @param {object} deps.testDems
-         * @param {string} deps.testMapRoot
+         * @param {TeqFw_Db_StringMap} [deps.testDems]
+         * @param {string} [deps.testMapRoot]
          * @returns {Promise<any>}
          */
         this.exec = async function ({path, testDems, testMapRoot}) {
@@ -55,7 +55,7 @@ export default class TeqFw_Db_Back_Dem_Load_A_Scan {
             /** @type {string[]} */
             const filenames = file.scanNodeModules(path, DEM);
             // add schema from test if available
-            if (typeof testDems === 'object') {
+            if (testDems && typeof testDems === 'object') {
                 for (const key of Object.keys(testDems)) {
                     const testPath = testDems[key];
                     filenames.push(pathUtil.join(testPath, DEM));

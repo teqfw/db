@@ -16,12 +16,12 @@ const NS = 'TeqFw_Db_Back_RDb_Schema_A_Dto_Ref';
 export default class TeqFw_Db_Back_RDb_Schema_A_Dto_Ref {
     /**
      * Path to referencing entity.
-     * @type {string}
+     * @type {string | undefined}
      */
     path;
     /**
      * Attributes of the referencing entity that are used in relations.
-     * @type {string[]}
+     * @type {unknown[] | undefined}
      */
     attrs;
 }

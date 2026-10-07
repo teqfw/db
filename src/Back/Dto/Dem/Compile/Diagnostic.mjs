@@ -13,7 +13,7 @@ const NS = 'TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic';
 export default class TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic {
     /** @type {string} */
     code;
-    /** @type {any} */
+    /** @type {TeqFw_Db_Object} */
     details;
     /** @type {string} */
     message;
@@ -21,10 +21,30 @@ export default class TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic {
     path;
     /** @type {'error'|'warning'} */
     severity;
-    /** @type {ReadonlyArray<object>} */
+    /** @type {TeqFw_Db_SourceArray} */
     sources;
-    /** @type {string} */
+    /** @type {TeqFw_Db_DiagnosticStage} */
     stage;
+
+    /**
+     * @param {object} deps
+     * @param {string} deps.code
+     * @param {TeqFw_Db_Object} deps.details
+     * @param {string} deps.message
+     * @param {string} deps.path
+     * @param {TeqFw_Db_DiagnosticSeverity} deps.severity
+     * @param {TeqFw_Db_SourceArray} deps.sources
+     * @param {TeqFw_Db_DiagnosticStage} deps.stage
+     */
+    constructor({code, details, message, path, severity, sources, stage}) {
+        this.code = code;
+        this.details = details;
+        this.message = message;
+        this.path = path;
+        this.severity = severity;
+        this.sources = sources;
+        this.stage = stage;
+    }
 }
 
 /**
@@ -37,6 +57,7 @@ export class Factory {
      * Initialize the factory.
      */
     constructor() {
+        /** @type {Record<string, number>} */
         const stageOrder = Object.freeze({
             parse: 0,
             decode: 1,
@@ -56,6 +77,7 @@ export class Factory {
         const copy = function (value) {
             if (Array.isArray(value)) return Object.freeze(value.map(copy));
             if (value && typeof value === 'object') {
+                /** @type {TeqFw_Db_Object} */
                 const res = {};
                 for (const key of Object.keys(value).sort()) res[key] = copy(value[key]);
                 return Object.freeze(res);
@@ -74,11 +96,11 @@ export class Factory {
         /**
          * @param {object} deps
          * @param {string} deps.code
-         * @param {object} deps.details
+         * @param {TeqFw_Db_Object} [deps.details]
          * @param {string} deps.message
-         * @param {string} deps.path
-         * @param {object} deps.severity
-         * @param {object} deps.sources
+         * @param {string} [deps.path]
+         * @param {TeqFw_Db_DiagnosticSeverity} [deps.severity]
+         * @param {TeqFw_Db_SourceArray} [deps.sources]
          * @param {string} deps.stage
          * @returns {TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic}
          */
@@ -87,14 +109,12 @@ export class Factory {
             if (typeof message !== 'string' || message.length === 0) throw new TypeError('Diagnostic message is required.');
             if (!(stage in stageOrder)) throw new TypeError(`Unknown diagnostic stage '${stage}'.`);
             if (severity !== 'error' && severity !== 'warning') throw new TypeError(`Unknown diagnostic severity '${severity}'.`);
-            const res = new TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic();
-            res.code = code;
-            res.details = copy(details);
-            res.message = message;
-            res.path = typeof path === 'string' ? path : '';
-            res.severity = severity;
-            res.sources = Object.freeze([...sources].sort((a, b) => sourceKey(a).localeCompare(sourceKey(b))).map(copy));
-            res.stage = stage;
+            const res = new TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic({
+                code, details: copy(details), message,
+                path: typeof path === 'string' ? path : '', severity,
+                sources: Object.freeze([...sources].sort((a, b) => sourceKey(a).localeCompare(sourceKey(b))).map(copy)),
+                stage: /** @type {TeqFw_Db_DiagnosticStage} */ (stage),
+            });
             return Object.freeze(res);
         };
 
