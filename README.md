@@ -67,8 +67,22 @@ From a standalone checkout, install the locked dependency graph and run the pack
 
 ```sh
 npm ci
-npm test
+npm run verify
+npm audit
 ```
+
+Package tests inspect and unpack a real npm tarball, verify its declaration and
+runtime DI contracts, and exclude development assets and working configuration.
+Before publishing, inspect `npm pack --dry-run`; `prepublishOnly` runs verification
+and the production dependency audit. Publishing requires a new version and explicit
+maintainer intent. See [the security policy](SECURITY.md) for reporting and trust boundaries.
+
+The agent publishes from the verified local `main` checkout when the Human
+explicitly authorizes publication. It checks the version and changelog, audits
+dependencies, inspects the npm artifact, and runs `npm publish` using the existing
+npm authentication. The `prepublishOnly` hook enforces verification and the
+production dependency audit. GitHub Actions verifies changes; it does not publish.
+After publication, the agent checks the registry version, dist-tag, and integrity.
 
 ## Best Fit And Boundaries
 

@@ -24,7 +24,7 @@ class Dto {
     tables = {};
     /**
      * Contains all serials (for PostgreSQL DBs).
-     * @type {Object<string, string>}
+     * @type {TeqFw_Db_SequenceStateMap}
      */
     serials = {};
 }
@@ -46,7 +46,7 @@ export default class TeqFw_Db_Back_Dto_Export {
             const res = new Dto();
             // cast known attributes
             res.tables = /** @type {Record<string, object[]>} */ (cast.object(data?.tables));
-            res.serials = /** @type {TeqFw_Db_StringMap} */ (cast.object(data?.serials));
+            res.serials = /** @type {TeqFw_Db_SequenceStateMap} */ (cast.object(data?.serials));
             return res;
         };
     }

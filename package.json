@@ -12,6 +12,7 @@
     "jsconfig.json",
     "LICENSE",
     "README.md",
+    "SECURITY.md",
     "types.d.ts"
   ],
   "scripts": {
@@ -21,7 +22,9 @@
     "test:acceptance": "find test/acceptance -name '*.test.mjs' -print0 | xargs -0 node --test",
     "test:package": "find test/package -name '*.test.mjs' -print0 | xargs -0 node --test",
     "typecheck": "tsc -p jsconfig.json",
-    "lint:md": "markdownlint-cli2 \"skills/**/*.md\" \"*.md\"",
+    "lint:md": "node bin/lint/markdown.mjs",
+    "verify": "npm test && npm run typecheck && npm run lint:md",
+    "prepublishOnly": "npm run verify && npm audit --omit=dev",
     "test:optin": "npm run test:optin:preflight && npm run test:optin:postgresql && npm run test:optin:mariadb && npm run test:optin:identity",
     "test:optin:preflight": "node --test test/optin/Preflight.test.mjs",
     "test:optin:postgresql": "node --test test/optin/Postgresql.test.mjs",
@@ -49,6 +52,10 @@
     "url": "https://github.com/flancer64"
   },
   "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "types": "types.d.ts",
   "exports": {
     ".": {
@@ -65,24 +72,28 @@
   },
   "dependencies": {
     "@teqfw/cfg": "^2.0.0",
-    "@teqfw/log": ">=2.0.0",
+    "@teqfw/log": "^2.0.0",
     "knex": "^3.1.0"
   },
   "devDependencies": {
-    "@teqfw/di": "^2.7.0",
-    "@types/node": "^22.20.1",
-    "markdownlint-cli2": "^0.23.2",
-    "mysql2": "^3.12.0",
-    "pg": "^8.13.1",
+    "@types/node": "^22.20.5",
+    "markdownlint": "^0.41.1",
+    "mysql2": "^3.24.5",
+    "pg": "^8.23.1",
     "sqlite3": "^6.0.1",
     "typescript": "^5.9.3",
     "typescript-language-server": "^4.4.1"
+  },
+  "overrides": {
+    "micromark-extension-math": {
+      "katex": "^0.18.2"
+    }
   },
   "engines": {
     "node": ">=22.0.0"
   },
   "peerDependencies": {
-    "@teqfw/di": "^2.7.0"
+    "@teqfw/di": "^2.11.0"
   },
   "teqfw": {
     "fw": {

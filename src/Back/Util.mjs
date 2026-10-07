@@ -175,7 +175,7 @@ export function nameUQ(tbl, fld) {
 
 /**
  * @param {TeqFw_Db_Back_RDb_ITrans} trx
- * @returns {Promise<TeqFw_Db_StringNumberMap>}
+ * @returns {Promise<TeqFw_Db_SequenceStateMap>}
  * @deprecated
  */
 export function pgSerialsGet(trx) {
@@ -186,20 +186,20 @@ export function pgSerialsGet(trx) {
  * Get 'nextval' for Postgres serials.
  * @param {TeqFw_Db_LegacySerialSchema} schema
  * @param {TeqFw_Db_StringArray} serials
- * @returns {Promise<TeqFw_Db_StringNumberMap>}
+ * @returns {Promise<TeqFw_Db_SequenceStateMap>}
  * @memberOf TeqFw_Db_Back_Util
  */
 export function serialsGet(schema, serials) {
     return (async () => {
-        /** @type {TeqFw_Db_StringNumberMap} */
+        /** @type {TeqFw_Db_SequenceStateMap} */
         const result = {};
         for (const one of serials) {
-            schema.raw(`SELECT nextval('${one}')`);
+            schema.raw('SELECT nextval(?::regclass)', [one]);
         }
         const rs = await schema;
         for (const i in rs.rows) {
             const key = serials[Number(i)];
-            result[key] = rs.rows[0].nextval;
+            Object.defineProperty(result, key, {enumerable: true, configurable: true, writable: true, value: rs.rows[Number(i)].nextval});
         }
         return result;
     })();
@@ -215,7 +215,7 @@ export function serialsGet(schema, serials) {
 export function serialsGetOne(schema, serial) {
     return (async () => {
         try {
-            schema.raw(`SELECT nextval('${serial}')`);
+            schema.raw('SELECT nextval(?::regclass)', [serial]);
             const rs = await schema;
             const [first] = rs.rows;
             return first.nextval;
@@ -227,8 +227,8 @@ export function serialsGetOne(schema, serial) {
 
 /**
  * @param {TeqFw_Db_LegacySerialSchema} schema
- * @param {TeqFw_Db_StringNumberMap} serials
- * @returns {Promise<any>}
+ * @param {TeqFw_Db_SequenceStateMap} serials
+ * @returns {Promise<void>}
  * @deprecated
  */
 export function serialsSet(schema, serials) {
@@ -280,19 +280,19 @@ export default class TeqFw_Db_Back_Util {
         /**
          * Get 'nextval' for Postgres serials.
          * @param {TeqFw_Db_Back_RDb_ITrans} trx
-         * @returns {Promise<any>}
+         * @returns {Promise<TeqFw_Db_SequenceStateMap>}
          * @memberOf TeqFw_Db_Back_Util
          */
         this.pgSerialsGet = async function(trx) {
-            /** @type {TeqFw_Db_StringNumberMap} */
+            /** @type {TeqFw_Db_SequenceStateMap} */
             const res = {};
             const all = await trx.raw('SELECT sequence_name FROM information_schema.sequences  WHERE sequence_schema = \'public\'');
             if (Array.isArray(all?.rows)) {
                 // prepare batch of SQLs
                 for (const one of all.rows) {
                     const name = one['sequence_name'];
-                    const rs = await trx.raw(`SELECT nextval('${name}')`);
-                    res[name] = rs.rows[0]['nextval'];
+                    const rs = await trx.raw('SELECT nextval(?::regclass)', [name]);
+                    Object.defineProperty(res, name, {enumerable: true, configurable: true, writable: true, value: rs.rows[0]['nextval']});
                 }
             }
             return res;
@@ -300,15 +300,22 @@ export default class TeqFw_Db_Back_Util {
 
         /**
          * Set nextval for Postgres serial.
-         * @param {any} schema
-         * @param {TeqFw_Db_StringNumberMap} serials
+         * @param {TeqFw_Db_LegacySerialWriter} schema
+         * @param {TeqFw_Db_SequenceStateMap} serials
          * @returns {Promise<void>}
          * @memberOf TeqFw_Db_Back_Util
          */
         this.pgSerialsSet = async function(schema, serials) {
+            for (const value of Object.values(serials)) {
+                const decimal = typeof value === 'string' && /^-?\d{1,19}$/.test(value)
+                    && BigInt(value) >= -9223372036854775808n && BigInt(value) <= 9223372036854775807n;
+                if (value !== null && !Number.isSafeInteger(value) && !decimal) {
+                    throw new TypeError('Sequence values must be safe integers, signed 64-bit decimal strings, or null.');
+                }
+            }
             for (const one of Object.keys(serials)) {
                 if (serials[one] !== null)
-                    schema.raw(`SELECT setval('${one}', ${serials[one]})`);
+                    schema.raw('SELECT setval(?::regclass, ?)', [one, serials[one]]);
             }
             await schema;
         };

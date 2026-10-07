@@ -48,14 +48,16 @@ export default class Deep {
             const isObject = (value) => value && typeof value === 'object';
             if (!isObject(target) || !isObject(source)) return source;
             for (const key of Object.keys(source)) {
-                const current = target[key];
+                const current = Object.hasOwn(target, key) ? target[key] : undefined;
                 const incoming = source[key];
+                let value;
                 if (Array.isArray(current) && Array.isArray(incoming))
-                    target[key] = current.concat(incoming);
+                    value = current.concat(incoming);
                 else if (isObject(current) && isObject(incoming))
-                    target[key] = merge(Object.assign({}, current), incoming);
+                    value = merge(merge({}, current), incoming);
                 else
-                    target[key] = incoming;
+                    value = incoming;
+                Object.defineProperty(target, key, {configurable: true, enumerable: true, writable: true, value});
             }
             return target;
         };

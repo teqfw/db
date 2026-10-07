@@ -1,7 +1,7 @@
 # Environment Overview
 
 - Path: `ctx/docs/environment/overview.md`
-- Changed: `20261006`
+- Changed: `20261007`
 
 ## Runtime Model
 
@@ -20,6 +20,29 @@ The 2.x line targets Node.js 22 or newer to align with the current development-t
 - One `@teqfw/db` dialect adapter matching the configured Knex client.
 - Filesystem access for DEM/map declarations and import/export files.
 - Durable storage for rebuild snapshots when in-place replacement must preserve data.
+
+## npm Publication
+
+The agent is the publication operator. The Human explicitly authorizes an npm
+release; a request to maintain or verify the package alone does not authorize
+publication, commits, or pushes. Work from the verified local `main` checkout and
+preserve unrelated working-tree changes.
+
+Before publishing, confirm the intended package name, new version, changelog,
+registry, and dist-tag. Run the required verification, audit dependencies, and
+inspect the tarball contents with `npm pack --dry-run`. Publish with `npm publish`
+using the existing configured npm authentication. The `prepublishOnly` lifecycle
+hook runs the automated verification and production dependency audit. Do not
+bypass that hook with `--ignore-scripts`.
+
+Use npm CLI authentication without reading, printing, exporting, or committing
+credentials. Report a missing authentication prerequisite or interactive publisher
+challenge when it prevents the authorized release. After publication, verify the
+expected version, dist-tag, and artifact integrity in the registry.
+
+GitHub Actions is a verification service and does not publish this package. The
+current release path has no GitHub publication workflow or npm Trusted Publisher
+requirement. Provenance must be reported only when confirmed by registry metadata.
 
 ## Supported Database Contexts
 

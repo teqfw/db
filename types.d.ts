@@ -287,7 +287,9 @@ declare global {
 
     type TeqFw_Db_DiagnosticSeverity = DemDiagnosticSeverity;
     type TeqFw_Db_MutableSourceArray = DemSource[];
-    type TeqFw_Db_LegacySerialSchema = PromiseLike<{rows: {nextval: string | number}[]}> & {raw(sql: string): unknown};
+    type TeqFw_Db_LegacySerialSchema = PromiseLike<{rows: {nextval: string | number}[]}> & {raw(sql: string, bindings?: (string | number)[]): unknown};
+    type TeqFw_Db_LegacySerialWriter = PromiseLike<unknown> & {raw(sql: string, bindings?: (string | number)[]): unknown};
+    type TeqFw_Db_SequenceStateMap = Record<string, string | number | null>;
     type TeqFw_Db_SourceArray = readonly DemSource[];
     type TeqFw_Db_Graph = DemGraph;
     type TeqFw_Db_GraphEdgeArray = readonly DemGraphEdge[];
@@ -602,7 +604,7 @@ declare global {
     type TeqFw_Db_DemFragmentArray = TeqFw_Db_DemFragment[];
     type TeqFw_Db_DiagnosticArray = readonly DemDiagnostic[];
     type TeqFw_Db_Error = {name: string; message: string};
-    type TeqFw_Db_ExportDto = {tables: {[key: string]: object[]}; serials: TeqFw_Db_StringMap};
+    type TeqFw_Db_ExportDto = {tables: {[key: string]: object[]}; serials: TeqFw_Db_SequenceStateMap};
     type TeqFw_Db_FileError = {code?: string; message: string};
     type TeqFw_Db_Identifier = string | string[];
     type TeqFw_Db_LogicalType = {id: string; params?: {[key: string]: unknown}};

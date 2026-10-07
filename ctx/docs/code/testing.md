@@ -1,7 +1,7 @@
 # Testing Overview
 
 - Path: `ctx/docs/code/testing.md`
-- Changed: `20261006`
+- Changed: `20261007`
 
 Product-level rebuild obligations are defined in [product migration](../product/migration.md); these checks verify their current implementation and runtime evidence.
 
@@ -17,6 +17,24 @@ Product-level rebuild obligations are defined in [product migration](../product/
 
 Tests use `node:test`. `npm test` runs unit, integration, acceptance, and package layers.
 `npm run typecheck`, `npm run test:optin`, and `npm run test:manual` are explicit checks.
+
+`npm run verify` combines the automated suite, typecheck, and Markdown lint. CI runs
+it on Node.js 22 and 24, followed by a full dependency audit. `prepublishOnly` runs
+the same verification and the production dependency audit. Package tests create a
+real tarball with lifecycle scripts disabled, inspect its entries, and unpack it
+into an isolated consumer layout with the already installed runtime dependencies.
+They verify declaration consumers, closed exports, namespace metadata, and runtime
+DI resolution without fetching dependencies or executing install scripts.
+Publication is performed by the agent from the local checkout as described in
+[the environment publication contract](../environment/overview.md#npm-publication).
+GitHub Actions only verifies changes. The agent's `npm publish` command invokes
+the local publication gate through `prepublishOnly`; no GitHub publication
+workflow or OIDC dependency is part of the current implementation.
+
+Security regressions cover bound PostgreSQL sequence arguments, invalid sequence
+values rejected before SQL, ordinary own-property treatment of special JSON keys,
+and fingerprints that retain every enumerable JSON key. Legacy import restores
+sequences through the active transaction's schema builder.
 
 ## Required Verification
 

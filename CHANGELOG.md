@@ -2,6 +2,22 @@
 
 All notable changes to this package are documented in this file.
 
+## Unreleased
+
+### Security
+
+- Bind legacy PostgreSQL sequence names and values instead of interpolating SQL, validate sequence values before execution, and restore imported sequences through the active transaction.
+- Preserve special JSON keys during fingerprinting and prevent inherited-property merges and prototype mutation.
+- Replace the Markdown CLI dependency tree with a direct library runner and an override for the patched KaTeX line.
+
+### Development and Publication
+
+- Bound `@teqfw/log` to 2.x and align Node.js declaration dependencies with Node.js 22.
+- Add a verification command, publication checks, Node.js 22/24 CI, and a private vulnerability reporting policy.
+- Document agent-operated local npm publication with lifecycle verification; GitHub Actions only verifies changes.
+- Inspect a real npm tarball and verify its source syntax, consumer types, closed exports, and runtime DI resolution.
+- Remove obsolete scripts that deleted the dependency lockfile and development assets.
+
 ## 2.3.0 - 2026-09-03
 
 ### Added in 2.3.0

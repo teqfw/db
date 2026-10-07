@@ -72,7 +72,7 @@ export default function Factory({DEF, logger, fCommand, fOpt, app, conn, util, u
                 if (trx.isPostgres() && schema.getCompilation().physical.tables.some((table) => table.columns.some((column) => column.generation?.implementation === 'allocated'))) {
                     await trx.getDialectAdapter().restoreGeneratedState({tables: schema.getCompilation().physical.tables, transaction: trx});
                 } else if (trx.isPostgres() && dump.serials) {
-                    const schema = conn.getSchemaBuilder();
+                    const schema = trx.getKnexTrx().schema;
                     const norm = transform.prepareSerials(dump.serials);
                     await util.pgSerialsSet(schema, norm);
                 }

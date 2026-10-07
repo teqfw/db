@@ -21,7 +21,11 @@ export default class TeqFw_Db_Back_Dem_Compile_A_Fingerprint {
                 const object = /** @type {TeqFw_Db_Object} */ (value);
                 /** @type {TeqFw_Db_Object} */
                 const res = {};
-                for (const key of Object.keys(object).sort()) res[key] = normalize(object[key]);
+                for (const key of Object.keys(object).sort()) {
+                    Object.defineProperty(res, key, {
+                        configurable: true, enumerable: true, writable: true, value: normalize(object[key]),
+                    });
+                }
                 return res;
             }
             return value;

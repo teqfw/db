@@ -1,7 +1,7 @@
 # Filesystem Structure
 
 - Path: `ctx/docs/filesystem.md`
-- Changed: `20260903`
+- Changed: `20261007`
 
 ## Purpose
 
@@ -9,7 +9,8 @@ Define root-level repository navigation.
 
 ## Root Directories
 
-- `bin/` — development and release shell helpers.
+- `.github/` — CI verification configuration; npm publication is operated locally by the agent.
+- `bin/` — development verification helpers, including the Markdown lint runner.
 - `ctx/` — authoritative cognitive context.
 - `etc/` — package-owned DEM and map assets published for host discovery.
 - `skills/` — version-matched package-owned consumer guidance published with the npm artifact.
@@ -22,6 +23,7 @@ Define root-level repository navigation.
 - `AGENTS.md` — root ADSM instructions.
 - `LICENSE` — Apache 2.0 license.
 - `README.md` — npm/GitHub entry documentation.
+- `SECURITY.md` — vulnerability reporting, trust boundaries, and publication security policy.
 - `package.json` — npm metadata, dependencies, scripts, and TeqFW namespace registration.
 - `package-lock.json` — reproducible npm dependency graph for the 2.x line.
 - `jsconfig.json` — strict checked-JavaScript and declaration consumer compiler configuration.

@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
-import {cpSync, existsSync, mkdirSync, readFileSync, rmSync, symlinkSync, writeFileSync} from 'node:fs';
+import {existsSync, mkdirSync, readFileSync, rmSync, symlinkSync, writeFileSync} from 'node:fs';
+import {execFileSync} from 'node:child_process';
 import {createRequire} from 'node:module';
 import {tmpdir} from 'node:os';
 import {dirname, join, normalize, relative} from 'node:path';
@@ -7,6 +8,7 @@ import {fileURLToPath} from 'node:url';
 import {describe, it} from 'node:test';
 import {mkdtempSync} from 'node:fs';
 import * as ts from 'typescript';
+import Container from '@teqfw/di';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
 
@@ -61,16 +63,35 @@ describe('npm publication', () => {
 
     });
 
-    it('type-checks a consumer against the installed package layout', () => {
+    it('verifies declarations and runtime DI against a real packed artifact', async () => {
         const temp = mkdtempSync(join(tmpdir(), 'teqfw-db-types-'));
         try {
+            const packed = JSON.parse(execFileSync('npm', [
+                'pack', '--ignore-scripts', '--json', '--pack-destination', temp, '--cache', join(temp, 'cache'),
+            ], {cwd: root, encoding: 'utf8'}))[0];
+            const entries = packed.files.map((file) => file.path);
+            assert(entries.includes('SECURITY.md'));
+            assert(entries.includes('etc/teqfw.schema.json'));
+            assert(entries.includes('skills/teqfw-db/SKILL.md'));
+            assert(entries.includes('src/Back/Dto/Dem.mjs'));
+            assert(entries.includes('.env.example'));
+            for (const entry of entries) {
+                assert(!/^(?:ctx|test|bin|node_modules|\.git|\.agents|\.github)\//.test(entry), `Development asset in tarball: ${entry}`);
+                assert(!/(?:^|\/)\.env(?:\.|$)/.test(entry) || entry === '.env.example', `Working configuration in tarball: ${entry}`);
+                assert(!/(?:^|\/)(?:package-lock\.json|npm-shrinkwrap\.json)$/.test(entry), `Application lockfile in tarball: ${entry}`);
+            }
             const packageDir = join(temp, 'node_modules/@teqfw/db');
             mkdirSync(join(temp, 'node_modules/@teqfw'), {recursive: true});
             mkdirSync(packageDir);
-            for (const path of ['package.json', 'types.d.ts', 'jsconfig.json']) {
-                cpSync(join(root, path), join(packageDir, path));
+            execFileSync('tar', ['-xzf', join(temp, packed.filename), '-C', packageDir, '--strip-components=1']);
+            const manifest = JSON.parse(readFileSync(join(packageDir, 'package.json'), 'utf8'));
+            for (const name of [...Object.keys(manifest.dependencies), ...Object.keys(manifest.peerDependencies)]) {
+                symlinkSync(join(root, 'node_modules', name), join(temp, 'node_modules', name), 'dir');
             }
-            symlinkSync(join(root, 'node_modules/knex'), join(temp, 'node_modules/knex'), 'dir');
+            const sourceFiles = packed.files.filter((file) => file.path.startsWith('src/') && file.path.endsWith('.mjs'));
+            for (const file of sourceFiles) execFileSync(process.execPath, ['--check', join(packageDir, file.path)]);
+            const forbiddenHooks = ['preinstall', 'install', 'postinstall', 'prepare'];
+            for (const hook of forbiddenHooks) assert(!manifest.scripts[hook], `Installation lifecycle hook: ${hook}`);
 
             writeFileSync(join(temp, 'consumer.mts'), `
 import type {
@@ -123,6 +144,13 @@ void [cfg, diagnostic, selection, evidence, ambientConn, ambientTrx, ambientComp
             assert.deepEqual(installedManifest.teqfw.fw.di.namespaces, [{
                 prefix: 'TeqFw_Db_', path: './src', ext: '.mjs',
             }]);
+            const container = new Container({namespaces: installedManifest.teqfw.fw.di.namespaces.map((item) => ({
+                prefix: item.prefix, target: join(packageDir, item.path), defaultExt: item.ext,
+            }))});
+            const factory = await container.get('TeqFw_Db_Back_Dto_Dem__Factory$');
+            const dto = factory.create({entity: {example: {attr: {id: {type: 'id'}}}}});
+            assert.deepEqual(Object.keys(dto.entity), ['example']);
+            assert.equal(dto.entity.example.attr.id.type, 'id');
         } finally {
             rmSync(temp, {recursive: true, force: true});
         }
