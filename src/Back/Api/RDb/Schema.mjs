@@ -31,6 +31,12 @@ export default class TeqFw_Db_Back_Api_RDb_Schema {
     async getTablesList() {}
 
     /**
+     * Return the installed authentic compilation; throw before initialization.
+     * @returns {TeqFw_Db_DemCompilationResult}
+     */
+    getCompilation() { throw new TypeError('A successful DEM compilation result is required.'); }
+
+    /**
      * @param {object} deps
      * @param {object} deps.compilation
      */

@@ -47,6 +47,13 @@ sequences through the active transaction's schema builder.
 - SQLite integration covers immutable effective-DEM snapshot deduplication, application state transitions, last-applied resolution, and catalog-mismatch diagnostics.
 - The opt-in suite loads named PostgreSQL and MariaDB connections from an ignored project-root `.env`; tracked fixtures never contain credentials.
 
+## Schema Compilation Accessor Verification
+
+Schema lifecycle tests verify the public compilation accessor before initialization,
+after installation and replacement, and after rejected unbranded replacements.
+DI integration verifies that the accessor returns the authentic compiler result
+used for schema creation.
+
 ## Connection Diagnostics Verification
 
 Connection unit tests cover successful and failed initialization for every registered

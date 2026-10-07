@@ -63,6 +63,7 @@ describe('compiled schema execution', () => {
         connection = await dbConnect();
         const result = await compilation();
         schema.setCompilation({compilation: result});
+        assert.equal(schema.getCompilation(), result);
         const createEvidence = await schema.createAllTables({conn: connection});
         assert.equal(createEvidence.status, 'complete');
 
@@ -102,6 +103,13 @@ describe('compiled schema execution', () => {
                 && error.evidence.diagnostics[0].code === 'DEM_CAPABILITY_UNAVAILABLE',
         );
         assert.equal(schemaAccess, 0);
+    });
+
+    it('retains the installed compilation after a rejected replacement', async () => {
+        const result = await compilation();
+        schema.setCompilation({compilation: result});
+        assert.throws(() => schema.setCompilation({compilation: {...result}}), /successful DEM compilation result/);
+        assert.equal(schema.getCompilation(), result);
     });
 
     it('rejects unbranded state at the schema boundary', () => {

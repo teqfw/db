@@ -130,6 +130,11 @@ Selection v2 accepts registered typed expressions, derived projections, expressi
 
 ## Schema Lifecycle
 
+Install the successful loader result with `schema.setCompilation({compilation})`.
+`schema.getCompilation()` synchronously returns the same immutable, authenticated
+result for host schema preparation or history operations. It throws before a valid
+compilation has been installed; a rejected replacement preserves the prior result.
+
 Plan schema work from a successful compilation result. Let the schema executor preflight the operation and connection before requesting a mutable schema builder. Preserve phase order: tables and key constraints, relations, data, then late indexes. Drop relations before tables. Detect unsupported transfer cycles before reading or writing rows; use only an explicit strategy supported by the selected dialect.
 
 ## Rebuild
