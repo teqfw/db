@@ -1,7 +1,7 @@
 # Database Configuration
 
 - Path: `ctx/docs/environment/configuration.md`
-- Changed: `20260810`
+- Changed: `20261007`
 
 ## cfg Namespace
 
@@ -79,6 +79,20 @@ Adapter selection must agree with the actual connection during runtime preflight
 
 DEM capability requirements and PostgreSQL extension presence are model/runtime state, not connection secrets and not arbitrary new configuration keys.
 Until a public adapter-selection override is implemented and documented, agents must not invent one.
+
+## Connection Diagnostics
+
+Initialization success and failure messages include the configured client and select
+their description through its registered dialect adapter. SQLite reports the filename;
+PostgreSQL and MySQL/MariaDB report database, host, and user, ignoring a leftover SQLite
+filename. Omitted or opaque values appear as `(default)`; connection URLs are not parsed
+or printed. Passwords, TLS material, and full configuration objects are never included.
+Initialization failure logs omit the raw driver error because it may contain secrets;
+the original error is rethrown for the host to handle under its own logging policy.
+
+Successful setup means Knex initialization completed. It does not prove server
+reachability, authentication, or schema compatibility; those require actual database
+operations and the relevant runtime preflight.
 
 ## Rebuild Configuration Boundary
 

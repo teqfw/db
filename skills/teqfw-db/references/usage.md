@@ -10,6 +10,14 @@ Load selected `@teqfw/cfg` Sources before database runtime components. The defau
 
 Resolve a separate transient connection (`TeqFw_Db_Back_RDb_Connect$$`) for every non-default connection, initialize it with the selected immutable configuration, and disconnect it through host lifecycle code. Keep the default singleton for the package default connection.
 
+Setup diagnostics include the configured client. SQLite reports its filename;
+PostgreSQL and MySQL/MariaDB report database, host, and user even if a SQLite filename
+default remains in configuration. Missing or opaque values appear as `(default)`.
+Passwords, TLS material, connection URLs, and raw setup errors are excluded from these
+logs; initialization still rethrows the original error. Apply the host's secret-handling
+policy before logging that error. Successful setup confirms Knex initialization, not
+server reachability or authentication.
+
 ## DEM Composition
 
 Package attributes use `type.id: "core.identity"` for system identities and `type.id: "core.ref"` for stored references. The host application map owns the single `identityProfile`; packages do not choose its storage representation. A `core.ref` must participate in exactly one relation whose target is the corresponding `core.identity`, receives only that concrete type, and is never generated. Ordinary explicitly typed relations to compatible primary or unique keys remain separate.

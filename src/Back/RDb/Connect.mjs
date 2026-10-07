@@ -33,6 +33,11 @@ export default class TeqFw_Db_Back_RDb_Connect {
         /** @type {TeqFw_Db_Back_Api_RDb_Dialect} */
         let _adapter;
 
+        /** @param {unknown} value @returns {string} */
+        const describeValue = function (value) {
+            return typeof value === 'string' ? JSON.stringify(value) : '(default)';
+        };
+
         // INSTANCE METHODS
         /**
          * Initialize connection to database.
@@ -43,21 +48,21 @@ export default class TeqFw_Db_Back_RDb_Connect {
             // to prevent 'Cannot redefine property: password'
             const clone = JSON.parse(JSON.stringify(cfg));
             const adapter = _dialects.select({client: clone.client});
-            const filename = clone?.connection?.filename;
-            if (filename) {
-                _info = `'${filename}'`;
+            const connection = clone?.connection;
+            const client = describeValue(clone.client);
+            if (adapter.describe().id === 'sqlite') {
+                _info = `client ${client}, file ${describeValue(connection?.filename)}`;
             } else {
-                const db = clone?.connection?.database;
-                const host = clone?.connection?.host;
-                const user = clone?.connection?.user;
-                _info = `'${db}@${host}' as '${user}'`;
+                _info = `client ${client}, database ${describeValue(connection?.database)}, `
+                    + `host ${describeValue(connection?.host)}, user ${describeValue(connection?.user)}`;
             }
             try {
                 _knex = await knexFactory(clone);
                 _adapter = adapter;
                 log.info(`Setup connection to DB ${_info}.`);
             } catch (e) {
-                log.error(`Cannot setup connection to DB ${_info}.`, {err: e});
+                // Driver errors may carry credentials; preserve them only for the caller.
+                log.error(`Cannot setup connection to DB ${_info}.`);
                 throw e;
             }
         };

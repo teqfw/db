@@ -47,6 +47,15 @@ sequences through the active transaction's schema builder.
 - SQLite integration covers immutable effective-DEM snapshot deduplication, application state transitions, last-applied resolution, and catalog-mismatch diagnostics.
 - The opt-in suite loads named PostgreSQL and MariaDB connections from an ignored project-root `.env`; tracked fixtures never contain credentials.
 
+## Connection Diagnostics Verification
+
+Connection unit tests cover successful and failed initialization for every registered
+client alias. PostgreSQL and MySQL/MariaDB diagnostics ignore leftover SQLite filenames;
+SQLite diagnostics retain them. Verify client, database, host, and user selection,
+unchanged factory input, original-error rethrow, and omission of passwords, TLS material,
+connection URLs, nested objects, and raw driver errors from setup logs. These isolated
+tests do not require or establish network connectivity.
+
 ## DEM v2 Compiler Verification
 
 Every declaration and map fixture has `version: 2`. Unit and integration tests reject omitted or unsupported versions before compilation.
