@@ -5,7 +5,7 @@
  * @description TeqFW database package module.
  */
 
-export default class TeqFw_Db_Back_Util_ListQuery {
+export default class ListQuery {
     /**
      * Initialize the component.
      */

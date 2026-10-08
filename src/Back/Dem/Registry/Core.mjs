@@ -8,7 +8,7 @@
 /**
  * Core logical registries shared by compilation and typed expressions.
  */
-export default class TeqFw_Db_Back_Dem_Registry_Core {
+export default class Core {
     /**
      * Initialize immutable core registries.
      */

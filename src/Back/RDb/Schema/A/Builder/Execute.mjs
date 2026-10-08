@@ -5,7 +5,7 @@
  * @description Executes immutable schema plan operations through a selected dialect adapter.
  */
 
-export default class TeqFw_Db_Back_RDb_Schema_A_Builder_Execute {
+export default class Execute {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_RDb_Schema_A_Plan} deps.planner

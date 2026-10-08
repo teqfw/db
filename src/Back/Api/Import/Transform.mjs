@@ -11,7 +11,7 @@
  * insertion into a Relational Database (RDB).
  * @interface
  */
-export default class TeqFw_Db_Back_Api_Import_Transform {
+export default class Transform {
 
     /**
      * Filter or modify serials for PostgreSQL.

@@ -12,7 +12,7 @@
 const NS = 'TeqFw_Db_Back_Dto_RDb_Index';
 
 // MODULE'S CLASSES
-export default class TeqFw_Db_Back_Dto_RDb_Index {
+export default class Index {
     /** @type {unknown[] | undefined} */
     columns;
     /** @type {string | undefined} */
@@ -21,9 +21,9 @@ export default class TeqFw_Db_Back_Dto_RDb_Index {
     type;
 }
 // attributes names to use as aliases in queries to object props
-TeqFw_Db_Back_Dto_RDb_Index.COLUMNS = 'columns';
-TeqFw_Db_Back_Dto_RDb_Index.NAME = 'name';
-TeqFw_Db_Back_Dto_RDb_Index.TYPE = 'type';
+Index.COLUMNS = 'columns';
+Index.NAME = 'name';
+Index.TYPE = 'type';
 
 /**
  * Factory to create new DTO instances.
@@ -46,7 +46,7 @@ export class Factory {
         this.create = function (input = null) {
             const data = input && typeof input === 'object' && !Array.isArray(input)
                 ? /** @type {TeqFw_Db_Object} */ (input) : null;
-            const res = new TeqFw_Db_Back_Dto_RDb_Index();
+            const res = new Index();
             res.columns = cast.array(data?.columns);
             res.name = cast.string(data?.name);
             const typeValue = cast.enum(data?.type, INDEX);
@@ -57,7 +57,7 @@ export class Factory {
 }
 
 // finalize code components for this es6-module
-Object.freeze(TeqFw_Db_Back_Dto_RDb_Index);
+Object.freeze(Index);
 
 export const __deps__ = Object.freeze({
     Factory: Object.freeze({

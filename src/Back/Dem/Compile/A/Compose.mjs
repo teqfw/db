@@ -5,7 +5,7 @@
  * @description Composes decoded DEM fragments with single-owner semantics and trusted provenance.
  */
 
-export default class TeqFw_Db_Back_Dem_Compile_A_Compose {
+export default class Compose {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic__Factory} deps.diagnostic

@@ -7,7 +7,7 @@
 
 const NS = 'TeqFw_Db_Shared_Dto_Query_Expression';
 
-export default class TeqFw_Db_Shared_Dto_Query_Expression {
+export default class Expression {
     /** @type {TeqFw_Db_ExpressionKind | undefined} */ kind;
     /** @type {TeqFw_Db_StringOptional} */ name;
     /** @type {unknown} */ value;
@@ -44,11 +44,11 @@ export class Factory {
 
         /** @param {any} data @returns {TeqFw_Db_QueryExpression} */
         this.create = function (data) {
-            if (data instanceof TeqFw_Db_Shared_Dto_Query_Expression) {
+            if (data instanceof Expression) {
                 data = Object.fromEntries(Object.entries(data).filter(([, value]) => value !== undefined));
             }
             if (!isObject(data)) throw new TypeError('Query expression must be an object.');
-            const result = new TeqFw_Db_Shared_Dto_Query_Expression();
+            const result = new Expression();
             if (data.kind === 'attr') {
                 closed(data, ['kind', 'name']);
                 if (typeof data.name !== 'string' || !data.name) throw new TypeError('Attribute expression requires a name.');
@@ -82,4 +82,4 @@ export class Factory {
     }
 }
 
-Object.freeze(TeqFw_Db_Shared_Dto_Query_Expression);
+Object.freeze(Expression);

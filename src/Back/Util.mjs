@@ -236,7 +236,7 @@ export function serialsSet(schema, serials) {
 }
 
 // MODULE'S CLASSES
-export default class TeqFw_Db_Back_Util {
+export default class Util {
     /**
      * Initialize the component.
      */
@@ -360,4 +360,4 @@ export default class TeqFw_Db_Back_Util {
 }
 
 // MAIN
-const me = new TeqFw_Db_Back_Util();
+const me = new Util();

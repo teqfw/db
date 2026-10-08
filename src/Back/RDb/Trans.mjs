@@ -9,7 +9,7 @@
  * Knex based implementation for single transaction to manipulate data in DB.
  * @implements TeqFw_Db_Back_RDb_ITrans
  */
-export default class TeqFw_Db_Back_RDb_Trans {
+export default class Trans {
     /** @type {TeqFw_Db_Back_Api_RDb_Dialect} */
     #adapter;
     /** @type {TeqFw_Db_Back_RDb_Connect_Resolver} */

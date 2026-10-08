@@ -10,7 +10,7 @@
  * Interface for RDBMS queries builders.
  * @interface
  */
-export default class TeqFw_Db_Back_Api_RDb_QueryBuilder {
+export default class QueryBuilder {
 
     /**
      * Build and return a query.

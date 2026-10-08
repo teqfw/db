@@ -12,7 +12,7 @@
 const NS = 'TeqFw_Db_Back_Dto_Dem_Entity';
 
 // MODULE'S CLASSES
-export default class TeqFw_Db_Back_Dto_Dem_Entity {
+export default class Entity {
     /** @type {Object<string, TeqFw_Db_Back_Dto_Dem_Entity_Attr> | undefined} */
     attr;
     /** @type {string | undefined} */
@@ -28,7 +28,7 @@ export default class TeqFw_Db_Back_Dto_Dem_Entity {
 }
 
 // attributes names to use as aliases in queries to object props
-TeqFw_Db_Back_Dto_Dem_Entity.NAME = 'name';
+Entity.NAME = 'name';
 
 /**
  * Factory to create new DTO instances.
@@ -74,7 +74,7 @@ export class Factory {
             }
 
             // MAIN
-            const res = new TeqFw_Db_Back_Dto_Dem_Entity();
+            const res = new Entity();
             res.attr = parse(fAttr.create, data?.attr);
             res.comment = cast.string(data?.comment);
             res.index = parse(fIndex.create, data?.index);
@@ -87,7 +87,7 @@ export class Factory {
 }
 
 // finalize code components for this es6-module
-Object.freeze(TeqFw_Db_Back_Dto_Dem_Entity);
+Object.freeze(Entity);
 
 export const __deps__ = Object.freeze({
     Factory: Object.freeze({

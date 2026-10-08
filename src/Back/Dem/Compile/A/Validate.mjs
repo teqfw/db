@@ -5,7 +5,7 @@
  * @description Enforces canonical DEM logical types, indexes, relations, names, and provenance.
  */
 
-export default class TeqFw_Db_Back_Dem_Compile_A_Validate {
+export default class Validate {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic__Factory} deps.diagnostic

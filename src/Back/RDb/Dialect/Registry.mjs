@@ -5,7 +5,7 @@
  * @description Frozen explicit registry selecting a dialect adapter from a configured Knex client.
  */
 
-export default class TeqFw_Db_Back_RDb_Dialect_Registry {
+export default class Registry {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_Api_RDb_Dialect} deps.mysql

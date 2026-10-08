@@ -5,7 +5,7 @@
  * @description Resolves owner-scoped external references through a trusted application map.
  */
 
-export default class TeqFw_Db_Back_Dem_Compile_A_MapRefs {
+export default class MapRefs {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic__Factory} deps.diagnostic

@@ -10,7 +10,7 @@ const NS = 'TeqFw_Db_Back_Dto_Dem_Compile_Result';
 /**
  * Successful compilation value. Authenticity is held privately by the compiler.
  */
-export default class TeqFw_Db_Back_Dto_Dem_Compile_Result {
+export default class Result {
     /** @type {TeqFw_Db_EffectiveModel} */
     effective;
     /** @type {string} */
@@ -84,7 +84,7 @@ export class Factory {
          * @returns {TeqFw_Db_Back_Dto_Dem_Compile_Result}
          */
         this.create = function ({effective, fingerprint, graph, model, physical, provenance, requirements, warnings}) {
-            const res = new TeqFw_Db_Back_Dto_Dem_Compile_Result({
+            const res = new Result({
                 effective, fingerprint, graph, model, physical, provenance, requirements, warnings,
             });
             return freeze(res);
@@ -92,4 +92,4 @@ export class Factory {
     }
 }
 
-Object.freeze(TeqFw_Db_Back_Dto_Dem_Compile_Result);
+Object.freeze(Result);

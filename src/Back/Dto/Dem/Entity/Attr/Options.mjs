@@ -12,7 +12,7 @@
 const NS = 'TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options';
 
 // MODULE'S CLASSES
-export default class TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options {
+export default class Options {
     /** @type {boolean | null | undefined} */
     dateOnly;
     /**
@@ -55,7 +55,7 @@ export class Factory {
         this.create = function (input = null) {
             const data = input && typeof input === 'object' && !Array.isArray(input)
                 ? /** @type {TeqFw_Db_Object} */ (input) : null;
-            const res = new TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options();
+            const res = new Options();
             res.dateOnly = cast.booleanIfExists(data?.dateOnly);
             res.isTiny = cast.booleanIfExists(data?.isTiny);
             res.length = cast.int(data?.length);
@@ -69,7 +69,7 @@ export class Factory {
 }
 
 // finalize code components for this es6-module
-Object.freeze(TeqFw_Db_Back_Dto_Dem_Entity_Attr_Options);
+Object.freeze(Options);
 
 export const __deps__ = Object.freeze({
     Factory: Object.freeze({

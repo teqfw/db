@@ -5,7 +5,7 @@
  * @description Applies Selection v2 through one typed expression compiler.
  */
 
-export default class TeqFw_Db_Back_Mod_Selection {
+export default class Selection {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_Mod_Expression} deps.expression

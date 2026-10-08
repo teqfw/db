@@ -11,7 +11,7 @@
  * @namespace TeqFw_Db_Back_RDb_Schema_EntityBase
  * @deprecated create all methods in entities itself
  */
-export default class TeqFw_Db_Back_RDb_Schema_EntityBase {
+export default class EntityBase {
     /**
      * Initialize the component.
      */

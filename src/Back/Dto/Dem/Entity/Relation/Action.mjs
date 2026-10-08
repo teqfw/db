@@ -12,7 +12,7 @@
 const NS = 'TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action';
 
 // MODULE'S CLASSES
-export default class TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action {
+export default class Action {
     /** @type {TeqFw_Db_StringOptional} */
     delete;
     /** @type {TeqFw_Db_StringOptional} */
@@ -39,7 +39,7 @@ export class Factory {
         this.create = function (input = null) {
             const data = input && typeof input === 'object' && !Array.isArray(input)
                 ? /** @type {TeqFw_Db_Object} */ (input) : null;
-            const res = new TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action();
+            const res = new Action();
             const deleteValue = cast.enum(data?.delete, ACTION);
             res.delete = typeof deleteValue === 'string' ? deleteValue : undefined;
             const updateValue = cast.enum(data?.update, ACTION);
@@ -50,7 +50,7 @@ export class Factory {
 }
 
 // finalize code components for this es6-module
-Object.freeze(TeqFw_Db_Back_Dto_Dem_Entity_Relation_Action);
+Object.freeze(Action);
 
 export const __deps__ = Object.freeze({
     Factory: Object.freeze({

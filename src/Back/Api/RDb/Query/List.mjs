@@ -12,7 +12,7 @@
  * @extends TeqFw_Db_Back_Api_RDb_QueryBuilder
  * @deprecated I think all queries are the `list queries`.
  */
-export default class TeqFw_Db_Back_Api_RDb_Query_List {
+export default class List {
 
     /**
      * Build and return query to get total count of items for a given selection.

@@ -12,7 +12,7 @@
 const NS = 'TeqFw_Db_Back_Dto_RDb_Column';
 
 // MODULE'S CLASSES
-export default class TeqFw_Db_Back_Dto_RDb_Column {
+export default class Column {
     /** @type {string | undefined} */
     comment;
     /** @type {string | undefined} */
@@ -56,7 +56,7 @@ export class Factory {
         this.create = function (input = null) {
             const data = input && typeof input === 'object' && !Array.isArray(input)
                 ? /** @type {TeqFw_Db_Object} */ (input) : null;
-            const res = new TeqFw_Db_Back_Dto_RDb_Column();
+            const res = new Column();
             res.comment = cast.string(data?.comment);
             res.default = cast.string(data?.default);
             res.enum = cast.array(data?.enum);
@@ -74,7 +74,7 @@ export class Factory {
 }
 
 // finalize code components for this es6-module
-Object.freeze(TeqFw_Db_Back_Dto_RDb_Column);
+Object.freeze(Column);
 
 export const __deps__ = Object.freeze({
     Factory: Object.freeze({

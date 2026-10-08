@@ -9,7 +9,7 @@
  * Read the DEM and retrieve a list of all tables in the RDB organized by their dependency order.
  *
  */
-export default class TeqFw_Db_Back_Act_Dem_RdbTables {
+export default class RdbTables {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_RDb_IConnect} deps.conn

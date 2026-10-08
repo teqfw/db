@@ -14,7 +14,7 @@
  * Use Selection v2 to filter result sets.
  *
  */
-export default class TeqFw_Db_Back_Api_RDb_Repository {
+export default class Repository {
     /**
      * Create a new record in the table.
      * @param {object} deps

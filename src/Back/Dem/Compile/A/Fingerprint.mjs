@@ -5,7 +5,7 @@
  * @description Canonically serializes and fingerprints a successful DEM target.
  */
 
-export default class TeqFw_Db_Back_Dem_Compile_A_Fingerprint {
+export default class Fingerprint {
     /**
      * @param {object} deps
      * @param {typeof import('node:crypto').createHash} deps.createHash

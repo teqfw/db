@@ -12,7 +12,7 @@
 const NS = 'TeqFw_Db_Back_Dto_RDb_Table';
 
 // MODULE'S CLASSES
-export default class TeqFw_Db_Back_Dto_RDb_Table {
+export default class Table {
     /** @type {TeqFw_Db_Back_Dto_RDb_Column[] | undefined} */
     columns;
     /** @type {string | undefined} */
@@ -25,10 +25,10 @@ export default class TeqFw_Db_Back_Dto_RDb_Table {
     relations;
 }
 // attributes names to use as aliases in queries to object props
-TeqFw_Db_Back_Dto_RDb_Table.COLUMNS = 'columns';
-TeqFw_Db_Back_Dto_RDb_Table.COMMENT = 'comment';
-TeqFw_Db_Back_Dto_RDb_Table.NAME = 'name';
-TeqFw_Db_Back_Dto_RDb_Table.RELATIONS = 'relations';
+Table.COLUMNS = 'columns';
+Table.COMMENT = 'comment';
+Table.NAME = 'name';
+Table.RELATIONS = 'relations';
 
 /**
  * Factory to create new DTO instances.
@@ -52,7 +52,7 @@ export class Factory {
         this.create = function (input = null) {
             const data = input && typeof input === 'object' && !Array.isArray(input)
                 ? /** @type {TeqFw_Db_Object} */ (input) : null;
-            const res = new TeqFw_Db_Back_Dto_RDb_Table();
+            const res = new Table();
             res.columns = Array.isArray(data?.columns) ? data.columns.map((item) => fColumn.create(item)) : [];
             res.comment = cast.string(data?.comment);
             res.indexes = Array.isArray(data?.indexes) ? data.indexes.map((item) => fIndex.create(item)) : [];
@@ -64,7 +64,7 @@ export class Factory {
 }
 
 // finalize code components for this es6-module
-Object.freeze(TeqFw_Db_Back_Dto_RDb_Table);
+Object.freeze(Table);
 
 export const __deps__ = Object.freeze({
     Factory: Object.freeze({

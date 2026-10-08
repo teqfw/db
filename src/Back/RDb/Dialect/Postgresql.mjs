@@ -5,7 +5,7 @@
  * @description PostgreSQL core physical projection adapter with explicit frozen registries.
  */
 
-export default class TeqFw_Db_Back_RDb_Dialect_Postgresql {
+export default class Postgresql {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_RDb_Dialect_Knex} deps.knex

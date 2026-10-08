@@ -9,7 +9,7 @@
  * Load trusted DEM v2 sources and compile the canonical target.
  *
  */
-export default class TeqFw_Db_Back_Dem_Load {
+export default class Load {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_Dem_Load_A_Scan} deps.scan

@@ -5,7 +5,7 @@
  * @description MySQL and MariaDB physical projection adapter with explicit frozen registries.
  */
 
-export default class TeqFw_Db_Back_RDb_Dialect_Mysql {
+export default class Mysql {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_RDb_Dialect_Knex} deps.knex

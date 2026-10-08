@@ -12,7 +12,7 @@
 const NS = 'TeqFw_Db_Back_Dto_Config_Schema';
 
 // MODULE'S CLASSES
-export default class TeqFw_Db_Back_Dto_Config_Schema {
+export default class Schema {
     /**
      * Prefix for tables in RDB ('teq' => 'teq_table_name'). Default: use w/o prefix.
      * @type {string | undefined}
@@ -39,7 +39,7 @@ export class Factory {
         this.create = function (input = null) {
             const data = input && typeof input === 'object' && !Array.isArray(input)
                 ? /** @type {TeqFw_Db_Object} */ (input) : null;
-            const res = new TeqFw_Db_Back_Dto_Config_Schema();
+            const res = new Schema();
             res.prefix = cast.string(data?.prefix);
             return res;
         };

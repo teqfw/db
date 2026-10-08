@@ -12,7 +12,7 @@
 const NS = 'TeqFw_Db_Back_Dto_RDb_Relation';
 
 // MODULE'S CLASSES
-export default class TeqFw_Db_Back_Dto_RDb_Relation {
+export default class Relation {
     /** @type {unknown[] | undefined} */
     itsColumns;
     /** @type {string | undefined} */
@@ -27,12 +27,12 @@ export default class TeqFw_Db_Back_Dto_RDb_Relation {
     ownColumns;
 }
 // attributes names to use as aliases in queries to object props
-TeqFw_Db_Back_Dto_RDb_Relation.ITS_COLUMNS = 'itsColumns';
-TeqFw_Db_Back_Dto_RDb_Relation.ITS_TABLE = 'itsTable';
-TeqFw_Db_Back_Dto_RDb_Relation.NAME = 'name';
-TeqFw_Db_Back_Dto_RDb_Relation.ON_DELETE = 'onDelete';
-TeqFw_Db_Back_Dto_RDb_Relation.ON_UPDATE = 'onUpdate';
-TeqFw_Db_Back_Dto_RDb_Relation.OWN_COLUMNS = 'ownColumns';
+Relation.ITS_COLUMNS = 'itsColumns';
+Relation.ITS_TABLE = 'itsTable';
+Relation.NAME = 'name';
+Relation.ON_DELETE = 'onDelete';
+Relation.ON_UPDATE = 'onUpdate';
+Relation.OWN_COLUMNS = 'ownColumns';
 
 /**
  * Factory to create new DTO instances.
@@ -54,7 +54,7 @@ export class Factory {
         this.create = function (input = null) {
             const data = input && typeof input === 'object' && !Array.isArray(input)
                 ? /** @type {TeqFw_Db_Object} */ (input) : null;
-            const res = new TeqFw_Db_Back_Dto_RDb_Relation();
+            const res = new Relation();
             res.itsColumns = cast.array(data?.itsColumns);
             res.itsTable = cast.string(data?.itsTable);
             res.name = cast.string(data?.name);
@@ -69,7 +69,7 @@ export class Factory {
 }
 
 // finalize code components for this es6-module
-Object.freeze(TeqFw_Db_Back_Dto_RDb_Relation);
+Object.freeze(Relation);
 
 export const __deps__ = Object.freeze({
     Factory: Object.freeze({

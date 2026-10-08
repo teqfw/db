@@ -12,7 +12,7 @@
 const NS = 'TeqFw_Db_Back_Dto_Map';
 
 // MODULE'S CLASSES
-export default class TeqFw_Db_Back_Dto_Map {
+export default class Map {
     /**
      * List of deprecated tables with dependencies (foreign keys).
      * @type {Object<string, string[]> | undefined}
@@ -31,8 +31,8 @@ export default class TeqFw_Db_Back_Dto_Map {
 }
 
 // attributes names to use as aliases in queries to object props
-TeqFw_Db_Back_Dto_Map.REF = 'ref';
-TeqFw_Db_Back_Dto_Map.NAMESPACE = 'namespace';
+Map.REF = 'ref';
+Map.NAMESPACE = 'namespace';
 
 /**
  * Factory to create new DTO instances.
@@ -89,7 +89,7 @@ export class Factory {
             }
 
             // MAIN
-            const res = new TeqFw_Db_Back_Dto_Map();
+            const res = new Map();
             res.deprecated = parseDeprecated(data?.deprecated);
             res.namespace = cast.string(data?.namespace);
             res.ref = parseRef(data?.ref);
@@ -99,7 +99,7 @@ export class Factory {
 }
 
 // finalize code components for this es6-module
-Object.freeze(TeqFw_Db_Back_Dto_Map);
+Object.freeze(Map);
 
 export const __deps__ = Object.freeze({
     Factory: Object.freeze({

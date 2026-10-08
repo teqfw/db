@@ -5,7 +5,7 @@
  * @description Side-effect-free orchestration for versioned DEM compilation.
  */
 
-export default class TeqFw_Db_Back_Dem_Compile {
+export default class Compile {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_Dem_Compile_A_DecodeV2} deps.decodeV2

@@ -8,7 +8,7 @@
 /**
  * @implements TeqFw_Db_Back_Api_RDb_Schema
  */
-export default class TeqFw_Db_Back_RDb_Schema {
+export default class Schema {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_Dem_Compile} deps._compile

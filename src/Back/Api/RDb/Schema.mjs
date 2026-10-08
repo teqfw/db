@@ -9,7 +9,7 @@
 /**
  * @interface
  */
-export default class TeqFw_Db_Back_Api_RDb_Schema {
+export default class Schema {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_RDb_IConnect} deps.conn

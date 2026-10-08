@@ -12,7 +12,7 @@
 const NS = 'TeqFw_Db_Back_Dto_Config_Local_Connection';
 
 // MODULE'S CLASSES
-export default class TeqFw_Db_Back_Dto_Config_Local_Connection {
+export default class Connection {
     /** @type {string | undefined} */
     database;
     /**
@@ -59,7 +59,7 @@ export class Factory {
         this.create = function (input = null) {
             const data = input && typeof input === 'object' && !Array.isArray(input)
                 ? /** @type {TeqFw_Db_Object} */ (input) : null;
-            const res = new TeqFw_Db_Back_Dto_Config_Local_Connection();
+            const res = new Connection();
             res.database = cast.string(data?.database);
             res.filename = cast.string(data?.filename);
             res.flags = cast.arrayOfStr(data?.flags);

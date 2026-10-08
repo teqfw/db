@@ -5,7 +5,7 @@
  * @description Executes preflighted in-place or parallel rebuilds with explicit preservation, transaction ownership, and evidence.
  */
 
-export default class TeqFw_Db_Back_RDb_Rebuild_Execute {
+export default class Execute {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_Dem_Compile} deps.compile

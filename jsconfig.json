@@ -9,12 +9,18 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "ESNext",
-    "types": ["node"]
+    "types": [
+      "node"
+    ]
   },
   "include": [
+    "src",
     "test/package/types",
     "types.d.ts",
-    "node_modules/@teqfw/*/types.d.ts"
+    "node_modules/@teqfw/*/types.d.ts",
+    "node_modules/@teqfw/*/src"
   ],
-  "exclude": ["dist"]
+  "exclude": [
+    "dist"
+  ]
 }

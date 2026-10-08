@@ -7,7 +7,7 @@
  */
 
 /** @interface */
-export default class TeqFw_Db_Back_Api_RDb_Rebuild {
+export default class Rebuild {
     /**
      * @param {any} input
      * @returns {Promise<any>}

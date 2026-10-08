@@ -9,7 +9,7 @@
  * Compose schema configuration from DEMs union and map file.
  *
  */
-export default class TeqFw_Db_Back_Dem_Load_A_SchemaCfg {
+export default class SchemaCfg {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_Dto_Config_Schema__Factory} deps.factory

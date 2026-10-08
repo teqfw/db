@@ -5,7 +5,7 @@
  * @description Type-checks and compiles registered query expressions to bound Knex expressions.
  */
 
-export default class TeqFw_Db_Back_Mod_Expression {
+export default class Expression {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_Dem_Registry_Core} deps.core

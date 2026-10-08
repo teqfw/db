@@ -5,7 +5,7 @@
  * @description Versioned pgvector registries, codecs, preflight, and safe PostgreSQL execution.
  */
 
-export default class TeqFw_Db_Back_RDb_Dialect_Postgresql_PgVector {
+export default class PgVector {
     /**
      * Initialize the pgvector 0.7 registry baseline.
      */

@@ -5,7 +5,7 @@
  * @description Produces deterministic dependency-safe drop ordering for active and explicitly deprecated entities.
  */
 
-export default class TeqFw_Db_Back_RDb_Schema_A_DropOrder {
+export default class DropOrder {
     /** Initialize deterministic drop ordering. */
     constructor() {
         /**

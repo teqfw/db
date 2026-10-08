@@ -5,7 +5,7 @@
  * @description Builds frozen registry-backed adapters without making dialect decisions.
  */
 
-export default class TeqFw_Db_Back_RDb_Dialect_Knex {
+export default class Knex {
     /**
      * Initialize shared safe adapter helpers.
      * @param {object} deps

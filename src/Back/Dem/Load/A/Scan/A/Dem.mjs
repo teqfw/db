@@ -9,7 +9,7 @@
  * Load DEM data for a plugin and parse it.
  *
  */
-export default class TeqFw_Db_Back_Dem_Load_A_Scan_A_Dem {
+export default class Dem {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_Util_File} deps.file

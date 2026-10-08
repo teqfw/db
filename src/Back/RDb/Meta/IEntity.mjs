@@ -12,7 +12,7 @@
  * @interface
  * @deprecated use TeqFw_Db_Back_Api_RDb_Schema_Object
  */
-export default class TeqFw_Db_Back_RDb_Meta_IEntity {
+export default class IEntity {
     /**
      * Create entity DTO from given data.
      * @param {any} data

@@ -31,7 +31,7 @@ class Dto {
 
 /**
  */
-export default class TeqFw_Db_Back_Dto_Export {
+export default class Export {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Shared_Util_Cast} deps.cast

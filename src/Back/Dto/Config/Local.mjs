@@ -13,7 +13,7 @@
 const NS = 'TeqFw_Db_Back_Dto_Config_Local';
 
 // MODULE'S CLASSES
-export default class TeqFw_Db_Back_Dto_Config_Local {
+export default class Local {
     /** @type {string | undefined} */
     client;
     /** @type {TeqFw_Db_Back_Dto_Config_Local_Connection | undefined} */
@@ -56,7 +56,7 @@ export class Factory {
         this.create = function (input = null) {
             const data = input && typeof input === 'object' && !Array.isArray(input)
                 ? /** @type {TeqFw_Db_Object} */ (input) : null;
-            const res = new TeqFw_Db_Back_Dto_Config_Local();
+            const res = new Local();
             res.client = cast.string(data?.client);
             res.connection = fConn.create(data?.connection);
             res.searchPath = cast.arrayOfStr(data?.searchPath);

@@ -8,7 +8,7 @@
 /**
  * Resolve entities names to tables names according to connection configuration.
  */
-export default class TeqFw_Db_Back_RDb_Connect_Resolver {
+export default class Resolver {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_Defaults} deps.DEF

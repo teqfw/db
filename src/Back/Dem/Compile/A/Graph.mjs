@@ -5,7 +5,7 @@
  * @description Builds deterministic relation adjacency, SCC cycles, and dependency-first order.
  */
 
-export default class TeqFw_Db_Back_Dem_Compile_A_Graph {
+export default class Graph {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_Dto_Dem_Compile_Graph__Factory} deps.graphFactory

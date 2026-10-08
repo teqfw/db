@@ -5,7 +5,7 @@
  * @description Rejects invalid or colliding normalized declaration and map identities before compilation can succeed.
  */
 
-export default class TeqFw_Db_Back_Dem_Compile_A_ValidateNames {
+export default class ValidateNames {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic__Factory} deps.diagnostic

@@ -5,7 +5,7 @@
  * @description Builds immutable operation phases only from an authentic successful compilation result.
  */
 
-export default class TeqFw_Db_Back_RDb_Schema_A_Plan {
+export default class Plan {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_Dem_Compile} deps.compile

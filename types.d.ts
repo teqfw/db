@@ -174,146 +174,8 @@ export interface DbHistory {
     resolveLastApplied(input: {readonly compilation: DemCompilationResult; readonly connection: DbConnection; readonly transaction?: DbTransaction}): Promise<Readonly<{application: DbSchemaApplication; snapshot: DbEffectiveSnapshot}> | null>;
 }
 declare global {
-    type TeqFw_Db_NormalizedCoreType =
-        {id: 'core.binary'; params: {length?: number}} |
-        {id: 'core.datetime'; params: {timezone: boolean; precision?: number}} |
-        {id: 'core.decimal'; params: {precision: number; scale: number; unsigned: boolean}} |
-        {id: 'core.enum'; params: {values: string[]}} |
-        {id: 'core.integer'; params: {bits: 8 | 16 | 32 | 64; unsigned: boolean}} |
-        {id: 'core.string'; params: {length: number}} |
-        {id: 'core.vector'; params: {dimensions: number; element: 'bit' | 'float'; sparse: boolean}} |
-        {id: 'core.any' | 'core.boolean' | 'core.date' | 'core.identity' | 'core.json' | 'core.ref' | 'core.text' | 'core.uuid'; params: Record<string, never>};
-    type TeqFw_Db_NormalizedCoreTypeNullable = TeqFw_Db_NormalizedCoreType | null;
-
-    type TeqFw_Db_PaginationFields = readonly ('limit' | 'offset')[];
-    type TeqFw_Db_ExpressionKind = 'attr' | 'value' | 'call';
-    type TeqFw_Db_LogicalTypeOptional = DbLogicalType | undefined;
-    type TeqFw_Db_QueryExpressionArrayOptional = readonly DbExpression[] | undefined;
-    type TeqFw_Db_ExpressionSchema = {compatibilityUntyped?: boolean; attr?: Record<string, {name?: string; column?: string; type?: DbLogicalType; logicalType?: DbLogicalType}>; columns?: readonly DemPhysicalColumn[]; mapColumn?: (name: string) => string | undefined};
-    type TeqFw_Db_ExpressionContext = 'filter' | 'projection' | 'ordering' | 'index' | 'predicate';
-
-    type TeqFw_Db_IntegerBits = 8 | 16 | 32 | 64;
-    type TeqFw_Db_StorageTypeSelector = string | ((logicalType: TeqFw_Db_CanonicalLogicalType) => string);
-
-    type TeqFw_Db_PreflightInput = DbCapabilityPreflight;
-    type TeqFw_Db_CanonicalLogicalType = {id: string; params: Record<string, unknown>};
-    type TeqFw_Db_TypeResolutionInput = {logicalType: TeqFw_Db_CanonicalLogicalType; storage?: {type: string; params?: Record<string, unknown>}};
-    type TeqFw_Db_TypeProjectionInput = {logicalType: TeqFw_Db_CanonicalLogicalType; binding?: {type: string; params?: Record<string, unknown>}};
-    type TeqFw_Db_DefaultResolutionInput = {defaultValue: {kind: string; value?: unknown; name?: string}; logicalType: TeqFw_Db_CanonicalLogicalType};
-    type TeqFw_Db_GenerationResolutionInput = {generation: DbGeneration; logicalType: TeqFw_Db_CanonicalLogicalType};
-    type TeqFw_Db_RelationResolutionInput = {relation: DemRelation};
-    type TeqFw_Db_OperatorInput = {operator: string};
-    type TeqFw_Db_OperatorContract = {arity: number | {min: number}; args: string | readonly string[]; result: string; contexts: string[]};
-    type TeqFw_Db_ValueInput = {column: DemPhysicalColumn; value: unknown};
-    type TeqFw_Db_IndexExecutionInput = {connection: DbConnection; index: DemPhysicalIndex; knex: Knex | Knex.Transaction; table: DemPhysicalTable};
-    type TeqFw_Db_ExecutionInput = {execution: DbExecutionOptions; knex?: Knex | Knex.Transaction};
-
-    type TeqFw_Db_FailureDetails = {message: string; name: string; phases: DbLateIndexOutcome[]};
-
-    type TeqFw_Db_ExportTable = {name: string; columns: readonly {name: string; type?: unknown}[]};
-
-    type TeqFw_Db_SqlBinding = string | number | boolean | null | Knex.Raw;
-    type TeqFw_Db_VectorProjection = {diagnostics: DbAdapterDiagnostic[]; physicalType?: {args: number[]; dialect: string; type: string; unsigned: boolean}};
-    type TeqFw_Db_IndexProjection = {diagnostics: DbAdapterDiagnostic[]; descriptor?: {include: string[]; keys: {attr?: string; operatorClass?: string}[]; kind: string; method: string; name: string; options: Record<string, number>; predicate?: DbExpression; requirements: string[]}};
-
-    type TeqFw_Db_VectorStorageRule = {capability: string; maxDimensions: number; element: string; sparse: boolean};
-    type TeqFw_Db_VectorOperatorClass = {methods: string[]; physical: string; storage: string};
-    type TeqFw_Db_VectorOperator = {implementation: string; physical: string; storage: string[]};
-    type TeqFw_Db_NumberRangeMap = Record<string, readonly [number, number]>;
-    type TeqFw_Db_VectorStorageInput = {binding: {params?: Record<string, unknown>}; logicalType: DbLogicalType};
-    type TeqFw_Db_VectorIndexInput = {entity: DemEntity; index: DemIndex; physicalName: string};
-    type TeqFw_Db_VectorValue = string | number[] | {dimensions: number; entries: {index: number; value: number}[]};
-
-    type TeqFw_Db_PreflightFunction = (input: DbCapabilityPreflight) => Promise<DbPreflightResult & {availableCapabilities?: readonly string[]}>;
-    type TeqFw_Db_PreflightConnection = DbConnection | DbTransaction;
-    type TeqFw_Db_KnexProvider = {getClient?: () => Knex; getKnex?: () => Knex; getKnexTrx?: () => Knex.Transaction};
     type TeqFw_Db_AddColumnFunction = (input: {column: DemPhysicalColumn; knex: Knex | Knex.Transaction; tableBuilder: Knex.CreateTableBuilder}) => unknown;
     type TeqFw_Db_AddIndexFunction = (input: {connection: DbConnection; index: DemPhysicalIndex; knex: Knex | Knex.Transaction; table: DemPhysicalTable}) => Promise<void>;
-
-    type TeqFw_Db_OperatorDescriptor = {operator: string; physical: string};
-    type TeqFw_Db_ExecutionSetting = {maximum: number; minimum: number; setting: string};
-
-    type TeqFw_Db_ProjectionDiagnosticArray = readonly {code?: string; details?: Record<string, unknown>; message?: string; path?: string; severity?: DemDiagnosticSeverity; sources?: readonly DemSource[]; stage?: DemDiagnosticStage}[];
-    type TeqFw_Db_SchemaExecutionPhase = {identity: string; phase: string; status: string; evidence?: unknown; error?: {message: string; name: string}};
-    type TeqFw_Db_PhysicalColumnDraft = {name: string; logicalType: DbLogicalType; physicalType: DbPhysicalType; nullable: boolean; comment?: string; defaultValue?: DbPhysicalDefault; generation?: DbGeneration; requirements: string[]};
-    type TeqFw_Db_PhysicalTableDraft = {entity: string; name: string; comment?: string; columns: TeqFw_Db_PhysicalColumnDraft[]};
-
-
-    type TeqFw_Db_PhysicalTableArray = readonly DemPhysicalTable[];
-    type TeqFw_Db_SchemaExecutionEvidence = {fingerprint: string; operation: string; phases: readonly DbLateIndexOutcome[]; preflight: DbPreflightResult; status: 'complete'};
-
-    type TeqFw_Db_StringNullable = string | null;
-
-    type TeqFw_Db_RebuildMode = DbRebuildMode;
-    type TeqFw_Db_SnapshotReaderOptional = DbSnapshotReader | undefined;
-    type TeqFw_Db_TransformationMap = Readonly<Record<string, DbTransformation>>;
-    type TeqFw_Db_Transformation = DbTransformation;
-    type TeqFw_Db_LateSchemaPhase = 'afterRelations' | 'afterData';
-    type TeqFw_Db_RebuildEvidenceDraft = {
-        accepted: boolean; dataComplete: boolean; failures: DbOperationFailure[];
-        fingerprint: string; generatedState: readonly unknown[];
-        mode: DbRebuildMode; mutationStarted: boolean; phases: DbLateIndexOutcome[];
-        preservation: {authorizedDiscard: boolean; status: 'notStarted' | 'verifiedReadable' | 'discardAuthorized' | 'notRequired'; tables: {entity: string; table: string; rows: number}[]};
-        preflight: Record<string, DbPreflightResult>; source: {adapter: string; fingerprint: string; id: string};
-        status: DbOperationStatus; strategy: Readonly<Record<string, unknown>> | null;
-        tables: {entity: string; table: string; status: string; sourceRows?: number; targetRows?: number; transformation?: string; error?: {name: string; message: string}}[];
-        target: {adapter: string; fingerprint: string; id: string}; transaction: {owned: boolean; outcome: DbTransactionOutcome};
-        transformations: {entity: string; id: string}[];
-    };
-
-    type TeqFw_Db_Model = DemModel;
-    type TeqFw_Db_EffectiveModel = DemEffectiveModel;
-    type TeqFw_Db_Provenance = DemProvenance;
-    type TeqFw_Db_PhysicalPlan = DemPhysicalPlan;
-    type TeqFw_Db_SchemaPlan = DbSchemaPlan;
-    type TeqFw_Db_CycleStrategyNullable = DbCycleStrategy | null;
-    type TeqFw_Db_SchemaOperation = 'create' | 'drop' | 'rebuild' | 'transfer';
-    type TeqFw_Db_DropTableArray = readonly DbDropTable[];
-    type TeqFw_Db_PhysicalIndexArray = DemPhysicalIndex[];
-    type TeqFw_Db_GraphEdges = DemGraphEdge[];
-    type TeqFw_Db_StringLists = string[][];
-
-    type TeqFw_Db_DiagnosticStage = DemDiagnosticStage;
-    type TeqFw_Db_CycleValidation = {valid: boolean; requirements?: readonly string[]; diagnostics?: readonly DemDiagnostic[]};
-    type TeqFw_Db_CycleValidationInput = {cycles: readonly DemGraphCycle[]; strategy?: DbCycleStrategy | null};
-
-    type TeqFw_Db_DiagnosticSeverity = DemDiagnosticSeverity;
-    type TeqFw_Db_MutableSourceArray = DemSource[];
-    type TeqFw_Db_LegacySerialSchema = PromiseLike<{rows: {nextval: string | number}[]}> & {raw(sql: string, bindings?: (string | number)[]): unknown};
-    type TeqFw_Db_LegacySerialWriter = PromiseLike<unknown> & {raw(sql: string, bindings?: (string | number)[]): unknown};
-    type TeqFw_Db_SequenceStateMap = Record<string, string | number | null>;
-    type TeqFw_Db_SourceArray = readonly DemSource[];
-    type TeqFw_Db_Graph = DemGraph;
-    type TeqFw_Db_GraphEdgeArray = readonly DemGraphEdge[];
-    type TeqFw_Db_GraphCycleArray = readonly DemGraphCycle[];
-    type TeqFw_Db_KnexTableBuilder = Knex.CreateTableBuilder;
-    type TeqFw_Db_PhysicalIndex = DemPhysicalIndex;
-    type TeqFw_Db_PhysicalRelation = DemPhysicalRelation;
-    type TeqFw_Db_ExpressionDescriptor = {implementation: string; operator?: string; physical?: string};
-    type TeqFw_Db_SqlArguments = readonly Knex.Raw[];
-
-    type TeqFw_Db_GeneratedStateEvidenceArray = readonly unknown[];
-    type TeqFw_Db_TransferStrategyEvidence = Readonly<Record<string, unknown>> | null;
-    type TeqFw_Db_SchemaDataTransfer = () => Promise<unknown>;
-    type TeqFw_Db_NumberNullable = number | null;
-    type TeqFw_Db_QueryBindings = readonly unknown[];
-    type TeqFw_Db_CatalogConnection = Pick<DbConnection, 'getClient' | 'getSchemaBuilder'>;
-    type TeqFw_Db_DialectAdapter = DbDialectAdapter;
-    type TeqFw_Db_KnexSchema = Knex.SchemaBuilder;
-    type TeqFw_Db_KnexQuery = Knex.QueryBuilder;
-    type TeqFw_Db_KnexRaw = Knex.Raw;
-    type TeqFw_Db_TransactionOptions = Knex.TransactionConfig;
-    type TeqFw_Db_Transaction = DbTransaction;
-    type TeqFw_Db_Connection = DbConnection;
-    type TeqFw_Db_SqliteColumnInput = {column: DemPhysicalColumn & {readonly comment?: string; readonly physicalType: {readonly type: string}}; tableBuilder: Knex.CreateTableBuilder; knex: Knex};
-    type TeqFw_Db_DemCompilationResult = DemCompilationResult;
-    type TeqFw_Db_DemCompiler = DemCompiler;
-    type TeqFw_Db_PhysicalTable = DemPhysicalTable;
-    type TeqFw_Db_PhysicalColumn = DemPhysicalColumn;
-    type TeqFw_Db_KnexTransaction = Knex.Transaction;
-    type TeqFw_Db_KnexQuerySource = Knex | Knex.Transaction;
-
-    type TeqFw_Cfg_Reader = {get: any};
     type TeqFw_Db_Back_Act_Dem_RdbTables = import("./src/Back/Act/Dem/RdbTables.mjs").default;
     type TeqFw_Db_Back_Act_Dem_RdbTables__Class = typeof import("./src/Back/Act/Dem/RdbTables.mjs").default;
     type TeqFw_Db_Back_Act_Dem_Tables = import("./src/Back/Act/Dem/Tables.mjs").default;
@@ -556,50 +418,144 @@ declare global {
     type TeqFw_Db_Back_Util__serialsGetOne = typeof import("./src/Back/Util.mjs").serialsGetOne;
     type TeqFw_Db_Back_Util__serialsSet = typeof import("./src/Back/Util.mjs").serialsSet;
     type TeqFw_Db_BooleanNullable = boolean | null | undefined;
+    type TeqFw_Db_CanonicalLogicalType = {id: string; params: Record<string, unknown>};
+    type TeqFw_Db_CatalogConnection = Pick<DbConnection, 'getClient' | 'getSchemaBuilder'>;
     type TeqFw_Db_ClientLike = {constructor: {name: string}};
+    type TeqFw_Db_ComposedDem = {diagnostics: DemDiagnostic[]; externalRefs: Record<string, {refs: Record<string, string[]>; pointers: TeqFw_Db_StringMap; envelope: TeqFw_Db_InputEnvelope}>; invalid: Set<string>; model: TeqFw_Db_ComposedModel; ownerByPath: TeqFw_Db_StringMap; provenance: Record<string, DemSource[]>};
+    type TeqFw_Db_ComposedModel = TeqFw_Db_DecodedContainer & {version: number; namespace: string; requires: string[]; deprecated: Record<string, string[]>};
+    type TeqFw_Db_Connection = DbConnection;
+    type TeqFw_Db_CycleStrategyNullable = DbCycleStrategy | null;
+    type TeqFw_Db_CycleValidation = {valid: boolean; requirements?: readonly string[]; diagnostics?: readonly DemDiagnostic[]};
+    type TeqFw_Db_CycleValidationInput = {cycles: readonly DemGraphCycle[]; strategy?: DbCycleStrategy | null};
     type TeqFw_Db_DateInput = Date | string | number | null | undefined;
+    type TeqFw_Db_DecodedAttribute = {name: string; comment: string; type: DbLogicalType; storage: Record<string, {type: string; params: Record<string, unknown>}>; nullable: boolean; default?: {kind: string; value?: unknown; name?: string; params?: Record<string, unknown>}; generation?: {kind: string; params: Record<string, unknown>}; __demSpecial?: string};
+    type TeqFw_Db_DecodedContainer = {entity: Record<string, TeqFw_Db_DecodedEntity>; package: Record<string, TeqFw_Db_DecodedContainer>; comment?: string; version?: number; requires?: string[]; refs?: Record<string, string[]>};
+    type TeqFw_Db_DecodedEntity = {name: string; path: string; comment: string; attr: Record<string, TeqFw_Db_DecodedAttribute>; index: Record<string, TeqFw_Db_DecodedIndex>; relation: Record<string, TeqFw_Db_DecodedRelation>};
+    type TeqFw_Db_DecodedExpression = {kind: string; name?: string; value?: unknown; type?: DbLogicalType; operator?: string; args?: TeqFw_Db_DecodedExpression[]};
+    type TeqFw_Db_DecodedFragment = {declaration: TeqFw_Db_DecodedContainer | null; diagnostics: DemDiagnostic[]; envelope: TeqFw_Db_InputEnvelope; pointers: TeqFw_Db_StringMap};
+    type TeqFw_Db_DecodedFragmentArray = ReadonlyArray<TeqFw_Db_DecodedFragment>;
+    type TeqFw_Db_DecodedIndex = {name: string; kind: string; keys: TeqFw_Db_DecodedIndexKey[]; include: string[]; options: Record<string, unknown>; phase: string; method?: string; predicate?: TeqFw_Db_DecodedExpression};
+    type TeqFw_Db_DecodedIndexKey = {attr?: string; expression?: TeqFw_Db_DecodedExpression; order?: unknown; nulls?: unknown; operatorClass?: unknown};
+    type TeqFw_Db_DecodedRelation = {name: string; attrs: string[]; ref: {path: string; attrs: string[]}; action: {delete?: string; update?: string}; deferrable: unknown};
+    type TeqFw_Db_DefaultResolutionInput = {defaultValue: {kind: string; value?: unknown; name?: string}; logicalType: TeqFw_Db_CanonicalLogicalType};
+    type TeqFw_Db_DemCompilationResult = DemCompilationResult;
+    type TeqFw_Db_DemCompiler = DemCompiler;
     type TeqFw_Db_DemEntityInfo = {entity: DemEntity; pointer: string; tableName: string; path: string; uniqueKeys: string[][]};
     type TeqFw_Db_DemEntityMap = {[key: string]: TeqFw_Db_DemEntityInfo};
     type TeqFw_Db_DemEnvelope = {declaration: unknown; [key: string]: unknown};
-    /** Intermediate DEM nodes preserve invalid tags until semantic validation. */
-    type TeqFw_Db_DiagnosticArrayMutable = DemDiagnostic[];
-    type TeqFw_Db_DecodedExpression = {kind: string; name?: string; value?: unknown; type?: DbLogicalType; operator?: string; args?: TeqFw_Db_DecodedExpression[]};
-    type TeqFw_Db_DecodedAttribute = {name: string; comment: string; type: DbLogicalType; storage: Record<string, {type: string; params: Record<string, unknown>}>; nullable: boolean; default?: {kind: string; value?: unknown; name?: string; params?: Record<string, unknown>}; generation?: {kind: string; params: Record<string, unknown>}; __demSpecial?: string};
-    type TeqFw_Db_DecodedIndexKey = {attr?: string; expression?: TeqFw_Db_DecodedExpression; order?: unknown; nulls?: unknown; operatorClass?: unknown};
-    type TeqFw_Db_DecodedIndex = {name: string; kind: string; keys: TeqFw_Db_DecodedIndexKey[]; include: string[]; options: Record<string, unknown>; phase: string; method?: string; predicate?: TeqFw_Db_DecodedExpression};
-    type TeqFw_Db_DecodedRelation = {name: string; attrs: string[]; ref: {path: string; attrs: string[]}; action: {delete?: string; update?: string}; deferrable: unknown};
-    type TeqFw_Db_DecodedEntity = {name: string; path: string; comment: string; attr: Record<string, TeqFw_Db_DecodedAttribute>; index: Record<string, TeqFw_Db_DecodedIndex>; relation: Record<string, TeqFw_Db_DecodedRelation>};
-    type TeqFw_Db_DecodedContainer = {entity: Record<string, TeqFw_Db_DecodedEntity>; package: Record<string, TeqFw_Db_DecodedContainer>; comment?: string; version?: number; requires?: string[]; refs?: Record<string, string[]>};
-    type TeqFw_Db_ComposedModel = TeqFw_Db_DecodedContainer & {version: number; namespace: string; requires: string[]; deprecated: Record<string, string[]>};
-    type TeqFw_Db_InputEnvelope = {declaration: unknown; filename?: string; fragmentId?: string; packageName?: string; revision?: string; mapId?: string};
-    type TeqFw_Db_DecodedFragment = {declaration: TeqFw_Db_DecodedContainer | null; diagnostics: DemDiagnostic[]; envelope: TeqFw_Db_InputEnvelope; pointers: TeqFw_Db_StringMap};
-    type TeqFw_Db_ComposedDem = {diagnostics: DemDiagnostic[]; externalRefs: Record<string, {refs: Record<string, string[]>; pointers: TeqFw_Db_StringMap; envelope: TeqFw_Db_InputEnvelope}>; invalid: Set<string>; model: TeqFw_Db_ComposedModel; ownerByPath: TeqFw_Db_StringMap; provenance: Record<string, DemSource[]>};
-    type TeqFw_Db_ValidatingEntityInfo = {entity: TeqFw_Db_DecodedEntity; pointer: string; tableName: string; signatures: TeqFw_Db_StringMap; uniqueKeys: string[][]};
-    type TeqFw_Db_LoadTestOptions = {testDems?: TeqFw_Db_StringMap; testMapRoot?: string};
-    type TeqFw_Db_DecodedFragmentArray = ReadonlyArray<TeqFw_Db_DecodedFragment>;
-    type TeqFw_Db_InputEnvelopeArray = ReadonlyArray<TeqFw_Db_InputEnvelope>;
-    type TeqFw_Db_NameClaims = Record<string, {rawName: string; sourcePointer: string}>;
     type TeqFw_Db_DemFragment = {declaration: unknown; filename?: string; fragmentId?: string; packageName?: string};
     type TeqFw_Db_DemFragmentArray = TeqFw_Db_DemFragment[];
     type TeqFw_Db_DiagnosticArray = readonly DemDiagnostic[];
+    /** Intermediate DEM nodes preserve invalid tags until semantic validation. */
+    type TeqFw_Db_DiagnosticArrayMutable = DemDiagnostic[];
+    type TeqFw_Db_DiagnosticSeverity = DemDiagnosticSeverity;
+    type TeqFw_Db_DiagnosticStage = DemDiagnosticStage;
+    type TeqFw_Db_DialectAdapter = DbDialectAdapter;
+    type TeqFw_Db_DropTableArray = readonly DbDropTable[];
+    type TeqFw_Db_EffectiveModel = DemEffectiveModel;
     type TeqFw_Db_Error = {name: string; message: string};
+    type TeqFw_Db_ExecutionInput = {execution: DbExecutionOptions; knex?: Knex | Knex.Transaction};
+    type TeqFw_Db_ExecutionSetting = {maximum: number; minimum: number; setting: string};
     type TeqFw_Db_ExportDto = {tables: {[key: string]: object[]}; serials: TeqFw_Db_SequenceStateMap};
+    type TeqFw_Db_ExportTable = {name: string; columns: readonly {name: string; type?: unknown}[]};
+    type TeqFw_Db_ExpressionContext = 'filter' | 'projection' | 'ordering' | 'index' | 'predicate';
+    type TeqFw_Db_ExpressionDescriptor = {implementation: string; operator?: string; physical?: string};
+    type TeqFw_Db_ExpressionKind = 'attr' | 'value' | 'call';
+    type TeqFw_Db_ExpressionSchema = {compatibilityUntyped?: boolean; attr?: Record<string, {name?: string; column?: string; type?: DbLogicalType; logicalType?: DbLogicalType}>; columns?: readonly DemPhysicalColumn[]; mapColumn?: (name: string) => string | undefined};
+    type TeqFw_Db_FailureDetails = {message: string; name: string; phases: DbLateIndexOutcome[]};
     type TeqFw_Db_FileError = {code?: string; message: string};
+    type TeqFw_Db_GeneratedStateEvidenceArray = readonly unknown[];
+    type TeqFw_Db_GenerationResolutionInput = {generation: DbGeneration; logicalType: TeqFw_Db_CanonicalLogicalType};
+    type TeqFw_Db_Graph = DemGraph;
+    type TeqFw_Db_GraphCycleArray = readonly DemGraphCycle[];
+    type TeqFw_Db_GraphEdgeArray = readonly DemGraphEdge[];
+    type TeqFw_Db_GraphEdges = DemGraphEdge[];
     type TeqFw_Db_Identifier = string | string[];
+    type TeqFw_Db_IndexExecutionInput = {connection: DbConnection; index: DemPhysicalIndex; knex: Knex | Knex.Transaction; table: DemPhysicalTable};
+    type TeqFw_Db_IndexProjection = {diagnostics: DbAdapterDiagnostic[]; descriptor?: {include: string[]; keys: {attr?: string; operatorClass?: string}[]; kind: string; method: string; name: string; options: Record<string, number>; predicate?: DbExpression; requirements: string[]}};
+    type TeqFw_Db_InputEnvelope = {declaration: unknown; filename?: string; fragmentId?: string; packageName?: string; revision?: string; mapId?: string};
+    type TeqFw_Db_InputEnvelopeArray = ReadonlyArray<TeqFw_Db_InputEnvelope>;
+    type TeqFw_Db_IntegerBits = 8 | 16 | 32 | 64;
+    type TeqFw_Db_KnexProvider = {getClient?: () => Knex; getKnex?: () => Knex; getKnexTrx?: () => Knex.Transaction};
+    type TeqFw_Db_KnexQuery = Knex.QueryBuilder;
+    type TeqFw_Db_KnexQuerySource = Knex | Knex.Transaction;
+    type TeqFw_Db_KnexRaw = Knex.Raw;
+    type TeqFw_Db_KnexSchema = Knex.SchemaBuilder;
+    type TeqFw_Db_KnexTableBuilder = Knex.CreateTableBuilder;
+    type TeqFw_Db_KnexTransaction = Knex.Transaction;
+    type TeqFw_Db_LateSchemaPhase = 'afterRelations' | 'afterData';
+    type TeqFw_Db_LegacySerialSchema = PromiseLike<{rows: {nextval: string | number}[]}> & {raw(sql: string, bindings?: (string | number)[]): unknown};
+    type TeqFw_Db_LegacySerialWriter = PromiseLike<unknown> & {raw(sql: string, bindings?: (string | number)[]): unknown};
+    type TeqFw_Db_LoadTestOptions = {testDems?: TeqFw_Db_StringMap; testMapRoot?: string};
     type TeqFw_Db_LogicalType = {id: string; params?: {[key: string]: unknown}};
+    type TeqFw_Db_LogicalTypeOptional = DbLogicalType | undefined;
+    type TeqFw_Db_Model = DemModel;
+    type TeqFw_Db_MutableSourceArray = DemSource[];
+    type TeqFw_Db_NameClaims = Record<string, {rawName: string; sourcePointer: string}>;
+    type TeqFw_Db_NormalizedCoreType =
+        {id: 'core.binary'; params: {length?: number}} |
+        {id: 'core.datetime'; params: {timezone: boolean; precision?: number}} |
+        {id: 'core.decimal'; params: {precision: number; scale: number; unsigned: boolean}} |
+        {id: 'core.enum'; params: {values: string[]}} |
+        {id: 'core.integer'; params: {bits: 8 | 16 | 32 | 64; unsigned: boolean}} |
+        {id: 'core.string'; params: {length: number}} |
+        {id: 'core.vector'; params: {dimensions: number; element: 'bit' | 'float'; sparse: boolean}} |
+        {id: 'core.any' | 'core.boolean' | 'core.date' | 'core.identity' | 'core.json' | 'core.ref' | 'core.text' | 'core.uuid'; params: Record<string, never>};
+    type TeqFw_Db_NormalizedCoreTypeNullable = TeqFw_Db_NormalizedCoreType | null;
+    type TeqFw_Db_NumberNullable = number | null;
     type TeqFw_Db_NumberOptional = number | undefined;
+    type TeqFw_Db_NumberRangeMap = Record<string, readonly [number, number]>;
     type TeqFw_Db_Object = {[key: string]: unknown};
     type TeqFw_Db_ObjectArray = object[];
     type TeqFw_Db_ObjectArrayOrNull = object[] | null;
     type TeqFw_Db_ObjectOptional = object | undefined;
     type TeqFw_Db_ObjectOrNull = TeqFw_Db_Object | null;
+    type TeqFw_Db_OperatorContract = {arity: number | {min: number}; args: string | readonly string[]; result: string; contexts: string[]};
+    type TeqFw_Db_OperatorDescriptor = {operator: string; physical: string};
+    type TeqFw_Db_OperatorInput = {operator: string};
     type TeqFw_Db_OrderDto = {alias: TeqFw_Db_StringOptional; dir: TeqFw_Db_StringOptional};
+    type TeqFw_Db_PaginationFields = readonly ('limit' | 'offset')[];
+    type TeqFw_Db_PhysicalColumn = DemPhysicalColumn;
+    type TeqFw_Db_PhysicalColumnDraft = {name: string; logicalType: DbLogicalType; physicalType: DbPhysicalType; nullable: boolean; comment?: string; defaultValue?: DbPhysicalDefault; generation?: DbGeneration; requirements: string[]};
+    type TeqFw_Db_PhysicalIndex = DemPhysicalIndex;
+    type TeqFw_Db_PhysicalIndexArray = DemPhysicalIndex[];
+    type TeqFw_Db_PhysicalPlan = DemPhysicalPlan;
+    type TeqFw_Db_PhysicalRelation = DemPhysicalRelation;
+    type TeqFw_Db_PhysicalTable = DemPhysicalTable;
+    type TeqFw_Db_PhysicalTableArray = readonly DemPhysicalTable[];
+    type TeqFw_Db_PhysicalTableDraft = {entity: string; name: string; comment?: string; columns: TeqFw_Db_PhysicalColumnDraft[]};
+    type TeqFw_Db_PreflightConnection = DbConnection | DbTransaction;
+    type TeqFw_Db_PreflightFunction = (input: DbCapabilityPreflight) => Promise<DbPreflightResult & {availableCapabilities?: readonly string[]}>;
+    type TeqFw_Db_PreflightInput = DbCapabilityPreflight;
+    type TeqFw_Db_ProjectionDiagnosticArray = readonly {code?: string; details?: Record<string, unknown>; message?: string; path?: string; severity?: DemDiagnosticSeverity; sources?: readonly DemSource[]; stage?: DemDiagnosticStage}[];
+    type TeqFw_Db_Provenance = DemProvenance;
+    type TeqFw_Db_QueryBindings = readonly unknown[];
     type TeqFw_Db_QueryExpression = DbExpression;
     type TeqFw_Db_QueryExpressionArray = readonly DbExpression[];
+    type TeqFw_Db_QueryExpressionArrayOptional = readonly DbExpression[] | undefined;
     type TeqFw_Db_QueryOrdering = DbOrdering;
     type TeqFw_Db_QueryOrderingArray = readonly DbOrdering[];
     type TeqFw_Db_QueryProjection = {as: string; expression: TeqFw_Db_QueryExpression};
     type TeqFw_Db_QueryProjectionArray = readonly DbProjection[];
+    type TeqFw_Db_RebuildEvidenceDraft = {
+        accepted: boolean; dataComplete: boolean; failures: DbOperationFailure[];
+        fingerprint: string; generatedState: readonly unknown[];
+        mode: DbRebuildMode; mutationStarted: boolean; phases: DbLateIndexOutcome[];
+        preservation: {authorizedDiscard: boolean; status: 'notStarted' | 'verifiedReadable' | 'discardAuthorized' | 'notRequired'; tables: {entity: string; table: string; rows: number}[]};
+        preflight: Record<string, DbPreflightResult>; source: {adapter: string; fingerprint: string; id: string};
+        status: DbOperationStatus; strategy: Readonly<Record<string, unknown>> | null;
+        tables: {entity: string; table: string; status: string; sourceRows?: number; targetRows?: number; transformation?: string; error?: {name: string; message: string}}[];
+        target: {adapter: string; fingerprint: string; id: string}; transaction: {owned: boolean; outcome: DbTransactionOutcome};
+        transformations: {entity: string; id: string}[];
+    };
+    type TeqFw_Db_RebuildMode = DbRebuildMode;
+    type TeqFw_Db_RelationResolutionInput = {relation: DemRelation};
+    type TeqFw_Db_SchemaDataTransfer = () => Promise<unknown>;
+    type TeqFw_Db_SchemaExecutionEvidence = {fingerprint: string; operation: string; phases: readonly DbLateIndexOutcome[]; preflight: DbPreflightResult; status: 'complete'};
+    type TeqFw_Db_SchemaExecutionPhase = {identity: string; phase: string; status: string; evidence?: unknown; error?: {message: string; name: string}};
+    type TeqFw_Db_SchemaOperation = 'create' | 'drop' | 'rebuild' | 'transfer';
+    type TeqFw_Db_SchemaPlan = DbSchemaPlan;
+    type TeqFw_Db_SequenceStateMap = Record<string, string | number | null>;
     type TeqFw_Db_SerialValue = number | string | null;
     type TeqFw_Db_Shared_Dto_Order = import("./src/Shared/Dto/Order.mjs").default;
     type TeqFw_Db_Shared_Dto_Order__Class = typeof import("./src/Shared/Dto/Order.mjs").default;
@@ -616,13 +572,36 @@ declare global {
     type TeqFw_Db_Shared_Util_Cast__Class = typeof import("./src/Shared/Util/Cast.mjs").default;
     type TeqFw_Db_Shared_Util_Deep = import("./src/Shared/Util/Deep.mjs").default;
     type TeqFw_Db_Shared_Util_Deep__Class = typeof import("./src/Shared/Util/Deep.mjs").default;
+    type TeqFw_Db_SnapshotReaderOptional = DbSnapshotReader | undefined;
+    type TeqFw_Db_SourceArray = readonly DemSource[];
+    type TeqFw_Db_SqlArguments = readonly Knex.Raw[];
+    type TeqFw_Db_SqlBinding = string | number | boolean | null | Knex.Raw;
+    type TeqFw_Db_SqliteColumnInput = {column: DemPhysicalColumn & {readonly comment?: string; readonly physicalType: {readonly type: string}}; tableBuilder: Knex.CreateTableBuilder; knex: Knex};
+    type TeqFw_Db_StorageTypeSelector = string | ((logicalType: TeqFw_Db_CanonicalLogicalType) => string);
     type TeqFw_Db_StringArray = string[];
     type TeqFw_Db_StringArrayMap = {[key: string]: string[]};
     type TeqFw_Db_StringArrayOrNull = string[] | null;
+    type TeqFw_Db_StringLists = string[][];
     type TeqFw_Db_StringMap = {[key: string]: string};
+    type TeqFw_Db_StringNullable = string | null;
     type TeqFw_Db_StringNumberMap = {[key: string]: number | string};
     type TeqFw_Db_StringOptional = string | undefined;
+    type TeqFw_Db_Transaction = DbTransaction;
+    type TeqFw_Db_TransactionOptions = Knex.TransactionConfig;
+    type TeqFw_Db_TransferStrategyEvidence = Readonly<Record<string, unknown>> | null;
+    type TeqFw_Db_Transformation = DbTransformation;
+    type TeqFw_Db_TransformationMap = Readonly<Record<string, DbTransformation>>;
+    type TeqFw_Db_TypeProjectionInput = {logicalType: TeqFw_Db_CanonicalLogicalType; binding?: {type: string; params?: Record<string, unknown>}};
+    type TeqFw_Db_TypeResolutionInput = {logicalType: TeqFw_Db_CanonicalLogicalType; storage?: {type: string; params?: Record<string, unknown>}};
     type TeqFw_Db_ValidatedDem = {entities: TeqFw_Db_DemEntityMap; provenance: Record<string, DemSource[]>; model: DemModel; diagnostics: DemDiagnostic[]};
-    type TeqFw_Log_Provider = {forSource: any};
+    type TeqFw_Db_ValidatingEntityInfo = {entity: TeqFw_Db_DecodedEntity; pointer: string; tableName: string; signatures: TeqFw_Db_StringMap; uniqueKeys: string[][]};
+    type TeqFw_Db_ValueInput = {column: DemPhysicalColumn; value: unknown};
+    type TeqFw_Db_VectorIndexInput = {entity: DemEntity; index: DemIndex; physicalName: string};
+    type TeqFw_Db_VectorOperator = {implementation: string; physical: string; storage: string[]};
+    type TeqFw_Db_VectorOperatorClass = {methods: string[]; physical: string; storage: string};
+    type TeqFw_Db_VectorProjection = {diagnostics: DbAdapterDiagnostic[]; physicalType?: {args: number[]; dialect: string; type: string; unsigned: boolean}};
+    type TeqFw_Db_VectorStorageInput = {binding: {params?: Record<string, unknown>}; logicalType: DbLogicalType};
+    type TeqFw_Db_VectorStorageRule = {capability: string; maxDimensions: number; element: string; sparse: boolean};
+    type TeqFw_Db_VectorValue = string | number[] | {dimensions: number; entries: {index: number; value: number}[]};
 }
 export {};

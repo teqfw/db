@@ -12,7 +12,7 @@
 const NS = 'TeqFw_Db_Back_Dto_Map_Ref';
 
 // MODULE'S CLASSES
-export default class TeqFw_Db_Back_Dto_Map_Ref {
+export default class Ref {
     /**
      * Path to virtual entity (/virtual/entity).
      * @type {string | undefined}
@@ -31,9 +31,9 @@ export default class TeqFw_Db_Back_Dto_Map_Ref {
 }
 
 // attributes names to use as aliases in queries to object props
-TeqFw_Db_Back_Dto_Map_Ref.ALIAS = 'alias';
-TeqFw_Db_Back_Dto_Map_Ref.ATTRS = 'attrs';
-TeqFw_Db_Back_Dto_Map_Ref.PATH = 'path';
+Ref.ALIAS = 'alias';
+Ref.ATTRS = 'attrs';
+Ref.PATH = 'path';
 
 /**
  * Factory to create new DTO instances.
@@ -52,7 +52,7 @@ export class Factory {
          * @returns {TeqFw_Db_Back_Dto_Map_Ref}
          */
         this.create = function create(data = null) {
-            const res = new TeqFw_Db_Back_Dto_Map_Ref();
+            const res = new Ref();
             res.attrs = (typeof (data?.attrs) === 'object')
                 ? JSON.parse(JSON.stringify(data.attrs)) : {};
             res.path = cast.string(data?.path);
@@ -63,7 +63,7 @@ export class Factory {
 }
 
 // finalize code components for this es6-module
-Object.freeze(TeqFw_Db_Back_Dto_Map_Ref);
+Object.freeze(Ref);
 
 export const __deps__ = Object.freeze({
     Factory: Object.freeze({

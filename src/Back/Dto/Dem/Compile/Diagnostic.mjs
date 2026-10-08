@@ -10,7 +10,7 @@ const NS = 'TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic';
 /**
  * Structured compiler diagnostic.
  */
-export default class TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic {
+export default class Diagnostic {
     /** @type {string} */
     code;
     /** @type {TeqFw_Db_Object} */
@@ -109,7 +109,7 @@ export class Factory {
             if (typeof message !== 'string' || message.length === 0) throw new TypeError('Diagnostic message is required.');
             if (!(stage in stageOrder)) throw new TypeError(`Unknown diagnostic stage '${stage}'.`);
             if (severity !== 'error' && severity !== 'warning') throw new TypeError(`Unknown diagnostic severity '${severity}'.`);
-            const res = new TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic({
+            const res = new Diagnostic({
                 code, details: copy(details), message,
                 path: typeof path === 'string' ? path : '', severity,
                 sources: Object.freeze([...sources].sort((a, b) => sourceKey(a).localeCompare(sourceKey(b))).map(copy)),
@@ -141,4 +141,4 @@ export class Factory {
     }
 }
 
-Object.freeze(TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic);
+Object.freeze(Diagnostic);

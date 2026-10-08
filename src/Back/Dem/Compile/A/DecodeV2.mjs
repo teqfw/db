@@ -5,7 +5,7 @@
  * @description Decodes and shape-checks explicit DEM v2 declarations.
  */
 
-export default class TeqFw_Db_Back_Dem_Compile_A_DecodeV2 {
+export default class DecodeV2 {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_Dto_Dem_Compile_Diagnostic__Factory} deps.diagnostic

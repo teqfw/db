@@ -7,7 +7,7 @@
 
 /**
  */
-export default class TeqFw_Db_Back_Cli_Export_A_Select {
+export default class Select {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_Enum_Db_Type_Column} deps.COLUMN

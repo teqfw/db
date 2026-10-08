@@ -9,7 +9,7 @@
 /**
  * @interface
  */
-export default class TeqFw_Db_Back_Api_RDb_Dialect {
+export default class Dialect {
     /** @returns {any} */
     describe() {}
     /** @param {any} input @returns {any} */

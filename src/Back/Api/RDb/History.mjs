@@ -7,7 +7,7 @@
  */
 
 /** @interface */
-export default class TeqFw_Db_Back_Api_RDb_History {
+export default class History {
     /** @param {object} deps @returns {Promise<any>} */
     async recordSnapshot(deps) {}
 

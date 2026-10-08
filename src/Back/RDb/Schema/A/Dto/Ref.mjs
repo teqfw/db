@@ -13,7 +13,7 @@
 const NS = 'TeqFw_Db_Back_RDb_Schema_A_Dto_Ref';
 
 // MODULE'S CLASSES
-export default class TeqFw_Db_Back_RDb_Schema_A_Dto_Ref {
+export default class Ref {
     /**
      * Path to referencing entity.
      * @type {string | undefined}
@@ -43,7 +43,7 @@ export class Factory {
          * @returns {TeqFw_Db_Back_RDb_Schema_A_Dto_Ref}
          */
         this.create = function (data = null) {
-            const res = new TeqFw_Db_Back_RDb_Schema_A_Dto_Ref();
+            const res = new Ref();
             res.path = cast.string(data?.path);
             res.attrs = cast.array(data?.attrs);
             return res;
@@ -52,7 +52,7 @@ export class Factory {
 }
 
 // finalize code components for this es6-module
-Object.freeze(TeqFw_Db_Back_RDb_Schema_A_Dto_Ref);
+Object.freeze(Ref);
 
 export const __deps__ = Object.freeze({
     Factory: Object.freeze({

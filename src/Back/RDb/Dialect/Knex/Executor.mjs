@@ -5,7 +5,7 @@
  * @description Safe Knex execution helpers for already resolved immutable physical descriptors.
  */
 
-export default class TeqFw_Db_Back_RDb_Dialect_Knex_Executor {
+export default class Executor {
     /**
      * Initialize fixed execution allow-lists.
      */

@@ -11,7 +11,7 @@
 
 /**
  */
-export default class TeqFw_Db_Back_Dem_Load_A_Scan {
+export default class Scan {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_Util_File} deps.file

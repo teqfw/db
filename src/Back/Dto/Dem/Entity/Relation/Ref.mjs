@@ -12,7 +12,7 @@
 const NS = 'TeqFw_Db_Back_Dto_Dem_Entity_Relation_Ref';
 
 // MODULE'S CLASSES
-export default class TeqFw_Db_Back_Dto_Dem_Entity_Relation_Ref {
+export default class Ref {
     /** @type {unknown[] | undefined} */
     attrs;
     /** @type {string | undefined} */
@@ -38,7 +38,7 @@ export class Factory {
         this.create = function (input = null) {
             const data = input && typeof input === 'object' && !Array.isArray(input)
                 ? /** @type {TeqFw_Db_Object} */ (input) : null;
-            const res = new TeqFw_Db_Back_Dto_Dem_Entity_Relation_Ref();
+            const res = new Ref();
             res.attrs = cast.array(data?.attrs);
             res.path = cast.string(data?.path);
             return res;
@@ -47,7 +47,7 @@ export class Factory {
 }
 
 // finalize code components for this es6-module
-Object.freeze(TeqFw_Db_Back_Dto_Dem_Entity_Relation_Ref);
+Object.freeze(Ref);
 
 export const __deps__ = Object.freeze({
     Factory: Object.freeze({

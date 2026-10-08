@@ -11,7 +11,7 @@
  * @interface
  * TODO: move to _Api_ namespace
  */
-export default class TeqFw_Db_Back_RDb_IConnect {
+export default class IConnect {
 
     /**
      * @returns {Promise<void>}

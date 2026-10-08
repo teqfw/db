@@ -5,7 +5,7 @@
  * @description Executes branded physical plans exclusively through the selected dialect adapter.
  */
 
-export default class TeqFw_Db_Back_RDb_Schema_A_Builder {
+export default class Builder {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_RDb_Schema_A_Builder_Execute} deps.execute

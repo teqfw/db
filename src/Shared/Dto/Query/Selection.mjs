@@ -7,7 +7,7 @@
 
 const NS = 'TeqFw_Db_Shared_Dto_Query_Selection';
 
-export default class TeqFw_Db_Shared_Dto_Query_Selection {
+export default class Selection {
     /** @type {2} */ version = 2;
     /** @type {TeqFw_Db_QueryExpression|undefined} */ where;
     /** @type {TeqFw_Db_QueryProjectionArray} */ select = [];
@@ -40,7 +40,7 @@ export class Factory {
             const allowed = ['execution', 'limit', 'offset', 'orderBy', 'select', 'version', 'where'];
             const unknown = Object.keys(data).filter((key) => !allowed.includes(key));
             if (unknown.length) throw new TypeError(`Unknown selection field '${unknown.sort()[0]}'.`);
-            const result = new TeqFw_Db_Shared_Dto_Query_Selection();
+            const result = new Selection();
             result.version = 2;
             if (data.where !== undefined) result.where = expression.create(data.where);
             if (data.select !== undefined && !Array.isArray(data.select)) throw new TypeError('Selection select must be an array.');
@@ -76,7 +76,7 @@ export class Factory {
     }
 }
 
-Object.freeze(TeqFw_Db_Shared_Dto_Query_Selection);
+Object.freeze(Selection);
 
 export const __deps__ = Object.freeze({
     Factory: Object.freeze({

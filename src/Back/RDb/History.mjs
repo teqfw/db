@@ -6,7 +6,7 @@
  */
 
 /** @implements TeqFw_Db_Back_Api_RDb_History */
-export default class TeqFw_Db_Back_RDb_History {
+export default class History {
     /** @param {object} deps @param {TeqFw_Db_Back_Dem_Compile} deps.compile */
     constructor({compile}) {
         const snapshotEntity = '/teqfw/db/schema/snapshot';

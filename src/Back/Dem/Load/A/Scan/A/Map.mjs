@@ -10,7 +10,7 @@
  * There is one only map file per application (in root plugin).
  *
  */
-export default class TeqFw_Db_Back_Dem_Load_A_Scan_A_Map {
+export default class Map {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_Util_File} deps.file

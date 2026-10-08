@@ -12,7 +12,7 @@
 const NS = 'TeqFw_Db_Back_Dto_Dem_Package';
 
 // MODULE'S CLASSES
-export default class TeqFw_Db_Back_Dto_Dem_Package {
+export default class Package {
     /** @type {Object<string, TeqFw_Db_Back_Dto_Dem_Entity> | undefined} */
     entity;
     /** @type {Object<string, TeqFw_Db_Back_Dto_Dem_Package> | undefined} */
@@ -57,7 +57,7 @@ export class Factory {
             }
 
             // MAIN
-            const res = new TeqFw_Db_Back_Dto_Dem_Package();
+            const res = new Package();
             res.entity = parse(fEntity.create, data?.entity);
             res.package = parse(create, data?.package);
             return res;
@@ -66,7 +66,7 @@ export class Factory {
 }
 
 // finalize code components for this es6-module
-Object.freeze(TeqFw_Db_Back_Dto_Dem_Package);
+Object.freeze(Package);
 
 export const __deps__ = Object.freeze({
     Factory: Object.freeze({

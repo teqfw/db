@@ -11,7 +11,7 @@
  * Designed to standardize access to entity schema details.
  * @interface
  */
-export default class TeqFw_Db_Back_Api_RDb_Schema_Object {
+export default class Object {
     /**
      * Create a persistent DTO.
      * If input data is provided, the method validates and casts types of attributes

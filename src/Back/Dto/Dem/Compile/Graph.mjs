@@ -10,7 +10,7 @@ const NS = 'TeqFw_Db_Back_Dto_Dem_Compile_Graph';
 /**
  * Entity dependency graph.
  */
-export default class TeqFw_Db_Back_Dto_Dem_Compile_Graph {
+export default class Graph {
     /** @type {TeqFw_Db_GraphCycleArray} */
     cycles;
     /** @type {TeqFw_Db_GraphEdgeArray} */
@@ -64,10 +64,10 @@ export class Factory {
          * @returns {TeqFw_Db_Back_Dto_Dem_Compile_Graph}
          */
         this.create = function ({cycles, edges, entities, topological}) {
-            const res = new TeqFw_Db_Back_Dto_Dem_Compile_Graph({cycles, edges, entities, topological});
+            const res = new Graph({cycles, edges, entities, topological});
             return freeze(res);
         };
     }
 }
 
-Object.freeze(TeqFw_Db_Back_Dto_Dem_Compile_Graph);
+Object.freeze(Graph);

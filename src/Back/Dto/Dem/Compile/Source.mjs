@@ -10,7 +10,7 @@ const NS = 'TeqFw_Db_Back_Dto_Dem_Compile_Source';
 /**
  * Trusted source evidence is created from scanner/runtime data, never declaration JSON.
  */
-export default class TeqFw_Db_Back_Dto_Dem_Compile_Source {
+export default class Source {
     /** @type {string} */
     filename;
     /** @type {string} */
@@ -68,7 +68,7 @@ export class Factory {
             if (typeof sourcePointer !== 'string') {
                 throw new TypeError("Trusted source field 'sourcePointer' must be a string.");
             }
-            const res = new TeqFw_Db_Back_Dto_Dem_Compile_Source({
+            const res = new Source({
                 filename, fragmentId, packageName, revision, sourcePointer,
             });
             return Object.freeze(res);
@@ -76,4 +76,4 @@ export class Factory {
     }
 }
 
-Object.freeze(TeqFw_Db_Back_Dto_Dem_Compile_Source);
+Object.freeze(Source);

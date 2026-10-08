@@ -6,7 +6,7 @@
  */
 
 /** @implements TeqFw_Db_Back_Api_RDb_Rebuild */
-export default class TeqFw_Db_Back_RDb_Rebuild {
+export default class Rebuild {
     /** @param {object} deps @param {TeqFw_Db_Back_RDb_Rebuild_Execute} deps.execute */
     constructor({execute}) {
         this.exec = execute.exec;

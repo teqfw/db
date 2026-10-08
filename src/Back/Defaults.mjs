@@ -8,7 +8,7 @@
 /**
  * Plugin level constants (hardcoded configuration).
  */
-export default class TeqFw_Db_Back_Defaults {
+export default class Defaults {
     NAME = '@teqfw/db'; // package identifier
 
     CLI_PREFIX = 'db'; // prefix for CLI actions

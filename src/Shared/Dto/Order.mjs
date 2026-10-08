@@ -41,7 +41,7 @@ class Dto {
 
 /**
  */
-export default class TeqFw_Db_Shared_Dto_Order {
+export default class Order {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Shared_Util_Cast} deps.cast

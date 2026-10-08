@@ -5,7 +5,7 @@
  * @description Canonicalizes registered core logical types and validates runtime values before database binding.
  */
 
-export default class TeqFw_Db_Back_Dem_Registry_CoreValue {
+export default class CoreValue {
     /** @param {object} deps @param {TeqFw_Db_Back_Dem_Registry_Core} deps.core */
     constructor({core}) {
         /** @param {any} value @returns {any} */

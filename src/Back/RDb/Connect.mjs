@@ -14,7 +14,7 @@
  * Default implementation for 'knex' based database connector.
  * @implements TeqFw_Db_Back_RDb_IConnect
  */
-export default class TeqFw_Db_Back_RDb_Connect {
+export default class Connect {
     /**
      * @param {object} deps
      * @param {TeqFw_Db_Back_RDb_Dialect_Registry} deps._dialects

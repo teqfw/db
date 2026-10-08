@@ -16,7 +16,7 @@
 const NS = 'TeqFw_Db_Back_Dto_Dem';
 
 // MODULE'S CLASSES
-export default class TeqFw_Db_Back_Dto_Dem {
+export default class Dem {
     /**
      * List of deprecated tables with dependencies (foreign keys).
      * @type {Object<string, string[]> | undefined}
@@ -34,9 +34,9 @@ export default class TeqFw_Db_Back_Dto_Dem {
 }
 
 // attributes names to use as aliases in queries to object props
-TeqFw_Db_Back_Dto_Dem.ENTITY = 'entity';
-TeqFw_Db_Back_Dto_Dem.PACKAGE = 'package';
-TeqFw_Db_Back_Dto_Dem.REFS = 'refs';
+Dem.ENTITY = 'entity';
+Dem.PACKAGE = 'package';
+Dem.REFS = 'refs';
 
 /**
  * Factory to create new DTO instances.
@@ -96,7 +96,7 @@ export class Factory {
             }
 
             // MAIN
-            const res = new TeqFw_Db_Back_Dto_Dem();
+            const res = new Dem();
             res.entity = parse(fEntity.create, data?.entity, TEntity.NAME);
             res.package = parse(fPkg.create, data?.package);
             res.refs = parseRefs(data?.refs);
@@ -106,7 +106,7 @@ export class Factory {
 }
 
 // finalize code components for this es6-module
-Object.freeze(TeqFw_Db_Back_Dto_Dem);
+Object.freeze(Dem);
 
 export const __deps__ = Object.freeze({
     Factory: Object.freeze({
