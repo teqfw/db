@@ -100,7 +100,7 @@ Use `@teqfw/db` when a TeqFW application needs a shared relational persistence l
 
 It is not an ORM, does not own application entities, authorization, or business rules, and does not infer incremental migrations from database drift. A rebuild preserves data only through an explicit snapshot or source-to-target transfer; release sequencing, cutover, and rollback policy stay with the application.
 
-For product and architectural background, see the project [context](https://github.com/teqfw/db/tree/main/ctx/docs/). The package root is type-only; runtime integration is through the `TeqFw_Db_` namespace rather than `@teqfw/db/src/**` imports.
+The package root is type-only; runtime integration is through the `TeqFw_Db_` namespace rather than `@teqfw/db/src/**` imports.
 
 ## Agent-Driven Development
 
@@ -125,3 +125,18 @@ Each TeqFW package is both a practical software component and a working demonstr
 ## License
 
 [Apache-2.0](LICENSE)
+
+## Maintainer Context
+
+The cognitive context is maintained in the private repository
+`flancer32/teqfw-db-ctx`, independently of this public product repository.
+Maintainers with access mount it at `ctx/`:
+
+```sh
+git clone git@github.com:flancer32/teqfw-db-ctx.git ctx
+```
+
+Product Git ignores `/ctx/`, and npm artifacts exclude it. Read `ctx/AGENTS.md`
+and `ctx/docs/filesystem.md` before development. Validate the mounted context
+with `adsm-ctx validate` from the product root; commit and push each repository
+separately.

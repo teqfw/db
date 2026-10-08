@@ -4,3 +4,6 @@
 /**/output*.zip
 /**/tmp/
 /node_modules/
+
+# Private cognitive context is an independent repository.
+/ctx/
