@@ -16,7 +16,7 @@
     "types.d.ts"
   ],
   "scripts": {
-    "test": "npm run test:unit && npm run test:integration && npm run test:acceptance && npm run test:package",
+    "test": "npm run check:esm && npm run test:unit && npm run test:integration && npm run test:acceptance && npm run test:package",
     "test:unit": "find test/unit -name '*.test.mjs' -print0 | xargs -0 node --test",
     "test:integration": "find test/integration -name '*.test.mjs' -print0 | xargs -0 node --test",
     "test:acceptance": "find test/acceptance -name '*.test.mjs' -print0 | xargs -0 node --test",
@@ -29,7 +29,8 @@
     "test:optin:preflight": "node --test test/optin/Preflight.test.mjs",
     "test:optin:postgresql": "node --test test/optin/Postgresql.test.mjs",
     "test:optin:mariadb": "node --test test/optin/Mysql.test.mjs",
-    "test:manual": "find test/manual -name '*.test.mjs' -print0 | xargs -r -0 node --test"
+    "test:manual": "find test/manual -name '*.test.mjs' -print0 | xargs -r -0 node --test",
+    "check:esm": "teqfw-esm-validator src --profile base"
   },
   "repository": {
     "type": "git",
@@ -75,6 +76,7 @@
     "knex": "^3.1.0"
   },
   "devDependencies": {
+    "@flancer32/skill-teqfw-esm-validator": "^0.15.2",
     "@types/node": "^22.20.5",
     "markdownlint": "^0.41.1",
     "mysql2": "^3.24.5",
