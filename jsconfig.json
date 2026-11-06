@@ -4,7 +4,6 @@
     "forceConsistentCasingInFileNames": true,
     "module": "nodenext",
     "moduleResolution": "nodenext",
-    "maxNodeModuleJsDepth": 0,
     "noEmit": true,
     "skipLibCheck": true,
     "strict": true,
@@ -14,11 +13,13 @@
     ]
   },
   "include": [
+    "bin",
     "src",
-    "test/package/types",
+    "test",
     "types.d.ts",
-    "node_modules/@teqfw/*/types.d.ts",
-    "node_modules/@teqfw/*/src"
+    "node_modules/@flancer32",
+    "node_modules/@teqfw",
+    "test/package/types"
   ],
   "exclude": [
     "dist"
